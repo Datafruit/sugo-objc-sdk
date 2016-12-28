@@ -14,7 +14,7 @@
 		141AC8671E137088008D67F6 /* Sugo+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C51E137088008D67F6 /* Sugo+AutomaticEvents.m */; };
 		141AC8681E137088008D67F6 /* SugoExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C61E137088008D67F6 /* SugoExceptionHandler.h */; };
 		141AC8691E137088008D67F6 /* SugoExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C71E137088008D67F6 /* SugoExceptionHandler.m */; };
-		141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C81E137088008D67F6 /* SugoPeople.h */; };
+		141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C81E137088008D67F6 /* SugoPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		141AC86B1E137088008D67F6 /* SugoPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C91E137088008D67F6 /* SugoPeople.m */; };
 		141AC86C1E137088008D67F6 /* SugoPeoplePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7CA1E137088008D67F6 /* SugoPeoplePrivate.h */; };
 		141AC86D1E137088008D67F6 /* SugoPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7CB1E137088008D67F6 /* SugoPrivate.h */; };
@@ -630,9 +630,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */,
-				141AC8D61E137088008D67F6 /* MPUIControlBinding.h in Headers */,
 				141AC7871E1364D7008D67F6 /* Sugo.h in Headers */,
+				141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */,
+				141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */,
+				141AC8D61E137088008D67F6 /* MPUIControlBinding.h in Headers */,
 				141AC8961E137088008D67F6 /* MPDesignerEventBindingMessage.h in Headers */,
 				141AC8851E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				141AC8B01E137088008D67F6 /* MPObjectSelector.h in Headers */,
@@ -676,7 +677,6 @@
 				141AC8EA1E137088008D67F6 /* UIColor+MPColor.h in Headers */,
 				141AC88B1E137088008D67F6 /* MPApplicationStateSerializer.h in Headers */,
 				141AC8FE1E137088008D67F6 /* WebViewJSExport.h in Headers */,
-				141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */,
 				141AC8661E137088008D67F6 /* Sugo+AutomaticEvents.h in Headers */,
 				141AC8EC1E137088008D67F6 /* UIImage+MPAverageColor.h in Headers */,
 				141AC8941E137088008D67F6 /* MPClassDescription.h in Headers */,
