@@ -36,7 +36,7 @@ FOUNDATION_EXPORT const unsigned char SugoVersionString[];
 #define SUGO_NO_AUTOMATIC_EVENTS_SUPPORT (defined(SUGO_APP_EXTENSION) || defined(SUGO_TVOS_EXTENSION) || defined(SUGO_WATCH_EXTENSION))
 #define SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT (defined(SUGO_APP_EXTENSION) || defined(SUGO_TVOS_EXTENSION) || defined(SUGO_WATCH_EXTENSION))
 
-@class    SugoPeople, MPSurvey;
+@class    SugoPeople;
 @protocol SugoDelegate;
 
 NS_ASSUME_NONNULL_BEGIN

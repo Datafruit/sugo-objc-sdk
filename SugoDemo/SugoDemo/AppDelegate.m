@@ -17,6 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [self initSugo];
     return YES;
 }
 
@@ -47,5 +48,13 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (void)initSugo {
+    NSString *projectID = @"Add_Your_Project_ID_Here";
+    NSString *appToken = @"Add_Your_App_Token_Here";
+    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
+    [[Sugo sharedInstance] setEnableLogging:YES];
+    [[Sugo sharedInstance] setFlushInterval:5];
+    [[Sugo sharedInstance] identify:[Sugo sharedInstance].distinctId];
+}
 
 @end

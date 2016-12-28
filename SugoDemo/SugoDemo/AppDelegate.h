@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@import Sugo;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
