@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+@import Sugo;
+
 
 @interface AppDelegate ()
 
@@ -47,6 +49,19 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    
+    return [[Sugo sharedInstance] handleURL:url];
+}
+
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+//    
+//}
+
+//- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+//    
+//}
 
 - (void)initSugo {
     NSString *projectID = @"Add_Your_Project_ID_Here";
