@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CodelessCommonViewController.h
 //  SugoDemo
 //
 //  Created by Zack on 28/12/16.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface CodelessCommonViewController : UIViewController
 
 @end
-
