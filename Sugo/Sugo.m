@@ -985,7 +985,7 @@ static NSString *defaultProjectToken;
                              object:nil];
 #endif // SUGO_NO_APP_LIFECYCLE_SUPPORT
 
-    [self initializeGestureRecognizer];
+//    [self initializeGestureRecognizer];
 }
 
 - (void) initializeGestureRecognizer {

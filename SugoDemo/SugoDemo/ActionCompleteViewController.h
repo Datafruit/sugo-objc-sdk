@@ -10,4 +10,7 @@
 
 @interface ActionCompleteViewController : UIViewController
 
+@property (atomic, strong) NSString *actionStr;
+@property (atomic, strong) NSString *descStr;
+
 @end

@@ -8,7 +8,9 @@
 
 #import "UIWebViewController.h"
 
-@interface UIWebViewController ()
+@interface UIWebViewController () <UIWebViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @end
 
@@ -17,6 +19,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.webView.delegate = self;
+    NSURL *url = [[NSURL alloc] initWithString:@"http://dev.ufile.ucloud.cn/test.html"];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    [self.webView loadRequest:request];
+    [self.view addSubview:self.webView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +33,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
 }
-*/
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+}
 
 @end

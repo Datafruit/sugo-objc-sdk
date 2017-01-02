@@ -10,28 +10,45 @@
 
 @interface ActionCompleteViewController ()
 
+@property (weak, nonatomic) IBOutlet UIView *popupView;
+@property (weak, nonatomic) IBOutlet UILabel *actionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descLabel;
+
 @end
 
 @implementation ActionCompleteViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.title = @"ActionComplete";
+    
+    self.popupView.clipsToBounds = YES;
+    self.popupView.layer.cornerRadius = 6;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(handleTap:)];
+    [self.view addGestureRecognizer:tap];
+    self.actionLabel.text = self.actionStr;
+    self.descLabel.text = self.descStr;
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidAppear:(BOOL)animated
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"ActionCompleteViewController Dismiss");
+        }];
+    });
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)handleTap:(UITapGestureRecognizer *)gesture
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"ActionCompleteViewController Dismiss");
+    }];
 }
-*/
+
 
 @end
