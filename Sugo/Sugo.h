@@ -107,8 +107,7 @@ NS_ASSUME_NONNULL_BEGIN
  The base URL used for Sugo API requests.
  
  @discussion
- Useful if you need to proxy Sugo requests. Defaults to
- https://api.sugo.com.
+ Useful if you need to proxy Sugo requests.
  */
 @property (nonatomic, copy) NSString *serverURL;
 

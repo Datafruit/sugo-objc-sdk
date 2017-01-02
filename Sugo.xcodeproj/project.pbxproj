@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14149DDF1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */; };
 		141AC7871E1364D7008D67F6 /* Sugo.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7851E1364D7008D67F6 /* Sugo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C11E137088008D67F6 /* AutomaticEventsConstants.h */; };
 		141AC8651E137088008D67F6 /* Sugo.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C31E137088008D67F6 /* Sugo.m */; };
@@ -148,6 +149,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUILayoutSupportToNSStringValueTransformer.m; sourceTree = "<group>"; };
 		141AC7821E1364D7008D67F6 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		141AC7851E1364D7008D67F6 /* Sugo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sugo.h; sourceTree = "<group>"; };
 		141AC7861E1364D7008D67F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -557,6 +559,7 @@
 				141AC8371E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */,
 				141AC8381E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m */,
 				141AC8391E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m */,
+				14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */,
 			);
 			name = Transformer;
 			sourceTree = "<group>";
@@ -824,6 +827,7 @@
 				141AC8DA1E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
 				141AC86B1E137088008D67F6 /* SugoPeople.m in Sources */,
 				141AC8E51E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.m in Sources */,
+				14149DDF1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */,
 				141AC8BE1E137088008D67F6 /* MPSequenceGenerator.m in Sources */,
 				141AC8D51E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				141AC8E91E137088008D67F6 /* UIApplication+AutomaticEvents.m in Sources */,

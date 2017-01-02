@@ -45,25 +45,25 @@
 - (NSDictionary *)collectAutomaticPeopleProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                             @"$ios_version": [self deviceSystemVersion],
-                                                                             @"$ios_lib_version": [Sugo libVersion],
+                                                                             @"ios_version": [self deviceSystemVersion],
+                                                                             @"ios_lib_version": [Sugo libVersion],
                                                                              }];
     NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
     if (infoDictionary[@"CFBundleVersion"]) {
-        p[@"$ios_app_version"] = infoDictionary[@"CFBundleVersion"];
+        p[@"ios_app_version"] = infoDictionary[@"CFBundleVersion"];
     }
     if (infoDictionary[@"CFBundleShortVersionString"]) {
-        p[@"$ios_app_release"] = infoDictionary[@"CFBundleShortVersionString"];
+        p[@"ios_app_release"] = infoDictionary[@"CFBundleShortVersionString"];
     }
     __strong Sugo *strongSugo = self.sugo;
     NSString *deviceModel = [strongSugo deviceModel];
     if (deviceModel) {
-        p[@"$ios_device_model"] = deviceModel;
+        p[@"ios_device_model"] = deviceModel;
     }
     NSString *ifa = [strongSugo IFA];
-    if (ifa) {
-        p[@"$ios_ifa"] = ifa;
-    }
+//    if (ifa) {
+//        p[@"ios_ifa"] = ifa;
+//    }
     return [p copy];
 }
 
@@ -78,21 +78,21 @@
         dispatch_async(strongSugo.serialQueue, ^{
             NSMutableDictionary *r = [NSMutableDictionary dictionary];
             NSMutableDictionary *p = [NSMutableDictionary dictionary];
-            r[@"$token"] = strongSugo.apiToken;
-            if (!r[@"$time"]) {
+            r[@"token"] = strongSugo.apiToken;
+            if (!r[@"time"]) {
                 // milliseconds unix timestamp
-                r[@"$time"] = epochMilliseconds;
+                r[@"time"] = epochMilliseconds;
             }
             if (ignore_time) {
-                r[@"$ignore_time"] = @YES;
+                r[@"ignore_time"] = @YES;
             }
 
-            if ([action isEqualToString:@"$unset"]) {
+            if ([action isEqualToString:@"unset"]) {
                 // $unset takes an array of property names which is supplied to this method
-                // in the properties parameter under the key "$properties"
-                r[action] = properties[@"$properties"];
+                // in the properties parameter under the key "properties"
+                r[action] = properties[@"properties"];
             } else {
-                if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
+                if ([action isEqualToString:@"set"] || [action isEqualToString:@"set_once"]) {
                     [p addEntriesFromDictionary:self.automaticPeopleProperties];
                 }
                 [p addEntriesFromDictionary:properties];
@@ -100,7 +100,7 @@
             }
 
             if (self.distinctId) {
-                r[@"$distinct_id"] = self.distinctId;
+                r[@"distinct_id"] = self.distinctId;
                 MPLogInfo(@"%@ queueing people record: %@", self.sugo, r);
                 [strongSugo.peopleQueue addObject:r];
                 if (strongSugo.peopleQueue.count > 500) {
@@ -139,27 +139,27 @@
 
 - (void)addPushDeviceToken:(NSData *)deviceToken
 {
-    NSDictionary *properties = @{@"$ios_devices": @[[SugoPeople pushDeviceTokenToString:deviceToken]]};
-    [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
+    NSDictionary *properties = @{@"ios_devices": @[[SugoPeople pushDeviceTokenToString:deviceToken]]};
+    [self addPeopleRecordToQueueWithAction:@"union" andProperties:properties];
 }
 
 - (void)removeAllPushDeviceTokens
 {
-    NSDictionary *properties = @{ @"$properties": @[@"$ios_devices"] };
-    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
+    NSDictionary *properties = @{ @"properties": @[@"ios_devices"] };
+    [self addPeopleRecordToQueueWithAction:@"unset" andProperties:properties];
 }
 
 - (void)removePushDeviceToken:(NSData *)deviceToken
 {
-    NSDictionary *properties = @{@"$ios_devices": [SugoPeople pushDeviceTokenToString:deviceToken]};
-    [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
+    NSDictionary *properties = @{@"ios_devices": [SugoPeople pushDeviceTokenToString:deviceToken]};
+    [self addPeopleRecordToQueueWithAction:@"remove" andProperties:properties];
 }
 
 - (void)set:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
     [Sugo assertPropertyTypes:properties];
-    [self addPeopleRecordToQueueWithAction:@"$set" andProperties:properties];
+    [self addPeopleRecordToQueueWithAction:@"set" andProperties:properties];
 }
 
 - (void)set:(NSString *)property to:(id)object
@@ -176,7 +176,7 @@
 {
     NSAssert(properties != nil, @"properties must not be nil");
     [Sugo assertPropertyTypes:properties];
-    [self addPeopleRecordToQueueWithAction:@"$set_once" andProperties:properties];
+    [self addPeopleRecordToQueueWithAction:@"set_once" andProperties:properties];
 }
 
 - (void)unset:(NSArray *)properties
@@ -187,8 +187,8 @@
                  @"%@ unset property names should be NSString. found: %@", self, v);
     }
     // $unset takes an array but addPeopleRecordToQueueWithAction:andProperties takes an NSDictionary
-    // so the array is stored under the key "$properties" which the above method expects when action is $unset
-    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:@{@"$properties": properties}];
+    // so the array is stored under the key "properties" which the above method expects when action is $unset
+    [self addPeopleRecordToQueueWithAction:@"unset" andProperties:@{@"properties": properties}];
 }
 
 - (void)increment:(NSDictionary *)properties
@@ -198,7 +198,7 @@
         NSAssert([v isKindOfClass:[NSNumber class]],
                  @"%@ increment property values should be NSNumber. found: %@", self, v);
     }
-    [self addPeopleRecordToQueueWithAction:@"$add" andProperties:properties];
+    [self addPeopleRecordToQueueWithAction:@"add" andProperties:properties];
 }
 
 - (void)increment:(NSString *)property by:(NSNumber *)amount
@@ -215,7 +215,7 @@
 {
     NSAssert(properties != nil, @"properties must not be nil");
     [Sugo assertPropertyTypes:properties];
-    [self addPeopleRecordToQueueWithAction:@"$append" andProperties:properties];
+    [self addPeopleRecordToQueueWithAction:@"append" andProperties:properties];
 }
 
 - (void)union:(NSDictionary *)properties
@@ -225,20 +225,20 @@
         NSAssert([v isKindOfClass:[NSArray class]],
                  @"%@ union property values should be NSArray. found: %@", self, v);
     }
-    [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
+    [self addPeopleRecordToQueueWithAction:@"union" andProperties:properties];
 }
 
 - (void)remove:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
     [Sugo assertPropertyTypes:properties];
-    [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
+    [self addPeopleRecordToQueueWithAction:@"remove" andProperties:properties];
 }
 
 - (void)merge:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    [self addPeopleRecordToQueueWithAction:@"$merge" andProperties:properties];
+    [self addPeopleRecordToQueueWithAction:@"merge" andProperties:properties];
 }
 
 - (void)trackCharge:(NSNumber *)amount
@@ -250,22 +250,22 @@
 {
     NSAssert(amount != nil, @"amount must not be nil");
     if (amount != nil) {
-        NSMutableDictionary *txn = [NSMutableDictionary dictionaryWithObjectsAndKeys:amount, @"$amount", [NSDate date], @"$time", nil];
+        NSMutableDictionary *txn = [NSMutableDictionary dictionaryWithObjectsAndKeys:amount, @"amount", [NSDate date], @"time", nil];
         if (properties) {
             [txn addEntriesFromDictionary:properties];
         }
-        [self append:@{@"$transactions": txn}];
+        [self append:@{@"transactions": txn}];
     }
 }
 
 - (void)clearCharges
 {
-    [self set:@{@"$transactions": @[]}];
+    [self set:@{@"transactions": @[]}];
 }
 
 - (void)deleteUser
 {
-    [self addPeopleRecordToQueueWithAction:@"$delete" andProperties:@{}];
+    [self addPeopleRecordToQueueWithAction:@"delete" andProperties:@{}];
 }
 
 @end

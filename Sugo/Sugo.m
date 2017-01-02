@@ -21,7 +21,7 @@
 #define SUGO_NO_APP_LIFECYCLE_SUPPORT (defined(SUGO_APP_EXTENSION) || defined(SUGO_WATCH_EXTENSION))
 #define SUGO_NO_UIAPPLICATION_ACCESS (defined(SUGO_APP_EXTENSION) || defined(SUGO_WATCH_EXTENSION))
 
-#define VERSION @"3.0.6"
+#define VERSION @"1.0.0"
 
 @implementation Sugo
 
@@ -101,11 +101,9 @@ static NSString *defaultProjectToken;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
 
-//        self.serverURL = @"https://api.sugo.com";
-//        self.switchboardURL = @"wss://switchboard.sugo.com";
-        self.serverURL = @"http://192.168.0.111:8080";
+        self.serverURL = @"http://192.168.0.212:8000";
         self.eventCollectionURL = @"http://collect.sugo.net";
-        self.switchboardURL = @"ws://192.168.0.111:8887";
+        self.switchboardURL = @"ws://192.168.0.212:8887";
         
         self.miniNotificationPresentationTime = 6.0;
 
@@ -136,7 +134,7 @@ static NSString *defaultProjectToken;
 
         NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (remoteNotification) {
-            [self trackPushNotification:remoteNotification event:@"$app_open"];
+            [self trackPushNotification:remoteNotification event:@"app_open"];
         }
 #endif
         instances[apiToken] = self;
@@ -279,7 +277,7 @@ static NSString *defaultProjectToken;
         self.people.distinctId = distinctId;
         if (self.people.unidentifiedQueue.count > 0) {
             for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                r[@"$distinct_id"] = distinctId;
+                r[@"distinct_id"] = distinctId;
                 [self.peopleQueue addObject:r];
             }
             [self.people.unidentifiedQueue removeAllObjects];
@@ -302,7 +300,7 @@ static NSString *defaultProjectToken;
         MPLogError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
-    [self track:nil eventName:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
+    [self track:nil eventName:@"create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
     [self flush];
 }
 
@@ -337,7 +335,7 @@ static NSString *defaultProjectToken;
         p[@"time"] = epochSeconds;
         if (eventStartTime) {
             [self.timedEvents removeObjectForKey:eventName];
-            p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
+            p[@"duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
         if (self.distinctId) {
             p[@"distinct_id"] = self.distinctId;
@@ -354,7 +352,7 @@ static NSString *defaultProjectToken;
                     self.validationEventCount++;
                 } else {
                     if (self.validationEventCount > 0) {
-                        p[@"$__c"] = @(self.validationEventCount);
+                        p[@"__c"] = @(self.validationEventCount);
                         self.validationEventCount = 0;
                     }
                 }
@@ -368,7 +366,7 @@ static NSString *defaultProjectToken;
             event[@"event_id"] = eventID;
         }
         
-        MPLogInfo(@"%@ queueing event: %@", self, event);
+//        MPLogInfo(@"%@ queueing event: %@", self, event);
         [self.eventsQueue addObject:event];
         if (self.eventsQueue.count > 5000) {
             [self.eventsQueue removeObjectAtIndex:0];
@@ -403,7 +401,7 @@ static NSString *defaultProjectToken;
 
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
-    [self trackPushNotification:userInfo event:@"$campaign_received"];
+    [self trackPushNotification:userInfo event:@"campaign_received"];
 }
 
 - (void)registerSuperProperties:(NSDictionary *)properties
@@ -551,7 +549,7 @@ static NSString *defaultProjectToken;
 - (void)flushWithCompletion:(void (^)())handler
 {
     dispatch_async(self.serialQueue, ^{
-        MPLogInfo(@"%@ flush starting", self);
+//        MPLogInfo(@"%@ flush starting", self);
 
         __strong id<SugoDelegate> strongDelegate = self.delegate;
         if (strongDelegate && [strongDelegate respondsToSelector:@selector(sugoWillFlush:)]) {
@@ -560,7 +558,6 @@ static NSString *defaultProjectToken;
                 return;
             }
         }
-        
         [self.network flushEventQueue:self.eventsQueue];
         [self.network flushPeopleQueue:self.peopleQueue];
         [self archive];
@@ -569,7 +566,7 @@ static NSString *defaultProjectToken;
             dispatch_async(dispatch_get_main_queue(), handler);
         }
 
-        MPLogInfo(@"%@ flush complete", self);
+//        MPLogInfo(@"%@ flush complete", self);
     });
 }
 
@@ -623,7 +620,7 @@ static NSString *defaultProjectToken;
 {
     NSString *filePath = [self eventsFilePath];
     NSMutableArray *eventsQueueCopy = [NSMutableArray arrayWithArray:[self.eventsQueue copy]];
-    MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
+//    MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
     if (![self archiveObject:eventsQueueCopy withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive event data", self);
     }
@@ -633,7 +630,7 @@ static NSString *defaultProjectToken;
 {
     NSString *filePath = [self peopleFilePath];
     NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
-    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
+//    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
     if (![self archiveObject:peopleQueueCopy withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive people data", self);
     }
@@ -648,7 +645,7 @@ static NSString *defaultProjectToken;
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
-    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
+//    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![self archiveObject:p withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive properties data", self);
     }
@@ -756,6 +753,27 @@ static NSString *defaultProjectToken;
     self.eventBindings = (NSSet *)[Sugo unarchiveOrDefaultFromFile:[self eventBindingsFilePath] asClass:[NSSet class]];
 }
 
+- (void)trackIntegration
+{
+    NSString *defaultKey = @"trackedKey";
+    if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
+        __weak Sugo *weakSelf = self;
+        dispatch_async(self.serialQueue, ^{
+            Sugo *strongSelf = weakSelf;
+            [self.network trackIntegrationWithID:strongSelf.projectID
+                                        andToken:strongSelf.apiToken
+                                   andDistinctID:strongSelf.distinctId
+                                   andCompletion:^(NSError *error) {
+                if (!error) {
+                    [NSUserDefaults.standardUserDefaults setBool:YES
+                                                          forKey:defaultKey];
+                    [NSUserDefaults.standardUserDefaults synchronize];
+                }
+            }];
+        });
+    }
+}
+
 #pragma mark - Application Helpers
 
 - (NSString *)description
@@ -827,7 +845,7 @@ static NSString *defaultProjectToken;
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
         if (properties) {
-            properties[@"$radio"] = [self currentRadio];
+            properties[@"radio"] = [self currentRadio];
             self.automaticProperties = [properties copy];
         }
     });
@@ -866,10 +884,10 @@ static NSString *defaultProjectToken;
     UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
     return @{
-             @"$os": [device systemName],
-             @"$os_version": [device systemVersion],
-             @"$screen_height": @((NSInteger)size.height),
-             @"$screen_width": @((NSInteger)size.width),
+             @"os": [device systemName],
+             @"os_version": [device systemVersion],
+             @"screen_height": @((NSInteger)size.height),
+             @"screen_width": @((NSInteger)size.width),
              };
 #endif
 }
@@ -880,22 +898,22 @@ static NSString *defaultProjectToken;
     NSString *deviceModel = [self deviceModel];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_release"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_build_number"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_version_string"];
-    [p setValue:[self IFA] forKey:@"$ios_ifa"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"app_version"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"app_release"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"app_build_number"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"app_version_string"];
+//    [p setValue:[self IFA] forKey:@"ios_ifa"];
     
 #if !SUGO_NO_REACHABILITY_SUPPORT
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
-    [p setValue:carrier.carrierName forKey:@"$carrier"];
+    [p setValue:carrier.carrierName forKey:@"carrier"];
 #endif
 
     [p addEntriesFromDictionary:@{
-                                  @"mp_lib": @"iphone",
-                                  @"$lib_version": [self libVersion],
-                                  @"$manufacturer": @"Apple",
-                                  @"$model": deviceModel,
+                                  @"mp_lib": @"Objective-C",
+                                  @"lib_version": [self libVersion],
+                                  @"manufacturer": @"Apple",
+                                  @"model": deviceModel,
                                   @"mp_device_model": deviceModel, //legacy
                                   }];
     [p addEntriesFromDictionary:[self collectDeviceProperties]];
@@ -915,9 +933,11 @@ static NSString *defaultProjectToken;
 
 - (void)setUpListeners
 {
+    [self trackIntegration];
+//    [self trackStayTime];
 #if !SUGO_NO_REACHABILITY_SUPPORT
     // wifi reachability
-    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.sugo.com")) != NULL) {
+    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "sugo.io")) != NULL) {
         SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
         if (SCNetworkReachabilitySetCallback(_reachability, SugoReachabilityCallback, &context)) {
             if (!SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
@@ -965,7 +985,7 @@ static NSString *defaultProjectToken;
                              object:nil];
 #endif // SUGO_NO_APP_LIFECYCLE_SUPPORT
 
-//    [self initializeGestureRecognizer];
+    [self initializeGestureRecognizer];
 }
 
 - (void) initializeGestureRecognizer {
@@ -973,7 +993,7 @@ static NSString *defaultProjectToken;
     dispatch_async(dispatch_get_main_queue(), ^{
         self.testDesignerGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                            action:@selector(connectGestureRecognized:)];
-        self.testDesignerGestureRecognizer.minimumPressDuration = 3;
+        self.testDesignerGestureRecognizer.minimumPressDuration = 1;
         self.testDesignerGestureRecognizer.cancelsTouchesInView = NO;
 #if TARGET_IPHONE_SIMULATOR
         self.testDesignerGestureRecognizer.numberOfTouchesRequired = 2;
@@ -1006,7 +1026,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
     if (properties) {
         BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
-        properties[@"$wifi"] = @(wifi);
+        properties[@"wifi"] = @(wifi);
         self.automaticProperties = [properties copy];
         MPLogInfo(@"%@ reachability changed, wifi=%d", self, wifi);
     }
@@ -1019,6 +1039,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
+    [self track:nil eventName:@"Launched"];
+//    [self timeEvent:@"stay_event"];
     [self startFlushTimer];
 
 #if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
@@ -1052,22 +1074,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     MPLogInfo(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
     
     dispatch_group_t bgGroup = dispatch_group_create();
-    NSString *trackedKey = [NSString stringWithFormat:@"MPTracked:%@", self.apiToken];
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:trackedKey]) {
-        dispatch_group_enter(bgGroup);
-        NSString *requestData = [MPNetwork encodeArrayForAPI:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"distinct_id": self.apiToken}}]];
-        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack andBody:postBody];
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                  NSURLResponse *urlResponse,
-                                                                  NSError *error) {
-            if (!error) {
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:trackedKey];
-            }
-            dispatch_group_leave(bgGroup);
-        }] resume];
-    }
     
     if (self.flushOnBackground) {
         [self flush];
@@ -1111,9 +1117,9 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)appLinksNotificationRaised:(NSNotification *)notification
 {
-    NSDictionary *eventMap = @{@"al_nav_out": @"$al_nav_out",
-                               @"al_nav_in": @"$al_nav_in",
-                               @"al_ref_back_out": @"$al_ref_back_out"
+    NSDictionary *eventMap = @{@"al_nav_out": @"al_nav_out",
+                               @"al_nav_in": @"al_nav_in",
+                               @"al_ref_back_out": @"al_ref_back_out"
                                };
     NSDictionary *userInfo = notification.userInfo;
     if (userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
@@ -1183,12 +1189,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
                                                                               withDistinctID:self.people.distinctId ?: self.distinctId
                                                                                     andToken:self.apiToken];
-            
-            
             // Build a network request from the URL
-            NSURLRequest *request = [self.network buildGetRequestForEndpoint:MPNetworkEndpointDecide
-                                                              withQueryItems:queryItems];
-            
+            NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
+                                                            andEndpoint:MPNetworkEndpointDecide
+                                                         withQueryItems:queryItems];
+
             // Send the network request
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             NSURLSession *session = [NSURLSession sharedSession];

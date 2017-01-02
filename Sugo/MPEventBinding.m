@@ -41,7 +41,7 @@
 
 + (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
 {
-    NSMutableDictionary *bindingProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys: @YES, @"$from_binding", nil];
+    NSMutableDictionary *bindingProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys: @YES, @"from_binding", nil];
     [bindingProperties addEntriesFromDictionary:properties];
     [[Sugo sharedInstance] track:eventID eventName:eventName properties:properties];
 }

@@ -30,10 +30,10 @@
                                               withDistinctID:(NSString *)distinctID
                                                     andToken:(NSString *)token;
 
-- (NSURLRequest *)buildRequestForEndpoint:(NSString *)endpoint
-                             byHTTPMethod:(NSString *)method
-                           withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
-                                  andBody:(NSString *)body;
-
+- (NSURLRequest *)buildRequestForURL:(NSURL *)url
+                         andEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
+                             andBody:(NSString *)body;
 
 @end

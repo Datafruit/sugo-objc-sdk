@@ -26,10 +26,17 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled;
 
-- (NSURLRequest *)buildGetRequestForEndpoint:(MPNetworkEndpoint)endpoint
-                              withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems;
+- (NSURLRequest *)buildGetRequestForURL:(NSURL *)url
+                               andEndpoint:(MPNetworkEndpoint)endpoint
+                            withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems;
 
-- (NSURLRequest *)buildPostRequestForEndpoint:(MPNetworkEndpoint)endpoint
-                                      andBody:(NSString *)body;
+- (NSURLRequest *)buildPostRequestForURL:(NSURL *)url
+                             andEndpoint:(MPNetworkEndpoint)endpoint
+                          withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
+                                 andBody:(NSString *)body;
 
+- (void)trackIntegrationWithID:(NSString *)ID
+                    andToken:(NSString *)token
+                    andDistinctID:(NSString *)distinctID
+                    andCompletion:(void (^)(NSError *error))completion;
 @end

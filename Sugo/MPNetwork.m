@@ -31,70 +31,32 @@ static const NSUInteger kBatchSize = 50;
 
 #pragma mark - Flush
 - (void)flushEventQueue:(NSMutableArray *)events {
-//    [self flushQueue:events endpoint:MPNetworkEndpointTrack];
-    if ([[NSDate date] timeIntervalSince1970] < self.requestsDisabledUntilTime) {
-        MPLogDebug(@"Attempted to flush to %lu, when we still have a timeout. Ignoring flush.", MPNetworkEndpointTrack);
-        return;
-    }
     
-    while (events.count > 0) {
-        NSUInteger batchSize = MIN(events.count, kBatchSize);
-        NSArray *batch = [events subarrayWithRange:NSMakeRange(0, batchSize)];
-        NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
-//        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
-        MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)events.count, MPNetworkEndpointTrack, events);
-//        NSURLRequest *request = [self buildPostRequestForEndpoint:MPNetworkEndpointTrack
-//                                                          andBody:postBody];
-        NSString *locateValue = [Sugo sharedInstance].projectID;
-        NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
-                                                                   value:locateValue];
-        NSArray *queryItems = @[queryItem];
-        NSURLRequest *request = [self buildRequestForEndpoint:[MPNetwork pathForEndpoint:MPNetworkEndpointTrack]
-                                                 byHTTPMethod:@"POST"
-                                               withQueryItems:queryItems
-                                                      andBody:postBody];
-        
-        [self updateNetworkActivityIndicator:YES];
-        
-        __block BOOL didFail = NO;
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                  NSURLResponse *urlResponse,
-                                                                  NSError *error) {
-            [self updateNetworkActivityIndicator:NO];
-            
-            BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
-            if (error || !success) {
-                MPLogError(@"%@ network failure: %@", self, error);
-                didFail = YES;
-            } else {
-                NSString *response = [[NSString alloc] initWithData:responseData
-                                                           encoding:NSUTF8StringEncoding];
-                if ([response intValue] == 0) {
-                    MPLogInfo(@"%@ %lu api rejected some items", self, MPNetworkEndpointTrack);
-                }
-            }
-            
-            dispatch_semaphore_signal(semaphore);
-        }] resume];
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-        if (didFail) {
-            break;
-        }
-        
-        [events removeObjectsInArray:batch];
-    }
+    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
+                                                               value:[Sugo sharedInstance].projectID];
+    NSArray *queryItems = @[queryItem];
+    [self flushQueue:events
+               toURL:self.eventCollectionURL
+         andEndpoint:MPNetworkEndpointTrack
+      withQueryItems:queryItems];
 }
 
 - (void)flushPeopleQueue:(NSMutableArray *)people {
-    [self flushQueue:people endpoint:MPNetworkEndpointEngage];
+//    [self flushQueue:people endpoint:MPNetworkEndpointEngage];
+    
+    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
+                                                               value:[Sugo sharedInstance].projectID];
+    NSArray *queryItems = @[queryItem];
+    [self flushQueue:people
+               toURL:self.eventCollectionURL
+         andEndpoint:MPNetworkEndpointTrack
+      withQueryItems:queryItems];
 }
 
-- (void)flushQueue:(NSMutableArray *)queue endpoint:(MPNetworkEndpoint)endpoint {
+- (void)flushQueue:(NSMutableArray *)queue
+             toURL:(NSURL *)url
+       andEndpoint:(MPNetworkEndpoint)endpoint
+    withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems {
     if ([[NSDate date] timeIntervalSince1970] < self.requestsDisabledUntilTime) {
         MPLogDebug(@"Attempted to flush to %lu, when we still have a timeout. Ignoring flush.", endpoint);
         return;
@@ -105,10 +67,12 @@ static const NSUInteger kBatchSize = 50;
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
         
         NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
+        NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
         MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
-        NSURLRequest *request = [self buildPostRequestForEndpoint:endpoint andBody:postBody];
-        
+        NSURLRequest *request = [self buildPostRequestForURL:url
+                                                 andEndpoint:endpoint
+                                              withQueryItems:queryItems
+                                                     andBody:postBody];
         [self updateNetworkActivityIndicator:YES];
         
         __block BOOL didFail = NO;
@@ -177,7 +141,8 @@ static const NSUInteger kBatchSize = 50;
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID
                                                     andToken:(NSString *)token {
-    NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"version" value:@"1"];
+    NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
+                                                              value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
     NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
     NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
     NSURLQueryItem *itemDistinctID = [NSURLQueryItem queryItemWithName:@"distinct_id" value:distinctID];
@@ -197,7 +162,7 @@ static const NSUInteger kBatchSize = 50;
     static NSDictionary *endPointToPath = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        endPointToPath = @{ @(MPNetworkEndpointTrack): @"/track/",
+        endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
                             @(MPNetworkEndpointEngage): @"/engage/",
                             @(MPNetworkEndpointDecide): @"/api/sdk/decide" };
     });
@@ -205,28 +170,34 @@ static const NSUInteger kBatchSize = 50;
     return endPointToPath[key];
 }
 
-- (NSURLRequest *)buildGetRequestForEndpoint:(MPNetworkEndpoint)endpoint
+- (NSURLRequest *)buildGetRequestForURL:(NSURL *)url
+                               andEndpoint:(MPNetworkEndpoint)endpoint
                               withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems {
-    return [self buildRequestForEndpoint:[MPNetwork pathForEndpoint:endpoint]
+    return [self buildRequestForURL:(NSURL *)url
+                        andEndpoint:[MPNetwork pathForEndpoint:endpoint]
                             byHTTPMethod:@"GET"
                           withQueryItems:queryItems
                                  andBody:nil];
 }
 
-- (NSURLRequest *)buildPostRequestForEndpoint:(MPNetworkEndpoint)endpoint
-                                      andBody:(NSString *)body {
-    return [self buildRequestForEndpoint:[MPNetwork pathForEndpoint:endpoint]
-                            byHTTPMethod:@"POST"
-                          withQueryItems:nil
-                                 andBody:body];
+- (NSURLRequest *)buildPostRequestForURL:(NSURL *)url
+                             andEndpoint:(MPNetworkEndpoint)endpoint
+                          withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
+                                 andBody:(NSString *)body {
+    return [self buildRequestForURL:(NSURL *)url
+                        andEndpoint:[MPNetwork pathForEndpoint:endpoint]
+                       byHTTPMethod:@"POST"
+                     withQueryItems:queryItems
+                            andBody:body];
 }
 
-- (NSURLRequest *)buildRequestForEndpoint:(NSString *)endpoint
-                             byHTTPMethod:(NSString *)method
-                           withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
-                                  andBody:(NSString *)body {
+- (NSURLRequest *)buildRequestForURL:(NSURL *)url
+                         andEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
+                             andBody:(NSString *)body {
     // Build URL from path and query items
-    NSURL *urlWithEndpoint = [self.serverURL URLByAppendingPathComponent:endpoint];
+    NSURL *urlWithEndpoint = [url URLByAppendingPathComponent:endpoint];
     NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
                                              resolvingAgainstBaseURL:YES];
     NSLog(@"%@", urlWithEndpoint.absoluteString);
@@ -241,6 +212,48 @@ static const NSUInteger kBatchSize = 50;
     MPLogDebug(@"%@ http request: %@?%@", self, request, body);
     
     return [request copy];
+}
+
+- (void)trackIntegrationWithID:(NSString *)ID
+                      andToken:(NSString *)token
+                    andDistinctID:(NSString *)distinctID
+                    andCompletion:(void (^)(NSError *error))completion {
+    
+    NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
+    NSNumber *epochSeconds = @(round(epochInterval));
+    NSMutableDictionary *integrationEvent = [[NSMutableDictionary alloc]
+                                             initWithDictionary: @{@"event_name": @"Integration",
+                                                                   @"properties": @{@"token": token,
+                                                                                    @"mp_lib": @"Objective-C",
+                                                                                    @"version": @"2.0",
+                                                                                    @"distinct_id": distinctID,
+                                                                                    @"time": epochSeconds}}];
+    NSMutableArray *integrationEvents = [NSMutableArray array];
+    [integrationEvents addObject:integrationEvent];
+    NSString *requestData = [MPNetwork encodeArrayForAPI:integrationEvents];
+    NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
+    NSLog(@"track integration post body: %@", postBody);
+    NSString *locateValue = ID;
+    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
+                                                               value:locateValue];
+    NSArray *queryItems = @[queryItem];
+    NSURLRequest *request = [self buildPostRequestForURL:self.eventCollectionURL
+                                             andEndpoint:MPNetworkEndpointTrack
+                                          withQueryItems:queryItems andBody:postBody];
+    
+    NSLog(@"track integration request: %@", request);
+    NSLog(@"track integration request body: %@", [[NSString alloc] initWithData:request.HTTPBody
+                                                                       encoding:NSUTF8StringEncoding]);
+
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                              NSURLResponse *urlResponse,
+                                                              NSError *error) {
+        NSLog(@"session request: %@", request);
+        NSLog(@"session request body: %@", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
+        
+        completion(error);
+    }] resume];
 }
 
 + (NSString *)encodeArrayForAPI:(NSArray *)array {
@@ -268,7 +281,7 @@ static const NSUInteger kBatchSize = 50;
 }
 
 + (NSString *)encodeJSONDataAsBase64:(NSData *)data {
-    return [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
 }
 
 + (id)convertFoundationTypesToJSON:(id)obj {

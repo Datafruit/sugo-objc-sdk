@@ -14,4 +14,4 @@ typedef NS_ENUM(NSUInteger, AutomaticEventMode) {
 };
 
 #pragma mark - Strings
-static NSString *const kAutomaticEventName = @"$ios_event";
+static NSString *const kAutomaticEventName = @"ios_event";
