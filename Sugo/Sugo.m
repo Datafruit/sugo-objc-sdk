@@ -985,7 +985,7 @@ static NSString *defaultProjectToken;
                              object:nil];
 #endif // SUGO_NO_APP_LIFECYCLE_SUPPORT
 
-//    [self initializeGestureRecognizer];
+    [self initializeGestureRecognizer];
 }
 
 - (void) initializeGestureRecognizer {
@@ -1242,7 +1242,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 NSMutableSet *parsedEventBindings = [NSMutableSet set];
                 if ([commonEventBindings isKindOfClass:[NSArray class]]) {
                     for (id obj in commonEventBindings) {
-                        NSLog(@"obj");
                         MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
                         if (binder) {
                             [parsedEventBindings addObject:binder];

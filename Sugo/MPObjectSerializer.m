@@ -108,11 +108,11 @@
             }
     };
     
-    if ([object isKindOfClass:[UIWebView class]]) {
-        serializedObject[@"htmlPage"] = [self getUIWebViewHTMLInfoFrom:(UIWebView *)object];
-    } else if ([object isKindOfClass:[WKWebView class]]) {
-        serializedObject[@"htmlPage"] = [self getWKWebViewHTMLInfoFrom:(WKWebView *)object];
-    }
+//    if ([object isKindOfClass:[UIWebView class]]) {
+//        serializedObject[@"htmlPage"] = [self getUIWebViewHTMLInfoFrom:(UIWebView *)object];
+//    } else if ([object isKindOfClass:[WKWebView class]]) {
+//        serializedObject[@"htmlPage"] = [self getWKWebViewHTMLInfoFrom:(WKWebView *)object];
+//    }
 
     [context addSerializedObject:serializedObject];
 }
@@ -338,194 +338,194 @@
 
 @implementation MPObjectSerializer (WebViewSerializer)
 
-- (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
-{
-    JSContext *jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-    WebViewJSExport *jsExport = [[WebViewJSExport alloc] init];
-    jsContext[@"WebViewJSExport"] = jsExport;
-    [jsContext evaluateScript:self.jsUIWebViewReportSource];
-    [jsContext evaluateScript:self.jsUIWebViewReportExcute];
-    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-    return @{
-             @"url": storage.path,
-             @"clientWidth": storage.width,
-             @"clientHeight": storage.height,
-             @"nodes": storage.nodes
-             };
-}
-
-- (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView
-{
-    WKUserScript *jsReportScript = [[WKUserScript alloc] initWithSource:self.jsWKWebViewReport injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
-    if (![webView.configuration.userContentController.userScripts containsObject:jsReportScript]) {
-        [webView.configuration.userContentController addUserScript:jsReportScript];
-    }
-    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"WKWebViewReporter"];
-    [webView.configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewReporter"];
-    [webView evaluateJavaScript:self.jsWKWebViewReport completionHandler:nil];
-    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-    return @{
-             @"url": storage.path,
-             @"clientWidth": storage.width,
-             @"clientHeight": storage.height,
-             @"nodes": storage.nodes
-             };
-}
-
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
-{
-    if ([message.name  isEqual: @"WKWebViewReporter"])
-    {
-        NSDictionary *body = (NSDictionary *)message.body;
-        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-        if (body[@"path"])
-        {
-            storage.path = (NSString *)body[@"path"];
-        }
-        if (body[@"clientWidth"])
-        {
-            storage.width = (NSString *)body[@"clientWidth"];
-        }
-        if (body[@"clientHeight"])
-        {
-            storage.height = (NSString *)body[@"clientHeight"];
-        }
-        if (body[@"nodes"])
-        {
-            storage.nodes = (NSString *)body[@"nodes"];
-        }
-    }
-}
-
-- (NSString *)jsUIWebViewReportSource
-{
-    return @"var sugo_report={};\n \
-    \tsugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);\n \
-    \tsugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);\n \
-    \tsugo_report.isElementInViewport = function(rect) {\n \
-    \t        return (\n \
-    \t                rect.top >= 0 &&\n \
-    \t                rect.left >= 0 &&\n \
-    \t                rect.bottom <= sugo_report.clientHeight && \n \
-    \t                rect.right <= sugo_report.clientWidth\n \
-    \t        );\n \
-    \t};\n \
-    \tsugo_report.get_node_name = function(node){\n \
-    \t\tvar path = '';\n \
-    \t\tvar name = node.localName;\n \
-    \t\tif(name == 'script'){return '';}\n \
-    \t\tif(name == 'link'){return '';}\n \
-    \t\tpath = name;\n \
-    \t\tid = node.id;\n \
-    \t\tif(id && id.length>0){\n \
-    \t\t\tpath += '#' + id;\n \
-    \t\t}\n \
-    \t\treturn path;\n \
-    \t};\n \
-    \tsugo_report.reportChildNode = function(childrens, jsonArry, parent_path){\n \
-    \t\t\tvar index_map={};\n \
-    \t\t\tfor(var i=0;i<childrens.length;i++){\n \
-    \t\t\t\tvar children = childrens[i];\n \
-    \t\t\t\tvar node_name = sugo_report.get_node_name(children);\n \
-    \t\t\t\tif (node_name == ''){ continue;}\n \
-    \t\t\t\tif(index_map[node_name] == null){\n \
-    \t\t\t\t\tindex_map[node_name] = 0;\n \
-    \t\t\t\t}else{\n \
-    \t\t\t\t\tindex_map[node_name] = index_map[node_name]  + 1;\n \
-    \t\t\t\t}\n \
-    \t\t\t\tvar htmlNode={};\n \
-    \t\t\tvar path=parent_path + '/' + node_name + '[' + index_map[node_name] + ']';\n \
-    \t\thtmlNode.path=path; \
-    \t\t\t\tvar rect = children.getBoundingClientRect();\n \
-    \t\t\t\tif(sugo_report.isElementInViewport(rect) == true){ \n \
-    \t\t\t\t\thtmlNode.rect=rect;\n \
-    \t\t\t\t\tjsonArry.push(htmlNode);\n \
-    \t\t\t\t}\n \
-    \t\t\t\tif(children.children){\n \
-    \t\t\t\t\tsugo_report.reportChildNode(children.children, jsonArry, path);\n \
-    \t\t\t\t}\n \
-    \t\t\t}\n \
-    \t};\n \
-    \tsugo_report.reportNodes = function(){\n \
-    \t\tvar jsonArry=[];\n \
-    \t\tvar body = document.getElementsByTagName('body')[0];\n \
-    \t\tvar childrens = body.children;\n \
-    \t\tvar parent_path='';\n \
-    \t\tsugo_report.reportChildNode(childrens, jsonArry, parent_path);\n \
-    \t\tWebViewJSExport.infoWithPathNodesWidthHeight(window.location.pathname, JSON.stringify(jsonArry), sugo_report.clientWidth, sugo_report.clientHeight);\n \
-    \t};";
-}
-
-- (NSString *)jsUIWebViewReportExcute
-{
-    return @"sugo_report.reportNodes();";
-}
-
-- (NSString *)jsWKWebViewReport
-{
-    return @"var sugo_report={};\n \
-    \tsugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);\n \
-    \tsugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);\n \
-    \tsugo_report.isElementInViewport = function(rect) {\n \
-    \t        return (\n \
-    \t                rect.top >= 0 &&\n \
-    \t                rect.left >= 0 &&\n \
-    \t                rect.bottom <= sugo_report.clientHeight && \n \
-    \t                rect.right <= sugo_report.clientWidth\n \
-    \t        );\n \
-    \t};\n \
-    \tsugo_report.get_node_name = function(node){\n \
-    \t\tvar path = '';\n \
-    \t\tvar name = node.localName;\n \
-    \t\tif(name == 'script'){return '';}\n \
-    \t\tif(name == 'link'){return '';}\n \
-    \t\tpath = name;\n \
-    \t\tid = node.id;\n \
-    \t\tif(id && id.length>0){\n \
-    \t\t\tpath += '#' + id;\n \
-    \t\t}\n \
-    \t\treturn path;\n \
-    \t};\n \
-    \tsugo_report.reportChildNode = function(childrens, jsonArry, parent_path){\n \
-    \t\t\tvar index_map={};\n \
-    \t\t\tfor(var i=0;i<childrens.length;i++){\n \
-    \t\t\t\tvar children = childrens[i];\n \
-    \t\t\t\tvar node_name = sugo_report.get_node_name(children);\n \
-    \t\t\t\tif (node_name == ''){ continue;}\n \
-    \t\t\t\tif(index_map[node_name] == null){\n \
-    \t\t\t\t\tindex_map[node_name] = 0;\n \
-    \t\t\t\t}else{\n \
-    \t\t\t\t\tindex_map[node_name] = index_map[node_name]  + 1;\n \
-    \t\t\t\t}\n \
-    \t\t\t\tvar htmlNode={};\n \
-    \t\t\tvar path=parent_path + '/' + node_name + '[' + index_map[node_name] + ']';\n \
-    \t\thtmlNode.path=path; \
-    \t\t\t\tvar rect = children.getBoundingClientRect();\n \
-    \t\t\t\tif(sugo_report.isElementInViewport(rect) == true){ \n \
-    \t\t\t\t\thtmlNode.rect=rect;\n \
-    \t\t\t\t\tjsonArry.push(htmlNode);\n \
-    \t\t\t\t}\n \
-    \t\t\t\tif(children.children){\n \
-    \t\t\t\t\tsugo_report.reportChildNode(children.children, jsonArry, path);\n \
-    \t\t\t\t}\n \
-    \t\t\t}\n \
-    \t};\n \
-    \tsugo_report.reportNodes = function(){\n \
-    \t\tvar jsonArry=[];\n \
-    \t\tvar body = document.getElementsByTagName('body')[0];\n \
-    \t\tvar childrens = body.children;\n \
-    \t\tvar parent_path='';\n \
-    \t\tsugo_report.reportChildNode(childrens, jsonArry, parent_path);\n \
-    \t\tvar message = {\n \
-    \t\t\t\t'path' : window.location.pathname,\n \
-    \t\t\t\t'clientWidth' : sugo_report.clientWidth,\n \
-    \t\t\t\t'clientHeight' : sugo_report.clientHeight,\n \
-    \t\t\t\t'nodes' : JSON.stringify(jsonArry)\n \
-    \t\t\t\t};\n \
-    \t\twindow.webkit.messageHandlers.WKWebViewReporter.postMessage(message);\n \
-    \t};\n \
-    \tsugo_report.reportNodes();";
-}
+//- (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
+//{
+//    JSContext *jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+//    WebViewJSExport *jsExport = [[WebViewJSExport alloc] init];
+//    jsContext[@"WebViewJSExport"] = jsExport;
+//    [jsContext evaluateScript:self.jsUIWebViewReportSource];
+//    [jsContext evaluateScript:self.jsUIWebViewReportExcute];
+//    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+//    return @{
+//             @"url": storage.path,
+//             @"clientWidth": storage.width,
+//             @"clientHeight": storage.height,
+//             @"nodes": storage.nodes
+//             };
+//}
+//
+//- (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView
+//{
+//    WKUserScript *jsReportScript = [[WKUserScript alloc] initWithSource:self.jsWKWebViewReport injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+//    if (![webView.configuration.userContentController.userScripts containsObject:jsReportScript]) {
+//        [webView.configuration.userContentController addUserScript:jsReportScript];
+//    }
+//    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"WKWebViewReporter"];
+//    [webView.configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewReporter"];
+//    [webView evaluateJavaScript:self.jsWKWebViewReport completionHandler:nil];
+//    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+//    return @{
+//             @"url": storage.path,
+//             @"clientWidth": storage.width,
+//             @"clientHeight": storage.height,
+//             @"nodes": storage.nodes
+//             };
+//}
+//
+//- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
+//{
+//    if ([message.name  isEqual: @"WKWebViewReporter"])
+//    {
+//        NSDictionary *body = (NSDictionary *)message.body;
+//        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+//        if (body[@"path"])
+//        {
+//            storage.path = (NSString *)body[@"path"];
+//        }
+//        if (body[@"clientWidth"])
+//        {
+//            storage.width = (NSString *)body[@"clientWidth"];
+//        }
+//        if (body[@"clientHeight"])
+//        {
+//            storage.height = (NSString *)body[@"clientHeight"];
+//        }
+//        if (body[@"nodes"])
+//        {
+//            storage.nodes = (NSString *)body[@"nodes"];
+//        }
+//    }
+//}
+//
+//- (NSString *)jsUIWebViewReportSource
+//{
+//    return @"var sugo_report={};\n \
+//    \tsugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);\n \
+//    \tsugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);\n \
+//    \tsugo_report.isElementInViewport = function(rect) {\n \
+//    \t        return (\n \
+//    \t                rect.top >= 0 &&\n \
+//    \t                rect.left >= 0 &&\n \
+//    \t                rect.bottom <= sugo_report.clientHeight && \n \
+//    \t                rect.right <= sugo_report.clientWidth\n \
+//    \t        );\n \
+//    \t};\n \
+//    \tsugo_report.get_node_name = function(node){\n \
+//    \t\tvar path = '';\n \
+//    \t\tvar name = node.localName;\n \
+//    \t\tif(name == 'script'){return '';}\n \
+//    \t\tif(name == 'link'){return '';}\n \
+//    \t\tpath = name;\n \
+//    \t\tid = node.id;\n \
+//    \t\tif(id && id.length>0){\n \
+//    \t\t\tpath += '#' + id;\n \
+//    \t\t}\n \
+//    \t\treturn path;\n \
+//    \t};\n \
+//    \tsugo_report.reportChildNode = function(childrens, jsonArry, parent_path){\n \
+//    \t\t\tvar index_map={};\n \
+//    \t\t\tfor(var i=0;i<childrens.length;i++){\n \
+//    \t\t\t\tvar children = childrens[i];\n \
+//    \t\t\t\tvar node_name = sugo_report.get_node_name(children);\n \
+//    \t\t\t\tif (node_name == ''){ continue;}\n \
+//    \t\t\t\tif(index_map[node_name] == null){\n \
+//    \t\t\t\t\tindex_map[node_name] = 0;\n \
+//    \t\t\t\t}else{\n \
+//    \t\t\t\t\tindex_map[node_name] = index_map[node_name]  + 1;\n \
+//    \t\t\t\t}\n \
+//    \t\t\t\tvar htmlNode={};\n \
+//    \t\t\tvar path=parent_path + '/' + node_name + '[' + index_map[node_name] + ']';\n \
+//    \t\thtmlNode.path=path; \
+//    \t\t\t\tvar rect = children.getBoundingClientRect();\n \
+//    \t\t\t\tif(sugo_report.isElementInViewport(rect) == true){ \n \
+//    \t\t\t\t\thtmlNode.rect=rect;\n \
+//    \t\t\t\t\tjsonArry.push(htmlNode);\n \
+//    \t\t\t\t}\n \
+//    \t\t\t\tif(children.children){\n \
+//    \t\t\t\t\tsugo_report.reportChildNode(children.children, jsonArry, path);\n \
+//    \t\t\t\t}\n \
+//    \t\t\t}\n \
+//    \t};\n \
+//    \tsugo_report.reportNodes = function(){\n \
+//    \t\tvar jsonArry=[];\n \
+//    \t\tvar body = document.getElementsByTagName('body')[0];\n \
+//    \t\tvar childrens = body.children;\n \
+//    \t\tvar parent_path='';\n \
+//    \t\tsugo_report.reportChildNode(childrens, jsonArry, parent_path);\n \
+//    \t\tWebViewJSExport.infoWithPathNodesWidthHeight(window.location.pathname, JSON.stringify(jsonArry), sugo_report.clientWidth, sugo_report.clientHeight);\n \
+//    \t};";
+//}
+//
+//- (NSString *)jsUIWebViewReportExcute
+//{
+//    return @"sugo_report.reportNodes();";
+//}
+//
+//- (NSString *)jsWKWebViewReport
+//{
+//    return @"var sugo_report={};\n \
+//    \tsugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);\n \
+//    \tsugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);\n \
+//    \tsugo_report.isElementInViewport = function(rect) {\n \
+//    \t        return (\n \
+//    \t                rect.top >= 0 &&\n \
+//    \t                rect.left >= 0 &&\n \
+//    \t                rect.bottom <= sugo_report.clientHeight && \n \
+//    \t                rect.right <= sugo_report.clientWidth\n \
+//    \t        );\n \
+//    \t};\n \
+//    \tsugo_report.get_node_name = function(node){\n \
+//    \t\tvar path = '';\n \
+//    \t\tvar name = node.localName;\n \
+//    \t\tif(name == 'script'){return '';}\n \
+//    \t\tif(name == 'link'){return '';}\n \
+//    \t\tpath = name;\n \
+//    \t\tid = node.id;\n \
+//    \t\tif(id && id.length>0){\n \
+//    \t\t\tpath += '#' + id;\n \
+//    \t\t}\n \
+//    \t\treturn path;\n \
+//    \t};\n \
+//    \tsugo_report.reportChildNode = function(childrens, jsonArry, parent_path){\n \
+//    \t\t\tvar index_map={};\n \
+//    \t\t\tfor(var i=0;i<childrens.length;i++){\n \
+//    \t\t\t\tvar children = childrens[i];\n \
+//    \t\t\t\tvar node_name = sugo_report.get_node_name(children);\n \
+//    \t\t\t\tif (node_name == ''){ continue;}\n \
+//    \t\t\t\tif(index_map[node_name] == null){\n \
+//    \t\t\t\t\tindex_map[node_name] = 0;\n \
+//    \t\t\t\t}else{\n \
+//    \t\t\t\t\tindex_map[node_name] = index_map[node_name]  + 1;\n \
+//    \t\t\t\t}\n \
+//    \t\t\t\tvar htmlNode={};\n \
+//    \t\t\tvar path=parent_path + '/' + node_name + '[' + index_map[node_name] + ']';\n \
+//    \t\thtmlNode.path=path; \
+//    \t\t\t\tvar rect = children.getBoundingClientRect();\n \
+//    \t\t\t\tif(sugo_report.isElementInViewport(rect) == true){ \n \
+//    \t\t\t\t\thtmlNode.rect=rect;\n \
+//    \t\t\t\t\tjsonArry.push(htmlNode);\n \
+//    \t\t\t\t}\n \
+//    \t\t\t\tif(children.children){\n \
+//    \t\t\t\t\tsugo_report.reportChildNode(children.children, jsonArry, path);\n \
+//    \t\t\t\t}\n \
+//    \t\t\t}\n \
+//    \t};\n \
+//    \tsugo_report.reportNodes = function(){\n \
+//    \t\tvar jsonArry=[];\n \
+//    \t\tvar body = document.getElementsByTagName('body')[0];\n \
+//    \t\tvar childrens = body.children;\n \
+//    \t\tvar parent_path='';\n \
+//    \t\tsugo_report.reportChildNode(childrens, jsonArry, parent_path);\n \
+//    \t\tvar message = {\n \
+//    \t\t\t\t'path' : window.location.pathname,\n \
+//    \t\t\t\t'clientWidth' : sugo_report.clientWidth,\n \
+//    \t\t\t\t'clientHeight' : sugo_report.clientHeight,\n \
+//    \t\t\t\t'nodes' : JSON.stringify(jsonArry)\n \
+//    \t\t\t\t};\n \
+//    \t\twindow.webkit.messageHandlers.WKWebViewReporter.postMessage(message);\n \
+//    \t};\n \
+//    \tsugo_report.reportNodes();";
+//}
 
 @end
 

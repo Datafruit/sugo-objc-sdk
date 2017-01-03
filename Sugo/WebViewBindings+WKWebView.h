@@ -10,8 +10,9 @@
 
 @interface WebViewBindings (WKWebView) <WKScriptMessageHandler>
 
-- (void)bindWKWebView:(WKWebView *)webView;
+- (void)startWKWebViewBindings:(WKWebView *)webView;
 - (void)stopWKWebViewBindings:(WKWebView *)webView;
+- (void)updateWKWebViewBindings:(WKWebView *)webView;
 - (NSString *)jsWKWebViewBindingsSource;
 - (NSString *)jsWKWebViewBindingsExcute;
 

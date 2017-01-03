@@ -7,7 +7,7 @@
 //
 
 #import "WebViewBindings.h"
-#import "WebViewBindings+UIViewController.h"
+#import "WebViewBindings+WebView.h"
 #import "WebViewBindings+UIWebView.h"
 #import "WebViewBindings+WKWebView.h"
 
@@ -28,13 +28,32 @@
 
 - (instancetype)initSingleton
 {
-    self  = [super init];
     _mode = Designer;
-    _vcSwizzleRunning = false;
-    _uiWebViewSwizzleRunning = false;
-    _wkWebViewJavaScriptInjected = false;
-    _vcSwizzleBlockName = [[NSUUID UUID] UUIDString];
-    _uiWebViewSwizzleBlockName = [[NSUUID UUID] UUIDString];
+    _codelessBindings = [[NSMutableArray alloc] init];
+    _designerBindings = [[NSMutableArray alloc] init];
+    _bindings = [[NSMutableArray alloc] init];
+    _stringBindings = [[NSMutableString alloc] init];
+    self  = [super init];
+    
+    _uiVcPath = [[NSMutableString alloc] init];
+    _wkVcPath = [[NSMutableString alloc] init];
+    _isWebViewNeedReload = NO;
+    _viewSwizzleRunning = NO;
+    
+    _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
+    _uiRemoveFromSuperviewBlockName = [[NSUUID UUID] UUIDString];
+    
+    _wkDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
+    _wkRemoveFromSuperviewBlockName = [[NSUUID UUID] UUIDString];
+    [self addObserver:self
+           forKeyPath:@"stringBindings"
+              options:NSKeyValueObservingOptionNew
+              context:nil];
+    [self addObserver:self
+           forKeyPath:@"isWebViewNeedReload"
+              options:NSKeyValueObservingOptionNew
+              context:nil];
+    
     return self;
 }
 
@@ -46,21 +65,39 @@
     return nil;
 }
 
+- (void)dealloc
+{
+    _mode = Designer;
+    [_designerBindings removeAllObjects];
+    [_codelessBindings removeAllObjects];
+    [_bindings removeAllObjects];
+    _stringBindings = nil;
+    _isWebViewNeedReload = NO;
+    
+    _uiWebView = nil;
+    _uiVcPath = nil;
+    
+    _wkWebView = nil;
+    _wkVcPath = nil;
+}
+
 - (void)fillBindings
 {
-    if (_mode == Designer)
+    if (self.mode == Designer)
     {
-        _bindings = _designerBindings;
+        self.bindings = _designerBindings;
     } else if (_mode == Codeless)
     {
-        _bindings = _codelessBindings;
+        self.bindings = _codelessBindings;
     }
     
-    if (_bindings && [_bindings count] > 0) {
-        NSData *jsonBindings = [NSJSONSerialization dataWithJSONObject:_bindings options:NSJSONWritingPrettyPrinted error:nil];
-        _stringBindings = [[NSString alloc] initWithData:jsonBindings encoding:NSUTF8StringEncoding];
-        [self stop];
-        [self excute];
+    if (self.bindings && [self.bindings count] > 0) {
+        NSData *jsonBindings = [NSJSONSerialization dataWithJSONObject:self.bindings
+                                                               options:NSJSONWritingPrettyPrinted
+                                                                 error:nil];
+        self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
+                                                           encoding:NSUTF8StringEncoding];
+        
     }
     
 }

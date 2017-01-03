@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		14149DDF1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */; };
+		14149DEE1E1A6D9D0006DF6A /* WebViewBindings+WebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */; };
+		14149DEF1E1A6D9D0006DF6A /* WebViewBindings+WebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */; };
 		141AC7871E1364D7008D67F6 /* Sugo.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7851E1364D7008D67F6 /* Sugo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C11E137088008D67F6 /* AutomaticEventsConstants.h */; };
 		141AC8651E137088008D67F6 /* Sugo.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C31E137088008D67F6 /* Sugo.m */; };
@@ -124,8 +126,6 @@
 		141AC8F31E137088008D67F6 /* UIViewController+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8531E137088008D67F6 /* UIViewController+AutomaticEvents.m */; };
 		141AC8F41E137088008D67F6 /* WebViewBindings.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8551E137088008D67F6 /* WebViewBindings.h */; };
 		141AC8F51E137088008D67F6 /* WebViewBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8561E137088008D67F6 /* WebViewBindings.m */; };
-		141AC8F61E137088008D67F6 /* WebViewBindings+UIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8571E137088008D67F6 /* WebViewBindings+UIViewController.h */; };
-		141AC8F71E137088008D67F6 /* WebViewBindings+UIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8581E137088008D67F6 /* WebViewBindings+UIViewController.m */; };
 		141AC8F81E137088008D67F6 /* WebViewBindings+UIWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8591E137088008D67F6 /* WebViewBindings+UIWebView.h */; };
 		141AC8F91E137088008D67F6 /* WebViewBindings+UIWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85A1E137088008D67F6 /* WebViewBindings+UIWebView.m */; };
 		141AC8FA1E137088008D67F6 /* WebViewBindings+WKWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC85B1E137088008D67F6 /* WebViewBindings+WKWebView.h */; };
@@ -150,6 +150,8 @@
 
 /* Begin PBXFileReference section */
 		14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUILayoutSupportToNSStringValueTransformer.m; sourceTree = "<group>"; };
+		14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+WebView.h"; sourceTree = "<group>"; };
+		14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+WebView.m"; sourceTree = "<group>"; };
 		141AC7821E1364D7008D67F6 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		141AC7851E1364D7008D67F6 /* Sugo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sugo.h; sourceTree = "<group>"; };
 		141AC7861E1364D7008D67F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -270,8 +272,6 @@
 		141AC8531E137088008D67F6 /* UIViewController+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutomaticEvents.m"; sourceTree = "<group>"; };
 		141AC8551E137088008D67F6 /* WebViewBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewBindings.h; sourceTree = "<group>"; };
 		141AC8561E137088008D67F6 /* WebViewBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewBindings.m; sourceTree = "<group>"; };
-		141AC8571E137088008D67F6 /* WebViewBindings+UIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+UIViewController.h"; sourceTree = "<group>"; };
-		141AC8581E137088008D67F6 /* WebViewBindings+UIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+UIViewController.m"; sourceTree = "<group>"; };
 		141AC8591E137088008D67F6 /* WebViewBindings+UIWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+UIWebView.h"; sourceTree = "<group>"; };
 		141AC85A1E137088008D67F6 /* WebViewBindings+UIWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+UIWebView.m"; sourceTree = "<group>"; };
 		141AC85B1E137088008D67F6 /* WebViewBindings+WKWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+WKWebView.h"; sourceTree = "<group>"; };
@@ -377,8 +377,8 @@
 			children = (
 				141AC8551E137088008D67F6 /* WebViewBindings.h */,
 				141AC8561E137088008D67F6 /* WebViewBindings.m */,
-				141AC8571E137088008D67F6 /* WebViewBindings+UIViewController.h */,
-				141AC8581E137088008D67F6 /* WebViewBindings+UIViewController.m */,
+				14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */,
+				14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */,
 				141AC8591E137088008D67F6 /* WebViewBindings+UIWebView.h */,
 				141AC85A1E137088008D67F6 /* WebViewBindings+UIWebView.m */,
 				141AC85B1E137088008D67F6 /* WebViewBindings+WKWebView.h */,
@@ -666,7 +666,6 @@
 				141AC8F41E137088008D67F6 /* WebViewBindings.h in Headers */,
 				141AC8DD1E137088008D67F6 /* MPValueTransformers.h in Headers */,
 				141AC8E41E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h in Headers */,
-				141AC8F61E137088008D67F6 /* WebViewBindings+UIViewController.h in Headers */,
 				141AC8BB1E137088008D67F6 /* MPResources.h in Headers */,
 				141AC8721E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
 				141AC89D1E137088008D67F6 /* MPEventBinding.h in Headers */,
@@ -683,6 +682,7 @@
 				141AC8661E137088008D67F6 /* Sugo+AutomaticEvents.h in Headers */,
 				141AC8EC1E137088008D67F6 /* UIImage+MPAverageColor.h in Headers */,
 				141AC8941E137088008D67F6 /* MPClassDescription.h in Headers */,
+				14149DEE1E1A6D9D0006DF6A /* WebViewBindings+WebView.h in Headers */,
 				141AC8CA1E137088008D67F6 /* MPSwizzler.h in Headers */,
 				141AC8AE1E137088008D67F6 /* MPObjectIdentityProvider.h in Headers */,
 				141AC8801E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h in Headers */,
@@ -768,7 +768,6 @@
 				141AC87B1E137088008D67F6 /* MPABTestDesignerConnection.m in Sources */,
 				141AC8FD1E137088008D67F6 /* WebViewInfoStorage.m in Sources */,
 				141AC8CB1E137088008D67F6 /* MPSwizzler.m in Sources */,
-				141AC8F71E137088008D67F6 /* WebViewBindings+UIViewController.m in Sources */,
 				141AC8D81E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
 				141AC8C91E137088008D67F6 /* MPSwizzle.m in Sources */,
 				141AC8EB1E137088008D67F6 /* UIColor+MPColor.m in Sources */,
@@ -809,6 +808,7 @@
 				141AC87D1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				141AC8671E137088008D67F6 /* Sugo+AutomaticEvents.m in Sources */,
 				141AC89E1E137088008D67F6 /* MPEventBinding.m in Sources */,
+				14149DEF1E1A6D9D0006DF6A /* WebViewBindings+WebView.m in Sources */,
 				141AC8DC1E137088008D67F6 /* MPUITableViewBinding.m in Sources */,
 				141AC8D71E137088008D67F6 /* MPUIControlBinding.m in Sources */,
 				141AC8981E137088008D67F6 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
