@@ -18,7 +18,9 @@
     storage.eventName = eventName;
     storage.properties = properties;
     NSData *pData = [properties dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *pJSON = [NSJSONSerialization JSONObjectWithData:pData options:NSJSONReadingMutableContainers error:nil];
+    NSDictionary *pJSON = [NSJSONSerialization JSONObjectWithData:pData
+                                                          options:NSJSONReadingMutableContainers
+                                                            error:nil];
     if (pJSON != nil)
     {
         [[Sugo sharedInstance] track:storage.eventID

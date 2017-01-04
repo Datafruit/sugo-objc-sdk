@@ -10,7 +10,14 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "WebViewInfoStorage.h"
 
-@interface WebViewJSExport : NSObject <JSExport>
+@protocol WebViewJSExportProtocol <NSObject, JSExport>
+
++ (void)eventWithId:(NSString *)eventId Name:(NSString *)eventName Properties:(NSString *)properties;
++ (void)infoWithPath:(NSString *)path Nodes:(NSString *)nodes Width:(NSString *)width Height:(NSString *)height;
+
+@end
+
+@interface WebViewJSExport : NSObject <WebViewJSExportProtocol>
 
 + (void)eventWithId:(NSString *)eventId Name:(NSString *)eventName Properties:(NSString *)properties;
 + (void)infoWithPath:(NSString *)path Nodes:(NSString *)nodes Width:(NSString *)width Height:(NSString *)height;
