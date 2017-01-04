@@ -8,6 +8,8 @@
 
 #import "MPDesignerEventBindingMessage.h"
 
+NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
+
 @implementation MPDesignerTrackMessage
 
 {

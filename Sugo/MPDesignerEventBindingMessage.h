@@ -34,6 +34,8 @@ __deprecated
 @end
 
 
+extern NSString *const MPDesignerEventBindingTrackMessageType;
+
 @interface MPDesignerTrackMessage : MPAbstractABTestDesignerMessage
 
 + (instancetype)message;

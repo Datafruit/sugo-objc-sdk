@@ -330,7 +330,12 @@ static NSString *defaultProjectToken;
     NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[eventName];
-        NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:self.automaticProperties];
+        
+        NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+        if (!self.abtestDesignerConnection.connected
+            || !self.isCodelessTesting) {
+            [p addEntriesFromDictionary:self.automaticProperties];
+        }
         p[@"token"] = self.apiToken;
         p[@"time"] = epochSeconds;
         if (eventStartTime) {
@@ -372,12 +377,17 @@ static NSString *defaultProjectToken;
             [self.eventsQueue removeObjectAtIndex:0];
         }
         
+        if (self.abtestDesignerConnection.connected
+            && self.isCodelessTesting) {
+            [self flushQueueViaWebSocket];
+        }
         // Always archive
         [self archiveEvents];
     });
-#if SUGO_FLUSH_IMMEDIATELY
-    [self flush];
-#endif
+//#if SUGO_FLUSH_IMMEDIATELY
+//    [self flush];
+//#endif
+
 }
 
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
@@ -548,9 +558,11 @@ static NSString *defaultProjectToken;
 
 - (void)flushWithCompletion:(void (^)())handler
 {
+    if (self.isCodelessTesting) {
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
 //        MPLogInfo(@"%@ flush starting", self);
-
         __strong id<SugoDelegate> strongDelegate = self.delegate;
         if (strongDelegate && [strongDelegate respondsToSelector:@selector(sugoWillFlush:)]) {
             if (![strongDelegate sugoWillFlush:self]) {
@@ -565,9 +577,18 @@ static NSString *defaultProjectToken;
         if (handler) {
             dispatch_async(dispatch_get_main_queue(), handler);
         }
-
 //        MPLogInfo(@"%@ flush complete", self);
     });
+}
+
+- (void)flushQueueViaWebSocket
+{
+    if (self.eventsQueue.count > 0) {
+        NSDictionary *events = [NSDictionary dictionaryWithObject:self.eventsQueue
+                                                           forKey:@"events"];
+        [self.abtestDesignerConnection sendMessage:[MPDesignerTrackMessage messageWithPayload:events]];
+        [self.eventsQueue removeAllObjects];
+    }
 }
 
 #pragma mark - Persistence

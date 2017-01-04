@@ -2,6 +2,7 @@
 // Copyright (c) 2014 Sugo. All rights reserved.
 
 #import "Sugo.h"
+#import "SugoPrivate.h"
 #import "MPABTestDesignerChangeRequestMessage.h"
 #import "MPABTestDesignerClearRequestMessage.h"
 #import "MPABTestDesignerConnection.h"
@@ -57,6 +58,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
             MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
             MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
             MPDesignerEventBindingRequestMessageType     : [MPDesignerEventBindingRequestMessage class],
+            MPDesignerEventBindingTrackMessageType       : [MPDesignerTrackMessage class],
         };
 
         _open = NO;
@@ -186,6 +188,9 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         NSString *type = messageDictionary[@"type"];
         NSDictionary *payload = messageDictionary[@"payload"];
 
+        if ([type isEqualToString:@"event_binding_request"]) {
+            [Sugo sharedInstance].isCodelessTesting = YES;
+        }
         designerMessage = [_typeToMessageClassMap[type] messageWithType:type payload:payload];
     } else {
         MPLogWarning(@"Badly formed socket message expected JSON dictionary: %@", error);
