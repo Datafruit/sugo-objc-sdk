@@ -31,6 +31,7 @@
         [[Sugo sharedInstance] track:storage.eventID
                                eventName:storage.eventName];
     }
+    NSLog(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
 }
 
 + (void)infoWithPath:(NSString *)path Nodes:(NSString *)nodes Width:(NSString *)width Height:(NSString *)height

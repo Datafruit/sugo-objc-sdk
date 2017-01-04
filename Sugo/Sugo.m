@@ -114,9 +114,9 @@ static NSString *defaultProjectToken;
 #if !defined(SUGO_WATCH_EXTENSION)
         self.taskId = UIBackgroundTaskInvalid;
 #endif
-        NSString *label = [NSString stringWithFormat:@"com.sugo.%@.%p", apiToken, (void *)self];
+        NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-
+        self.isCodelessTesting = NO;
 #if defined(DISABLE_SUGO_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
 #else
@@ -1288,7 +1288,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 completion(nil);
             }
         } else {
-            MPLogInfo(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)self.eventBindings.count, self.eventBindings);
+            MPLogInfo(@"%@ decide check found %lu tracking events, and %lu h5 tracking events",
+                      self,
+                      (unsigned long)self.eventBindings.count,
+                      [[WebViewBindings globalBindings].designerBindings count]);
 
             if (completion) {
                 completion(newEventBindings);

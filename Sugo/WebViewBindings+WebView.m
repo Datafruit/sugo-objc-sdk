@@ -27,7 +27,7 @@
             if (!uiWebView) {
                 return;
             }
-            if (self.wkVcPath || self.wkVcPath.length > 0) {
+            if (self.uiVcPath.length > 0) {
                 return;
             }
             UIResponder *responder = uiWebView;
@@ -40,7 +40,7 @@
                 }
             }
             self.uiWebView = uiWebView;
-            [self startUIWebViewBindings:self.uiWebView];
+            [self startUIWebViewBindings:&uiWebView];
         };
         
         void (^uiRemoveFromSuperviewBlock)(id, SEL) = ^(id webView, SEL command) {
@@ -57,7 +57,7 @@
             if (!wkWebView) {
                 return;
             }
-            if (self.wkVcPath || self.wkVcPath.length > 0) {
+            if (self.wkVcPath.length > 0) {
                 return;
             }
             UIResponder *responder = wkWebView;
@@ -70,7 +70,7 @@
                 }
             }
             self.wkWebView = wkWebView;
-            [self startWKWebViewBindings:self.wkWebView];
+            [self startWKWebViewBindings:&wkWebView];
         };
 
         void (^wkRemoveFromSuperviewBlock)(id, SEL) = ^(id webView, SEL command) {
@@ -82,19 +82,19 @@
             [self stopWKWebViewBindings:wkWebView];
         };
         
-        [MPSwizzler swizzleSelector:@selector(didMoveToWindow)
+        [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:NSClassFromString(@"UIWebView")
                           withBlock:uiDidMoveToWindowBlock
                               named:self.uiDidMoveToWindowBlockName];
-        [MPSwizzler swizzleSelector:@selector(removeFromSuperview)
+        [MPSwizzler swizzleSelector:NSSelectorFromString(@"removeFromSuperview")
                             onClass:NSClassFromString(@"UIWebView")
                           withBlock:uiRemoveFromSuperviewBlock
                               named:self.uiRemoveFromSuperviewBlockName];
-        [MPSwizzler swizzleSelector:@selector(didMoveToWindow)
+        [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:NSClassFromString(@"WKWebView")
                           withBlock:wkDidMoveToWindowBlock
                               named:self.wkDidMoveToWindowBlockName];
-        [MPSwizzler swizzleSelector:@selector(removeFromSuperview)
+        [MPSwizzler swizzleSelector:NSSelectorFromString(@"removeFromSuperview")
                             onClass:NSClassFromString(@"WKWebView")
                           withBlock:wkRemoveFromSuperviewBlock
                               named:self.wkRemoveFromSuperviewBlockName];
@@ -112,16 +112,16 @@
             [self stopWKWebViewBindings:self.wkWebView];
         }
         
-        [MPSwizzler unswizzleSelector:@selector(didMoveToWindow)
+        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                               onClass:NSClassFromString(@"UIWebView")
                                 named:self.uiDidMoveToWindowBlockName];
-        [MPSwizzler unswizzleSelector:@selector(removeFromSuperview)
+        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"removeFromSuperview")
                               onClass:NSClassFromString(@"UIWebView")
                                 named:self.uiRemoveFromSuperviewBlockName];
-        [MPSwizzler unswizzleSelector:@selector(didMoveToWindow)
+        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                               onClass:NSClassFromString(@"WKWebView")
                                 named:self.uiDidMoveToWindowBlockName];
-        [MPSwizzler unswizzleSelector:@selector(removeFromSuperview)
+        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"removeFromSuperview")
                               onClass:NSClassFromString(@"WKWebView")
                                 named:self.wkRemoveFromSuperviewBlockName];
         self.viewSwizzleRunning = NO;
@@ -133,9 +133,9 @@
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context
 {
-    NSLog(@"Object: %@ = K: %@ = V: %@", object, keyPath, change[NSKeyValueChangeNewKey]);
+    NSLog(@"Object: %@ = \nK: %@ = \nV: %@", object, keyPath, change[NSKeyValueChangeNewKey]);
     if ([keyPath isEqualToString:@"stringBindings"]) {
-        if (self.mode == Codeless) {
+        if (self.mode == Codeless && [Sugo sharedInstance].isCodelessTesting) {
             self.isWebViewNeedReload = YES;
         }
         if (!self.isWebViewNeedReload) {
@@ -149,13 +149,15 @@
             return;
         }
         if (self.uiWebView) {
-            [self updateUIWebViewBindings:self.uiWebView];
+            UIWebView *webView = self.uiWebView;
+            [self updateUIWebViewBindings:&webView];
             [self.uiWebView performSelectorOnMainThread:@selector(reload)
                                              withObject:nil
                                           waitUntilDone:NO];
         }
         if (self.wkWebView) {
-            [self updateWKWebViewBindings:self.wkWebView];
+            WKWebView *webView = self.wkWebView;
+            [self updateWKWebViewBindings:&webView];
             [self.wkWebView performSelectorOnMainThread:@selector(reload)
                                              withObject:nil
                                           waitUntilDone:NO];

@@ -42,9 +42,15 @@
     
     _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
     _uiRemoveFromSuperviewBlockName = [[NSUUID UUID] UUIDString];
+    _uiWebViewJavaScriptInjected = NO;
+    _uiWebViewDidStartLoadBlockName = [[NSUUID UUID] UUIDString];
+    _uiWebViewDidFinishLoadBlockName = [[NSUUID UUID] UUIDString];
     
     _wkDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
     _wkRemoveFromSuperviewBlockName = [[NSUUID UUID] UUIDString];
+    _wkWebViewJavaScriptInjected = NO;
+    _wkWebViewCurrentJSSource = [[WKUserScript alloc] init];
+    _wkWebViewCurrentJSExcute = [[WKUserScript alloc] init];
     [self addObserver:self
            forKeyPath:@"stringBindings"
               options:NSKeyValueObservingOptionNew
@@ -85,10 +91,10 @@
 {
     if (self.mode == Designer)
     {
-        self.bindings = _designerBindings;
+        self.bindings = self.designerBindings;
     } else if (_mode == Codeless)
     {
-        self.bindings = _codelessBindings;
+        self.bindings = self.codelessBindings;
     }
     
     if (self.bindings && [self.bindings count] > 0) {

@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 
 @property BOOL viewSwizzleRunning;
 
-@property (atomic, strong) NSString* stringBindings;
+@property (atomic, strong) NSMutableString* stringBindings;
 @property BOOL isWebViewNeedReload;
 
 @property (atomic, strong) UIWebView* uiWebView;

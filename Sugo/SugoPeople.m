@@ -60,7 +60,7 @@
     if (deviceModel) {
         p[@"ios_device_model"] = deviceModel;
     }
-    NSString *ifa = [strongSugo IFA];
+//    NSString *ifa = [strongSugo IFA];
 //    if (ifa) {
 //        p[@"ios_ifa"] = ifa;
 //    }

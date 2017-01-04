@@ -10,9 +10,9 @@
 
 @interface WebViewBindings (UIWebView)
 
-- (void)startUIWebViewBindings:(UIWebView *)webView;
+- (void)startUIWebViewBindings:(UIWebView **)webView;
 - (void)stopUIWebViewBindings:(UIWebView *)webView;
-- (void)updateUIWebViewBindings:(UIWebView *)webView;
+- (void)updateUIWebViewBindings:(UIWebView **)webView;
 - (NSString *)jsUIWebViewBindingsSource;
 - (NSString *)jsUIWebViewBindingsExcute;
 

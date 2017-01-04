@@ -7,9 +7,8 @@
 //
 
 #import "WKWebViewController.h"
-#import <WebKit/WebKit.h>
 
-@interface WKWebViewController () <WKNavigationDelegate>
+@interface WKWebViewController ()
 
 @property (atomic, strong) WKWebView *webView;
 

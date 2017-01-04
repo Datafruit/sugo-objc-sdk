@@ -344,7 +344,6 @@
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
 {
     JSContext *jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-    WebViewJSExport *jsExport = [WebViewJSExport self];
     jsContext[@"WebViewJSExport"] = [WebViewJSExport class]; //jsExport;
     [jsContext evaluateScript:self.jsWebViewUtils];
     [jsContext evaluateScript:self.jsUIWebViewReportSource];

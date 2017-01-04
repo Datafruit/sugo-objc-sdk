@@ -200,7 +200,6 @@ static const NSUInteger kBatchSize = 50;
     NSURL *urlWithEndpoint = [url URLByAppendingPathComponent:endpoint];
     NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
                                              resolvingAgainstBaseURL:YES];
-    NSLog(@"%@", urlWithEndpoint.absoluteString);
     components.queryItems = queryItems;
 
     // Build request from URL
@@ -209,6 +208,7 @@ static const NSUInteger kBatchSize = 50;
     [request setHTTPMethod:method];
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     
+    NSLog(@"build request: %@", [request URL].absoluteString);
     MPLogDebug(@"%@ http request: %@?%@", self, request, body);
     
     return [request copy];
