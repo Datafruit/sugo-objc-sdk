@@ -6,7 +6,7 @@
 //  Copyright © 2017年 sugo. All rights reserved.
 //
 
-#import "SugoPrivate.h";
+#import "SugoPrivate.h"
 #import "WebViewBindings.h"
 #import "WebViewBindings+WebView.h"
 #import "WebViewBindings+UIWebView.h"
