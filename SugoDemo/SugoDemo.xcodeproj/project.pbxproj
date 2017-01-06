@@ -12,6 +12,7 @@
 		141AC7A41E1366DB008D67F6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 141AC7A21E1366DB008D67F6 /* Main.storyboard */; };
 		141AC7A61E1366DB008D67F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 141AC7A51E1366DB008D67F6 /* Assets.xcassets */; };
 		141AC7A91E1366DB008D67F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 141AC7A71E1366DB008D67F6 /* LaunchScreen.storyboard */; };
+		14282F1E1E1F381C00B3E4FA /* SugoDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 14282F1D1E1F381C00B3E4FA /* SugoDemoTests.m */; };
 		14BA1A831E13EC18002F0C4B /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A821E13EC18002F0C4B /* TrackingViewController.m */; };
 		14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A851E13EC58002F0C4B /* UtilityViewController.m */; };
 		14BA1A891E13EC7D002F0C4B /* CodelessCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A881E13EC7D002F0C4B /* CodelessCommonViewController.m */; };
@@ -19,6 +20,16 @@
 		14BA1A8F1E13ECAB002F0C4B /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A8E1E13ECAB002F0C4B /* WKWebViewController.m */; };
 		14BA1A921E13ECD7002F0C4B /* ActionCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A911E13ECD7002F0C4B /* ActionCompleteViewController.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		14282F201E1F381C00B3E4FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 141AC78E1E1366DB008D67F6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 141AC7951E1366DB008D67F6;
+			remoteInfo = SugoDemo;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		141AC7961E1366DB008D67F6 /* SugoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SugoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -29,6 +40,9 @@
 		141AC7A51E1366DB008D67F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		141AC7A81E1366DB008D67F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		141AC7AA1E1366DB008D67F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		14282F1B1E1F381C00B3E4FA /* SugoDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SugoDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		14282F1D1E1F381C00B3E4FA /* SugoDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SugoDemoTests.m; sourceTree = "<group>"; };
+		14282F1F1E1F381C00B3E4FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14BA1A811E13EC18002F0C4B /* TrackingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingViewController.h; sourceTree = "<group>"; };
 		14BA1A821E13EC18002F0C4B /* TrackingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackingViewController.m; sourceTree = "<group>"; };
 		14BA1A841E13EC58002F0C4B /* UtilityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityViewController.h; sourceTree = "<group>"; };
@@ -51,6 +65,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		14282F181E1F381C00B3E4FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -58,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7981E1366DB008D67F6 /* SugoDemo */,
+				14282F1C1E1F381C00B3E4FA /* SugoDemoTests */,
 				141AC7971E1366DB008D67F6 /* Products */,
 				14BA1A7B1E13E9F6002F0C4B /* Frameworks */,
 			);
@@ -67,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7961E1366DB008D67F6 /* SugoDemo.app */,
+				14282F1B1E1F381C00B3E4FA /* SugoDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,6 +128,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		14282F1C1E1F381C00B3E4FA /* SugoDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				14282F1D1E1F381C00B3E4FA /* SugoDemoTests.m */,
+				14282F1F1E1F381C00B3E4FA /* Info.plist */,
+			);
+			path = SugoDemoTests;
+			sourceTree = "<group>";
+		};
 		14BA1A7B1E13E9F6002F0C4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +164,24 @@
 			productReference = 141AC7961E1366DB008D67F6 /* SugoDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		14282F1A1E1F381C00B3E4FA /* SugoDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14282F241E1F381C00B3E4FA /* Build configuration list for PBXNativeTarget "SugoDemoTests" */;
+			buildPhases = (
+				14282F171E1F381C00B3E4FA /* Sources */,
+				14282F181E1F381C00B3E4FA /* Frameworks */,
+				14282F191E1F381C00B3E4FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				14282F211E1F381C00B3E4FA /* PBXTargetDependency */,
+			);
+			name = SugoDemoTests;
+			productName = SugoDemoTests;
+			productReference = 14282F1B1E1F381C00B3E4FA /* SugoDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -144,6 +194,11 @@
 					141AC7951E1366DB008D67F6 = {
 						CreatedOnToolsVersion = 8.2;
 						ProvisioningStyle = Automatic;
+					};
+					14282F1A1E1F381C00B3E4FA = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 141AC7951E1366DB008D67F6;
 					};
 				};
 			};
@@ -161,6 +216,7 @@
 			projectRoot = "";
 			targets = (
 				141AC7951E1366DB008D67F6 /* SugoDemo */,
+				14282F1A1E1F381C00B3E4FA /* SugoDemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -173,6 +229,13 @@
 				141AC7A91E1366DB008D67F6 /* LaunchScreen.storyboard in Resources */,
 				141AC7A61E1366DB008D67F6 /* Assets.xcassets in Resources */,
 				141AC7A41E1366DB008D67F6 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		14282F191E1F381C00B3E4FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,7 +257,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		14282F171E1F381C00B3E4FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				14282F1E1E1F381C00B3E4FA /* SugoDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		14282F211E1F381C00B3E4FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 141AC7951E1366DB008D67F6 /* SugoDemo */;
+			targetProxy = 14282F201E1F381C00B3E4FA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		141AC7A21E1366DB008D67F6 /* Main.storyboard */ = {
@@ -328,6 +407,32 @@
 			};
 			name = Release;
 		};
+		14282F221E1F381C00B3E4FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = SugoDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SugoDemo.app/SugoDemo";
+			};
+			name = Debug;
+		};
+		14282F231E1F381C00B3E4FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = SugoDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SugoDemo.app/SugoDemo";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -348,6 +453,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		14282F241E1F381C00B3E4FA /* Build configuration list for PBXNativeTarget "SugoDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				14282F221E1F381C00B3E4FA /* Debug */,
+				14282F231E1F381C00B3E4FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
