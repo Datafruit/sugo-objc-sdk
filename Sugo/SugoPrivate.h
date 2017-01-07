@@ -61,10 +61,8 @@
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 #endif
 
-#if !defined(SUGO_WATCH_EXTENSION)
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
-#endif
 
 // re-declare internally as readwrite
 @property (atomic, strong) SugoPeople *people;

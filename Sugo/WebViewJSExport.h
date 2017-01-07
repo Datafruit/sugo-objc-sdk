@@ -12,14 +12,30 @@
 
 @protocol WebViewJSExportProtocol <NSObject, JSExport>
 
-+ (void)eventWithId:(NSString *)eventId Name:(NSString *)eventName Properties:(NSString *)properties;
-+ (void)infoWithPath:(NSString *)path Nodes:(NSString *)nodes Width:(NSString *)width Height:(NSString *)height;
++ (void)trackOfId:(NSString *)eventId
+             name:(NSString *)eventName
+       properties:(NSString *)properties;
+
++ (void)timeOfEvent:(NSString *)event;
+
++ (void)infoOfPath:(NSString *)path
+             nodes:(NSString *)nodes
+             width:(NSString *)width
+            height:(NSString *)height;
 
 @end
 
 @interface WebViewJSExport : NSObject <WebViewJSExportProtocol>
 
-+ (void)eventWithId:(NSString *)eventId Name:(NSString *)eventName Properties:(NSString *)properties;
-+ (void)infoWithPath:(NSString *)path Nodes:(NSString *)nodes Width:(NSString *)width Height:(NSString *)height;
++ (void)trackOfId:(NSString *)eventId
+             name:(NSString *)eventName
+       properties:(NSString *)properties;
+
++ (void)timeOfEvent:(NSString *)event;
+
++ (void)infoOfPath:(NSString *)path
+             nodes:(NSString *)nodes
+             width:(NSString *)width
+            height:(NSString *)height;
 
 @end

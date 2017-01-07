@@ -11,7 +11,9 @@
 
 @implementation WebViewJSExport
 
-+ (void)eventWithId:(NSString *)eventId Name:(NSString *)eventName Properties:(NSString *)properties
++ (void)trackOfId:(NSString *)eventId
+             name:(NSString *)eventName
+       properties:(NSString *)properties
 {
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     storage.eventID = eventId;
@@ -24,17 +26,25 @@
     if (pJSON != nil)
     {
         [[Sugo sharedInstance] track:storage.eventID
-                               eventName:storage.eventName
-                              properties:pJSON];
+                           eventName:storage.eventName
+                          properties:pJSON];
     }
     else {
         [[Sugo sharedInstance] track:storage.eventID
-                               eventName:storage.eventName];
+                           eventName:storage.eventName];
     }
     NSLog(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
 }
 
-+ (void)infoWithPath:(NSString *)path Nodes:(NSString *)nodes Width:(NSString *)width Height:(NSString *)height
++ (void)timeOfEvent:(NSString *)event
+{
+    [[Sugo sharedInstance] timeEvent:event];
+}
+
++ (void)infoOfPath:(NSString *)path
+             nodes:(NSString *)nodes
+             width:(NSString *)width
+            height:(NSString *)height
 {
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     storage.path = path;

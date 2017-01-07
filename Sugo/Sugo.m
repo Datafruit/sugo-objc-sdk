@@ -13,13 +13,8 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
-#if defined(SUGO_WATCH_EXTENSION)
-#import "SugoWatchProperties.h"
-#import <WatchKit/WatchKit.h>
-#endif
-
-#define SUGO_NO_APP_LIFECYCLE_SUPPORT (defined(SUGO_APP_EXTENSION) || defined(SUGO_WATCH_EXTENSION))
-#define SUGO_NO_UIAPPLICATION_ACCESS (defined(SUGO_APP_EXTENSION) || defined(SUGO_WATCH_EXTENSION))
+#define SUGO_NO_APP_LIFECYCLE_SUPPORT (defined(SUGO_APP_EXTENSION))
+#define SUGO_NO_UIAPPLICATION_ACCESS (defined(SUGO_APP_EXTENSION))
 
 #define VERSION @"1.0.0"
 
@@ -111,9 +106,8 @@ static NSString *defaultProjectToken;
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
 
-#if !defined(SUGO_WATCH_EXTENSION)
         self.taskId = UIBackgroundTaskInvalid;
-#endif
+        
         NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         self.isCodelessTesting = NO;
@@ -252,11 +246,9 @@ static NSString *defaultProjectToken;
 {
     NSString *distinctId = [self IFA];
 
-#if !defined(SUGO_WATCH_EXTENSION)
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
-#endif
     if (!distinctId) {
         MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
@@ -595,13 +587,8 @@ static NSString *defaultProjectToken;
 - (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"sugo-%@-%@.plist", self.apiToken, data];
-#if !defined(SUGO_TVOS_EXTENSION)
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
-#else
-    return [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]
-            stringByAppendingPathComponent:filename];
-#endif
 }
 
 - (NSString *)eventsFilePath
@@ -899,9 +886,6 @@ static NSString *defaultProjectToken;
 
 - (NSDictionary *)collectDeviceProperties
 {
-#if defined(SUGO_WATCH_EXTENSION)
-    return [SugoWatchProperties collectDeviceProperties];
-#else
     UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
     return @{
@@ -910,7 +894,6 @@ static NSString *defaultProjectToken;
              @"screen_height": @((NSInteger)size.height),
              @"screen_width": @((NSInteger)size.width),
              };
-#endif
 }
 
 - (NSDictionary *)collectAutomaticProperties

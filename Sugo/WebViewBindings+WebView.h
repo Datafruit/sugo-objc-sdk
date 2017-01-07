@@ -12,5 +12,6 @@
 
 - (void)excute;
 - (void)stop;
+- (NSString *)jsSourceOfFileName:(NSString *)fileName;
 
 @end
