@@ -12,10 +12,6 @@
 #import "SugoPrivate.h"
 #import "MPLogger.h"
 
-#if defined(SUGO_WATCH_EXTENSION)
-#import "SugoWatchProperties.h"
-#endif
-
 @implementation SugoPeople
 
 - (instancetype)initWithSugo:(Sugo *)sugo
@@ -35,11 +31,7 @@
 }
 
 - (NSString *)deviceSystemVersion {
-#if defined(SUGO_WATCH_EXTENSION)
-    return [SugoWatchProperties systemVersion];
-#else
     return [UIDevice currentDevice].systemVersion;
-#endif
 }
 
 - (NSDictionary *)collectAutomaticPeopleProperties

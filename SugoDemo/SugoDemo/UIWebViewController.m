@@ -19,6 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = @"UIWebView";
     
     self.webView.delegate = self;
     NSURL *url = [[NSURL alloc] initWithString:@"http://dev.ufile.ucloud.cn/test.html"];

@@ -12,7 +12,7 @@
 #import "Sugo.h"
 #import <UIKit/UIKit.h>
 
-#define SUGO_NO_NETWORK_ACTIVITY_INDICATOR (defined(SUGO_APP_EXTENSION) || defined(SUGO_TVOS_EXTENSION) || defined(SUGO_WATCH_EXTENSION))
+#define SUGO_NO_NETWORK_ACTIVITY_INDICATOR (defined(SUGO_APP_EXTENSION))
 
 static const NSUInteger kBatchSize = 50;
 

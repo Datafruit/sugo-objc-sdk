@@ -49,6 +49,7 @@
     _wkDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
     _wkRemoveFromSuperviewBlockName = [[NSUUID UUID] UUIDString];
     _wkWebViewJavaScriptInjected = NO;
+    _wkWebViewCurrentJSTrack = [[WKUserScript alloc] init];
     _wkWebViewCurrentJSSource = [[WKUserScript alloc] init];
     _wkWebViewCurrentJSExcute = [[WKUserScript alloc] init];
     [self addObserver:self

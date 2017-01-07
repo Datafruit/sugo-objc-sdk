@@ -6,6 +6,7 @@
 //  Copyright © 2017年 sugo. All rights reserved.
 //
 
+#import "Sugo.h"
 #import "SugoPrivate.h"
 #import "WebViewBindings.h"
 #import "WebViewBindings+WebView.h"
@@ -126,6 +127,19 @@
                                 named:self.wkRemoveFromSuperviewBlockName];
         self.viewSwizzleRunning = NO;
     }
+}
+
+- (NSString *)jsSourceOfFileName:(NSString *)fileName
+{
+    NSMutableString *source = [[NSMutableString alloc] init];
+    NSBundle *bundle = [NSBundle bundleForClass:[Sugo class]];
+    NSString *sourcePath = [bundle pathForResource:fileName ofType:@"js"];
+    if (sourcePath) {
+        source = [NSMutableString stringWithContentsOfFile:sourcePath
+                                                  encoding:NSUTF8StringEncoding
+                                                     error:nil];
+    }
+    return source;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
