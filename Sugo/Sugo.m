@@ -303,7 +303,7 @@ static NSString *defaultProjectToken;
 
 - (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
 {
-    
+    NSLog(@"track:%@, %@, %@", eventID, eventName, properties);
     if (eventName.length == 0) {
         MPLogWarning(@"%@ sugo track called with empty event parameter. using 'mp_event'", self);
         eventName = @"mp_event";
@@ -768,10 +768,10 @@ static NSString *defaultProjectToken;
         __weak Sugo *weakSelf = self;
         dispatch_async(self.serialQueue, ^{
             Sugo *strongSelf = weakSelf;
-            [self.network trackIntegrationWithID:strongSelf.projectID
-                                        andToken:strongSelf.apiToken
-                                   andDistinctID:strongSelf.distinctId
-                                   andCompletion:^(NSError *error) {
+            [strongSelf.network trackIntegrationWithID:strongSelf.projectID
+                                              andToken:strongSelf.apiToken
+                                         andDistinctID:strongSelf.distinctId
+                                         andCompletion:^(NSError *error) {
                 if (!error) {
                     [NSUserDefaults.standardUserDefaults setBool:YES
                                                           forKey:defaultKey];
@@ -781,6 +781,51 @@ static NSString *defaultProjectToken;
         });
     }
 }
+
+- (void)trackStayTime
+{
+    void (^viewDidAppearBlock)(id, SEL) = ^(id viewController, SEL command) {
+        UIViewController *vc = (UIViewController *)viewController;
+        if (!vc) {
+            return;
+        }
+
+        [self timeEvent:@"stay_event"];
+        NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
+        if (vc.title) {
+            pViewController[@"page"] = vc.title;
+        } else {
+            pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
+        }
+        [self track:nil eventName:@"enter_page_event" properties:pViewController];
+    };
+    
+    [MPSwizzler swizzleSelector:@selector(viewDidAppear:)
+                        onClass:[UIViewController class]
+                      withBlock:viewDidAppearBlock
+                          named:[[NSUUID UUID] UUIDString]];
+    
+    void (^viewDidDisappearBlock)(id, SEL) = ^(id viewController, SEL command) {
+        UIViewController *vc = (UIViewController *)viewController;
+        if (!vc) {
+            return;
+        }
+
+        NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
+        if (vc.title) {
+            pViewController[@"page"] = vc.title;
+        } else {
+            pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
+        }
+        [self track:nil eventName:@"stay_event" properties:pViewController];
+    };
+    
+    [MPSwizzler swizzleSelector:@selector(viewDidDisappear:)
+                        onClass:[UIViewController class]
+                      withBlock:viewDidDisappearBlock
+                          named:[[NSUUID UUID] UUIDString]];
+}
+
 
 #pragma mark - Application Helpers
 
@@ -938,7 +983,7 @@ static NSString *defaultProjectToken;
 - (void)setUpListeners
 {
     [self trackIntegration];
-//    [self trackStayTime];
+    [self trackStayTime];
 #if !SUGO_NO_REACHABILITY_SUPPORT
     // wifi reachability
     if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "sugo.io")) != NULL) {
@@ -1354,14 +1399,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             for (MPEventBinding *binding in self.eventBindings) {
                 [binding stop];
             }
-            MPABTestDesignerConnection *connection = strongSelf.abtestDesignerConnection;
-            void (^block)(id, SEL, NSString*, NSString*, id) = ^(id obj, SEL sel, NSString *event_id, NSString *event_name, id params) {
-                MPDesignerTrackMessage *message = [MPDesignerTrackMessage messageWithPayload:@{@"event_id": event_id,
-                                                                                               @"event_name": event_name}];
-                [connection sendMessage:message];
-            };
-            
-            [MPSwizzler swizzleSelector:@selector(track:eventName:properties:) onClass:[Sugo class] withBlock:block named:@"track_properties"];
         }
     };
     void (^disconnectCallback)(void) = ^{

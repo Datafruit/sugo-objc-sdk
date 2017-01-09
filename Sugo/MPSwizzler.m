@@ -7,11 +7,12 @@
 //
 
 #import <objc/runtime.h>
+#import <UIKit/UIKit.h>
 #import "MPLogger.h"
 #import "MPSwizzler.h"
 
 #define MIN_ARGS 2
-#define MAX_ARGS 5
+#define MAX_ARGS 4
 
 @interface MPSwizzle : NSObject
 
@@ -54,6 +55,21 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
     if (swizzle) {
         ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
 
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while ((block = [blocks nextObject])) {
+            block(self, _cmd, arg);
+        }
+    }
+}
+
+static void mp_swizzledMethod_3_BOOL(id self, SEL _cmd, BOOL arg)
+{
+    Method aMethod = class_getInstanceMethod([self class], _cmd);
+    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:MAPTABLE_ID(aMethod)];
+    if (swizzle) {
+        ((void(*)(id, SEL, BOOL))swizzle.originalMethod)(self, _cmd, arg);
+        
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
@@ -137,7 +153,12 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
         if (numArgs >= MIN_ARGS && numArgs <= MAX_ARGS) {
             
             BOOL isLocal = [self isLocallyDefinedMethod:aMethod onClass:aClass];
-            IMP swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
+            IMP swizzledMethod;
+            if (aSelector == @selector(viewDidAppear:) || aSelector == @selector(viewDidDisappear:)) {
+                swizzledMethod = (IMP)mp_swizzledMethod_3_BOOL;
+            } else {
+                swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
+            }
             MPSwizzle *swizzle = [self swizzleForMethod:aMethod];
             
             if (isLocal) {
@@ -145,10 +166,15 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                     IMP originalMethod = method_getImplementation(aMethod);
                     
                     // Replace the local implementation of this method with the swizzled one
-                    method_setImplementation(aMethod,swizzledMethod);
+                    method_setImplementation(aMethod, swizzledMethod);
                     
                     // Create and add the swizzle
-                    swizzle = [[MPSwizzle alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
+                    swizzle = [[MPSwizzle alloc] initWithBlock:aBlock
+                                                         named:aName
+                                                      forClass:aClass
+                                                      selector:aSelector
+                                                originalMethod:originalMethod
+                                                   withNumArgs:numArgs];
                     [self setSwizzle:swizzle forMethod:aMethod];
                     
                 } else {
@@ -169,7 +195,12 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                     return;
                 }
                 
-                MPSwizzle *newSwizzle = [[MPSwizzle alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
+                MPSwizzle *newSwizzle = [[MPSwizzle alloc] initWithBlock:aBlock
+                                                                   named:aName
+                                                                forClass:aClass
+                                                                selector:aSelector
+                                                          originalMethod:originalMethod
+                                                             withNumArgs:numArgs];
                 [self setSwizzle:newSwizzle forMethod:newMethod];
             }
         } else {
