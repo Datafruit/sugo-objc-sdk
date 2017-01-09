@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MPObjectSelector.h"
+#import "Attributes.h"
 
 @interface MPEventBinding : NSObject <NSCoding>
 
@@ -16,6 +17,7 @@
 @property (nonatomic, strong) MPObjectSelector *path;
 @property (nonatomic, copy) NSString *eventID;
 @property (nonatomic, copy) NSString *eventName;
+@property (nonatomic, strong) Attributes *attributes;
 
 @property (nonatomic, assign) Class swizzleClass;
 
@@ -34,7 +36,7 @@
 + (id)bindingWithJSONObject:(id)object;
 
 - (instancetype)init __unavailable;
-- (instancetype)initWithEventID:(NSString *)eventID eventName:(NSString *)eventName onPath:(NSString *)path;
+- (instancetype)initWithEventID:(NSString *)eventID eventName:(NSString *)eventName onPath:(NSString *)path withAttributes:(Attributes *)attributes;
 
 /*!
  Intercepts track calls and adds a property indicating the track event

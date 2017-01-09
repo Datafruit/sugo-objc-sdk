@@ -141,6 +141,8 @@
 		144D2E4B1E20C5A800387FD2 /* WebViewReport.excute.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E421E20C5A800387FD2 /* WebViewReport.excute.js */; };
 		144D2E4C1E20C5A800387FD2 /* WKWebViewReport.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E431E20C5A800387FD2 /* WKWebViewReport.js */; };
 		144D2E4D1E20C5A800387FD2 /* WKWebViewTrack.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E441E20C5A800387FD2 /* WKWebViewTrack.js */; };
+		14656FEC1E2379BF006B7107 /* Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 14656FEA1E2379BF006B7107 /* Attributes.h */; };
+		14656FED1E2379BF006B7107 /* Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 14656FEB1E2379BF006B7107 /* Attributes.m */; };
 		148D657A1E13D611002B2BB7 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D65791E13D611002B2BB7 /* libicucore.tbd */; };
 		14BA1A3C1E13D630002F0C4B /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A3B1E13D630002F0C4B /* Accelerate.framework */; };
 		14BA1A3E1E13D637002F0C4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A3D1E13D637002F0C4B /* UIKit.framework */; };
@@ -294,6 +296,8 @@
 		144D2E421E20C5A800387FD2 /* WebViewReport.excute.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.excute.js; sourceTree = "<group>"; };
 		144D2E431E20C5A800387FD2 /* WKWebViewReport.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WKWebViewReport.js; sourceTree = "<group>"; };
 		144D2E441E20C5A800387FD2 /* WKWebViewTrack.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WKWebViewTrack.js; sourceTree = "<group>"; };
+		14656FEA1E2379BF006B7107 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
+		14656FEB1E2379BF006B7107 /* Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attributes.m; sourceTree = "<group>"; };
 		148D65791E13D611002B2BB7 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		14BA1A3B1E13D630002F0C4B /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		14BA1A3D1E13D637002F0C4B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -458,6 +462,7 @@
 				141AC8141E137088008D67F6 /* MPObjectSerializerConfig.m */,
 				141AC8151E137088008D67F6 /* MPObjectSerializerContext.h */,
 				141AC8161E137088008D67F6 /* MPObjectSerializerContext.m */,
+				14656FEE1E2379CA006B7107 /* Injection */,
 			);
 			name = Serialization;
 			sourceTree = "<group>";
@@ -652,6 +657,15 @@
 			name = WebViewBindings;
 			sourceTree = "<group>";
 		};
+		14656FEE1E2379CA006B7107 /* Injection */ = {
+			isa = PBXGroup;
+			children = (
+				14656FEA1E2379BF006B7107 /* Attributes.h */,
+				14656FEB1E2379BF006B7107 /* Attributes.m */,
+			);
+			name = Injection;
+			sourceTree = "<group>";
+		};
 		148D65781E13D611002B2BB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -691,6 +705,7 @@
 				141AC8991E137088008D67F6 /* MPDesignerSessionCollection.h in Headers */,
 				141AC8B21E137088008D67F6 /* MPObjectSerializer.h in Headers */,
 				141AC87A1E137088008D67F6 /* MPABTestDesignerConnection.h in Headers */,
+				14656FEC1E2379BF006B7107 /* Attributes.h in Headers */,
 				141AC8F21E137088008D67F6 /* UIViewController+AutomaticEvents.h in Headers */,
 				141AC8E81E137088008D67F6 /* UIApplication+AutomaticEvents.h in Headers */,
 				141AC87E1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */,
@@ -871,6 +886,7 @@
 				141AC8D91E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				141AC8911E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
 				141AC8ED1E137088008D67F6 /* UIImage+MPAverageColor.m in Sources */,
+				14656FED1E2379BF006B7107 /* Attributes.m in Sources */,
 				141AC8B11E137088008D67F6 /* MPObjectSelector.m in Sources */,
 				141AC8791E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				141AC8731E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m in Sources */,

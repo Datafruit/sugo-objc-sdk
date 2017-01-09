@@ -8,6 +8,7 @@
 
 #import "MPSwizzler.h"
 #import "MPUIControlBinding.h"
+#import "Attributes.h"
 
 @interface MPUIControlBinding()
 
@@ -58,11 +59,16 @@
     }
 
     UIControlEvents verifyEvent = [object[@"verify_event"] unsignedIntegerValue];
+    
+    NSDictionary *attributesPaths = [NSDictionary dictionaryWithDictionary:object[@"attributes"]];
+    Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
+    
     return [[MPUIControlBinding alloc] initWithEventID:eventID
                                              eventName:eventName
                                                 onPath:path
                                       withControlEvent:[object[@"control_event"] unsignedIntegerValue]
-                                        andVerifyEvent:verifyEvent];
+                                        andVerifyEvent:verifyEvent
+                                            attributes:attributes];
 }
 
 #pragma clang diagnostic push
@@ -78,8 +84,9 @@
                          onPath:(NSString *)path
                withControlEvent:(UIControlEvents)controlEvent
                  andVerifyEvent:(UIControlEvents)verifyEvent
+                     attributes:(Attributes *)attributes
 {
-    if (self = [super initWithEventID:eventID eventName:eventName onPath:path]) {
+    if (self = [super initWithEventID:eventID eventName:eventName onPath:path withAttributes:attributes]) {
         [self setSwizzleClass:[UIControl class]];
         _controlEvent = controlEvent;
 
@@ -228,7 +235,11 @@
         shouldTrack = [self verifyControlMatchesPath:sender];
     }
     if (shouldTrack) {
-        [[self class] track:[self eventID] eventName:[self eventName] properties:nil];
+        NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+        if (self.attributes) {
+            [p addEntriesFromDictionary:[self.attributes parse]];
+        }
+        [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }
 }
 
