@@ -14,6 +14,8 @@
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
-                   withDelegate:(Class)delegateClass;
+                   withDelegate:(Class)delegateClass
+                     attributes:(Attributes *)attributes;
+
 
 @end

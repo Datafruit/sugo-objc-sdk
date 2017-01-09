@@ -19,6 +19,7 @@
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
                withControlEvent:(UIControlEvents)controlEvent
-                 andVerifyEvent:(UIControlEvents)verifyEvent;
+                 andVerifyEvent:(UIControlEvents)verifyEvent
+                     attributes:(Attributes *)attributes;
 
 @end

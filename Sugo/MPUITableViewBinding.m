@@ -44,10 +44,14 @@
         return nil;
     }
 
+    NSDictionary *attributesPaths = object[@"attributes"];
+    Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
+    
     return [[MPUITableViewBinding alloc] initWithEventID:(NSString *)eventID
                                                eventName:eventName
-                                                    onPath:path
-                                              withDelegate:tableDelegate];
+                                                  onPath:path
+                                            withDelegate:tableDelegate
+                                              attributes:attributes];
 }
 
 #pragma clang diagnostic push
@@ -61,20 +65,25 @@
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
+                     attributes:(Attributes *)attributes
 {
     return [self initWithEventID:eventID
                        eventName:eventName
                           onPath:path
-                    withDelegate:nil];
+                    withDelegate:nil
+                      attributes:attributes];
 }
 
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
                    withDelegate:(Class)delegateClass
+                     attributes:(Attributes *)attributes
 {
     if (self = [super initWithEventID:eventID
-                            eventName:eventName onPath:path]) {
+                            eventName:eventName
+                               onPath:path
+                       withAttributes:attributes]) {
         [self setSwizzleClass:delegateClass];
     }
     return self;
@@ -97,13 +106,19 @@
             if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
                 UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
                 NSString *label = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
+                
+                NSMutableDictionary *p = [[NSMutableDictionary alloc]
+                                          initWithDictionary:@{
+                                                               @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
+                                                               @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
+                                                               @"Cell Label": label
+                                                               }];
+                if (self.attributes) {
+                    [p addEntriesFromDictionary:[self.attributes parse]];
+                }
                 [[self class] track:[self eventID]
                           eventName:[self eventName]
-                         properties:@{
-                                      @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
-                                      @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
-                                      @"Cell Label": label
-                                      }];
+                         properties:p];
             }
         };
 
