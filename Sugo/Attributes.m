@@ -46,13 +46,13 @@
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%@", ((UIDatePicker *)object).date]}];
             } else if ([object isKindOfClass:[UISegmentedControl class]]) {
                 NSLog(@"attributes: UISegmentedControl");
-                [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%d", ((UISegmentedControl *)object).selectedSegmentIndex]}];
+                [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)object).selectedSegmentIndex]}];
             } else if ([object isKindOfClass:[UISlider class]]) {
                 NSLog(@"attributes: UISlider");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%f", ((UISlider *)object).value]}];
             } else if ([object isKindOfClass:[UISwitch class]]) {
                 NSLog(@"attributes: UISwitch");
-                [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%@", ((UISwitch *)object).isOn]}];
+                [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%i", ((UISwitch *)object).isOn]}];
             } else if ([object isKindOfClass:[UITextField class]]) {
                 NSLog(@"attributes: UITextField");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%@", ((UITextField *)object).text]}];
@@ -75,7 +75,7 @@
         MPObjectSelector *p = [[MPObjectSelector alloc] initWithString:self.paths[key]];
         if ([UIApplication sharedApplication].keyWindow.rootViewController) {
             NSMutableArray *objects = [[NSMutableArray alloc] init];
-            objects = [p fuzzySelectFromRoot:[UIApplication sharedApplication].keyWindow.rootViewController];
+            [objects addObjectsFromArray:[p fuzzySelectFromRoot:[UIApplication sharedApplication].keyWindow.rootViewController]];
             [aObjects setObject:objects forKey:key];
         }
     }
