@@ -96,9 +96,11 @@ static NSString *defaultProjectToken;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
 
-        self.serverURL = @"http://192.168.0.212:8000";
-        self.eventCollectionURL = @"http://collect.sugo.net";
-        self.switchboardURL = @"ws://192.168.0.212:8887";
+        self.configuration = [Sugo loadConfiguration];
+        
+        self.serverURL = [self.configuration objectForKey:@"serverURL"];
+        self.eventCollectionURL = [self.configuration objectForKey:@"eventCollectionURL"];
+        self.switchboardURL = [self.configuration objectForKey:@"switchboardURL"];
         
         self.miniNotificationPresentationTime = 6.0;
 
@@ -157,6 +159,18 @@ static NSString *defaultProjectToken;
         _reachability = NULL;
     }
 #endif
+}
+
++ (NSDictionary *)loadConfiguration
+{
+    NSMutableDictionary *configuration = [[NSMutableDictionary alloc] init];
+    NSBundle *bundle = [NSBundle bundleForClass:[Sugo class]];
+    NSString *path = [bundle pathForResource:@"SugoConfiguration" ofType:@"plist"];
+    if (path) {
+        configuration = [NSMutableDictionary dictionaryWithContentsOfFile:path];
+    }
+    NSLog(@"Configuration: %@", configuration);
+    return [NSDictionary dictionaryWithDictionary:configuration];
 }
 
 #if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT

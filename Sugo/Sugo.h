@@ -107,6 +107,28 @@ NS_ASSUME_NONNULL_BEGIN
  @property
  
  @abstract
+ The base URL used for Sugo events collection.
+ 
+ @discussion
+ Useful if you need to proxy Sugo requests.
+ */
+@property (nonatomic, copy) NSString *eventCollectionURL;
+
+/*!
+ @property
+ 
+ @abstract
+ The base URL used for Sugo codeless bindings.
+ 
+ @discussion
+ Useful if you need to proxy Sugo requests.
+ */
+@property (nonatomic, copy) NSString *switchboardURL;
+
+/*!
+ @property
+ 
+ @abstract
  The project ID used for Sugo API requests.
  */
 @property (nonatomic, copy) NSString *projectID;

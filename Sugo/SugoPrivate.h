@@ -79,13 +79,11 @@
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (atomic) BOOL isCodelessTesting;
+@property (atomic, strong) NSDictionary *configuration;
 
 @property (nonatomic) BOOL decideResponseCached;
 
 @property (nonatomic, strong) NSSet *eventBindings;
-
-@property (atomic, copy) NSString *switchboardURL;
-@property (atomic, copy) NSString *eventCollectionURL;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
 
@@ -103,6 +101,8 @@
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
 #endif
+
++ (NSDictionary *)loadConfiguration;
 
 @end
 
