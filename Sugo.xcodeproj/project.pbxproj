@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14015FC11E2DBDD2003DB275 /* SugoConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14015FC01E2DBDD2003DB275 /* SugoConfiguration.plist */; };
 		14149DDF1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */; };
 		14149DEE1E1A6D9D0006DF6A /* WebViewBindings+WebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */; };
 		14149DEF1E1A6D9D0006DF6A /* WebViewBindings+WebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */; };
@@ -158,6 +159,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		14015FC01E2DBDD2003DB275 /* SugoConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoConfiguration.plist; sourceTree = "<group>"; };
 		14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUILayoutSupportToNSStringValueTransformer.m; sourceTree = "<group>"; };
 		14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+WebView.h"; sourceTree = "<group>"; };
 		14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+WebView.m"; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7851E1364D7008D67F6 /* Sugo.h */,
+				14015FC01E2DBDD2003DB275 /* SugoConfiguration.plist */,
 				141AC7861E1364D7008D67F6 /* Info.plist */,
 				141AC7C01E137088008D67F6 /* app_extension_module.modulemap */,
 				141AC7CE1E137088008D67F6 /* module.modulemap */,
@@ -814,6 +817,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				144D2E461E20C5A800387FD2 /* UIWebViewTrack.js in Resources */,
+				14015FC11E2DBDD2003DB275 /* SugoConfiguration.plist in Resources */,
 				144D2E481E20C5A800387FD2 /* WebViewBindings.1.js in Resources */,
 				144D2E451E20C5A800387FD2 /* UIWebViewReport.js in Resources */,
 				144D2E491E20C5A800387FD2 /* WebViewBindings.2.js in Resources */,
