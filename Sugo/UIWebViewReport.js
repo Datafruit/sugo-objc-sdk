@@ -6,8 +6,6 @@
   Copyright © 2017年 sugo. All rights reserved.
 */
 var sugo_report = {};
-sugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
-sugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
 sugo_report.isElementInViewport = function(rect) {
     return (
             rect.top >= 0 &&
@@ -45,6 +43,8 @@ sugo_report.reportNodes = function() {
     var body = document.getElementsByTagName('body')[0];
     var childrens = body.children;
     var parent_path = '';
+    sugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
+    sugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
     sugo_report.handleNodeChild(childrens, jsonArray, parent_path, 'report');
     WebViewJSExport.infoOfPathNodesWidthHeight(window.location.pathname, JSON.stringify(jsonArray), sugo_report.clientWidth, sugo_report.clientHeight);
 };

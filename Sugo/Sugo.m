@@ -96,11 +96,11 @@ static NSString *defaultProjectToken;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
 
-        self.configuration = [Sugo loadConfiguration];
+        self.configuration = [Sugo loadConfigurationPropertyListWithName:@"SugoURLs"];
         
-        self.serverURL = [self.configuration objectForKey:@"serverURL"];
-        self.eventCollectionURL = [self.configuration objectForKey:@"eventCollectionURL"];
-        self.switchboardURL = [self.configuration objectForKey:@"switchboardURL"];
+        self.serverURL = [self.configuration objectForKey:@"Bindings"];
+        self.eventCollectionURL = [self.configuration objectForKey:@"Collection"];
+        self.switchboardURL = [self.configuration objectForKey:@"Codeless"];
         
         self.miniNotificationPresentationTime = 6.0;
 
@@ -161,11 +161,11 @@ static NSString *defaultProjectToken;
 #endif
 }
 
-+ (NSDictionary *)loadConfiguration
++ (NSDictionary *)loadConfigurationPropertyListWithName:(NSString *)name
 {
     NSMutableDictionary *configuration = [[NSMutableDictionary alloc] init];
     NSBundle *bundle = [NSBundle bundleForClass:[Sugo class]];
-    NSString *path = [bundle pathForResource:@"SugoConfiguration" ofType:@"plist"];
+    NSString *path = [bundle pathForResource:name ofType:@"plist"];
     if (path) {
         configuration = [NSMutableDictionary dictionaryWithContentsOfFile:path];
     }
