@@ -31,7 +31,7 @@
             if (self.uiVcPath.length > 0) {
                 return;
             }
-            UIResponder *responder = uiWebView;
+            UIResponder *responder = uiWebView.superview;
             while ([responder nextResponder]) {
                 responder = responder.nextResponder;
                 if ([responder isKindOfClass:[UIViewController class]]) {
@@ -61,7 +61,7 @@
             if (self.wkVcPath.length > 0) {
                 return;
             }
-            UIResponder *responder = wkWebView;
+            UIResponder *responder = wkWebView.superview;
             while ([responder nextResponder]) {
                 responder = responder.nextResponder;
                 if ([responder isKindOfClass:[UIViewController class]]) {

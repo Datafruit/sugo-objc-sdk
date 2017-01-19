@@ -102,7 +102,7 @@
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
 #endif
 
-+ (NSDictionary *)loadConfiguration;
++ (NSDictionary *)loadConfigurationPropertyListWithName:(NSString *)name;
 
 @end
 
