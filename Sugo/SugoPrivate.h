@@ -79,7 +79,7 @@
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (atomic) BOOL isCodelessTesting;
-@property (atomic, strong) NSDictionary *configuration;
+@property (atomic, strong) NSMutableDictionary *sugoConfiguration;
 
 @property (nonatomic) BOOL decideResponseCached;
 

@@ -95,12 +95,8 @@ static NSString *defaultProjectToken;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
-
-        self.configuration = [Sugo loadConfigurationPropertyListWithName:@"SugoURLs"];
         
-        self.serverURL = [self.configuration objectForKey:@"Bindings"];
-        self.eventCollectionURL = [self.configuration objectForKey:@"Collection"];
-        self.switchboardURL = [self.configuration objectForKey:@"Codeless"];
+        [self setupConfiguration];
         
         self.miniNotificationPresentationTime = 6.0;
 
@@ -169,7 +165,7 @@ static NSString *defaultProjectToken;
     if (path) {
         configuration = [NSMutableDictionary dictionaryWithContentsOfFile:path];
     }
-    NSLog(@"Configuration: %@", configuration);
+    NSLog(@"%@ Property List: %@", name, configuration);
     return [NSDictionary dictionaryWithDictionary:configuration];
 }
 
@@ -990,6 +986,22 @@ static NSString *defaultProjectToken;
 #else
     return NO;
 #endif
+}
+
+- (void)setupConfiguration
+{
+    self.sugoConfiguration = [[NSMutableDictionary alloc] init];
+    // For URLs
+    self.sugoConfiguration[@"URLs"] = [Sugo loadConfigurationPropertyListWithName:@"SugoURLs"];
+    self.serverURL = [self.sugoConfiguration[@"URLs"]
+                      objectForKey:@"Bindings"];
+    self.eventCollectionURL = [self.sugoConfiguration[@"URLs"]
+                               objectForKey:@"Collection"];
+    self.switchboardURL = [self.sugoConfiguration[@"URLs"]
+                           objectForKey:@"Codeless"];
+    
+    // For Custom dimension table
+    self.sugoConfiguration[@"Dimension"] = [Sugo loadConfigurationPropertyListWithName:@"SugoCustomDimensionTable"];
 }
 
 #pragma mark - UIApplication Events
