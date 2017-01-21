@@ -156,6 +156,8 @@
 		14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */; };
 		14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4D1E13D675002F0C4B /* WebKit.framework */; };
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
+		14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */; };
+		14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -312,6 +314,8 @@
 		14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14BA1A4D1E13D675002F0C4B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SugoHelpers.h"; sourceTree = "<group>"; };
+		14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SugoHelpers.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -614,6 +618,8 @@
 				141AC8421E137088008D67F6 /* NSInvocation+MPHelpers.m */,
 				141AC8501E137088008D67F6 /* UIView+MPHelpers.h */,
 				141AC8511E137088008D67F6 /* UIView+MPHelpers.m */,
+				14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */,
+				14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -732,6 +738,7 @@
 				141AC8BB1E137088008D67F6 /* MPResources.h in Headers */,
 				141AC8721E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
 				141AC89D1E137088008D67F6 /* MPEventBinding.h in Headers */,
+				14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */,
 				141AC8741E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.h in Headers */,
 				141AC8C81E137088008D67F6 /* MPSwizzle.h in Headers */,
 				141AC8DB1E137088008D67F6 /* MPUITableViewBinding.h in Headers */,
@@ -874,6 +881,7 @@
 				141AC8D41E137088008D67F6 /* MPTypeDescription.m in Sources */,
 				141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */,
 				141AC8BC1E137088008D67F6 /* MPResources.m in Sources */,
+				14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */,
 				141AC8861E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				141AC8771E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				141AC87D1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
