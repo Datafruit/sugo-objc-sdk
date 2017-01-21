@@ -41,18 +41,6 @@ static const NSUInteger kBatchSize = 50;
       withQueryItems:queryItems];
 }
 
-- (void)flushPeopleQueue:(NSMutableArray *)people {
-//    [self flushQueue:people endpoint:MPNetworkEndpointEngage];
-    
-    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
-                                                               value:[Sugo sharedInstance].projectID];
-    NSArray *queryItems = @[queryItem];
-    [self flushQueue:people
-               toURL:self.eventCollectionURL
-         andEndpoint:MPNetworkEndpointTrack
-      withQueryItems:queryItems];
-}
-
 - (void)flushQueue:(NSMutableArray *)queue
              toURL:(NSURL *)url
        andEndpoint:(MPNetworkEndpoint)endpoint
@@ -163,7 +151,6 @@ static const NSUInteger kBatchSize = 50;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
-                            @(MPNetworkEndpointEngage): @"/engage/",
                             @(MPNetworkEndpointDecide): @"/api/sdk/decide" };
     });
     NSNumber *key = @(endpoint);

@@ -61,7 +61,6 @@ static NSString *defaultProjectToken;
 {
     if (self = [super init]) {
         self.eventsQueue = [NSMutableArray array];
-        self.peopleQueue = [NSMutableArray array];
         self.timedEvents = [NSMutableDictionary dictionary];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
@@ -276,15 +275,6 @@ static NSString *defaultProjectToken;
     
     dispatch_async(self.serialQueue, ^{
         self.distinctId = distinctId;
-        self.people.distinctId = distinctId;
-        if (self.people.unidentifiedQueue.count > 0) {
-            for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                r[@"distinct_id"] = distinctId;
-                [self.peopleQueue addObject:r];
-            }
-            [self.people.unidentifiedQueue removeAllObjects];
-            [self archivePeople];
-        }
         [self archiveProperties];
     });
 #if SUGO_FLUSH_IMMEDIATELY
@@ -498,9 +488,7 @@ static NSString *defaultProjectToken;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.people.distinctId = nil;
-        self.people.unidentifiedQueue = [NSMutableArray array];
-        self.eventsQueue = [NSMutableArray array];
-        self.peopleQueue = [NSMutableArray array];
+        self.eventsQueue = [NSMutableArray array];;
         self.timedEvents = [NSMutableDictionary dictionary];
         self.decideResponseCached = NO;
         self.eventBindings = [NSSet set];
@@ -573,7 +561,7 @@ static NSString *defaultProjectToken;
             }
         }
         [self.network flushEventQueue:self.eventsQueue];
-        [self.network flushPeopleQueue:self.peopleQueue];
+        
         [self archive];
         
         if (handler) {
@@ -629,7 +617,6 @@ static NSString *defaultProjectToken;
 - (void)archive
 {
     [self archiveEvents];
-    [self archivePeople];
     [self archiveProperties];
     [self archiveEventBindings];
 }
@@ -644,16 +631,6 @@ static NSString *defaultProjectToken;
     }
 }
 
-- (void)archivePeople
-{
-    NSString *filePath = [self peopleFilePath];
-    NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
-//    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
-    if (![self archiveObject:peopleQueueCopy withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive people data", self);
-    }
-}
-
 - (void)archiveProperties
 {
     NSString *filePath = [self propertiesFilePath];
@@ -661,7 +638,6 @@ static NSString *defaultProjectToken;
     [p setValue:self.distinctId forKey:@"distinctId"];
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
 //    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![self archiveObject:p withFilePath:filePath]) {
@@ -708,7 +684,6 @@ static NSString *defaultProjectToken;
 - (void)unarchive
 {
     [self unarchiveEvents];
-    [self unarchivePeople];
     [self unarchiveProperties];
     [self unarchiveEventBindings];
 }
@@ -748,11 +723,6 @@ static NSString *defaultProjectToken;
     self.eventsQueue = (NSMutableArray *)[Sugo unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSMutableArray class]];
 }
 
-- (void)unarchivePeople
-{
-    self.peopleQueue = (NSMutableArray *)[Sugo unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSMutableArray class]];
-}
-
 - (void)unarchiveProperties
 {
     NSDictionary *properties = (NSDictionary *)[Sugo unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
@@ -760,7 +730,6 @@ static NSString *defaultProjectToken;
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
-        self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
     }

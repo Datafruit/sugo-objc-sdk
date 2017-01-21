@@ -12,11 +12,10 @@
 @interface SugoPeople ()
 
 @property (nonatomic, weak) Sugo *sugo;
-@property (nonatomic, strong) NSMutableArray *unidentifiedQueue;
+
 @property (nonatomic, copy) NSString *distinctId;
 @property (nonatomic, strong) NSDictionary *automaticPeopleProperties;
 
 - (instancetype)initWithSugo:(Sugo *)sugo;
-- (void)merge:(NSDictionary *)properties;
 
 @end
