@@ -9,6 +9,7 @@
 #import "Sugo.h"
 #import "SugoPrivate.h"
 #import "WebViewBindings.h"
+#import "UIViewController+SugoHelpers.h"
 #import "WebViewBindings+WebView.h"
 #import "WebViewBindings+UIWebView.h"
 #import "WebViewBindings+WKWebView.h"
@@ -31,15 +32,7 @@
             if (self.uiVcPath.length > 0) {
                 return;
             }
-            UIResponder *responder = uiWebView.superview;
-            while ([responder nextResponder]) {
-                responder = responder.nextResponder;
-                if ([responder isKindOfClass:[UIViewController class]]) {
-                    self.uiVcPath = NSStringFromClass([responder classForCoder]);
-                    NSLog(@"UI VC Path: %@", self.uiVcPath);
-                    break;
-                }
-            }
+            self.uiVcPath = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
             self.uiWebView = uiWebView;
             [self startUIWebViewBindings:&uiWebView];
         };
@@ -61,15 +54,7 @@
             if (self.wkVcPath.length > 0) {
                 return;
             }
-            UIResponder *responder = wkWebView.superview;
-            while ([responder nextResponder]) {
-                responder = responder.nextResponder;
-                if ([responder isKindOfClass:[UIViewController class]]) {
-                    self.wkVcPath = NSStringFromClass([responder classForCoder]);
-                    NSLog(@"WK VC Path: %@", self.wkVcPath);
-                    break;
-                }
-            }
+            self.wkVcPath = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
             self.wkWebView = wkWebView;
             [self startWKWebViewBindings:&wkWebView];
         };
