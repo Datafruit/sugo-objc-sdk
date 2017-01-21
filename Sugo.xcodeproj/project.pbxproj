@@ -133,15 +133,15 @@
 		141AC8FD1E137088008D67F6 /* WebViewInfoStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */; };
 		141AC8FE1E137088008D67F6 /* WebViewJSExport.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC85F1E137088008D67F6 /* WebViewJSExport.h */; };
 		141AC8FF1E137088008D67F6 /* WebViewJSExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8601E137088008D67F6 /* WebViewJSExport.m */; };
-		144D2E451E20C5A800387FD2 /* UIWebViewReport.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3C1E20C5A800387FD2 /* UIWebViewReport.js */; };
-		144D2E461E20C5A800387FD2 /* UIWebViewTrack.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3D1E20C5A800387FD2 /* UIWebViewTrack.js */; };
+		144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */; };
+		144D2E461E20C5A800387FD2 /* WebViewTrack.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3D1E20C5A800387FD2 /* WebViewTrack.UI.js */; };
 		144D2E471E20C5A800387FD2 /* Utils.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3E1E20C5A800387FD2 /* Utils.js */; };
 		144D2E481E20C5A800387FD2 /* WebViewBindings.1.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3F1E20C5A800387FD2 /* WebViewBindings.1.js */; };
 		144D2E491E20C5A800387FD2 /* WebViewBindings.2.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E401E20C5A800387FD2 /* WebViewBindings.2.js */; };
 		144D2E4A1E20C5A800387FD2 /* WebViewBindings.excute.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E411E20C5A800387FD2 /* WebViewBindings.excute.js */; };
 		144D2E4B1E20C5A800387FD2 /* WebViewReport.excute.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E421E20C5A800387FD2 /* WebViewReport.excute.js */; };
-		144D2E4C1E20C5A800387FD2 /* WKWebViewReport.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E431E20C5A800387FD2 /* WKWebViewReport.js */; };
-		144D2E4D1E20C5A800387FD2 /* WKWebViewTrack.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E441E20C5A800387FD2 /* WKWebViewTrack.js */; };
+		144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */; };
+		144D2E4D1E20C5A800387FD2 /* WebViewTrack.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E441E20C5A800387FD2 /* WebViewTrack.WK.js */; };
 		14656FEC1E2379BF006B7107 /* Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 14656FEA1E2379BF006B7107 /* Attributes.h */; };
 		14656FED1E2379BF006B7107 /* Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 14656FEB1E2379BF006B7107 /* Attributes.m */; };
 		148D657A1E13D611002B2BB7 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D65791E13D611002B2BB7 /* libicucore.tbd */; };
@@ -156,6 +156,9 @@
 		14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */; };
 		14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4D1E13D675002F0C4B /* WebKit.framework */; };
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
+		14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */; };
+		14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */; };
+		14DEB5281E32F982009F0F80 /* WebViewTrack.js in Resources */ = {isa = PBXBuildFile; fileRef = 14DEB5271E32F982009F0F80 /* WebViewTrack.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -289,15 +292,15 @@
 		141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewInfoStorage.m; sourceTree = "<group>"; };
 		141AC85F1E137088008D67F6 /* WebViewJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJSExport.h; sourceTree = "<group>"; };
 		141AC8601E137088008D67F6 /* WebViewJSExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJSExport.m; sourceTree = "<group>"; };
-		144D2E3C1E20C5A800387FD2 /* UIWebViewReport.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = UIWebViewReport.js; sourceTree = "<group>"; };
-		144D2E3D1E20C5A800387FD2 /* UIWebViewTrack.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = UIWebViewTrack.js; sourceTree = "<group>"; };
+		144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.UI.js; sourceTree = "<group>"; };
+		144D2E3D1E20C5A800387FD2 /* WebViewTrack.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewTrack.UI.js; sourceTree = "<group>"; };
 		144D2E3E1E20C5A800387FD2 /* Utils.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Utils.js; sourceTree = "<group>"; };
 		144D2E3F1E20C5A800387FD2 /* WebViewBindings.1.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.1.js; sourceTree = "<group>"; };
 		144D2E401E20C5A800387FD2 /* WebViewBindings.2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.2.js; sourceTree = "<group>"; };
 		144D2E411E20C5A800387FD2 /* WebViewBindings.excute.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.excute.js; sourceTree = "<group>"; };
 		144D2E421E20C5A800387FD2 /* WebViewReport.excute.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.excute.js; sourceTree = "<group>"; };
-		144D2E431E20C5A800387FD2 /* WKWebViewReport.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WKWebViewReport.js; sourceTree = "<group>"; };
-		144D2E441E20C5A800387FD2 /* WKWebViewTrack.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WKWebViewTrack.js; sourceTree = "<group>"; };
+		144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.WK.js; sourceTree = "<group>"; };
+		144D2E441E20C5A800387FD2 /* WebViewTrack.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewTrack.WK.js; sourceTree = "<group>"; };
 		14656FEA1E2379BF006B7107 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
 		14656FEB1E2379BF006B7107 /* Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attributes.m; sourceTree = "<group>"; };
 		148D65791E13D611002B2BB7 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
@@ -312,6 +315,9 @@
 		14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14BA1A4D1E13D675002F0C4B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SugoHelpers.h"; sourceTree = "<group>"; };
+		14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SugoHelpers.m"; sourceTree = "<group>"; };
+		14DEB5271E32F982009F0F80 /* WebViewTrack.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewTrack.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -614,6 +620,8 @@
 				141AC8421E137088008D67F6 /* NSInvocation+MPHelpers.m */,
 				141AC8501E137088008D67F6 /* UIView+MPHelpers.h */,
 				141AC8511E137088008D67F6 /* UIView+MPHelpers.m */,
+				14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */,
+				14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -632,6 +640,7 @@
 			isa = PBXGroup;
 			children = (
 				144D2E3E1E20C5A800387FD2 /* Utils.js */,
+				14DEB5241E32F7B0009F0F80 /* WebViewTrack */,
 				144D2E4F1E20C5CE00387FD2 /* WebViewReport */,
 				144D2E501E20C5E000387FD2 /* WebViewBindings */,
 			);
@@ -641,8 +650,8 @@
 		144D2E4F1E20C5CE00387FD2 /* WebViewReport */ = {
 			isa = PBXGroup;
 			children = (
-				144D2E3C1E20C5A800387FD2 /* UIWebViewReport.js */,
-				144D2E431E20C5A800387FD2 /* WKWebViewReport.js */,
+				144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */,
+				144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */,
 				144D2E421E20C5A800387FD2 /* WebViewReport.excute.js */,
 			);
 			name = WebViewReport;
@@ -651,8 +660,6 @@
 		144D2E501E20C5E000387FD2 /* WebViewBindings */ = {
 			isa = PBXGroup;
 			children = (
-				144D2E3D1E20C5A800387FD2 /* UIWebViewTrack.js */,
-				144D2E441E20C5A800387FD2 /* WKWebViewTrack.js */,
 				144D2E3F1E20C5A800387FD2 /* WebViewBindings.1.js */,
 				144D2E401E20C5A800387FD2 /* WebViewBindings.2.js */,
 				144D2E411E20C5A800387FD2 /* WebViewBindings.excute.js */,
@@ -686,6 +693,16 @@
 				148D65791E13D611002B2BB7 /* libicucore.tbd */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		14DEB5241E32F7B0009F0F80 /* WebViewTrack */ = {
+			isa = PBXGroup;
+			children = (
+				14DEB5271E32F982009F0F80 /* WebViewTrack.js */,
+				144D2E3D1E20C5A800387FD2 /* WebViewTrack.UI.js */,
+				144D2E441E20C5A800387FD2 /* WebViewTrack.WK.js */,
+			);
+			name = WebViewTrack;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -732,6 +749,7 @@
 				141AC8BB1E137088008D67F6 /* MPResources.h in Headers */,
 				141AC8721E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
 				141AC89D1E137088008D67F6 /* MPEventBinding.h in Headers */,
+				14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */,
 				141AC8741E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.h in Headers */,
 				141AC8C81E137088008D67F6 /* MPSwizzle.h in Headers */,
 				141AC8DB1E137088008D67F6 /* MPUITableViewBinding.h in Headers */,
@@ -816,16 +834,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				144D2E461E20C5A800387FD2 /* UIWebViewTrack.js in Resources */,
+				144D2E461E20C5A800387FD2 /* WebViewTrack.UI.js in Resources */,
 				14015FC11E2DBDD2003DB275 /* SugoURLs.plist in Resources */,
 				144D2E481E20C5A800387FD2 /* WebViewBindings.1.js in Resources */,
-				144D2E451E20C5A800387FD2 /* UIWebViewReport.js in Resources */,
+				14DEB5281E32F982009F0F80 /* WebViewTrack.js in Resources */,
+				144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */,
 				144D2E491E20C5A800387FD2 /* WebViewBindings.2.js in Resources */,
-				144D2E4C1E20C5A800387FD2 /* WKWebViewReport.js in Resources */,
+				144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */,
 				144D2E471E20C5A800387FD2 /* Utils.js in Resources */,
 				144D2E4A1E20C5A800387FD2 /* WebViewBindings.excute.js in Resources */,
 				144D2E4B1E20C5A800387FD2 /* WebViewReport.excute.js in Resources */,
-				144D2E4D1E20C5A800387FD2 /* WKWebViewTrack.js in Resources */,
+				144D2E4D1E20C5A800387FD2 /* WebViewTrack.WK.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -874,6 +893,7 @@
 				141AC8D41E137088008D67F6 /* MPTypeDescription.m in Sources */,
 				141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */,
 				141AC8BC1E137088008D67F6 /* MPResources.m in Sources */,
+				14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */,
 				141AC8861E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				141AC8771E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				141AC87D1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,

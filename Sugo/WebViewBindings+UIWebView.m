@@ -86,7 +86,12 @@
 
 - (NSString *)jsUIWebViewTrack
 {
-    return [self jsSourceOfFileName:@"UIWebViewTrack"];
+    NSString *track = [self jsSourceOfFileName:@"WebViewTrack"];
+    NSString *relativePath = [NSString stringWithFormat:@"sugo.relative_path = window.location.pathname.replace('', '');"];
+    NSString *ui = [self jsSourceOfFileName:@"WebViewTrack.UI"];
+    
+    return [[track stringByAppendingString:relativePath]
+            stringByAppendingString:ui];
 }
 
 - (NSString *)jsUIWebViewBindingsSource

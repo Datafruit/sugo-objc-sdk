@@ -1,9 +1,9 @@
-/* 
-  WKWebViewReport.js
-  Sugo
-
-  Created by Zack on 6/1/17.
-  Copyright © 2017年 sugo. All rights reserved.
+/*
+ WebViewReport.WK.js
+ Sugo
+ 
+ Created by Zack on 6/1/17.
+ Copyright © 2017年 sugo. All rights reserved.
  */
 var sugo_report = {};
 sugo_report.isElementInViewport = function(rect) {
@@ -47,7 +47,7 @@ sugo_report.reportNodes = function() {
     sugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
     sugo_report.handleNodeChild(childrens, jsonArray, parent_path, 'report');
     var message = {
-        'path' : window.location.pathname,
+        'path' : sugo.relative_path,
         'clientWidth' : sugo_report.clientWidth,
         'clientHeight' : sugo_report.clientHeight,
         'nodes' : JSON.stringify(jsonArray)

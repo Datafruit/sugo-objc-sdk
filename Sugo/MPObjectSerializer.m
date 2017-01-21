@@ -343,7 +343,7 @@
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
     jsContext[@"WebViewJSExport"] = [WebViewJSExport class]; //jsExport;
     [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"Utils"]];
-    [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"UIWebViewReport"]];
+    [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"WebViewReport.UI"]];
     [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"WebViewReport.excute"]];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     return @{
@@ -361,7 +361,7 @@
     WKUserScript *jsUtilsScript = [[WKUserScript alloc] initWithSource:[wvBindings jsSourceOfFileName:@"Utils"]
                                                           injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                                        forMainFrameOnly:YES];
-    WKUserScript *jsReportSourceScript = [[WKUserScript alloc] initWithSource:[wvBindings jsSourceOfFileName:@"WKWebViewReport"]
+    WKUserScript *jsReportSourceScript = [[WKUserScript alloc] initWithSource:[wvBindings jsSourceOfFileName:@"WebViewReport.WK"]
                                                           injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                                        forMainFrameOnly:YES];
     if (![webView.configuration.userContentController.userScripts containsObject:jsUtilsScript]) {
