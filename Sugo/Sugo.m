@@ -943,11 +943,12 @@ static NSString *defaultProjectToken;
 {
     UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
+    NSDictionary *dimension = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"Dimension"]];
     return @{
-             @"os": [device systemName],
-             @"os_version": [device systemVersion],
-             @"screen_height": @((NSInteger)size.height),
-             @"screen_width": @((NSInteger)size.width),
+             dimension[@"SystemName"]: [device systemName],
+             dimension[@"SystemVersion"]: [device systemVersion],
+             dimension[@"ScreenWidth"]: @((NSInteger)size.height),
+             dimension[@"ScreenHeight"]: @((NSInteger)size.width),
              };
 }
 
@@ -955,25 +956,23 @@ static NSString *defaultProjectToken;
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     NSString *deviceModel = [self deviceModel];
+    NSDictionary *dimension = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"Dimension"]];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"app_version"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"app_release"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"app_build_number"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"app_version_string"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:dimension[@"AppBundleVersion"]];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:dimension[@"AppBundleShortVersionString"]];
 //    [p setValue:[self IFA] forKey:@"ios_ifa"];
     
 #if !SUGO_NO_REACHABILITY_SUPPORT
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
-    [p setValue:carrier.carrierName forKey:@"carrier"];
+    [p setValue:carrier.carrierName forKey:dimension[@"Carrier"]];
 #endif
 
     [p addEntriesFromDictionary:@{
-                                  @"mp_lib": @"Objective-C",
-                                  @"lib_version": [self libVersion],
-                                  @"manufacturer": @"Apple",
-                                  @"model": deviceModel,
-                                  @"mp_device_model": deviceModel, //legacy
+                                  dimension[@"SDKType"]: @"Objective-C",
+                                  dimension[@"SDKVersion"]: [self libVersion],
+                                  dimension[@"Manufacturer"]: @"Apple",
+                                  dimension[@"Model"]: deviceModel, //legacy
                                   }];
     [p addEntriesFromDictionary:[self collectDeviceProperties]];
     return [p copy];
@@ -993,12 +992,10 @@ static NSString *defaultProjectToken;
     self.sugoConfiguration = [[NSMutableDictionary alloc] init];
     // For URLs
     self.sugoConfiguration[@"URLs"] = [Sugo loadConfigurationPropertyListWithName:@"SugoURLs"];
-    self.serverURL = [self.sugoConfiguration[@"URLs"]
-                      objectForKey:@"Bindings"];
-    self.eventCollectionURL = [self.sugoConfiguration[@"URLs"]
-                               objectForKey:@"Collection"];
-    self.switchboardURL = [self.sugoConfiguration[@"URLs"]
-                           objectForKey:@"Codeless"];
+    NSDictionary *urls = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"URLs"]];
+    self.serverURL = urls[@"Bindings"];
+    self.eventCollectionURL = urls[@"Collection"];
+    self.switchboardURL = urls[@"Codeless"];
     
     // For Custom dimension table
     self.sugoConfiguration[@"Dimension"] = [Sugo loadConfigurationPropertyListWithName:@"SugoCustomDimensionTable"];
@@ -1262,8 +1259,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         if (!useCache || !self.decideResponseCached) {
             // Build a proper URL from our parameters
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
-                                                                              withDistinctID:self.people.distinctId ?: self.distinctId
-                                                                                    andToken:self.apiToken];
+                                                            withDistinctID:self.people.distinctId ?: self.distinctId
+                                                                  andToken:self.apiToken];
             // Build a network request from the URL
             NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
                                                             andEndpoint:MPNetworkEndpointDecide
