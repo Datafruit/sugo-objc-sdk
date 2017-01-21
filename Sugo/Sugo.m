@@ -16,7 +16,6 @@
 #define SUGO_NO_APP_LIFECYCLE_SUPPORT (defined(SUGO_APP_EXTENSION))
 #define SUGO_NO_UIAPPLICATION_ACCESS (defined(SUGO_APP_EXTENSION))
 
-#define VERSION @"1.0.0"
 
 @implementation Sugo
 
@@ -317,9 +316,8 @@ static NSString *defaultProjectToken;
     
     properties = [properties copy];
     [Sugo assertPropertyTypes:properties];
-
-    NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
-    NSNumber *epochSeconds = @(round(epochInterval));
+    NSDate *date = [NSDate date];
+    NSTimeInterval epochInterval = [date timeIntervalSince1970];
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[eventName];
         
@@ -329,10 +327,10 @@ static NSString *defaultProjectToken;
             [p addEntriesFromDictionary:self.automaticProperties];
         }
         p[@"token"] = self.apiToken;
-        p[@"time"] = epochSeconds;
+        p[@"time"] = date;
         if (eventStartTime) {
             [self.timedEvents removeObjectForKey:eventName];
-            p[@"duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
+            p[@"duration"] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
         if (self.distinctId) {
             p[@"distinct_id"] = self.distinctId;
@@ -357,8 +355,8 @@ static NSString *defaultProjectToken;
         }
 #endif
         NSMutableDictionary *event = [[NSMutableDictionary alloc]
-                                      initWithDictionary:@{ @"event_name": eventName,
-                                                            @"properties": [NSDictionary dictionaryWithDictionary:p]}];
+                                      initWithDictionary:@{ @"event_name": eventName}];
+        [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
         if (eventID) {
             event[@"event_id"] = eventID;
         }
@@ -905,7 +903,7 @@ static NSString *defaultProjectToken;
 
 + (NSString *)libVersion
 {
-    return VERSION;
+    return [[NSBundle bundleForClass:[Sugo class]] infoDictionary][@"CFBundleShortVersionString"];
 }
 
 - (NSDictionary *)collectDeviceProperties
