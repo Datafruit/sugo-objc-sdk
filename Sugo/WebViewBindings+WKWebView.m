@@ -124,7 +124,12 @@
 
 - (NSString *)jsWKWebViewTrack
 {
-    return [self jsSourceOfFileName:@"WKWebViewTrack"];
+    NSString *track = [self jsSourceOfFileName:@"WebViewTrack"];
+    NSString *relativePath = [NSString stringWithFormat:@"sugo.relative_path = window.location.pathname.replace('', '');"];
+    NSString *wk = [self jsSourceOfFileName:@"WebViewTrack.WK"];
+    
+    return [[track stringByAppendingString:relativePath]
+            stringByAppendingString:wk];
 }
 
 - (NSString *)jsWKWebViewBindingsSource
