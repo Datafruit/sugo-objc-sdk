@@ -98,7 +98,7 @@
         self.bindings = self.codelessBindings;
     }
     
-    if (self.bindings && [self.bindings count] > 0) {
+    if (self.bindings) {
         NSData *jsonBindings = [NSJSONSerialization dataWithJSONObject:self.bindings
                                                                options:NSJSONWritingPrettyPrinted
                                                                  error:nil];
