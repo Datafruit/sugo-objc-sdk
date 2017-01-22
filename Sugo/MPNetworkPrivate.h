@@ -26,6 +26,9 @@
 + (NSData *)encodeArrayAsJSONData:(NSArray *)array;
 + (NSString *)encodeJSONDataAsBase64:(NSData *)data;
 
++ (NSString *)encodeArrayForBatch:(NSArray *)batch;
++ (NSString *)encodeBase64ForDataString:(NSString *)dataString;
+
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID
                                                     andToken:(NSString *)token;

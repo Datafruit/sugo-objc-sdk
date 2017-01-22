@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EventName</key>
+	<string>event_name</string>
+	<key>EventID</key>
+	<string>event_id</string>
+	<key>Token</key>
+	<string>token</string>
+	<key>DistinctID</key>
+	<string>distinct_id</string>
+	<key>SDKType</key>
+	<string>sdk_type</string>
+	<key>SDKVersion</key>
+	<string>sdk_version</string>
+	<key>SystemName</key>
+	<string>system_name</string>
+	<key>SystemVersion</key>
+	<string>system_version</string>
+	<key>AppBundleVersion</key>
+	<string>app_version</string>
+	<key>AppBundleShortVersionString</key>
+	<string>app_version_string</string>
+	<key>Manufacturer</key>
+	<string>manufacturer</string>
+	<key>Model</key>
+	<string>model</string>
+	<key>Carrier</key>
+	<string>carrier</string>
+	<key>ScreenWidth</key>
+	<string>screen_width</string>
+	<key>ScreenHeight</key>
+	<string>screen_height</string>
+</dict>
+</plist>

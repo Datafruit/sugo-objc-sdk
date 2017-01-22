@@ -41,18 +41,6 @@ static const NSUInteger kBatchSize = 50;
       withQueryItems:queryItems];
 }
 
-- (void)flushPeopleQueue:(NSMutableArray *)people {
-//    [self flushQueue:people endpoint:MPNetworkEndpointEngage];
-    
-    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
-                                                               value:[Sugo sharedInstance].projectID];
-    NSArray *queryItems = @[queryItem];
-    [self flushQueue:people
-               toURL:self.eventCollectionURL
-         andEndpoint:MPNetworkEndpointTrack
-      withQueryItems:queryItems];
-}
-
 - (void)flushQueue:(NSMutableArray *)queue
              toURL:(NSURL *)url
        andEndpoint:(MPNetworkEndpoint)endpoint
@@ -66,7 +54,7 @@ static const NSUInteger kBatchSize = 50;
         NSUInteger batchSize = MIN(queue.count, kBatchSize);
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
         
-        NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
+        NSString *requestData = [MPNetwork encodeArrayForBatch: batch];//[MPNetwork encodeArrayForAPI:batch];
         NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
         MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
         NSURLRequest *request = [self buildPostRequestForURL:url
@@ -163,7 +151,6 @@ static const NSUInteger kBatchSize = 50;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
-                            @(MPNetworkEndpointEngage): @"/engage/",
                             @(MPNetworkEndpointDecide): @"/api/sdk/decide" };
     });
     NSNumber *key = @(endpoint);
@@ -219,18 +206,17 @@ static const NSUInteger kBatchSize = 50;
                     andDistinctID:(NSString *)distinctID
                     andCompletion:(void (^)(NSError *error))completion {
     
-    NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
-    NSNumber *epochSeconds = @(round(epochInterval));
+    NSDate *date = [NSDate date];
     NSMutableDictionary *integrationEvent = [[NSMutableDictionary alloc]
-                                             initWithDictionary: @{@"event_name": @"Integration",
-                                                                   @"properties": @{@"token": token,
-                                                                                    @"mp_lib": @"Objective-C",
-                                                                                    @"version": @"2.0",
-                                                                                    @"distinct_id": distinctID,
-                                                                                    @"time": epochSeconds}}];
+                                             initWithDictionary: @{@"event_name": @"Integration"}];
+    [integrationEvent addEntriesFromDictionary:@{@"token": token,
+                                                 @"sdk_type": @"Objective-C",
+                                                 @"sdk_version": [Sugo libVersion],
+                                                 @"distinct_id": distinctID,
+                                                 @"time": date}];
     NSMutableArray *integrationEvents = [NSMutableArray array];
     [integrationEvents addObject:integrationEvent];
-    NSString *requestData = [MPNetwork encodeArrayForAPI:integrationEvents];
+    NSString *requestData = [MPNetwork encodeArrayForBatch:integrationEvents];
     NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
     NSLog(@"track integration post body: %@", postBody);
     NSString *locateValue = ID;
@@ -282,6 +268,98 @@ static const NSUInteger kBatchSize = 50;
 
 + (NSString *)encodeJSONDataAsBase64:(NSData *)data {
     return [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
+}
+
+// Encode data for Sugo special need
++ (NSString *)encodeArrayForBatch:(NSArray *)batch
+{
+    NSMutableDictionary *types = [[NSMutableDictionary alloc] init];
+    NSMutableArray *keys = [[NSMutableArray alloc] init];
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    NSMutableString *dataString = [[NSMutableString alloc] init];
+    
+    NSString *TypeSeperator = @"|";
+    NSString *KeysSeperator = @",";
+    NSString *ValuesSeperator = [NSString stringWithFormat:@"%c", 1];
+    NSString *LinesSeperator = [NSString stringWithFormat:@"%c", 2];
+    
+    for (NSDictionary *object in batch) {
+        for (NSString *key in object.allKeys.reverseObjectEnumerator) {
+            if (![keys containsObject:key]) {
+                if ([[[object[key] classForCoder] description] isEqualToString:@"NSNumber"]) {
+                    if (strcmp([(NSNumber *)object[key] objCType], @encode(int)) == 0
+                        || (strcmp([(NSNumber *)object[key] objCType], @encode(long)) == 0)) {
+                        [types setValue:@"l" forKey:key];
+                    } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
+                                || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0))) {
+                        [types setValue:@"f" forKey:key];
+                    }
+                } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]) {
+                    [types setValue:@"d" forKey:key];
+                } else {
+                    [types setValue:@"s" forKey:key];
+                }
+                [keys addObject:key];
+            }
+        }
+    }
+    
+    for (NSString *key in keys) {
+        dataString = [NSMutableString stringWithFormat:@"%@%@%@%@%@",
+                      dataString,
+                      types[key],
+                      TypeSeperator,
+                      key,
+                      KeysSeperator];
+        
+    }
+    dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
+    dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
+    
+    for (NSDictionary *object in batch) {
+        NSMutableDictionary *value = [[NSMutableDictionary alloc] init];
+        for (NSString *key in keys) {
+            if (object[key]) {
+                if ([types[key] isEqualToString:@"d"]) {
+                    [value setValue:[NSString stringWithFormat:@"%0.f", ((NSDate *)object[key]).timeIntervalSince1970 * 1000] forKey:key];
+                } else {
+                    [value setValue:object[key] forKey:key];
+                }
+                
+            } else {
+                if ([types[key] isEqualToString:@"s"]) {
+                    [value setValue:@"" forKey:key];
+                } else {
+                    [value setValue:@"0" forKey:key];
+                }
+            }
+        }
+        [values addObject:value];
+    }
+    
+    for (NSDictionary *value in values) {
+        for (NSString *key in keys) {
+            dataString = [NSMutableString stringWithFormat:@"%@%@%@",
+                          dataString,
+                          value[key],
+                          ValuesSeperator];
+        }
+        dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
+        dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
+    }
+    NSLog(@"Data:\n%@", dataString);
+    return [MPNetwork encodeBase64ForDataString:dataString];
+}
+
++ (NSString *)encodeBase64ForDataString:(NSString *)dataString
+{
+    NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+    if (!data) {
+        return @"";
+    }
+    NSString *base64Encoded = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
+    
+    return base64Encoded;
 }
 
 + (id)convertFoundationTypesToJSON:(id)obj {

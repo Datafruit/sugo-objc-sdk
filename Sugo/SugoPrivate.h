@@ -75,11 +75,10 @@
 @property (atomic, strong) NSDictionary *automaticProperties;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSMutableArray *eventsQueue;
-@property (nonatomic, strong) NSMutableArray *peopleQueue;
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (atomic) BOOL isCodelessTesting;
-@property (atomic, strong) NSDictionary *configuration;
+@property (atomic, strong) NSMutableDictionary *sugoConfiguration;
 
 @property (nonatomic) BOOL decideResponseCached;
 
@@ -90,7 +89,6 @@
 - (NSString *)deviceModel;
 - (NSString *)IFA;
 
-- (void)archivePeople;
 - (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;

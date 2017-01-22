@@ -16,7 +16,6 @@
 #define SUGO_NO_APP_LIFECYCLE_SUPPORT (defined(SUGO_APP_EXTENSION))
 #define SUGO_NO_UIAPPLICATION_ACCESS (defined(SUGO_APP_EXTENSION))
 
-#define VERSION @"1.0.0"
 
 @implementation Sugo
 
@@ -61,7 +60,6 @@ static NSString *defaultProjectToken;
 {
     if (self = [super init]) {
         self.eventsQueue = [NSMutableArray array];
-        self.peopleQueue = [NSMutableArray array];
         self.timedEvents = [NSMutableDictionary dictionary];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
@@ -95,12 +93,8 @@ static NSString *defaultProjectToken;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
-
-        self.configuration = [Sugo loadConfigurationPropertyListWithName:@"SugoURLs"];
         
-        self.serverURL = [self.configuration objectForKey:@"Bindings"];
-        self.eventCollectionURL = [self.configuration objectForKey:@"Collection"];
-        self.switchboardURL = [self.configuration objectForKey:@"Codeless"];
+        [self setupConfiguration];
         
         self.miniNotificationPresentationTime = 6.0;
 
@@ -169,7 +163,7 @@ static NSString *defaultProjectToken;
     if (path) {
         configuration = [NSMutableDictionary dictionaryWithContentsOfFile:path];
     }
-    NSLog(@"Configuration: %@", configuration);
+    NSLog(@"%@ Property List: %@", name, configuration);
     return [NSDictionary dictionaryWithDictionary:configuration];
 }
 
@@ -280,15 +274,6 @@ static NSString *defaultProjectToken;
     
     dispatch_async(self.serialQueue, ^{
         self.distinctId = distinctId;
-        self.people.distinctId = distinctId;
-        if (self.people.unidentifiedQueue.count > 0) {
-            for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                r[@"distinct_id"] = distinctId;
-                [self.peopleQueue addObject:r];
-            }
-            [self.people.unidentifiedQueue removeAllObjects];
-            [self archivePeople];
-        }
         [self archiveProperties];
     });
 #if SUGO_FLUSH_IMMEDIATELY
@@ -331,9 +316,8 @@ static NSString *defaultProjectToken;
     
     properties = [properties copy];
     [Sugo assertPropertyTypes:properties];
-
-    NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
-    NSNumber *epochSeconds = @(round(epochInterval));
+    NSDate *date = [NSDate date];
+    NSTimeInterval epochInterval = [date timeIntervalSince1970];
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[eventName];
         
@@ -343,10 +327,10 @@ static NSString *defaultProjectToken;
             [p addEntriesFromDictionary:self.automaticProperties];
         }
         p[@"token"] = self.apiToken;
-        p[@"time"] = epochSeconds;
+        p[@"time"] = date;
         if (eventStartTime) {
             [self.timedEvents removeObjectForKey:eventName];
-            p[@"duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
+            p[@"duration"] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
         if (self.distinctId) {
             p[@"distinct_id"] = self.distinctId;
@@ -371,8 +355,8 @@ static NSString *defaultProjectToken;
         }
 #endif
         NSMutableDictionary *event = [[NSMutableDictionary alloc]
-                                      initWithDictionary:@{ @"event_name": eventName,
-                                                            @"properties": [NSDictionary dictionaryWithDictionary:p]}];
+                                      initWithDictionary:@{ @"event_name": eventName}];
+        [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
         if (eventID) {
             event[@"event_id"] = eventID;
         }
@@ -502,9 +486,7 @@ static NSString *defaultProjectToken;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.people.distinctId = nil;
-        self.people.unidentifiedQueue = [NSMutableArray array];
-        self.eventsQueue = [NSMutableArray array];
-        self.peopleQueue = [NSMutableArray array];
+        self.eventsQueue = [NSMutableArray array];;
         self.timedEvents = [NSMutableDictionary dictionary];
         self.decideResponseCached = NO;
         self.eventBindings = [NSSet set];
@@ -577,7 +559,7 @@ static NSString *defaultProjectToken;
             }
         }
         [self.network flushEventQueue:self.eventsQueue];
-        [self.network flushPeopleQueue:self.peopleQueue];
+        
         [self archive];
         
         if (handler) {
@@ -633,7 +615,6 @@ static NSString *defaultProjectToken;
 - (void)archive
 {
     [self archiveEvents];
-    [self archivePeople];
     [self archiveProperties];
     [self archiveEventBindings];
 }
@@ -648,16 +629,6 @@ static NSString *defaultProjectToken;
     }
 }
 
-- (void)archivePeople
-{
-    NSString *filePath = [self peopleFilePath];
-    NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
-//    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
-    if (![self archiveObject:peopleQueueCopy withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive people data", self);
-    }
-}
-
 - (void)archiveProperties
 {
     NSString *filePath = [self propertiesFilePath];
@@ -665,7 +636,6 @@ static NSString *defaultProjectToken;
     [p setValue:self.distinctId forKey:@"distinctId"];
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
 //    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![self archiveObject:p withFilePath:filePath]) {
@@ -712,7 +682,6 @@ static NSString *defaultProjectToken;
 - (void)unarchive
 {
     [self unarchiveEvents];
-    [self unarchivePeople];
     [self unarchiveProperties];
     [self unarchiveEventBindings];
 }
@@ -752,11 +721,6 @@ static NSString *defaultProjectToken;
     self.eventsQueue = (NSMutableArray *)[Sugo unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSMutableArray class]];
 }
 
-- (void)unarchivePeople
-{
-    self.peopleQueue = (NSMutableArray *)[Sugo unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSMutableArray class]];
-}
-
 - (void)unarchiveProperties
 {
     NSDictionary *properties = (NSDictionary *)[Sugo unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
@@ -764,7 +728,6 @@ static NSString *defaultProjectToken;
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
-        self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
     }
@@ -940,18 +903,19 @@ static NSString *defaultProjectToken;
 
 + (NSString *)libVersion
 {
-    return VERSION;
+    return [[NSBundle bundleForClass:[Sugo class]] infoDictionary][@"CFBundleShortVersionString"];
 }
 
 - (NSDictionary *)collectDeviceProperties
 {
     UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
+    NSDictionary *dimension = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"Dimension"]];
     return @{
-             @"os": [device systemName],
-             @"os_version": [device systemVersion],
-             @"screen_height": @((NSInteger)size.height),
-             @"screen_width": @((NSInteger)size.width),
+             dimension[@"SystemName"]: [device systemName],
+             dimension[@"SystemVersion"]: [device systemVersion],
+             dimension[@"ScreenWidth"]: @((NSInteger)size.height),
+             dimension[@"ScreenHeight"]: @((NSInteger)size.width),
              };
 }
 
@@ -959,25 +923,23 @@ static NSString *defaultProjectToken;
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     NSString *deviceModel = [self deviceModel];
+    NSDictionary *dimension = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"Dimension"]];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"app_version"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"app_release"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"app_build_number"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"app_version_string"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:dimension[@"AppBundleVersion"]];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:dimension[@"AppBundleShortVersionString"]];
 //    [p setValue:[self IFA] forKey:@"ios_ifa"];
     
 #if !SUGO_NO_REACHABILITY_SUPPORT
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
-    [p setValue:carrier.carrierName forKey:@"carrier"];
+    [p setValue:carrier.carrierName forKey:dimension[@"Carrier"]];
 #endif
 
     [p addEntriesFromDictionary:@{
-                                  @"mp_lib": @"Objective-C",
-                                  @"lib_version": [self libVersion],
-                                  @"manufacturer": @"Apple",
-                                  @"model": deviceModel,
-                                  @"mp_device_model": deviceModel, //legacy
+                                  dimension[@"SDKType"]: @"Objective-C",
+                                  dimension[@"SDKVersion"]: [self libVersion],
+                                  dimension[@"Manufacturer"]: @"Apple",
+                                  dimension[@"Model"]: deviceModel, //legacy
                                   }];
     [p addEntriesFromDictionary:[self collectDeviceProperties]];
     return [p copy];
@@ -990,6 +952,20 @@ static NSString *defaultProjectToken;
 #else
     return NO;
 #endif
+}
+
+- (void)setupConfiguration
+{
+    self.sugoConfiguration = [[NSMutableDictionary alloc] init];
+    // For URLs
+    self.sugoConfiguration[@"URLs"] = [Sugo loadConfigurationPropertyListWithName:@"SugoURLs"];
+    NSDictionary *urls = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"URLs"]];
+    self.serverURL = urls[@"Bindings"];
+    self.eventCollectionURL = urls[@"Collection"];
+    self.switchboardURL = urls[@"Codeless"];
+    
+    // For Custom dimension table
+    self.sugoConfiguration[@"Dimension"] = [Sugo loadConfigurationPropertyListWithName:@"SugoCustomDimensionTable"];
 }
 
 #pragma mark - UIApplication Events
@@ -1250,8 +1226,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         if (!useCache || !self.decideResponseCached) {
             // Build a proper URL from our parameters
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
-                                                                              withDistinctID:self.people.distinctId ?: self.distinctId
-                                                                                    andToken:self.apiToken];
+                                                            withDistinctID:self.people.distinctId ?: self.distinctId
+                                                                  andToken:self.apiToken];
             // Build a network request from the URL
             NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
                                                             andEndpoint:MPNetworkEndpointDecide

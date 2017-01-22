@@ -10,7 +10,6 @@
 
 typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
     MPNetworkEndpointTrack,
-    MPNetworkEndpointEngage,
     MPNetworkEndpointDecide
 };
 
@@ -22,7 +21,6 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
 - (instancetype)initWithServerURL:(NSURL *)serverURL andEventCollectionURL:(NSURL *)eventCollectionURL;
 
 - (void)flushEventQueue:(NSArray *)events;
-- (void)flushPeopleQueue:(NSArray *)people;
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled;
 
