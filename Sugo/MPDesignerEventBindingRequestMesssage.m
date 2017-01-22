@@ -78,12 +78,12 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
             [bindingCollection updateBindings:commonEvents];
             
             NSArray *htmlEvents = [self payload][@"h5_events"];
-            if (htmlEvents && [htmlEvents count] > 0) {
+            if (htmlEvents) {
                 [[WebViewBindings globalBindings].codelessBindings removeAllObjects];
                 [[WebViewBindings globalBindings].codelessBindings addObjectsFromArray:htmlEvents];
                 [WebViewBindings globalBindings].mode = Codeless;
                 [[WebViewBindings globalBindings] fillBindings];
-            }            
+            }
         });
 
         MPDesignerEventBindingResponseMessage *changeResponseMessage = [MPDesignerEventBindingResponseMessage message];
