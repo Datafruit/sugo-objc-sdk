@@ -10,6 +10,7 @@
 #import "WebViewBindings+WebView.h"
 #import "WebViewJSExport.h"
 #import "MPSwizzler.h"
+#import "SugoPrivate.h"
 
 
 @implementation WebViewBindings (UIWebView)
@@ -87,7 +88,19 @@
 - (NSString *)jsUIWebViewTrack
 {
     NSString *track = [self jsSourceOfFileName:@"WebViewTrack"];
-    NSString *relativePath = [NSString stringWithFormat:@"sugo.relative_path = window.location.pathname.replace('', '');"];
+    
+    NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
+    NSDictionary *replacement = [Sugo loadConfigurationPropertyListWithName:@"SugoResourcesPathReplacement"];
+    if (replacement) {
+        for (NSString *key in replacement.allKeys) {
+            relativePath = [NSMutableString stringWithFormat:@"%@.replace(%@, %@)",
+                            relativePath,
+                            key.length>0?key:@"''",
+                            ((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@"''"];
+        }
+    }
+    relativePath = [NSMutableString stringWithFormat:@"%@%@", relativePath, @";"];
+    
     NSString *ui = [self jsSourceOfFileName:@"WebViewTrack.UI"];
     
     return [[track stringByAppendingString:relativePath]
