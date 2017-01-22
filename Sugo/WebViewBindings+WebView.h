@@ -7,7 +7,6 @@
 //
 
 #import "WebViewBindings.h"
-#import "SugoPrivate.h"
 
 @interface WebViewBindings (WebView)
 

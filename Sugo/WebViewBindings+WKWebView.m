@@ -10,6 +10,7 @@
 #import "WebViewBindings+WebView.h"
 #import "Sugo.h"
 #import "MPSwizzler.h"
+#import "SugoPrivate.h"
 
 
 @implementation WebViewBindings (WKWebView)
