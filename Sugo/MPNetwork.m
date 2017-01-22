@@ -209,12 +209,11 @@ static const NSUInteger kBatchSize = 50;
     NSDate *date = [NSDate date];
     NSMutableDictionary *integrationEvent = [[NSMutableDictionary alloc]
                                              initWithDictionary: @{@"event_name": @"Integration"}];
-    [integrationEvent addEntriesFromDictionary:
-     [NSDictionary dictionaryWithDictionary:@{@"token": token,
-                                              @"sdk_type": @"Objective-C",
-                                              @"sdk_version": [Sugo libVersion],
-                                              @"distinct_id": distinctID,
-                                              @"time": date}]];
+    [integrationEvent addEntriesFromDictionary:@{@"token": token,
+                                                 @"sdk_type": @"Objective-C",
+                                                 @"sdk_version": [Sugo libVersion],
+                                                 @"distinct_id": distinctID,
+                                                 @"time": date}];
     NSMutableArray *integrationEvents = [NSMutableArray array];
     [integrationEvents addObject:integrationEvent];
     NSString *requestData = [MPNetwork encodeArrayForBatch:integrationEvents];
@@ -314,21 +313,21 @@ static const NSUInteger kBatchSize = 50;
                       KeysSeperator];
         
     }
-    dataString = [dataString substringToIndex:dataString.length - 1];
-    dataString = [dataString stringByAppendingString:LinesSeperator];
+    dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
+    dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
     
     for (NSDictionary *object in batch) {
         NSMutableDictionary *value = [[NSMutableDictionary alloc] init];
         for (NSString *key in keys) {
             if (object[key]) {
-                if (types[key] == @"d") {
+                if ([types[key] isEqualToString:@"d"]) {
                     [value setValue:[NSString stringWithFormat:@"%0.f", ((NSDate *)object[key]).timeIntervalSince1970 * 1000] forKey:key];
                 } else {
                     [value setValue:object[key] forKey:key];
                 }
                 
             } else {
-                if (types[key] == @"s") {
+                if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:@"" forKey:key];
                 } else {
                     [value setValue:@"0" forKey:key];
@@ -340,13 +339,13 @@ static const NSUInteger kBatchSize = 50;
     
     for (NSDictionary *value in values) {
         for (NSString *key in keys) {
-            dataString = [NSMutableString stringWithFormat:@"%@%@%@%",
+            dataString = [NSMutableString stringWithFormat:@"%@%@%@",
                           dataString,
                           value[key],
                           ValuesSeperator];
         }
-        dataString = [dataString substringToIndex:dataString.length - 1];
-        dataString = [dataString stringByAppendingString:LinesSeperator];
+        dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
+        dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
     }
     NSLog(@"Data:\n%@", dataString);
     return [MPNetwork encodeBase64ForDataString:dataString];
