@@ -11,7 +11,7 @@
 	<key>DistinctID</key>
 	<string>distinct_id</string>
 	<key>SDKType</key>
-	<string>sdk_type</string>
+	<string>sugo_lib</string>
 	<key>SDKVersion</key>
 	<string>sdk_version</string>
 	<key>SystemName</key>
@@ -22,6 +22,10 @@
 	<string>app_version</string>
 	<key>AppBundleShortVersionString</key>
 	<string>app_version_string</string>
+	<key>Time</key>
+	<string>time</string>
+	<key>Duration</key>
+	<string>duration</string>
 	<key>Manufacturer</key>
 	<string>manufacturer</string>
 	<key>Model</key>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Integration</key>
+	<string>Integration</string>
+	<key>AppStay</key>
+	<string>app_stay</string>
+	<key>BackgroundStay</key>
+	<string>background_stay</string>
+	<key>PageStay</key>
+	<string>page_stay</string>
+	<key>HTMLStay</key>
+	<string>html_stay</string>
+	<key>AppEnter</key>
+	<string>app_enter</string>
+	<key>BackgroundEnter</key>
+	<string>background_enter</string>
+	<key>PageEnter</key>
+	<string>page_enter</string>
+	<key>HTMLEnter</key>
+	<string>html_enter</string>
+	<key>AppExit</key>
+	<string>app_exit</string>
+	<key>BackgroundExit</key>
+	<string>background_exit</string>
+	<key>PageExit</key>
+	<string>page_exit</string>
+	<key>HTMLExit</key>
+	<string>html_exit</string>
+</dict>
+</plist>
