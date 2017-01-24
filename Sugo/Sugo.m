@@ -305,6 +305,16 @@ static NSString *defaultProjectToken;
 
 - (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
 {
+    dispatch_async(self.serialQueue, ^{
+        [self rawTrack:eventID eventName:eventName properties:properties];
+    });
+#if SUGO_FLUSH_IMMEDIATELY
+    [self flush];
+#endif
+}
+
+- (void)rawTrack:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
+{
     NSDictionary *key = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKey"]];
     if (!key) {
         return;
@@ -326,66 +336,60 @@ static NSString *defaultProjectToken;
     [Sugo assertPropertyTypes:properties];
     NSDate *date = [NSDate date];
     NSTimeInterval epochInterval = [date timeIntervalSince1970];
-    dispatch_async(self.serialQueue, ^{
-        NSNumber *eventStartTime = self.timedEvents[eventName];
-        
-        NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-        if (!self.abtestDesignerConnection.connected
-            || !self.isCodelessTesting) {
-            [p addEntriesFromDictionary:self.automaticProperties];
-        }
-        p[key[@"Token"]] = self.apiToken;
-        p[key[@"Time"]] = date;
-        if (eventStartTime) {
-            [self.timedEvents removeObjectForKey:eventName];
-            p[key[@"Duration"]] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
-        }
-        if (self.distinctId) {
-            p[key[@"DistinctID"]] = self.distinctId;
-        }
-        [p addEntriesFromDictionary:self.superProperties];
-        if (properties) {
-            [p addEntriesFromDictionary:properties];
-        }
-        
+    NSNumber *eventStartTime = self.timedEvents[eventName];
+    
+    NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+    if (!self.abtestDesignerConnection.connected
+        || !self.isCodelessTesting) {
+        [p addEntriesFromDictionary:self.automaticProperties];
+    }
+    p[key[@"Token"]] = self.apiToken;
+    p[key[@"Time"]] = date;
+    if (eventStartTime) {
+        [self.timedEvents removeObjectForKey:eventName];
+        p[key[@"Duration"]] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
+    }
+    if (self.distinctId) {
+        p[key[@"DistinctID"]] = self.distinctId;
+    }
+    [p addEntriesFromDictionary:self.superProperties];
+    if (properties) {
+        [p addEntriesFromDictionary:properties];
+    }
+    
 #if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
-        if (self.validationEnabled) {
-            if (self.validationMode == AutomaticEventModeCount) {
-                if (isAutomaticEvent) {
-                    self.validationEventCount++;
-                } else {
-                    if (self.validationEventCount > 0) {
-                        p[@"__c"] = @(self.validationEventCount);
-                        self.validationEventCount = 0;
-                    }
+    if (self.validationEnabled) {
+        if (self.validationMode == AutomaticEventModeCount) {
+            if (isAutomaticEvent) {
+                self.validationEventCount++;
+            } else {
+                if (self.validationEventCount > 0) {
+                    p[@"__c"] = @(self.validationEventCount);
+                    self.validationEventCount = 0;
                 }
             }
         }
+    }
 #endif
-        NSMutableDictionary *event = [[NSMutableDictionary alloc]
-                                      initWithDictionary:@{ key[@"EventName"]: eventName}];
-        [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
-        if (eventID) {
-            event[key[@"EventID"]] = eventID;
-        }
-        
-//        MPLogInfo(@"%@ queueing event: %@", self, event);
-        [self.eventsQueue addObject:event];
-        if (self.eventsQueue.count > 5000) {
-            [self.eventsQueue removeObjectAtIndex:0];
-        }
-        
-        if (self.abtestDesignerConnection.connected
-            && self.isCodelessTesting) {
-            [self flushQueueViaWebSocket];
-        }
-        // Always archive
-        [self archiveEvents];
-    });
-//#if SUGO_FLUSH_IMMEDIATELY
-//    [self flush];
-//#endif
-
+    NSMutableDictionary *event = [[NSMutableDictionary alloc]
+                                  initWithDictionary:@{ key[@"EventName"]: eventName}];
+    [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
+    if (eventID) {
+        event[key[@"EventID"]] = eventID;
+    }
+    
+    //        MPLogInfo(@"%@ queueing event: %@", self, event);
+    [self.eventsQueue addObject:event];
+    if (self.eventsQueue.count > 5000) {
+        [self.eventsQueue removeObjectAtIndex:0];
+    }
+    
+    if (self.abtestDesignerConnection.connected
+        && self.isCodelessTesting) {
+        [self flushQueueViaWebSocket];
+    }
+    // Always archive
+    [self archiveEvents];
 }
 
 - (void)registerSuperProperties:(NSDictionary *)properties
@@ -751,14 +755,17 @@ static NSString *defaultProjectToken;
             return;
         }
 
-        [self timeEvent:@"stay_event"];
-        NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
-        if (vc.title) {
-            pViewController[@"page"] = vc.title;
-        } else {
-            pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
+        NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
+        if (value) {
+            NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
+            if (vc.title) {
+                pViewController[@"page"] = vc.title;
+            } else {
+                pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
+            }
+            [self track:nil eventName:value[@"PageEnter"] properties:pViewController];
+            [self timeEvent:value[@"PageStay"]];
         }
-        [self track:nil eventName:@"enter_page_event" properties:pViewController];
     };
     
     [MPSwizzler swizzleSelector:@selector(viewDidAppear:)
@@ -771,14 +778,18 @@ static NSString *defaultProjectToken;
         if (!vc) {
             return;
         }
-
-        NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
-        if (vc.title) {
-            pViewController[@"page"] = vc.title;
-        } else {
-            pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
+        
+        NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
+        if (value) {
+            NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
+            if (vc.title) {
+                pViewController[@"page"] = vc.title;
+            } else {
+                pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
+            }
+            [self track:nil eventName:value[@"PageStay"] properties:pViewController];
+            [self track:nil eventName:value[@"PageExit"] properties:pViewController];
         }
-        [self track:nil eventName:@"stay_event" properties:pViewController];
     };
     
     [MPSwizzler swizzleSelector:@selector(viewDidDisappear:)
@@ -1147,14 +1158,13 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ application will terminate", self);
     
-//    NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
-//    if (value) {
-//        [self track:nil eventName:value[@"BackgroundStay"]];
-//        [self track:nil eventName:value[@"BackgroundExit"]];
-//        [self track:nil eventName:value[@"AppStay"]];
-//        [self track:nil eventName:value[@"AppExit"]];
-//        [self.network flushEventQueue:self.eventsQueue];
-//    }
+    NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
+    if (value) {
+        [self rawTrack:nil eventName:value[@"BackgroundStay"] properties:nil];
+        [self rawTrack:nil eventName:value[@"BackgroundExit"] properties:nil];
+        [self rawTrack:nil eventName:value[@"AppStay"] properties:nil];
+        [self rawTrack:nil eventName:value[@"AppExit"] properties:nil];
+    }
     
     dispatch_async(_serialQueue, ^{
        [self archive];
