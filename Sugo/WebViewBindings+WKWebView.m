@@ -127,22 +127,50 @@
 {
     NSString *track = [self jsSourceOfFileName:@"WebViewTrack"];
     
+    NSMutableString *nativePath = [[NSMutableString alloc] initWithString:self.wkWebView.URL.path];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacement = [Sugo loadConfigurationPropertyListWithName:@"SugoResourcesPathReplacement"];
     if (replacement) {
         for (NSString *key in replacement.allKeys) {
-            relativePath = [NSMutableString stringWithFormat:@"%@.replace(%@, %@)",
+            relativePath = [NSMutableString stringWithFormat:@"%@.replace(/%@/g, %@)",
                             relativePath,
                             key.length>0?key:@"''",
                             ((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@"''"];
+            
+            NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", key.length>0?key:@""]
+                                                                           options:NSRegularExpressionAnchorsMatchLines
+                                                                             error:nil];
+            nativePath = [re stringByReplacingMatchesInString:nativePath
+                                                      options:0
+                                                        range:NSMakeRange(0, nativePath.length)
+                                                 withTemplate:((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@""];
+            
         }
     }
-    relativePath = [NSMutableString stringWithFormat:@"%@%@", relativePath, @";"];
+    relativePath = [NSMutableString stringWithFormat:@"%@;", relativePath];
     
+    NSMutableString *pn = [[NSMutableString alloc] init];
+    NSMutableString *ic = [[NSMutableString alloc] init];
+    if ([SugoPageInfos global].infos.count > 0) {
+        for (NSDictionary *info in [SugoPageInfos global].infos) {
+            if ([info[@"page"] isEqualToString:nativePath]) {
+                pn = info[@"page"];
+                ic = info[@"code"];
+                break;
+            }
+        }
+    }
+    NSMutableString *pageName = [NSMutableString stringWithFormat:@"sugo.page_name = %@;", pn.length>0?pn:@"''"];
+    NSMutableString *initCode = [NSMutableString stringWithFormat:@"sugo.init_code = %@;", ic.length>0?ic:@"''"];
+
     NSString *wk = [self jsSourceOfFileName:@"WebViewTrack.WK"];
     
-    return [[track stringByAppendingString:relativePath]
+    return [[[[track stringByAppendingString:relativePath]
+              stringByAppendingString:pageName]
+             stringByAppendingString:initCode]
             stringByAppendingString:wk];
+    
+    
 }
 
 - (NSString *)jsWKWebViewBindingsSource

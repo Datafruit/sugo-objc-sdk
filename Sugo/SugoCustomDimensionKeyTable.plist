@@ -36,5 +36,9 @@
 	<string>screen_width</string>
 	<key>ScreenHeight</key>
 	<string>screen_height</string>
+	<key>PagePath</key>
+	<string>path_name</string>
+	<key>PageName</key>
+	<string>page_name</string>
 </dict>
 </plist>

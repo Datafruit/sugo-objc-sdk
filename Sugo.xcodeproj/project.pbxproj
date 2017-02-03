@@ -133,6 +133,8 @@
 		141AC8FD1E137088008D67F6 /* WebViewInfoStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */; };
 		141AC8FE1E137088008D67F6 /* WebViewJSExport.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC85F1E137088008D67F6 /* WebViewJSExport.h */; };
 		141AC8FF1E137088008D67F6 /* WebViewJSExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8601E137088008D67F6 /* WebViewJSExport.m */; };
+		141DFD221E442A0400714BA7 /* SugoPageInfos.h in Headers */ = {isa = PBXBuildFile; fileRef = 141DFD201E442A0400714BA7 /* SugoPageInfos.h */; };
+		141DFD231E442A0400714BA7 /* SugoPageInfos.m in Sources */ = {isa = PBXBuildFile; fileRef = 141DFD211E442A0400714BA7 /* SugoPageInfos.m */; };
 		14250C1F1E34D0B80021793D /* SugoResourcesPathReplacement.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14250C1E1E34D0B80021793D /* SugoResourcesPathReplacement.plist */; };
 		142D82EC1E36EFAA00AAD916 /* SugoCustomDimensionValueTable.plist in Resources */ = {isa = PBXBuildFile; fileRef = 142D82EB1E36EFAA00AAD916 /* SugoCustomDimensionValueTable.plist */; };
 		144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */; };
@@ -295,6 +297,8 @@
 		141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewInfoStorage.m; sourceTree = "<group>"; };
 		141AC85F1E137088008D67F6 /* WebViewJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJSExport.h; sourceTree = "<group>"; };
 		141AC8601E137088008D67F6 /* WebViewJSExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJSExport.m; sourceTree = "<group>"; };
+		141DFD201E442A0400714BA7 /* SugoPageInfos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPageInfos.h; sourceTree = "<group>"; };
+		141DFD211E442A0400714BA7 /* SugoPageInfos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoPageInfos.m; sourceTree = "<group>"; };
 		14250C1E1E34D0B80021793D /* SugoResourcesPathReplacement.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoResourcesPathReplacement.plist; sourceTree = "<group>"; };
 		142D82EB1E36EFAA00AAD916 /* SugoCustomDimensionValueTable.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoCustomDimensionValueTable.plist; sourceTree = "<group>"; };
 		144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.UI.js; sourceTree = "<group>"; };
@@ -503,6 +507,8 @@
 		141AC9481E13C446008D67F6 /* Track */ = {
 			isa = PBXGroup;
 			children = (
+				141DFD201E442A0400714BA7 /* SugoPageInfos.h */,
+				141DFD211E442A0400714BA7 /* SugoPageInfos.m */,
 				141AC94B1E13C5EE008D67F6 /* Messages */,
 				141AC9451E13C16C008D67F6 /* Bindings */,
 			);
@@ -770,6 +776,7 @@
 				141AC88B1E137088008D67F6 /* MPApplicationStateSerializer.h in Headers */,
 				141AC8FE1E137088008D67F6 /* WebViewJSExport.h in Headers */,
 				141AC8661E137088008D67F6 /* Sugo+AutomaticEvents.h in Headers */,
+				141DFD221E442A0400714BA7 /* SugoPageInfos.h in Headers */,
 				141AC8EC1E137088008D67F6 /* UIImage+MPAverageColor.h in Headers */,
 				141AC8941E137088008D67F6 /* MPClassDescription.h in Headers */,
 				14149DEE1E1A6D9D0006DF6A /* WebViewBindings+WebView.h in Headers */,
@@ -893,6 +900,7 @@
 				141AC8B31E137088008D67F6 /* MPObjectSerializer.m in Sources */,
 				141AC88E1E137088008D67F6 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
 				141AC8BA1E137088008D67F6 /* MPPropertyDescription.m in Sources */,
+				141DFD231E442A0400714BA7 /* SugoPageInfos.m in Sources */,
 				141AC8FB1E137088008D67F6 /* WebViewBindings+WKWebView.m in Sources */,
 				141AC8F31E137088008D67F6 /* UIViewController+AutomaticEvents.m in Sources */,
 				141AC8B51E137088008D67F6 /* MPObjectSerializerConfig.m in Sources */,
