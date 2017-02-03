@@ -14,7 +14,7 @@ sugo_report.isElementInViewport = function(rect) {
             rect.right <= sugo_report.clientWidth
             );
 };
-sugo_report.handleNodeChild = function(childrens, jsonArray, parent_path, type) {
+sugo_report.handleNodeChild = function(childrens, jsonArray, parent_path) {
     var index_map = {};
     for (var i = 0; i < childrens.length; i++) {
         var children = childrens[i];
@@ -34,7 +34,7 @@ sugo_report.handleNodeChild = function(childrens, jsonArray, parent_path, type) 
         }
         
         if (children.children) {
-            sugo_report.handleNodeChild(children.children, jsonArray, path, type);
+            sugo_report.handleNodeChild(children.children, jsonArray, path);
         }
     }
 };
@@ -45,6 +45,6 @@ sugo_report.reportNodes = function() {
     var parent_path = '';
     sugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
     sugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
-    sugo_report.handleNodeChild(childrens, jsonArray, parent_path, 'report');
+    sugo_report.handleNodeChild(childrens, jsonArray, parent_path);
     WebViewJSExport.infoOfPathNodesWidthHeight(sugo.relative_path, JSON.stringify(jsonArray), sugo_report.clientWidth, sugo_report.clientHeight);
 };
