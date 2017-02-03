@@ -97,7 +97,7 @@
         for (NSString *key in replacement.allKeys) {
             relativePath = [NSMutableString stringWithFormat:@"%@.replace(/%@/g, %@)",
                             relativePath,
-                            key.length>0?key:@"''",
+                            key.length>0?key:@" ",
                             ((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@"''"];
             
             NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", key.length>0?key:@""]
