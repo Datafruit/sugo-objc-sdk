@@ -32,6 +32,7 @@
 #import "UIView+MPHelpers.h"
 #import "MPDesignerEventBindingMessage.h"
 #import "WebViewBindings.h"
+#import "SugoPageInfos.h"
 #import "MPDesignerSessionCollection.h"
 #import "MPEventBinding.h"
 #import "MPSwizzler.h"

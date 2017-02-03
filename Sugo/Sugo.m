@@ -4,11 +4,14 @@
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 
+#import <UIKit/UIKit.h>
+
 #import "Sugo.h"
 #import "SugoPrivate.h"
 #import "SugoPeople.h"
 #import "SugoPeoplePrivate.h"
 #import "MPNetworkPrivate.h"
+#import "UIViewController+SugoHelpers.h"
 
 #import "MPLogger.h"
 #import "MPFoundation.h"
@@ -342,6 +345,14 @@ static NSString *defaultProjectToken;
     if (!self.abtestDesignerConnection.connected
         || !self.isCodelessTesting) {
         [p addEntriesFromDictionary:self.automaticProperties];
+    }
+    p[key[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
+    if ([SugoPageInfos global].infos.count > 0) {
+        for (NSDictionary *info in [SugoPageInfos global].infos) {
+            if ([info[@"page"] isEqualToString:p[key[@"PagePath"]]]) {
+                p[key[@"PageName"]] = info[@"page_name"];
+            }
+        }
     }
     p[key[@"Token"]] = self.apiToken;
     p[key[@"Time"]] = date;
@@ -757,13 +768,7 @@ static NSString *defaultProjectToken;
 
         NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
         if (value) {
-            NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
-            if (vc.title) {
-                pViewController[@"page"] = vc.title;
-            } else {
-                pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
-            }
-            [self track:nil eventName:value[@"PageEnter"] properties:pViewController];
+            [self track:nil eventName:value[@"PageEnter"] properties:nil];
             [self timeEvent:value[@"PageStay"]];
         }
     };
@@ -781,14 +786,8 @@ static NSString *defaultProjectToken;
         
         NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
         if (value) {
-            NSMutableDictionary *pViewController = [[NSMutableDictionary alloc] init];
-            if (vc.title) {
-                pViewController[@"page"] = vc.title;
-            } else {
-                pViewController[@"page"] = NSStringFromClass([vc classForCoder]);
-            }
-            [self track:nil eventName:value[@"PageStay"] properties:pViewController];
-            [self track:nil eventName:value[@"PageExit"] properties:pViewController];
+            [self track:nil eventName:value[@"PageStay"] properties:nil];
+            [self track:nil eventName:value[@"PageExit"] properties:nil];
         }
     };
     
@@ -1324,6 +1323,12 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     [[WebViewBindings globalBindings].designerBindings removeAllObjects];
                     [[WebViewBindings globalBindings].designerBindings addObjectsFromArray:(NSArray *)htmlEventBindings];
                     [[WebViewBindings globalBindings] fillBindings];
+                }
+                
+                id pageInfos = object[@"page_info"];
+                if ([pageInfos isKindOfClass:[NSArray class]]) {
+                    [[SugoPageInfos global].infos removeAllObjects];
+                    [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
                 }
                 
                 self.eventBindings = [allEventBindings copy];
