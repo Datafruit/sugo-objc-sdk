@@ -909,8 +909,8 @@ static NSString *defaultProjectToken;
     return @{
              key[@"SystemName"]: [device systemName],
              key[@"SystemVersion"]: [device systemVersion],
-             key[@"ScreenWidth"]: @((NSInteger)size.height),
-             key[@"ScreenHeight"]: @((NSInteger)size.width),
+             key[@"ScreenWidth"]: @((NSInteger)size.width),
+             key[@"ScreenHeight"]: @((NSInteger)size.height),
              };
 }
 

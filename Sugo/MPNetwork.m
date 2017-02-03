@@ -293,6 +293,8 @@ static const NSUInteger kBatchSize = 50;
                     } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
                                 || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0))) {
                         [types setValue:@"f" forKey:key];
+                    } else {
+                        [types setValue:@"s" forKey:key];
                     }
                 } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]) {
                     [types setValue:@"d" forKey:key];
