@@ -100,6 +100,7 @@ static NSString *defaultProjectToken;
 #endif
         self.projectID = projectID;
         self.apiToken = apiToken;
+        self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
@@ -351,6 +352,7 @@ static NSString *defaultProjectToken;
         }
     }
     p[key[@"Token"]] = self.apiToken;
+    p[key[@"SessionID"]] = self.sessionId;
     if (eventStartTime) {
         [self.timedEvents removeObjectForKey:eventName];
         p[key[@"Duration"]] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);

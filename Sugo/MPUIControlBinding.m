@@ -9,6 +9,7 @@
 #import "MPSwizzler.h"
 #import "MPUIControlBinding.h"
 #import "Attributes.h"
+#import "SugoPrivate.h"
 
 @interface MPUIControlBinding()
 
@@ -238,6 +239,14 @@
         NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
         if (self.attributes) {
             [p addEntriesFromDictionary:[self.attributes parse]];
+        }
+        if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]) {
+            NSDictionary *key = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]];
+            if (self.controlEvent == UIControlEventEditingDidBegin) {
+                p[key[@"EventType"]] = @"focus";
+            } else {
+                p[key[@"EventType"]] = @"click";
+            }
         }
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }

@@ -69,6 +69,7 @@
 @property (atomic, strong) SugoPeople *people;
 @property (atomic, strong) MPNetwork *network;
 @property (atomic, copy) NSString *distinctId;
+@property (atomic, strong) NSString *sessionId;
 
 @property (nonatomic, copy) NSString *apiToken;
 @property (atomic, strong) NSString *urlSchemesKeyValue;
