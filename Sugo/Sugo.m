@@ -351,7 +351,6 @@ static NSString *defaultProjectToken;
         }
     }
     p[key[@"Token"]] = self.apiToken;
-    p[key[@"Time"]] = date;
     if (eventStartTime) {
         [self.timedEvents removeObjectForKey:eventName];
         p[key[@"Duration"]] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
@@ -384,6 +383,7 @@ static NSString *defaultProjectToken;
     if (!self.abtestDesignerConnection.connected
         || !self.isCodelessTesting) {
         [p addEntriesFromDictionary:self.automaticProperties];
+        p[key[@"Time"]] = date;
         [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
     } else {
         p[key[@"Time"]] = @(epochInterval);
