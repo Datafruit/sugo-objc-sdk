@@ -10,6 +10,8 @@
 	<string>token</string>
 	<key>DistinctID</key>
 	<string>distinct_id</string>
+	<key>SessionID</key>
+	<string>session_id</string>
 	<key>SDKType</key>
 	<string>sugo_lib</string>
 	<key>SDKVersion</key>
