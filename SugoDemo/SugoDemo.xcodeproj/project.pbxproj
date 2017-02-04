@@ -40,6 +40,7 @@
 		141AC7A51E1366DB008D67F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		141AC7A81E1366DB008D67F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		141AC7AA1E1366DB008D67F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		141DFD281E442B4A00714BA7 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		14282F1B1E1F381C00B3E4FA /* SugoDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SugoDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		14282F1D1E1F381C00B3E4FA /* SugoDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SugoDemoTests.m; sourceTree = "<group>"; };
 		14282F1F1E1F381C00B3E4FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -140,6 +141,7 @@
 		14BA1A7B1E13E9F6002F0C4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				141DFD281E442B4A00714BA7 /* Sugo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -461,6 +463,7 @@
 				14282F231E1F381C00B3E4FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
