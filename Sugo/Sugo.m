@@ -1246,6 +1246,67 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         NSMutableSet *newEventBindings = [NSMutableSet set];
         __block BOOL hadError = NO;
 
+        if ([NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"]) {
+            
+            NSData *cacheData = [NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"];
+            NSLog(@"Decide cacheData\n%@",[[NSString alloc] initWithData:cacheData encoding:NSUTF8StringEncoding]);
+            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:cacheData options:(NSJSONReadingOptions)0 error:nil];
+            NSDictionary *config = object[@"config"];
+            if (config && [config isKindOfClass:NSDictionary.class]) {
+                NSDictionary *validationConfig = config[@"ce"];
+                if (validationConfig && [validationConfig isKindOfClass:NSDictionary.class]) {
+                    self.validationEnabled = [validationConfig[@"enabled"] boolValue];
+                    
+                    NSString *method = validationConfig[@"method"];
+                    if (method && [method isKindOfClass:NSString.class]) {
+                        if ([method isEqualToString:@"count"]) {
+                            self.validationMode = AutomaticEventModeCount;
+                        }
+                    }
+                }
+            }
+            
+            id commonEventBindings = object[@"event_bindings"];
+            NSMutableSet *parsedEventBindings = [NSMutableSet set];
+            if ([commonEventBindings isKindOfClass:[NSArray class]]) {
+                for (id obj in commonEventBindings) {
+                    MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
+                    if (binder) {
+                        [parsedEventBindings addObject:binder];
+                    }
+                }
+            } else {
+                MPLogDebug(@"%@ tracking events check response format error: %@", self, object);
+            }
+            
+            // Finished bindings are those which should no longer be run.
+            NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
+            [finishedEventBindings minusSet:parsedEventBindings];
+            [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
+            
+            // New bindings are those we are running for the first time.
+            [newEventBindings unionSet:parsedEventBindings];
+            [newEventBindings minusSet:self.eventBindings];
+            
+            NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
+            [allEventBindings unionSet:newEventBindings];
+            
+            id htmlEventBindings = object[@"h5_event_bindings"];
+            if ([htmlEventBindings isKindOfClass:[NSArray class]]) {
+                [[WebViewBindings globalBindings].designerBindings removeAllObjects];
+                [[WebViewBindings globalBindings].designerBindings addObjectsFromArray:(NSArray *)htmlEventBindings];
+                [[WebViewBindings globalBindings] fillBindings];
+            }
+            
+            id pageInfos = object[@"page_info"];
+            if ([pageInfos isKindOfClass:[NSArray class]]) {
+                [[SugoPageInfos global].infos removeAllObjects];
+                [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
+            }
+            
+            self.eventBindings = [allEventBindings copy];
+        }
+        
         if (!useCache || !self.decideResponseCached) {
             // Build a proper URL from our parameters
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
@@ -1269,7 +1330,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
-                NSLog(@"Decide responseData%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                NSLog(@"Decide responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                 // Handle network response
                 NSDictionary *object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
                 if (error) {
@@ -1284,7 +1345,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
-
+                
+                [NSUserDefaults.standardUserDefaults setObject:responseData
+                                                        forKey:@"EventBindings"];
+                
                 NSDictionary *config = object[@"config"];
                 if (config && [config isKindOfClass:NSDictionary.class]) {
                     NSDictionary *validationConfig = config[@"ce"];
@@ -1310,7 +1374,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                         }
                     }
                 } else {
-                    MPLogDebug(@"%@ mp tracking events check response format error: %@", self, object);
+                    MPLogDebug(@"%@ tracking events check response format error: %@", self, object);
                 }
 
                 // Finished bindings are those which should no longer be run.
