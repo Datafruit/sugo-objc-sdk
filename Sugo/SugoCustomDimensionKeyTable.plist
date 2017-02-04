@@ -40,5 +40,7 @@
 	<string>path_name</string>
 	<key>PageName</key>
 	<string>page_name</string>
+	<key>EventType</key>
+	<string>event_type</string>
 </dict>
 </plist>

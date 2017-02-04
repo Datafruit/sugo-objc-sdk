@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
+#import "SugoPrivate.h"
 
 @implementation MPUITableViewBinding
 
@@ -116,6 +117,11 @@
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
                 }
+                if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]) {
+                    NSDictionary *key = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]];
+                    p[key[@"EventType"]] = @"click";
+                }
+
                 [[self class] track:[self eventID]
                           eventName:[self eventName]
                          properties:p];
