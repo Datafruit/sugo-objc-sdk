@@ -140,10 +140,11 @@
             NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", key.length>0?key:@""]
                                                                            options:NSRegularExpressionAnchorsMatchLines
                                                                              error:nil];
-            nativePath = [re stringByReplacingMatchesInString:nativePath
-                                                      options:0
-                                                        range:NSMakeRange(0, nativePath.length)
-                                                 withTemplate:((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@""];
+            nativePath = [NSMutableString
+                          stringWithString:[re stringByReplacingMatchesInString:nativePath
+                                                                        options:0
+                                                                          range:NSMakeRange(0, nativePath.length)
+                                                                   withTemplate:((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@""]];
             
         }
     }
