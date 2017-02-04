@@ -12,8 +12,6 @@
 		141AC7A41E1366DB008D67F6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 141AC7A21E1366DB008D67F6 /* Main.storyboard */; };
 		141AC7A61E1366DB008D67F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 141AC7A51E1366DB008D67F6 /* Assets.xcassets */; };
 		141AC7A91E1366DB008D67F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 141AC7A71E1366DB008D67F6 /* LaunchScreen.storyboard */; };
-		141DFD291E442B4A00714BA7 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 141DFD281E442B4A00714BA7 /* Sugo.framework */; };
-		141DFD2A1E442B4A00714BA7 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 141DFD281E442B4A00714BA7 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		14282F1E1E1F381C00B3E4FA /* SugoDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 14282F1D1E1F381C00B3E4FA /* SugoDemoTests.m */; };
 		14BA1A831E13EC18002F0C4B /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A821E13EC18002F0C4B /* TrackingViewController.m */; };
 		14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A851E13EC58002F0C4B /* UtilityViewController.m */; };
@@ -32,20 +30,6 @@
 			remoteInfo = SugoDemo;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		141DFD2B1E442B4A00714BA7 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				141DFD2A1E442B4A00714BA7 /* Sugo.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		141AC7961E1366DB008D67F6 /* SugoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SugoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,7 +63,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				141DFD291E442B4A00714BA7 /* Sugo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +156,6 @@
 				141AC7921E1366DB008D67F6 /* Sources */,
 				141AC7931E1366DB008D67F6 /* Frameworks */,
 				141AC7941E1366DB008D67F6 /* Resources */,
-				141DFD2B1E442B4A00714BA7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
