@@ -342,10 +342,6 @@ static NSString *defaultProjectToken;
     NSNumber *eventStartTime = self.timedEvents[eventName];
     
     NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-    if (!self.abtestDesignerConnection.connected
-        || !self.isCodelessTesting) {
-        [p addEntriesFromDictionary:self.automaticProperties];
-    }
     p[key[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
     if ([SugoPageInfos global].infos.count > 0) {
         for (NSDictionary *info in [SugoPageInfos global].infos) {
@@ -384,7 +380,16 @@ static NSString *defaultProjectToken;
 #endif
     NSMutableDictionary *event = [[NSMutableDictionary alloc]
                                   initWithDictionary:@{ key[@"EventName"]: eventName}];
-    [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
+    
+    if (!self.abtestDesignerConnection.connected
+        || !self.isCodelessTesting) {
+        [p addEntriesFromDictionary:self.automaticProperties];
+        [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
+    } else {
+        p[key[@"Time"]] = @(epochInterval);
+        event[@"properties"] = p;
+    }
+    
     if (eventID) {
         event[key[@"EventID"]] = eventID;
     }
