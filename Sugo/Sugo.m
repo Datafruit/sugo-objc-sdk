@@ -1075,11 +1075,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         properties[@"wifi"] = @(wifi);
         MPLogInfo(@"%@ reachability changed, wifi=%d", self, wifi);
         
-        NSString *network = @"NotReachable";
+        NSString *network = @"";
         if ((flags & kSCNetworkReachabilityFlagsReachable) == 0)
         {
             // The target host is not reachable.
-            network = @"NotReachable";
+            network = @"";
         }
         
         if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0)
@@ -1115,19 +1115,19 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             
             if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyGPRS"]) {
                 
-                network = @"GPRS";
+                network = @"2G";
             }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
                 
-                network = @"2.75G EDGE";
+                network = @"2G";
             }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyWCDMA"]){
                 
                 network = @"3G";
             }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSDPA"]){
                 
-                network = @"3.5G HSDPA";
+                network = @"3G";
             }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSUPA"]){
                 
-                network = @"3.5G HSUPA";
+                network = @"3G";
             }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMA1x"]){
                 
                 network = @"2G";
@@ -1140,12 +1140,12 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"]){
                 
                 network = @"3G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyeHRPD"]){
-                
-                network = @"HRPD";
             }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyLTE"]){
                 
                 network = @"4G";
+            } else {
+                
+                network = @"other";
             }
         }
         //
