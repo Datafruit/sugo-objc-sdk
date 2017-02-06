@@ -12,6 +12,8 @@
 	<string>distinct_id</string>
 	<key>SessionID</key>
 	<string>session_id</string>
+	<key>Reachability</key>
+	<string>network</string>
 	<key>SDKType</key>
 	<string>sugo_lib</string>
 	<key>SDKVersion</key>
