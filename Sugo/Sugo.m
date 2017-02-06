@@ -94,9 +94,6 @@ static NSString *defaultProjectToken;
 #if !SUGO_NO_EXCEPTION_HANDLING
         // Install uncaught exception handlers first
         [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
-#if !SUGO_NO_REACHABILITY_SUPPORT
-        self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
-#endif
 #endif
         self.projectID = projectID;
         self.apiToken = apiToken;
@@ -113,7 +110,9 @@ static NSString *defaultProjectToken;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
-
+#if !SUGO_NO_REACHABILITY_SUPPORT
+        self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
+#endif
         self.taskId = UIBackgroundTaskInvalid;
         
         NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
@@ -360,6 +359,7 @@ static NSString *defaultProjectToken;
     if (self.distinctId) {
         p[key[@"DistinctID"]] = self.distinctId;
     }
+
     [p addEntriesFromDictionary:self.superProperties];
     if (properties) {
         [p addEntriesFromDictionary:properties];
@@ -977,8 +977,14 @@ static NSString *defaultProjectToken;
     [self trackIntegration];
     [self trackStayTime];
 #if !SUGO_NO_REACHABILITY_SUPPORT
-    // wifi reachability
-    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "sugo.io")) != NULL) {
+    // cellular info
+    [self setCurrentRadio];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(setCurrentRadio)
+                                                 name:CTRadioAccessTechnologyDidChangeNotification
+                                               object:nil];
+    // reachability
+    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, [self.eventCollectionURL cStringUsingEncoding:NSUTF8StringEncoding])) != NULL) {
         SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
         if (SCNetworkReachabilitySetCallback(_reachability, SugoReachabilityCallback, &context)) {
             if (!SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
@@ -987,13 +993,6 @@ static NSString *defaultProjectToken;
             }
         }
     }
-    
-    // cellular info
-    [self setCurrentRadio];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                           selector:@selector(setCurrentRadio)
-                               name:CTRadioAccessTechnologyDidChangeNotification
-                             object:nil];
 #endif // SUGO_NO_REACHABILITY_SUPPORT
 
 #if !SUGO_NO_APP_LIFECYCLE_SUPPORT
@@ -1061,6 +1060,12 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)reachabilityChanged:(SCNetworkReachabilityFlags)flags
 {
+    
+    NSDictionary *key = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKey"]];
+    if (!key) {
+        return;
+    }
+    
     // this should be run in the serial queue. the reason we don't dispatch_async here
     // is because it's only ever called by the reachability callback, which is already
     // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
@@ -1068,8 +1073,86 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (properties) {
         BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
         properties[@"wifi"] = @(wifi);
-        self.automaticProperties = [properties copy];
         MPLogInfo(@"%@ reachability changed, wifi=%d", self, wifi);
+        
+        NSString *network = @"";
+        if ((flags & kSCNetworkReachabilityFlagsReachable) == 0)
+        {
+            // The target host is not reachable.
+            network = @"";
+        }
+        
+        if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0)
+        {
+            /*
+             If the target host is reachable and no connection is required then we'll assume (for now) that you're on Wi-Fi...
+             */
+            network = @"WiFi";
+        }
+        
+        if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) ||
+             (flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0))
+        {
+            /*
+             ... and the connection is on-demand (or on-traffic) if the calling application is using the CFSocketStream or higher APIs...
+             */
+            
+            if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0)
+            {
+                /*
+                 ... and no [user] intervention is needed...
+                 */
+                network = @"WiFi";
+            }
+        }
+        
+        if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN)
+        {
+            /*
+             ... but WWAN connections are OK if the calling application is using the CFNetwork APIs.
+             */
+            NSString *currentStatus = self.telephonyInfo.currentRadioAccessTechnology;
+            
+            if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyGPRS"]) {
+                
+                network = @"2G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
+                
+                network = @"2G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyWCDMA"]){
+                
+                network = @"3G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSDPA"]){
+                
+                network = @"3G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSUPA"]){
+                
+                network = @"3G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMA1x"]){
+                
+                network = @"2G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"]){
+                
+                network = @"3G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"]){
+                
+                network = @"3G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"]){
+                
+                network = @"3G";
+            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyLTE"]){
+                
+                network = @"4G";
+            } else {
+                
+                network = @"other";
+            }
+        }
+        //
+        properties[key[@"Reachability"]] = network;
+        
+        self.automaticProperties = [properties copy];
+        MPLogInfo(@"Reachability: %@", network);
     }
 }
 
