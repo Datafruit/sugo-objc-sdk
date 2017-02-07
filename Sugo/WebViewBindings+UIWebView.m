@@ -37,6 +37,8 @@
             [jsContext evaluateScript:[self jsUIWebViewTrack]];
             [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
             [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
+            [jsContext evaluateScript:[self jsUtils]];
+            [jsContext evaluateScript:[self jsUIWebViewReport]];
             self.uiWebViewJavaScriptInjected = YES;
             NSLog(@"UIWebView Injected");
         }
@@ -83,6 +85,8 @@
         [jsContext evaluateScript:[self jsUIWebViewTrack]];
         [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
         [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
+        [jsContext evaluateScript:[self jsUtils]];
+        [jsContext evaluateScript:[self jsUIWebViewReport]];
     }
 }
 
@@ -151,6 +155,16 @@
 - (NSString *)jsUIWebViewBindingsExcute
 {
     return [self jsSourceOfFileName:@"WebViewBindings.excute"];
+}
+
+- (NSString *)jsUtils
+{
+    return [self jsSourceOfFileName:@"Utils"];
+}
+
+- (NSString *)jsUIWebViewReport
+{
+    return [self jsSourceOfFileName:@"WebViewReport.UI"];
 }
 
 @end

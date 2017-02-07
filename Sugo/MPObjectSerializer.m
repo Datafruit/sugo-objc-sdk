@@ -342,8 +342,6 @@
     JSContext *jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
     jsContext[@"WebViewJSExport"] = [WebViewJSExport class]; //jsExport;
-    [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"Utils"]];
-    [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"WebViewReport.UI"]];
     [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"WebViewReport.excute"]];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     return @{
