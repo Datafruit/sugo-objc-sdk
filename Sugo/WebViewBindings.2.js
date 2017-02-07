@@ -46,7 +46,7 @@ sugo_bindings.delegate = function(eventType) {
             }
         }
     }
-    document.addEventListener(eventType, handle);
+    document.addEventListener(eventType, handle, true);
 };
 sugo_bindings.bindEvent = function() {
     sugo_bindings.delegate('click');

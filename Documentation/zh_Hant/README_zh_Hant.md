@@ -167,9 +167,9 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 Sugo *sugo = [Sugo sharedInstance];
 ```
 
-### 3.2 代码埋点
+### 3.2 手动埋点
 
-#### 3.2.1 事件埋点
+#### 3.2.1 代码埋点
 
 当需要把自定义事件发送到服务器时，可在相应位置调用
 
@@ -191,11 +191,11 @@ Sugo *sugo = [Sugo sharedInstance];
 [[Sugo sharedInstance] track:@"EventId" eventName:@"EventName" properties:@{ @"key1": @"value2", @"key2": @"value2"}];	//eventId可为空
 ```
 
-#### 3.2.2 时间埋点
+#### 3.2.2 时长统计
 
 ##### 3.2.2.1 创建
 
-当需要对时间进行跟踪时，可在开始跟踪的位置调用
+当需要对时间进行跟踪统计时，可在开始跟踪的位置调用
 
 * `- (void)timeEvent:(NSString *)event`
 
@@ -237,11 +237,11 @@ Sugo *sugo = [Sugo sharedInstance];
 [[Sugo sharedInstance] clearTimedEvents];
 ```
 
-#### 3.2.3 超级属性
+#### 3.2.3 全局属性
 
 ##### 3.2.3.1 注册
 
-当每一个事件都需要记录相同的属性时，可以选择使用超级属性(超级属性仅允许`NSString`类型作为key值，value值则允许`NSString`、`NSNumber`、`NSArray`、`NSDictionary`、`NSDate`、`NSURL`这些类型)，
+当每一个事件都需要记录相同的属性时，可以选择使用全局属性(全局属性仅允许`NSString`类型作为key值，value值则允许`NSString`、`NSNumber`、`NSArray`、`NSDictionary`、`NSDate`、`NSURL`这些类型)，
 通过调用
 
 * `- (void)registerSuperPropertiesOnce:(NSDictionary *)properties;`
@@ -250,13 +250,13 @@ Sugo *sugo = [Sugo sharedInstance];
 示例如下：
 
 ```
-[[Sugo sharedInstance] registerSuperPropertiesOnce:@{ @"key1": @"value2", @"key2": @"value2"}]; // 此方法不会覆盖当前已有的超级属性
-[[Sugo sharedInstance] registerSuperProperties:@{ @"key1": @"value2", @"key2": @"value2"}]; // 此方法会覆盖当前已有的超级属性
+[[Sugo sharedInstance] registerSuperPropertiesOnce:@{ @"key1": @"value2", @"key2": @"value2"}]; // 此方法不会覆盖当前已有的全局属性
+[[Sugo sharedInstance] registerSuperProperties:@{ @"key1": @"value2", @"key2": @"value2"}]; // 此方法会覆盖当前已有的全局属性
 ```
 
 ##### 3.2.3.2 获取
 
-当需要获取已注册的超级属性时，可以调用
+当需要获取已注册的全局属性时，可以调用
 
 * `- (NSDictionary *)currentSuperProperties;`
 
@@ -268,7 +268,7 @@ Sugo *sugo = [Sugo sharedInstance];
 
 ##### 3.2.3.3 注销
 
-当需要注销某一超级属性时，可以调用
+当需要注销某一全局属性时，可以调用
 
 * `- (void)unregisterSuperProperty:(NSString *)propertyName;`
 
@@ -280,7 +280,7 @@ Sugo *sugo = [Sugo sharedInstance];
 
 ##### 3.2.3.4 清除
 
-当需要清除所有超级属性时，可以调用
+当需要清除所有全局属性时，可以调用
 
 * `- (void)clearSuperProperties;`
 
@@ -289,6 +289,16 @@ Sugo *sugo = [Sugo sharedInstance];
 ```
  [[Sugo sharedInstance] clearSuperProperties];
 ```
+
+#### 3.2.4 WebView埋点
+
+当需要在WebView(UIWebView或WKWebView)中进行代码埋点时，在页面加载完毕后，可调用以下API(是`3.2.1`与`3.2.2`同名方法在JavaScript中的接口，实现机制相同)进行JavaScript内容的代码埋点
+
+```
+sugo.timeEvent(event_name);					// 在开始统计时长的时候调用
+sugo.track(event_id, event_name, props);	// 准备把自定义事件发送到服务器时
+```
+
 
 ## 4. 反馈
 
