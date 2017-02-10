@@ -29,7 +29,7 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property (atomic, strong) NSMutableString* stringBindings;
 @property BOOL isWebViewNeedReload;
 
-@property (atomic, strong) UIWebView* uiWebView;
+@property (atomic, weak) UIWebView* uiWebView;
 @property (atomic, strong) NSString* uiVcPath;
 @property (atomic, strong) NSString* uiDidMoveToWindowBlockName;
 @property (atomic, strong) NSString* uiRemoveFromSuperviewBlockName;
@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property (atomic, strong) NSString* uiWebViewDidFinishLoadBlockName;
 @property BOOL uiWebViewJavaScriptInjected;
 
-@property (atomic, strong) WKWebView* wkWebView;
+@property (atomic, weak) WKWebView* wkWebView;
 @property (atomic, strong) NSString* wkVcPath;
 @property (atomic, strong) NSString* wkDidMoveToWindowBlockName;
 @property (atomic, strong) NSString* wkRemoveFromSuperviewBlockName;

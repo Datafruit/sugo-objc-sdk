@@ -24,8 +24,11 @@
         self.wkWebViewCurrentJSExcute = [self wkJavaScriptExcute];
         self.wkWebViewCurrentJSUtils = [self wkJavaScriptUtils];
         self.wkWebViewCurrentJSReportSource = [self wkJavaScriptReportSource];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSSugo];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSTrack];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSSource];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSUtils];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSReportSource];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSExcute];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewBindingsTrack"];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewBindingsTime"];
@@ -85,13 +88,13 @@
                                                                     error:nil];
             if (pJSON != nil)
             {
-                [[Sugo sharedInstance] track:storage.eventID
+                [[Sugo sharedInstance] trackEventID:storage.eventID
                                    eventName:storage.eventName
                                   properties:pJSON];
             }
             else
             {
-                [[Sugo sharedInstance] track:storage.eventID
+                [[Sugo sharedInstance] trackEventID:storage.eventID
                                    eventName:storage.eventName];
             }
             NSLog(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
@@ -101,25 +104,25 @@
             if (eventName) {
                 [[Sugo sharedInstance] timeEvent:eventName];
             }
-        }
-    } else if ([message.name  isEqual: @"WKWebViewReporter"]) {
-        NSDictionary *body = (NSDictionary *)message.body;
-        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-        if (body[@"path"])
-        {
-            storage.path = (NSString *)body[@"path"];
-        }
-        if (body[@"clientWidth"])
-        {
-            storage.width = (NSString *)body[@"clientWidth"];
-        }
-        if (body[@"clientHeight"])
-        {
-            storage.height = (NSString *)body[@"clientHeight"];
-        }
-        if (body[@"nodes"])
-        {
-            storage.nodes = (NSString *)body[@"nodes"];
+        } else if ([message.name  isEqual: @"WKWebViewReporter"]) {
+            NSDictionary *body = (NSDictionary *)message.body;
+            WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+            if (body[@"path"])
+            {
+                storage.path = (NSString *)body[@"path"];
+            }
+            if (body[@"clientWidth"])
+            {
+                storage.width = (NSString *)body[@"clientWidth"];
+            }
+            if (body[@"clientHeight"])
+            {
+                storage.height = (NSString *)body[@"clientHeight"];
+            }
+            if (body[@"nodes"])
+            {
+                storage.nodes = (NSString *)body[@"nodes"];
+            }
         }
     } else {
         NSLog(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
@@ -221,8 +224,8 @@
 
 - (NSString *)jsWKWebViewBindingsSource
 {
-    NSString *vcPath = [NSString stringWithFormat:@"sugo_bindings.current_page = '%@::' + window.location.pathname;\n", self.wkVcPath];
-    NSString *bindings = [NSString stringWithFormat:@"sugo_bindings.h5_event_bindings = %@;\n", self.stringBindings];
+    NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + window.location.pathname;\n", self.wkVcPath];
+    NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
     NSString *wk = [self jsSourceOfFileName:@"WebViewBindings.WK"];
     
     return [[vcPath stringByAppendingString:bindings]

@@ -63,12 +63,12 @@
 - (void)stopUIWebViewBindings:(UIWebView *)webView
 {
     if (self.uiWebViewSwizzleRunning) {
-//        if ((*webView).delegate) {
+//        if (webView && webView.delegate) {
 //            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
-//                                  onClass:[(*webView).delegate class]
+//                                  onClass:[webView.delegate class]
 //                                    named:self.uiWebViewDidStartLoadBlockName];
 //            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
-//                                  onClass:[(*webView).delegate class]
+//                                  onClass:[webView.delegate class]
 //                                    named:self.uiWebViewDidFinishLoadBlockName];
 //        }
         self.uiWebViewJavaScriptInjected = NO;
@@ -79,16 +79,16 @@
 
 - (void)updateUIWebViewBindings:(UIWebView **)webView
 {
-    if (self.uiWebViewSwizzleRunning) {
-        JSContext *jsContext = [(*webView) valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-        jsContext[@"WebViewJSExport"] = [WebViewJSExport class];
-        [jsContext evaluateScript:[self jsUISugo]];
-        [jsContext evaluateScript:[self jsUIWebViewTrack]];
-        [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
-        [jsContext evaluateScript:[self jsUIUtils]];
-        [jsContext evaluateScript:[self jsUIWebViewReportSource]];
-        [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
-    }
+//    if (self.uiWebViewSwizzleRunning) {
+//        JSContext *jsContext = [(*webView) valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+//        jsContext[@"WebViewJSExport"] = [WebViewJSExport class];
+//        [jsContext evaluateScript:[self jsUISugo]];
+//        [jsContext evaluateScript:[self jsUIWebViewTrack]];
+//        [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
+//        [jsContext evaluateScript:[self jsUIUtils]];
+//        [jsContext evaluateScript:[self jsUIWebViewReportSource]];
+//        [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
+//    }
 }
 
 - (NSString *)jsUISugo
@@ -144,8 +144,8 @@
 
 - (NSString *)jsUIWebViewBindingsSource
 {
-    NSString *vcPath = [NSString stringWithFormat:@"sugo_bindings.current_page = '%@::' + window.location.pathname;\n", self.uiVcPath];
-    NSString *bindings = [NSString stringWithFormat:@"sugo_bindings.h5_event_bindings = %@;\n", self.stringBindings];
+    NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + window.location.pathname;\n", self.uiVcPath];
+    NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
     NSString *ui = [self jsSourceOfFileName:@"WebViewBindings.UI"];
     
     return [[vcPath stringByAppendingString:bindings]
