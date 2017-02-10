@@ -140,8 +140,7 @@
 		144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */; };
 		144D2E461E20C5A800387FD2 /* WebViewTrack.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3D1E20C5A800387FD2 /* WebViewTrack.UI.js */; };
 		144D2E471E20C5A800387FD2 /* Utils.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3E1E20C5A800387FD2 /* Utils.js */; };
-		144D2E481E20C5A800387FD2 /* WebViewBindings.1.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3F1E20C5A800387FD2 /* WebViewBindings.1.js */; };
-		144D2E491E20C5A800387FD2 /* WebViewBindings.2.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E401E20C5A800387FD2 /* WebViewBindings.2.js */; };
+		144D2E491E20C5A800387FD2 /* WebViewBindings.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */; };
 		144D2E4A1E20C5A800387FD2 /* WebViewBindings.excute.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E411E20C5A800387FD2 /* WebViewBindings.excute.js */; };
 		144D2E4B1E20C5A800387FD2 /* WebViewReport.excute.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E421E20C5A800387FD2 /* WebViewReport.excute.js */; };
 		144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */; };
@@ -162,7 +161,8 @@
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
 		14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */; };
 		14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */; };
-		14DEB5281E32F982009F0F80 /* WebViewTrack.js in Resources */ = {isa = PBXBuildFile; fileRef = 14DEB5271E32F982009F0F80 /* WebViewTrack.js */; };
+		14C7BE6A1E4D6DB4000BD790 /* Sugo.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE691E4D6DB4000BD790 /* Sugo.js */; };
+		14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */; };
 		14DEB52A1E33023A009F0F80 /* SugoCustomDimensionKeyTable.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14DEB5291E33023A009F0F80 /* SugoCustomDimensionKeyTable.plist */; };
 /* End PBXBuildFile section */
 
@@ -304,8 +304,7 @@
 		144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.UI.js; sourceTree = "<group>"; };
 		144D2E3D1E20C5A800387FD2 /* WebViewTrack.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewTrack.UI.js; sourceTree = "<group>"; };
 		144D2E3E1E20C5A800387FD2 /* Utils.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Utils.js; sourceTree = "<group>"; };
-		144D2E3F1E20C5A800387FD2 /* WebViewBindings.1.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.1.js; sourceTree = "<group>"; };
-		144D2E401E20C5A800387FD2 /* WebViewBindings.2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.2.js; sourceTree = "<group>"; };
+		144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.UI.js; sourceTree = "<group>"; };
 		144D2E411E20C5A800387FD2 /* WebViewBindings.excute.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.excute.js; sourceTree = "<group>"; };
 		144D2E421E20C5A800387FD2 /* WebViewReport.excute.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.excute.js; sourceTree = "<group>"; };
 		144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.WK.js; sourceTree = "<group>"; };
@@ -326,7 +325,8 @@
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SugoHelpers.h"; sourceTree = "<group>"; };
 		14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SugoHelpers.m"; sourceTree = "<group>"; };
-		14DEB5271E32F982009F0F80 /* WebViewTrack.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewTrack.js; sourceTree = "<group>"; };
+		14C7BE691E4D6DB4000BD790 /* Sugo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Sugo.js; sourceTree = "<group>"; };
+		14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.WK.js; sourceTree = "<group>"; };
 		14DEB5291E33023A009F0F80 /* SugoCustomDimensionKeyTable.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoCustomDimensionKeyTable.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -654,10 +654,11 @@
 		144D2E4E1E20C5AD00387FD2 /* JavaScript */ = {
 			isa = PBXGroup;
 			children = (
+				14C7BE691E4D6DB4000BD790 /* Sugo.js */,
 				144D2E3E1E20C5A800387FD2 /* Utils.js */,
 				14DEB5241E32F7B0009F0F80 /* WebViewTrack */,
-				144D2E4F1E20C5CE00387FD2 /* WebViewReport */,
 				144D2E501E20C5E000387FD2 /* WebViewBindings */,
+				144D2E4F1E20C5CE00387FD2 /* WebViewReport */,
 			);
 			name = JavaScript;
 			sourceTree = "<group>";
@@ -675,8 +676,8 @@
 		144D2E501E20C5E000387FD2 /* WebViewBindings */ = {
 			isa = PBXGroup;
 			children = (
-				144D2E3F1E20C5A800387FD2 /* WebViewBindings.1.js */,
-				144D2E401E20C5A800387FD2 /* WebViewBindings.2.js */,
+				144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */,
+				14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */,
 				144D2E411E20C5A800387FD2 /* WebViewBindings.excute.js */,
 			);
 			name = WebViewBindings;
@@ -713,7 +714,6 @@
 		14DEB5241E32F7B0009F0F80 /* WebViewTrack */ = {
 			isa = PBXGroup;
 			children = (
-				14DEB5271E32F982009F0F80 /* WebViewTrack.js */,
 				144D2E3D1E20C5A800387FD2 /* WebViewTrack.UI.js */,
 				144D2E441E20C5A800387FD2 /* WebViewTrack.WK.js */,
 			);
@@ -853,12 +853,12 @@
 				14250C1F1E34D0B80021793D /* SugoResourcesPathReplacement.plist in Resources */,
 				144D2E461E20C5A800387FD2 /* WebViewTrack.UI.js in Resources */,
 				14015FC11E2DBDD2003DB275 /* SugoURLs.plist in Resources */,
-				144D2E481E20C5A800387FD2 /* WebViewBindings.1.js in Resources */,
 				14DEB52A1E33023A009F0F80 /* SugoCustomDimensionKeyTable.plist in Resources */,
-				14DEB5281E32F982009F0F80 /* WebViewTrack.js in Resources */,
 				144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */,
+				14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */,
 				142D82EC1E36EFAA00AAD916 /* SugoCustomDimensionValueTable.plist in Resources */,
-				144D2E491E20C5A800387FD2 /* WebViewBindings.2.js in Resources */,
+				144D2E491E20C5A800387FD2 /* WebViewBindings.UI.js in Resources */,
+				14C7BE6A1E4D6DB4000BD790 /* Sugo.js in Resources */,
 				144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */,
 				144D2E471E20C5A800387FD2 /* Utils.js in Resources */,
 				144D2E4A1E20C5A800387FD2 /* WebViewBindings.excute.js in Resources */,

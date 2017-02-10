@@ -34,11 +34,12 @@
         if (!self.uiWebViewJavaScriptInjected) {
             JSContext *jsContext = [(UIWebView *)webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
             jsContext[@"WebViewJSExport"] = [WebViewJSExport class];
+            [jsContext evaluateScript:[self jsUISugo]];
             [jsContext evaluateScript:[self jsUIWebViewTrack]];
             [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
+            [jsContext evaluateScript:[self jsUIUtils]];
+            [jsContext evaluateScript:[self jsUIWebViewReportSource]];
             [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
-            [jsContext evaluateScript:[self jsUtils]];
-            [jsContext evaluateScript:[self jsUIWebViewReport]];
             self.uiWebViewJavaScriptInjected = YES;
             NSLog(@"UIWebView Injected");
         }
@@ -80,20 +81,23 @@
 {
     if (self.uiWebViewSwizzleRunning) {
         JSContext *jsContext = [(*webView) valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-        WebViewJSExport *jsExport = [[WebViewJSExport alloc] init];
-        jsContext[@"WebViewJSExport"] = jsExport;
+        jsContext[@"WebViewJSExport"] = [WebViewJSExport class];
+        [jsContext evaluateScript:[self jsUISugo]];
         [jsContext evaluateScript:[self jsUIWebViewTrack]];
         [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
+        [jsContext evaluateScript:[self jsUIUtils]];
+        [jsContext evaluateScript:[self jsUIWebViewReportSource]];
         [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
-        [jsContext evaluateScript:[self jsUtils]];
-        [jsContext evaluateScript:[self jsUIWebViewReport]];
     }
+}
+
+- (NSString *)jsUISugo
+{
+    return [self jsSourceOfFileName:@"Sugo"];
 }
 
 - (NSString *)jsUIWebViewTrack
 {
-    NSString *track = [self jsSourceOfFileName:@"WebViewTrack"];
-    
     NSMutableString *nativePath = [[NSMutableString alloc] initWithString:self.uiWebView.request.URL.path];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacement = [Sugo loadConfigurationPropertyListWithName:@"SugoResourcesPathReplacement"];
@@ -133,23 +137,19 @@
     
     NSString *ui = [self jsSourceOfFileName:@"WebViewTrack.UI"];
     
-    return [[[[track stringByAppendingString:relativePath]
-              stringByAppendingString:pageName]
+    return [[[relativePath stringByAppendingString:pageName]
              stringByAppendingString:initCode]
             stringByAppendingString:ui];
 }
 
 - (NSString *)jsUIWebViewBindingsSource
 {
-    
-    NSString *part1 = [self jsSourceOfFileName:@"WebViewBindings.1"];
     NSString *vcPath = [NSString stringWithFormat:@"sugo_bindings.current_page = '%@::' + window.location.pathname;\n", self.uiVcPath];
     NSString *bindings = [NSString stringWithFormat:@"sugo_bindings.h5_event_bindings = %@;\n", self.stringBindings];
-    NSString *part2 = [self jsSourceOfFileName:@"WebViewBindings.2"];
+    NSString *ui = [self jsSourceOfFileName:@"WebViewBindings.UI"];
     
-    return [[[part1 stringByAppendingString:vcPath]
-             stringByAppendingString:bindings]
-            stringByAppendingString:part2];
+    return [[vcPath stringByAppendingString:bindings]
+            stringByAppendingString:ui];
 }
 
 - (NSString *)jsUIWebViewBindingsExcute
@@ -157,12 +157,12 @@
     return [self jsSourceOfFileName:@"WebViewBindings.excute"];
 }
 
-- (NSString *)jsUtils
+- (NSString *)jsUIUtils
 {
     return [self jsSourceOfFileName:@"Utils"];
 }
 
-- (NSString *)jsUIWebViewReport
+- (NSString *)jsUIWebViewReportSource
 {
     return [self jsSourceOfFileName:@"WebViewReport.UI"];
 }

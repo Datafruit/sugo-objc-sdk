@@ -1,20 +1,21 @@
-sugo_bindings.current_event_bindings = {};
-for (var i = 0; i < sugo_bindings.h5_event_bindings.length; i++) {
-    var b_event = sugo_bindings.h5_event_bindings[i];
-    if (b_event.target_activity === sugo_bindings.current_page) {
+sugo.current_event_bindings = {};
+for (var i = 0; i < sugo.h5_event_bindings.length; i++) {
+    var b_event = sugo.h5_event_bindings[i];
+    if (b_event.target_activity === sugo.current_page) {
         var key = JSON.stringify(b_event.path);
-        sugo_bindings.current_event_bindings[key] = b_event;
+        sugo.current_event_bindings[key] = b_event;
     }
 };
-sugo_bindings.delegate = function(eventType) {
+
+sugo.delegate = function(eventType) {
     function handle(e) {
         var evt = window.event ? window.event : e;
         var target = evt.target || evt.srcElement;
         var currentTarget = e ? e.currentTarget : this;
-        var paths = Object.keys(sugo_bindings.current_event_bindings);
+        var paths = Object.keys(sugo.current_event_bindings);
         for (var idx = 0; idx < paths.length; idx++) {
             var path_str = paths[idx];
-            var event = sugo_bindings.current_event_bindings[path_str];
+            var event = sugo.current_event_bindings[path_str];
             if (event.event_type != eventType) {
                 continue;
             }
@@ -36,21 +37,21 @@ sugo_bindings.delegate = function(eventType) {
                             }
                             custom_props.from_binding = true;
                             custom_props.event_label = ele.innerText;
-                            sugo.track(event.event_id, event.event_name, custom_props);
+                            WebViewJSExport.trackOfIdNameProperties(event.event_id, event.event_name, JSON.stringify(custom_props));
                             break;
                         }
                         parentNode = parentNode.parentNode;
                     }
-                    
                 }
             }
         }
     }
     document.addEventListener(eventType, handle, true);
 };
-sugo_bindings.bindEvent = function() {
-    sugo_bindings.delegate('click');
-    sugo_bindings.delegate('focus');
-    sugo_bindings.delegate('submit');
-    sugo_bindings.delegate('change');
+
+sugo.bindEvent = function() {
+    sugo.delegate('click');
+    sugo.delegate('focus');
+    sugo.delegate('submit');
+    sugo.delegate('change');
 };

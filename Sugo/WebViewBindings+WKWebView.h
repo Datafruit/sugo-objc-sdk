@@ -13,8 +13,5 @@
 - (void)startWKWebViewBindings:(WKWebView **)webView;
 - (void)stopWKWebViewBindings:(WKWebView *)webView;
 - (void)updateWKWebViewBindings:(WKWebView **)webView;
-- (NSString *)jsWKWebViewTrack;
-- (NSString *)jsWKWebViewBindingsSource;
-- (NSString *)jsWKWebViewBindingsExcute;
 
 @end
