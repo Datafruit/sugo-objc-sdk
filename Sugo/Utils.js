@@ -6,15 +6,15 @@
   Copyright © 2017年 sugo. All rights reserved.
 */
 
-var sugo_utils = {};
+var UTILS = {};
 
-sugo_utils.cssPath = function(node, optimized) {
+UTILS.cssPath = function(node, optimized) {
     if (node.nodeType !== Node.ELEMENT_NODE)
         return '';
     var steps = [];
     var contextNode = node;
     while (contextNode) {
-        var step = sugo_utils._cssPathStep(contextNode, !!optimized, contextNode === node);
+        var step = UTILS._cssPathStep(contextNode, !!optimized, contextNode === node);
         if (!step)
             break;
         steps.push(step);
@@ -26,25 +26,25 @@ sugo_utils.cssPath = function(node, optimized) {
     return steps.join(' > ');
 };
 
-sugo_utils._cssPathStep = function(node, optimized, isTargetNode) {
+UTILS._cssPathStep = function(node, optimized, isTargetNode) {
     if (node.nodeType !== Node.ELEMENT_NODE)
         return null;
     
     var id = node.getAttribute('id');
     if (optimized) {
         if (id)
-            return new sugo_utils.DOMNodePathStep(idSelector(id), true);
+            return new UTILS.DOMNodePathStep(idSelector(id), true);
         var nodeNameLower = node.nodeName.toLowerCase();
         if (nodeNameLower === 'body' || nodeNameLower === 'head' || nodeNameLower === 'html')
-            return new sugo_utils.DOMNodePathStep(node.nodeName.toLowerCase(), true);
+            return new UTILS.DOMNodePathStep(node.nodeName.toLowerCase(), true);
     }
     var nodeName = node.nodeName.toLowerCase();
     
     if (id)
-        return new sugo_utils.DOMNodePathStep(nodeName.toLowerCase() + idSelector(id), true);
+        return new UTILS.DOMNodePathStep(nodeName.toLowerCase() + idSelector(id), true);
     var parent = node.parentNode;
     if (!parent || parent.nodeType === Node.DOCUMENT_NODE)
-        return new sugo_utils.DOMNodePathStep(nodeName.toLowerCase(), true);
+        return new UTILS.DOMNodePathStep(nodeName.toLowerCase(), true);
     
     function prefixedElementClassNames(node) {
         var classAttribute = node.getAttribute('class');
@@ -145,15 +145,15 @@ sugo_utils._cssPathStep = function(node, optimized, isTargetNode) {
         }
     }
     
-    return new sugo_utils.DOMNodePathStep(result, false);
+    return new UTILS.DOMNodePathStep(result, false);
 };
 
-sugo_utils.DOMNodePathStep = function(value, optimized) {
+UTILS.DOMNodePathStep = function(value, optimized) {
     this.value = value;
     this.optimized = optimized || false;
 };
 
-sugo_utils.DOMNodePathStep.prototype = {
+UTILS.DOMNodePathStep.prototype = {
     
 toString: function() {
     return this.value;

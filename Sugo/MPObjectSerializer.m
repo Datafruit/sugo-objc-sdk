@@ -19,12 +19,10 @@
 #import "WebViewJSExport.h"
 
 
-@interface MPObjectSerializer (WebViewSerializer) <WKScriptMessageHandler>
+@interface MPObjectSerializer (WebViewSerializer)
 
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView;
 - (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView;
-
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message;
 
 @end
 
@@ -356,20 +354,6 @@
 {
     
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    WKUserScript *jsUtilsScript = [[WKUserScript alloc] initWithSource:[wvBindings jsSourceOfFileName:@"Utils"]
-                                                          injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                                                       forMainFrameOnly:YES];
-    WKUserScript *jsReportSourceScript = [[WKUserScript alloc] initWithSource:[wvBindings jsSourceOfFileName:@"WebViewReport.WK"]
-                                                          injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                                                       forMainFrameOnly:YES];
-    if (![webView.configuration.userContentController.userScripts containsObject:jsUtilsScript]) {
-        [webView.configuration.userContentController addUserScript:jsUtilsScript];
-    }
-    if (![webView.configuration.userContentController.userScripts containsObject:jsReportSourceScript]) {
-        [webView.configuration.userContentController addUserScript:jsReportSourceScript];
-    }
-    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"WKWebViewReporter"];
-    [webView.configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewReporter"];
     [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewReport.excute"] completionHandler:nil];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     return @{
@@ -380,30 +364,30 @@
              };
 }
 
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
-{
-    if ([message.name  isEqual: @"WKWebViewReporter"])
-    {
-        NSDictionary *body = (NSDictionary *)message.body;
-        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-        if (body[@"path"])
-        {
-            storage.path = (NSString *)body[@"path"];
-        }
-        if (body[@"clientWidth"])
-        {
-            storage.width = (NSString *)body[@"clientWidth"];
-        }
-        if (body[@"clientHeight"])
-        {
-            storage.height = (NSString *)body[@"clientHeight"];
-        }
-        if (body[@"nodes"])
-        {
-            storage.nodes = (NSString *)body[@"nodes"];
-        }
-    }
-}
+//- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
+//{
+//    if ([message.name  isEqual: @"WKWebViewReporter"])
+//    {
+//        NSDictionary *body = (NSDictionary *)message.body;
+//        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+//        if (body[@"path"])
+//        {
+//            storage.path = (NSString *)body[@"path"];
+//        }
+//        if (body[@"clientWidth"])
+//        {
+//            storage.width = (NSString *)body[@"clientWidth"];
+//        }
+//        if (body[@"clientHeight"])
+//        {
+//            storage.height = (NSString *)body[@"clientHeight"];
+//        }
+//        if (body[@"nodes"])
+//        {
+//            storage.nodes = (NSString *)body[@"nodes"];
+//        }
+//    }
+//}
 @end
 
 

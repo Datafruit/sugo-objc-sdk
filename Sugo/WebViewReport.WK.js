@@ -1,28 +1,23 @@
-/*
- WebViewReport.WK.js
- Sugo
- 
- Created by Zack on 6/1/17.
- Copyright © 2017年 sugo. All rights reserved.
- */
-var sugo_report = {};
-sugo_report.isElementInViewport = function(rect) {
+sugo.isElementInViewport = function(rect) {
     return (
             rect.top >= 0 &&
             rect.left >= 0 &&
-            rect.bottom <= sugo_report.clientHeight &&
-            rect.right <= sugo_report.clientWidth
+            rect.bottom <= sugo.clientHeight &&
+            rect.right <= sugo.clientWidth
             );
 };
-sugo_report.handleNodeChild = function(childrens, jsonArray, parent_path) {
+
+sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
     var index_map = {};
     for (var i = 0; i < childrens.length; i++) {
         var children = childrens[i];
-        var path = sugo_utils.cssPath(children);
+        var path = UTILS.cssPath(children);
         var htmlNode = {};
+        htmlNode.innerText = children.innerText;
         htmlNode.path = path;
+        
         var rect = children.getBoundingClientRect();
-        if (sugo_report.isElementInViewport(rect) == true) {
+        if (sugo.isElementInViewport(rect) == true) {
             var temp_rect = {
             top: rect.top,
             left: rect.left,
@@ -30,27 +25,30 @@ sugo_report.handleNodeChild = function(childrens, jsonArray, parent_path) {
             height: rect.height
             };
             htmlNode.rect = temp_rect;
-            jsonArray.push(htmlNode);
+            jsonArry.push(htmlNode);
         }
         
         if (children.children) {
-            sugo_report.handleNodeChild(children.children, jsonArray, path);
+            sugo.handleNodeChild(children.children, jsonArry, path);
         }
     }
 };
-sugo_report.reportNodes = function() {
+
+sugo.reportNodes = function() {
     var jsonArray = [];
     var body = document.getElementsByTagName('body')[0];
     var childrens = body.children;
     var parent_path = '';
-    sugo_report.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
-    sugo_report.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
-    sugo_report.handleNodeChild(childrens, jsonArray, parent_path);
-    var message = {
-        'path' : sugo.relative_path,
-        'clientWidth' : sugo_report.clientWidth,
-        'clientHeight' : sugo_report.clientHeight,
-        'nodes' : JSON.stringify(jsonArray)
-    };
-    window.webkit.messageHandlers.WKWebViewReporter.postMessage(message);
+    sugo.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
+    sugo.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
+    sugo.handleNodeChild(childrens, jsonArray, parent_path);
+    if (window.webkit.messageHandlers.WKWebViewReporter) {
+        var message = {
+            'path' : sugo.relative_path,
+            'clientWidth' : sugo.clientWidth,
+            'clientHeight' : sugo.clientHeight,
+            'nodes' : JSON.stringify(jsonArray)
+        };
+        window.webkit.messageHandlers.WKWebViewReporter.postMessage(message);
+    }
 };

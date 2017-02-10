@@ -213,7 +213,7 @@ static const NSUInteger kBatchSize = 50;
                                                  @"sdk_type": @"Objective-C",
                                                  @"sdk_version": [Sugo libVersion],
                                                  @"distinct_id": distinctID,
-                                                 @"time": date}];
+                                                 @"time_event": date}];
     NSMutableArray *integrationEvents = [NSMutableArray array];
     [integrationEvents addObject:integrationEvent];
     NSString *requestData = [MPNetwork encodeArrayForBatch:integrationEvents];
