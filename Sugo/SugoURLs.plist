@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>Bindings</key>
-	<string>http://192.168.0.51:8080</string>
+	<string>http://192.168.0.212:8000</string>
 	<key>Collection</key>
 	<string>http://collect.sugo.net</string>
 	<key>Codeless</key>
-	<string>ws://192.168.0.51:8887</string>
+	<string>ws://192.168.0.212:8887</string>
 </dict>
 </plist>

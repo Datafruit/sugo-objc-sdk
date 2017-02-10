@@ -385,10 +385,10 @@ static NSString *defaultProjectToken;
     if (!self.abtestDesignerConnection.connected
         || !self.isCodelessTesting) {
         [p addEntriesFromDictionary:self.automaticProperties];
-        p[key[@"Time"]] = date;
+        p[key[@"EventTime"]] = date;
         [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
     } else {
-        p[key[@"Time"]] = @(epochInterval);
+        p[key[@"EventTime"]] = @(epochInterval);
         event[@"properties"] = p;
     }
     
@@ -940,7 +940,7 @@ static NSString *defaultProjectToken;
                                   key[@"SDKType"]: @"Objective-C",
                                   key[@"SDKVersion"]: [self libVersion],
                                   key[@"Manufacturer"]: @"Apple",
-                                  key[@"Model"]: deviceModel, //legacy
+                                  key[@"DeviceModel"]: deviceModel, //legacy
                                   }];
     [p addEntriesFromDictionary:[self collectDeviceProperties]];
     return [p copy];

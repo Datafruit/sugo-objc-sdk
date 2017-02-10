@@ -6,10 +6,18 @@
 	<string>event_name</string>
 	<key>EventID</key>
 	<string>event_id</string>
+	<key>EventType</key>
+	<string>event_type</string>
+	<key>EventLabel</key>
+	<string>event_label</string>
+	<key>EventTime</key>
+	<string>event_time</string>
 	<key>Token</key>
 	<string>token</string>
 	<key>DistinctID</key>
 	<string>distinct_id</string>
+	<key>DeviceID</key>
+	<string>device_id</string>
 	<key>SessionID</key>
 	<string>session_id</string>
 	<key>Reachability</key>
@@ -22,18 +30,18 @@
 	<string>system_name</string>
 	<key>SystemVersion</key>
 	<string>system_version</string>
+	<key>AppBundleName</key>
+	<string>app_name</string>
 	<key>AppBundleVersion</key>
 	<string>app_version</string>
 	<key>AppBundleShortVersionString</key>
-	<string>app_version_string</string>
-	<key>Time</key>
-	<string>time</string>
+	<string>app_build_number</string>
 	<key>Duration</key>
 	<string>duration</string>
 	<key>Manufacturer</key>
 	<string>manufacturer</string>
-	<key>Model</key>
-	<string>model</string>
+	<key>DeviceModel</key>
+	<string>device_model</string>
 	<key>Carrier</key>
 	<string>carrier</string>
 	<key>ScreenWidth</key>
@@ -44,7 +52,7 @@
 	<string>path_name</string>
 	<key>PageName</key>
 	<string>page_name</string>
-	<key>EventType</key>
-	<string>event_type</string>
+	<key>FromBinding</key>
+	<string>from_binding</string>
 </dict>
 </plist>
