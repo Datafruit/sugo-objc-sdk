@@ -22,7 +22,7 @@
     self.title = @"UIWebView";
     
     self.webView.delegate = self;
-    NSURL *url = [[NSURL alloc] initWithString:@"http://dev.ufile.ucloud.cn/test.html"];
+    NSURL *url = [[NSURL alloc] initWithString:@"https://www.jd.com/"];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [self.webView loadRequest:request];
     [self.view addSubview:self.webView];

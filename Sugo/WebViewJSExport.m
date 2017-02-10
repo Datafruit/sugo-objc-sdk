@@ -25,12 +25,12 @@
                                                             error:nil];
     if (pJSON != nil)
     {
-        [[Sugo sharedInstance] track:storage.eventID
+        [[Sugo sharedInstance] trackEventID:storage.eventID
                            eventName:storage.eventName
                           properties:pJSON];
     }
     else {
-        [[Sugo sharedInstance] track:storage.eventID
+        [[Sugo sharedInstance] trackEventID:storage.eventID
                            eventName:storage.eventName];
     }
     NSLog(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);

@@ -43,7 +43,7 @@
 {
     NSMutableDictionary *bindingProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys: @YES, @"from_binding", nil];
     [bindingProperties addEntriesFromDictionary:properties];
-    [[Sugo sharedInstance] track:eventID eventName:eventName properties:properties];
+    [[Sugo sharedInstance] trackEventID:eventID eventName:eventName properties:properties];
 }
 
 - (instancetype)initWithEventID:(NSString *)eventID
