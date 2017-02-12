@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Sugo.h"
 
 typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
     MPNetworkEndpointTrack,
@@ -33,8 +34,4 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
                           withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                                  andBody:(NSString *)body;
 
-- (void)trackIntegrationWithID:(NSString *)ID
-                    andToken:(NSString *)token
-                    andDistinctID:(NSString *)distinctID
-                    andCompletion:(void (^)(NSError *error))completion;
 @end

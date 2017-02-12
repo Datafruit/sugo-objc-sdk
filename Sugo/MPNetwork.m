@@ -201,47 +201,6 @@ static const NSUInteger kBatchSize = 50;
     return [request copy];
 }
 
-- (void)trackIntegrationWithID:(NSString *)ID
-                      andToken:(NSString *)token
-                    andDistinctID:(NSString *)distinctID
-                    andCompletion:(void (^)(NSError *error))completion {
-    
-    NSDate *date = [NSDate date];
-    NSMutableDictionary *integrationEvent = [[NSMutableDictionary alloc]
-                                             initWithDictionary: @{@"event_name": @"Integration"}];
-    [integrationEvent addEntriesFromDictionary:@{@"token": token,
-                                                 @"sdk_type": @"Objective-C",
-                                                 @"sdk_version": [Sugo libVersion],
-                                                 @"distinct_id": distinctID,
-                                                 @"time_event": date}];
-    NSMutableArray *integrationEvents = [NSMutableArray array];
-    [integrationEvents addObject:integrationEvent];
-    NSString *requestData = [MPNetwork encodeArrayForBatch:integrationEvents];
-    NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
-    NSLog(@"track integration post body: %@", postBody);
-    NSString *locateValue = ID;
-    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
-                                                               value:locateValue];
-    NSArray *queryItems = @[queryItem];
-    NSURLRequest *request = [self buildPostRequestForURL:self.eventCollectionURL
-                                             andEndpoint:MPNetworkEndpointTrack
-                                          withQueryItems:queryItems andBody:postBody];
-    
-    NSLog(@"track integration request: %@", request);
-    NSLog(@"track integration request body: %@", [[NSString alloc] initWithData:request.HTTPBody
-                                                                       encoding:NSUTF8StringEncoding]);
-
-    NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                              NSURLResponse *urlResponse,
-                                                              NSError *error) {
-        NSLog(@"session request: %@", request);
-        NSLog(@"session request body: %@", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
-        
-        completion(error);
-    }] resume];
-}
-
 + (NSString *)encodeArrayForAPI:(NSArray *)array {
     NSData *data = [MPNetwork encodeArrayAsJSONData:array];
     return [MPNetwork encodeJSONDataAsBase64:data];

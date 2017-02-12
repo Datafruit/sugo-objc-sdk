@@ -107,6 +107,7 @@ static NSString *defaultProjectToken;
         
         self.miniNotificationPresentationTime = 6.0;
 
+        self.deviceId = [self defaultDeviceId];
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -256,18 +257,41 @@ static NSString *defaultProjectToken;
     }
 }
 
+- (NSString *)defaultDeviceId
+{
+    NSString *deviceId = [self IFA];
+
+    if (!deviceId && NSClassFromString(@"UIDevice")) {
+        deviceId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    }
+    if (!deviceId) {
+        MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
+        deviceId = [[NSUUID UUID] UUIDString];
+    }
+    return deviceId;
+}
+
 - (NSString *)defaultDistinctId
 {
-    NSString *distinctId = [self IFA];
-
-    if (!distinctId && NSClassFromString(@"UIDevice")) {
-        distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    }
-    if (!distinctId) {
-        MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
+    NSString *distinctId;
+    
+    NSString *defaultKey = @"distinctId";
+    if (![NSUserDefaults.standardUserDefaults stringForKey:defaultKey]) {
+        
         distinctId = [[NSUUID UUID] UUIDString];
+        
+        [NSUserDefaults.standardUserDefaults setObject:distinctId
+                                                forKey:defaultKey];
+        [NSUserDefaults.standardUserDefaults synchronize];
+        
+        return distinctId;
+        
+    } else {
+        
+        distinctId = (NSString *) [NSUserDefaults.standardUserDefaults objectForKey:defaultKey];
+        
+        return distinctId;
     }
-    return distinctId;
 }
 
 
@@ -366,6 +390,11 @@ static NSString *defaultProjectToken;
         [self.timedEvents removeObjectForKey:eventName];
         p[key[@"Duration"]] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
     }
+    
+    if (self.deviceId) {
+        p[key[@"DeviceID"]] = self.deviceId;
+    }
+    
     if (self.distinctId) {
         p[key[@"DistinctID"]] = self.distinctId;
     }
@@ -499,6 +528,7 @@ static NSString *defaultProjectToken;
 - (void)reset
 {
     dispatch_async(self.serialQueue, ^{
+        self.deviceId = [self defaultDeviceId];
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.people.distinctId = nil;
@@ -741,6 +771,7 @@ static NSString *defaultProjectToken;
 {
     NSDictionary *properties = (NSDictionary *)[Sugo unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
     if (properties) {
+        self.deviceId = properties[@"deviceId"] ?: [self defaultDeviceId];
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
@@ -758,20 +789,14 @@ static NSString *defaultProjectToken;
 {
     NSString *defaultKey = @"trackedKey";
     if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
-        __weak Sugo *weakSelf = self;
-        dispatch_async(self.serialQueue, ^{
-            Sugo *strongSelf = weakSelf;
-            [strongSelf.network trackIntegrationWithID:strongSelf.projectID
-                                              andToken:strongSelf.apiToken
-                                         andDistinctID:strongSelf.distinctId
-                                         andCompletion:^(NSError *error) {
-                if (!error) {
-                    [NSUserDefaults.standardUserDefaults setBool:YES
-                                                          forKey:defaultKey];
-                    [NSUserDefaults.standardUserDefaults synchronize];
-                }
-            }];
-        });
+        
+        NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
+        if (value) {
+            [self trackEvent:value[@"Integration"]];
+            [NSUserDefaults.standardUserDefaults setBool:YES
+                                                  forKey:defaultKey];
+            [NSUserDefaults.standardUserDefaults synchronize];
+        }
     }
 }
 
