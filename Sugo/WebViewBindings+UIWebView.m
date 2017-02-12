@@ -34,12 +34,14 @@
         if (!self.uiWebViewJavaScriptInjected) {
             JSContext *jsContext = [(UIWebView *)webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
             jsContext[@"WebViewJSExport"] = [WebViewJSExport class];
-            [jsContext evaluateScript:[self jsUISugo]];
-            [jsContext evaluateScript:[self jsUIWebViewTrack]];
-            [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
-            [jsContext evaluateScript:[self jsUIUtils]];
-            [jsContext evaluateScript:[self jsUIWebViewReportSource]];
-            [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
+            
+            [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewSugo]];
+            [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewTrack]];
+            [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewBindingsSource]];
+            [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewUtils]];
+            [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewReportSource]];
+            [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewBindingsExcute]];
+            
             self.uiWebViewJavaScriptInjected = YES;
             NSLog(@"UIWebView Injected");
         }
@@ -79,19 +81,11 @@
 
 - (void)updateUIWebViewBindings:(UIWebView **)webView
 {
-//    if (self.uiWebViewSwizzleRunning) {
-//        JSContext *jsContext = [(*webView) valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-//        jsContext[@"WebViewJSExport"] = [WebViewJSExport class];
-//        [jsContext evaluateScript:[self jsUISugo]];
-//        [jsContext evaluateScript:[self jsUIWebViewTrack]];
-//        [jsContext evaluateScript:[self jsUIWebViewBindingsSource]];
-//        [jsContext evaluateScript:[self jsUIUtils]];
-//        [jsContext evaluateScript:[self jsUIWebViewReportSource]];
-//        [jsContext evaluateScript:[self jsUIWebViewBindingsExcute]];
-//    }
+   if (self.uiWebViewSwizzleRunning) {
+   }
 }
 
-- (NSString *)jsUISugo
+- (NSString *)jsUIWebViewSugo
 {
     return [self jsSourceOfFileName:@"Sugo"];
 }
@@ -157,7 +151,7 @@
     return [self jsSourceOfFileName:@"WebViewBindings.excute"];
 }
 
-- (NSString *)jsUIUtils
+- (NSString *)jsUIWebViewUtils
 {
     return [self jsSourceOfFileName:@"Utils"];
 }
