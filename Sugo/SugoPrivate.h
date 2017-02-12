@@ -68,6 +68,7 @@
 // re-declare internally as readwrite
 @property (atomic, strong) SugoPeople *people;
 @property (atomic, strong) MPNetwork *network;
+@property (atomic, copy) NSString *deviceId;
 @property (atomic, copy) NSString *distinctId;
 @property (atomic, strong) NSString *sessionId;
 
@@ -91,6 +92,7 @@
 - (NSString *)deviceModel;
 - (NSString *)IFA;
 
+- (NSString *)defaultDeviceId;
 - (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;

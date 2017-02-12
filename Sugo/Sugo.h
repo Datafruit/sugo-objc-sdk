@@ -90,6 +90,8 @@ NS_ASSUME_NONNULL_BEGIN
  is not available we will generate a new random UUIDString. To change the
  current distinct ID, use the <code>identify:</code> method.
  */
+@property (atomic, readonly, copy) NSString *deviceId;
+
 @property (atomic, readonly, copy) NSString *distinctId;
 
 /*!
