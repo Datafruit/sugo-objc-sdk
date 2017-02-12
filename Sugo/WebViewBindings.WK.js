@@ -40,7 +40,7 @@ sugo.delegate = function(eventType) {
                             var track = {
                                 'eventID'       : event.event_id,
                                 'eventName'     : event.event_name,
-                                'properties'    : JSON.stringify(props)
+                                'properties'    : JSON.stringify(custom_props)
                             };
                             window.webkit.messageHandlers.WKWebViewBindingsTrack.postMessage(track);
                             break;
