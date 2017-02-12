@@ -337,10 +337,8 @@
 
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
 {
-    JSContext *jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    jsContext[@"WebViewJSExport"] = [WebViewJSExport class]; //jsExport;
-    [jsContext evaluateScript:[wvBindings jsSourceOfFileName:@"WebViewReport.excute"]];
+    [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewReport.excute"]];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     return @{
              @"url": storage.path,

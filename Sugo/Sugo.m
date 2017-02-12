@@ -41,7 +41,7 @@ static NSString *defaultProjectToken;
     
     NSDictionary *value = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValue"]];
     if (value) {
-        [instance track:nil eventName:value[@"AppEnter"]];
+        [instance trackEvent:value[@"AppEnter"]];
         [instance timeEvent:value[@"AppStay"]];
     }
     
@@ -297,16 +297,26 @@ static NSString *defaultProjectToken;
         MPLogError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
-    [self track:nil eventName:@"create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
+    [self trackEvent:@"create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
     [self flush];
 }
 
-- (void)track:(nullable NSString *)eventID eventName:(NSString *)eventName
+- (void)trackEvent:(NSString *)event
 {
-    [self track:eventID eventName:eventName properties:nil];
+    [self trackEventID:nil eventName:event properties:nil];
 }
 
-- (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
+- (void)trackEvent:(NSString *)event properties:(NSDictionary *)properties
+{
+    [self trackEventID:nil eventName:event properties:properties];
+}
+
+- (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName
+{
+    [self trackEventID:eventID eventName:eventName properties:nil];
+}
+
+- (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName properties:(nullable NSDictionary *)properties
 {
     dispatch_async(self.serialQueue, ^{
         [self rawTrack:eventID eventName:eventName properties:properties];
@@ -775,7 +785,7 @@ static NSString *defaultProjectToken;
 
         NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
         if (value) {
-            [self track:nil eventName:value[@"PageEnter"] properties:nil];
+            [self trackEvent:value[@"PageEnter"] properties:nil];
             [self timeEvent:value[@"PageStay"]];
         }
     };
@@ -793,8 +803,8 @@ static NSString *defaultProjectToken;
         
         NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
         if (value) {
-            [self track:nil eventName:value[@"PageStay"] properties:nil];
-            [self track:nil eventName:value[@"PageExit"] properties:nil];
+            [self trackEvent:value[@"PageStay"] properties:nil];
+            [self trackEvent:value[@"PageExit"] properties:nil];
         }
     };
     
@@ -1203,7 +1213,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
     if (value) {
-        [self track:nil eventName:value[@"BackgroundEnter"]];
+        [self trackEvent:value[@"BackgroundEnter"]];
         [self timeEvent:value[@"BackgroundStay"]];
     }
     
@@ -1229,8 +1239,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     NSDictionary *value = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValue"]];
     if (value) {
-        [self track:nil eventName:value[@"BackgroundStay"]];
-        [self track:nil eventName:value[@"BackgroundExit"]];
+        [self trackEvent:value[@"BackgroundStay"]];
+        [self trackEvent:value[@"BackgroundExit"]];
         [self.network flushEventQueue:self.eventsQueue];
     }
     
@@ -1268,7 +1278,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                                };
     NSDictionary *userInfo = notification.userInfo;
     if (userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
-        [self track:nil eventName:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
+        [self trackEvent:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
     }
 }
 

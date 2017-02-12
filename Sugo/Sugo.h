@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  Sugo *sugo = [Sugo sharedInstanceWithToken:@"YOUR API TOKEN"];
  
  // Track an event in Sugo Engagement
- [sugo track:nil eventName:@"Button Clicked"];
+ [sugo trackEvent:@"Button Clicked"];
  
  // Set properties on a user in Sugo People
  [sugo identify:@"CURRENT USER DISTINCT ID"];
@@ -270,7 +270,7 @@ NS_ASSUME_NONNULL_BEGIN
  instance in your project, you can use <code>sharedInstance</code> to retrieve it.
  
  <pre>
- [Sugo sharedInstance] track:nil eventName:@"Something Happened"]];
+ [Sugo sharedInstance] trackEvent:@"Something Happened"]];
  </pre>
  
  If you are going to use this singleton approach,
@@ -396,10 +396,31 @@ NS_ASSUME_NONNULL_BEGIN
  @abstract
  Tracks an event.
  
+ @param event       event name
+ */
+- (void)trackEvent:(NSString *)event;
+
+/*!
+ @method
+ 
+ @abstract
+ Tracks an event.
+ 
+ @param event       event name
+ @param properties      properties dictionary
+ */
+- (void)trackEvent:(NSString *)event properties:(nullable NSDictionary *)properties;
+
+/*!
+ @method
+ 
+ @abstract
+ Tracks an event.
+ 
  @param eventID         event ID
  @param eventName       event name
  */
-- (void)track:(nullable NSString *)eventID eventName:(NSString *)eventName;
+- (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName;
 
 /*!
  @method
@@ -419,7 +440,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param eventName       event name
  @param properties      properties dictionary
  */
-- (void)track:(nullable NSString *)eventID eventName:(NSString *)eventName properties:(nullable NSDictionary *)properties;
+- (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName properties:(nullable NSDictionary *)properties;
 
 
 
@@ -534,7 +555,7 @@ NS_ASSUME_NONNULL_BEGIN
  [self uploadImageWithSuccessHandler:^{
  
  // track the event
- [sugo track:nil eventName:@"Image Upload"];
+ [sugo trackEvent:@"Image Upload"];
  }];
  </pre>
  

@@ -53,21 +53,20 @@
  
     switch (indexPath.item) {
         case 0:
-            [[Sugo sharedInstance] track:nil eventName:@"Track Event!"];
+            [[Sugo sharedInstance] trackEvent:@"Track Event!"];
             [descStr appendString:@"Event: \"Track Event!\""];
             break;
         case 1:
             p[@"Cool Property"] = @"Property Value";
-            [[Sugo sharedInstance] track:nil
-                               eventName:@"Track Event With Properties!"
-                              properties:p];
+            [[Sugo sharedInstance] trackEvent:@"Track Event With Properties!"
+                                   properties:p];
             [descStr appendString:@"Event: \"Track Event With Properties!\"\nProperties: "];
             [descStr appendString:[p description]];
             break;
         case 2:
             [[Sugo sharedInstance] timeEvent:@"Timed Event"];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[Sugo sharedInstance] track:nil eventName:@"Timed Event"];
+                [[Sugo sharedInstance] trackEvent:@"Timed Event"];
             });
             [descStr appendString:@"Timed Event: \"Timed Event\""];
             break;

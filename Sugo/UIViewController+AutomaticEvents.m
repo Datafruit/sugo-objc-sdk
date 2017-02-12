@@ -14,7 +14,7 @@
 
 - (void)mp_viewDidAppear:(BOOL)animated {
     if ([self shouldTrackClass:self.class]) {
-        [[Sugo sharedAutomatedInstance] track:nil eventName:kAutomaticEventName];
+        [[Sugo sharedAutomatedInstance] trackEvent:kAutomaticEventName];
     }
     [self mp_viewDidAppear:animated];
 }
