@@ -362,30 +362,6 @@
              };
 }
 
-//- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
-//{
-//    if ([message.name  isEqual: @"WKWebViewReporter"])
-//    {
-//        NSDictionary *body = (NSDictionary *)message.body;
-//        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-//        if (body[@"path"])
-//        {
-//            storage.path = (NSString *)body[@"path"];
-//        }
-//        if (body[@"clientWidth"])
-//        {
-//            storage.width = (NSString *)body[@"clientWidth"];
-//        }
-//        if (body[@"clientHeight"])
-//        {
-//            storage.height = (NSString *)body[@"clientHeight"];
-//        }
-//        if (body[@"nodes"])
-//        {
-//            storage.nodes = (NSString *)body[@"nodes"];
-//        }
-//    }
-//}
 @end
 
 

@@ -45,8 +45,8 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property BOOL wkWebViewJavaScriptInjected;
 @property (atomic, strong) WKUserScript *wkWebViewCurrentJSSugo;
 @property (atomic, strong) WKUserScript *wkWebViewCurrentJSTrack;
-@property (atomic, strong) WKUserScript *wkWebViewCurrentJSSource;
-@property (atomic, strong) WKUserScript *wkWebViewCurrentJSExcute;
+@property (atomic, strong) WKUserScript *wkWebViewCurrentJSBindingSource;
+@property (atomic, strong) WKUserScript *wkWebViewCurrentJSBindingExcute;
 @property (atomic, strong) WKUserScript *wkWebViewCurrentJSUtils;
 @property (atomic, strong) WKUserScript *wkWebViewCurrentJSReportSource;
 

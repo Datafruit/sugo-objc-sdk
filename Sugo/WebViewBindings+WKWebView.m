@@ -20,16 +20,16 @@
     if (!self.wkWebViewJavaScriptInjected) {
         self.wkWebViewCurrentJSSugo = [self wkJavaScriptSugo];
         self.wkWebViewCurrentJSTrack = [self wkJavaScriptTrack];
-        self.wkWebViewCurrentJSSource = [self wkJavaScriptSource];
-        self.wkWebViewCurrentJSExcute = [self wkJavaScriptExcute];
+        self.wkWebViewCurrentJSBindingSource = [self wkJavaScriptBindingSource];
+        self.wkWebViewCurrentJSBindingExcute = [self wkJavaScriptBindingExcute];
         self.wkWebViewCurrentJSUtils = [self wkJavaScriptUtils];
         self.wkWebViewCurrentJSReportSource = [self wkJavaScriptReportSource];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSSugo];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSTrack];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSSource];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingSource];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSUtils];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSReportSource];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSExcute];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingExcute];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewBindingsTrack"];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewBindingsTime"];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewReporter"];
@@ -54,20 +54,20 @@
     if (self.wkWebViewJavaScriptInjected) {
         NSMutableArray<WKUserScript *> *userScripts = [[NSMutableArray<WKUserScript *> alloc]
                                                        initWithArray:(*webView).configuration.userContentController.userScripts];
-        if ([userScripts containsObject:self.wkWebViewCurrentJSSource]) {
-            [userScripts removeObject:self.wkWebViewCurrentJSSource];
+        if ([userScripts containsObject:self.wkWebViewCurrentJSBindingSource]) {
+            [userScripts removeObject:self.wkWebViewCurrentJSBindingSource];
         }
-        if ([userScripts containsObject:self.wkWebViewCurrentJSExcute]) {
-            [userScripts removeObject:self.wkWebViewCurrentJSExcute];
+        if ([userScripts containsObject:self.wkWebViewCurrentJSBindingExcute]) {
+            [userScripts removeObject:self.wkWebViewCurrentJSBindingExcute];
         }
         [(*webView).configuration.userContentController removeAllUserScripts];
         for (WKUserScript *userScript in userScripts) {
             [(*webView).configuration.userContentController addUserScript:userScript];
         }
-        self.wkWebViewCurrentJSSource = [self wkJavaScriptSource];
-        self.wkWebViewCurrentJSExcute = [self wkWebViewCurrentJSExcute];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSSource];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSExcute];
+        self.wkWebViewCurrentJSBindingSource = [self wkJavaScriptBindingSource];
+        self.wkWebViewCurrentJSBindingExcute = [self wkWebViewCurrentJSBindingExcute];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingSource];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingExcute];
         NSLog(@"WKWebView Updated");
     }
 }
@@ -131,7 +131,7 @@
 
 - (WKUserScript *)wkJavaScriptSugo
 {
-    return [[WKUserScript alloc] initWithSource:self.jsWKSugo
+    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewSugo
                                   injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                forMainFrameOnly:YES];
 }
@@ -143,14 +143,14 @@
                                forMainFrameOnly:YES];
 }
 
-- (WKUserScript *)wkJavaScriptSource
+- (WKUserScript *)wkJavaScriptBindingSource
 {
     return [[WKUserScript alloc] initWithSource:self.jsWKWebViewBindingsSource
                                   injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                forMainFrameOnly:YES];
 }
 
-- (WKUserScript *)wkJavaScriptExcute
+- (WKUserScript *)wkJavaScriptBindingExcute
 {
     return [[WKUserScript alloc] initWithSource:self.jsWKWebViewBindingsExcute
                                   injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
@@ -159,7 +159,7 @@
 
 - (WKUserScript *)wkJavaScriptUtils
 {
-    return [[WKUserScript alloc] initWithSource:self.jsWKUtils
+    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewUtils
                                   injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                forMainFrameOnly:YES];
 }
@@ -171,7 +171,7 @@
                                forMainFrameOnly:YES];
 }
 
-- (NSString *)jsWKSugo
+- (NSString *)jsWKWebViewSugo
 {
     return [self jsSourceOfFileName:@"Sugo"];
 }
@@ -237,7 +237,7 @@
     return [self jsSourceOfFileName:@"WebViewBindings.excute"];
 }
 
-- (NSString *)jsWKUtils
+- (NSString *)jsWKWebViewUtils
 {
     return [self jsSourceOfFileName:@"Utils"];
 }
