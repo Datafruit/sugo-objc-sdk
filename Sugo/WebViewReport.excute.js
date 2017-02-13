@@ -1,3 +1,3 @@
 if (sugo.reportNodes) {
-    sugo.reportNodes();
+	sugo.reportNodes();
 }

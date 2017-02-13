@@ -19,9 +19,9 @@ sugo.track('浏览');
 sugo.enter_time = new Date().getTime();
 
 window.addEventListener('beforeunload', function(e) {
-                        var duration = (new Date().getTime() - sugo.enter_time) / 1000;
-                        sugo.track('停留', {
-                                   duration: duration
-                                   });
-                        sugo.track('页面退出');
-                        });
+    var duration = (new Date().getTime() - sugo.enter_time) / 1000;
+    sugo.track('停留', {
+        duration: duration
+    });
+    sugo.track('页面退出');
+});
