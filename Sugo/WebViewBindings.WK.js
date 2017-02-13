@@ -36,6 +36,7 @@ sugo.delegate = function(eventType) {
                                 custom_props = sugo_props(e, ele, event, sugo);
                             }
                             custom_props.from_binding = true;
+                            custom_props.event_type = eventType;
                             custom_props.event_label = ele.innerText;
                             var track = {
                                 'eventID'       : event.event_id,
