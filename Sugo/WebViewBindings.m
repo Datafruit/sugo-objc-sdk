@@ -85,6 +85,7 @@
     _isWebViewNeedReload = NO;
     
     _uiWebView = nil;
+    _uiWebViewDelegate = nil;
     _uiVcPath = nil;
     
     _wkWebView = nil;

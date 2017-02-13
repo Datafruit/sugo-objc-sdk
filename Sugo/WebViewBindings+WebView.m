@@ -34,6 +34,9 @@
             }
             self.uiVcPath = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
             self.uiWebView = uiWebView;
+            if (self.uiWebView.delegate) {
+                self.uiWebViewDelegate = self.uiWebView.delegate;
+            }
             [self startUIWebViewBindings:&uiWebView];
         };
         
@@ -43,7 +46,10 @@
                 return;
             }
             self.uiVcPath = nil;
-            [self stopUIWebViewBindings:uiWebView];
+            [self stopUIWebViewBindings];
+            if (self.uiWebViewDelegate) {
+                self.uiWebViewDelegate = nil;
+            }
         };
         
         void (^wkDidMoveToWindowBlock)(id, SEL) = ^(id webView, SEL command) {
@@ -92,7 +98,7 @@
 {
     if (self.viewSwizzleRunning) {
         if (self.uiWebView) {
-            [self stopUIWebViewBindings:self.uiWebView];
+            [self stopUIWebViewBindings];
         }
         if (self.wkWebView) {
             [self stopWKWebViewBindings:self.wkWebView];

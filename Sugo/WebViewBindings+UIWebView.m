@@ -62,17 +62,17 @@
     }
 }
 
-- (void)stopUIWebViewBindings:(UIWebView *)webView
+- (void)stopUIWebViewBindings
 {
     if (self.uiWebViewSwizzleRunning) {
-//        if (webView && webView.delegate) {
-//            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
-//                                  onClass:[webView.delegate class]
-//                                    named:self.uiWebViewDidStartLoadBlockName];
-//            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
-//                                  onClass:[webView.delegate class]
-//                                    named:self.uiWebViewDidFinishLoadBlockName];
-//        }
+        if (self.uiWebViewDelegate) {
+            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
+                                  onClass:[self.uiWebViewDelegate class]
+                                    named:self.uiWebViewDidStartLoadBlockName];
+            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
+                                  onClass:[self.uiWebViewDelegate class]
+                                    named:self.uiWebViewDidFinishLoadBlockName];
+        }
         self.uiWebViewJavaScriptInjected = NO;
         self.uiWebViewSwizzleRunning = NO;
         self.uiWebView = nil;

@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property BOOL isWebViewNeedReload;
 
 @property (atomic, weak) UIWebView* uiWebView;
+@property (atomic, retain) id <UIWebViewDelegate> uiWebViewDelegate;
 @property (atomic, strong) NSString* uiVcPath;
 @property (atomic, strong) NSString* uiDidMoveToWindowBlockName;
 @property (atomic, strong) NSString* uiRemoveFromSuperviewBlockName;
