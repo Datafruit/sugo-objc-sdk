@@ -399,6 +399,10 @@ static NSString *defaultProjectToken;
         p[key[@"DistinctID"]] = self.distinctId;
     }
 
+    if (!p[key[@"EventType"]]) {
+        p[key[@"EventType"]] = eventName;
+    }
+    
     [p addEntriesFromDictionary:self.superProperties];
     if (properties) {
         [p addEntriesFromDictionary:properties];

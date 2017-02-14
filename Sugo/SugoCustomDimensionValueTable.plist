@@ -28,5 +28,11 @@
 	<string>停留</string>
 	<key>HTMLExit</key>
 	<string>页面退出</string>
+	<key>click</key>
+	<string>点击</string>
+	<key>focus</key>
+	<string>聚焦</string>
+	<key>change</key>
+	<string>改变</string>
 </dict>
 </plist>
