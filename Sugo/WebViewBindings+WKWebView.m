@@ -88,6 +88,11 @@
                                                                     error:nil];
             if (pJSON != nil)
             {
+                NSDictionary *value = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValue"]];
+                NSDictionary *key = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]];
+                NSString *keyEventType = key[@"EventType"];
+                NSString *valueEventType = value[pJSON[keyEventType]];
+                [pJSON setValue:valueEventType forKey:keyEventType];
                 [[Sugo sharedInstance] trackEventID:storage.eventID
                                    eventName:storage.eventName
                                   properties:pJSON];

@@ -53,6 +53,5 @@ sugo.delegate = function(eventType) {
 sugo.bindEvent = function() {
     sugo.delegate('click');
     sugo.delegate('focus');
-    sugo.delegate('submit');
     sugo.delegate('change');
 };
