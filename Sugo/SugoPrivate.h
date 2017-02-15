@@ -14,11 +14,9 @@
 #endif
 
 #if TARGET_OS_IPHONE
-#if !SUGO_NO_REACHABILITY_SUPPORT
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
-#endif
 
 #if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
 #import "Sugo+AutomaticEvents.h"
@@ -46,10 +44,8 @@
     BOOL _enableVisualABTestAndCodeless;
 }
 
-#if !SUGO_NO_REACHABILITY_SUPPORT
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
-#endif
 
 #if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 @property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
@@ -89,6 +85,7 @@
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
 
+- (NSString *)deviceBrand;
 - (NSString *)deviceModel;
 - (NSString *)IFA;
 

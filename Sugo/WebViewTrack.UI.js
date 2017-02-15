@@ -1,3 +1,4 @@
+sugo.view_props = {};
 sugo.track = function(event_name, props) {
     if (!props) {
         props = {};
@@ -15,7 +16,7 @@ sugo.timeEvent = function(event_name) {
 var init_code = new Function(sugo.init_code);
 init_code();
 
-sugo.track('浏览');
+sugo.track('浏览', sugo.view_props);
 sugo.enter_time = new Date().getTime();
 
 window.addEventListener('beforeunload', function(e) {
