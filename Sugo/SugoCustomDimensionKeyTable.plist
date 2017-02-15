@@ -42,6 +42,8 @@
 	<string>manufacturer</string>
 	<key>DeviceModel</key>
 	<string>device_model</string>
+	<key>DeviceBrand</key>
+	<string>device_brand</string>
 	<key>Carrier</key>
 	<string>carrier</string>
 	<key>ScreenWidth</key>

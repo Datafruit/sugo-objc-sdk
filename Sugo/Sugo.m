@@ -110,10 +110,8 @@ static NSString *defaultProjectToken;
         self.deviceId = [self defaultDeviceId];
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
-        self.automaticProperties = [self collectAutomaticProperties];
-#if !SUGO_NO_REACHABILITY_SUPPORT
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
-#endif
+        self.automaticProperties = [self collectAutomaticProperties];
         self.taskId = UIBackgroundTaskInvalid;
         
         NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
@@ -148,7 +146,6 @@ static NSString *defaultProjectToken;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-#if !SUGO_NO_REACHABILITY_SUPPORT
     if (_reachability != NULL) {
         if (!SCNetworkReachabilitySetCallback(_reachability, NULL, NULL)) {
             MPLogError(@"%@ error unsetting reachability callback", self);
@@ -159,7 +156,6 @@ static NSString *defaultProjectToken;
         CFRelease(_reachability);
         _reachability = NULL;
     }
-#endif
 }
 
 + (NSDictionary *)loadConfigurationPropertyListWithName:(NSString *)name
@@ -851,6 +847,25 @@ static NSString *defaultProjectToken;
     return [NSString stringWithFormat:@"<Sugo: %p - Token: %@>", (void *)self, self.apiToken];
 }
 
+- (NSString *)deviceBrand
+{
+    UIDevice *device = [UIDevice currentDevice];
+    
+    switch (device.userInterfaceIdiom) {
+        case UIUserInterfaceIdiomPhone:
+            return @"iPhone";
+        case UIUserInterfaceIdiomPad:
+            return @"iPhone";
+        case UIUserInterfaceIdiomTV:
+            return @"TV";
+        case UIUserInterfaceIdiomCarPlay:
+            return @"CarPlay";
+        case UIUserInterfaceIdiomUnspecified:
+        default:
+            return @"Unrecognized";
+    }
+}
+
 - (NSString *)deviceModel
 {
     NSString *results = nil;
@@ -864,30 +879,6 @@ static NSString *defaultProjectToken;
         MPLogError(@"Failed fetch hw.machine from sysctl.");
     }
     return results;
-}
-
-- (NSString *)watchModel
-{
-    NSString *model = nil;
-    Class WKInterfaceDeviceClass = NSClassFromString(@"WKInterfaceDevice");
-    if (WKInterfaceDeviceClass) {
-        SEL currentDeviceSelector = NSSelectorFromString(@"currentDevice");
-        id device = ((id (*)(id, SEL))[WKInterfaceDeviceClass methodForSelector:currentDeviceSelector])(WKInterfaceDeviceClass, currentDeviceSelector);
-        SEL screenBoundsSelector = NSSelectorFromString(@"screenBounds");
-        if (device && [device respondsToSelector:screenBoundsSelector]) {
-            NSInvocation *screenBoundsInvocation = [NSInvocation invocationWithMethodSignature:[device methodSignatureForSelector:screenBoundsSelector]];
-            [screenBoundsInvocation setSelector:screenBoundsSelector];
-            [screenBoundsInvocation invokeWithTarget:device];
-            CGRect screenBounds;
-            [screenBoundsInvocation getReturnValue:(void *)&screenBounds];
-            if (screenBounds.size.width == 136.0f) {
-                model = @"Apple Watch 38mm";
-            } else if (screenBounds.size.width == 156.0f) {
-                model = @"Apple Watch 42mm";
-            }
-        }
-    }
-    return model;
 }
 
 - (NSString *)IFA
@@ -923,7 +914,6 @@ static NSString *defaultProjectToken;
 
 - (NSString *)currentRadio
 {
-#if !SUGO_NO_REACHABILITY_SUPPORT
     NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
     if (!radio) {
         radio = @"None";
@@ -931,9 +921,6 @@ static NSString *defaultProjectToken;
         radio = [radio substringFromIndex:23];
     }
     return radio;
-#else 
-    return @"";
-#endif
 }
 
 - (NSString *)libVersion
@@ -950,19 +937,23 @@ static NSString *defaultProjectToken;
 {
     UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
+    NSString *deviceBrand = [self deviceBrand];
+    NSString *deviceModel = [self deviceModel];
     NSDictionary *key = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKey"]];
     return @{
-             key[@"SystemName"]: [device systemName],
+             key[@"Manufacturer"]:  @"Apple",
+             key[@"DeviceBrand"]:   deviceBrand,
+             key[@"DeviceModel"]:   deviceModel,
+             key[@"SystemName"]:    [device systemName],
              key[@"SystemVersion"]: [device systemVersion],
-             key[@"ScreenWidth"]: @((NSInteger)size.width),
-             key[@"ScreenHeight"]: @((NSInteger)size.height),
+             key[@"ScreenWidth"]:   @((NSInteger)size.width),
+             key[@"ScreenHeight"]:  @((NSInteger)size.height),
              };
 }
 
 - (NSDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
-    NSString *deviceModel = [self deviceModel];
     NSDictionary *key = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKey"]];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
@@ -970,16 +961,12 @@ static NSString *defaultProjectToken;
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:key[@"AppBundleShortVersionString"]];
 //    [p setValue:[self IFA] forKey:@"ios_ifa"];
     
-#if !SUGO_NO_REACHABILITY_SUPPORT
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:key[@"Carrier"]];
-#endif
 
     [p addEntriesFromDictionary:@{
-                                  key[@"SDKType"]: @"Objective-C",
-                                  key[@"SDKVersion"]: [self libVersion],
-                                  key[@"Manufacturer"]: @"Apple",
-                                  key[@"DeviceModel"]: deviceModel, //legacy
+                                  key[@"SDKType"]:      @"Objective-C",
+                                  key[@"SDKVersion"]:   [self libVersion]
                                   }];
     [p addEntriesFromDictionary:[self collectDeviceProperties]];
     return [p copy];
@@ -1015,7 +1002,6 @@ static NSString *defaultProjectToken;
 {
     [self trackIntegration];
     [self trackStayTime];
-#if !SUGO_NO_REACHABILITY_SUPPORT
     // cellular info
     [self setCurrentRadio];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -1032,7 +1018,6 @@ static NSString *defaultProjectToken;
             }
         }
     }
-#endif // SUGO_NO_REACHABILITY_SUPPORT
 
 #if !SUGO_NO_APP_LIFECYCLE_SUPPORT
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -1087,8 +1072,6 @@ static NSString *defaultProjectToken;
 #endif // SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 }
 
-#if !SUGO_NO_REACHABILITY_SUPPORT
-
 static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
     Sugo *sugo = (__bridge Sugo *)info;
@@ -1126,7 +1109,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             /*
              If the target host is reachable and no connection is required then we'll assume (for now) that you're on Wi-Fi...
              */
-            network = @"WiFi";
+            network = @"wifi";
         }
         
         if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) ||
@@ -1141,7 +1124,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 /*
                  ... and no [user] intervention is needed...
                  */
-                network = @"WiFi";
+                network = @"wifi";
             }
         }
         
@@ -1194,8 +1177,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         MPLogInfo(@"Reachability: %@", network);
     }
 }
-
-#endif // SUGO_NO_REACHABILITY_SUPPORT
 
 #if !SUGO_NO_APP_LIFECYCLE_SUPPORT
 
