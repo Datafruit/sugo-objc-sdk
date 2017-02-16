@@ -232,6 +232,12 @@ static const NSUInteger kBatchSize = 50;
 // Encode data for Sugo special need
 + (NSString *)encodeArrayForBatch:(NSArray *)batch
 {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:@"SugoDimensions"]) {
+        return @"";
+    }
+    NSArray *dimensions = [userDefaults objectForKey:@"SugoDimensions"];
+    
     NSMutableDictionary *types = [[NSMutableDictionary alloc] init];
     NSMutableArray *keys = [[NSMutableArray alloc] init];
     NSMutableArray *values = [[NSMutableArray alloc] init];
@@ -242,28 +248,57 @@ static const NSUInteger kBatchSize = 50;
     NSString *ValuesSeperator = [NSString stringWithFormat:@"%c", 1];
     NSString *LinesSeperator = [NSString stringWithFormat:@"%c", 2];
     
-    for (NSDictionary *object in batch) {
-        for (NSString *key in object.allKeys.reverseObjectEnumerator) {
-            if (![keys containsObject:key]) {
-                if ([[[object[key] classForCoder] description] isEqualToString:@"NSNumber"]) {
-                    if (strcmp([(NSNumber *)object[key] objCType], @encode(int)) == 0
-                        || (strcmp([(NSNumber *)object[key] objCType], @encode(long)) == 0)) {
-                        [types setValue:@"l" forKey:key];
-                    } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
-                                || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0))) {
-                        [types setValue:@"f" forKey:key];
-                    } else {
-                        [types setValue:@"s" forKey:key];
-                    }
-                } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]) {
-                    [types setValue:@"d" forKey:key];
-                } else {
-                    [types setValue:@"s" forKey:key];
-                }
-                [keys addObject:key];
-            }
+    //  ------------------------------
+    for (NSDictionary *dimension in dimensions) {
+        NSString *dimensionKey = dimension[@"name"];
+        NSNumber *dimensionType = dimension[@"type"];
+        NSString *type;
+        switch (dimensionType.integerValue) {
+            case 0:
+                type = @"l";
+                break;
+            case 1:
+                type = @"f";
+                break;
+            case 2:
+                type = @"s";
+                break;
+            case 4:
+                type = @"d";
+                break;
+            default:
+                break;
+        }
+        if (type) {
+            [types setValue:type forKey:dimensionKey];
+            [keys addObject:dimensionKey];
         }
     }
+    
+    //  ------------------------------
+    
+//    for (NSDictionary *object in batch) {
+//        for (NSString *key in object.allKeys.reverseObjectEnumerator) {
+//            if (![keys containsObject:key]) {
+//                if ([[[object[key] classForCoder] description] isEqualToString:@"NSNumber"]) {
+//                    if (strcmp([(NSNumber *)object[key] objCType], @encode(int)) == 0
+//                        || (strcmp([(NSNumber *)object[key] objCType], @encode(long)) == 0)) {
+//                        [types setValue:@"l" forKey:key];
+//                    } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
+//                                || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0))) {
+//                        [types setValue:@"f" forKey:key];
+//                    } else {
+//                        [types setValue:@"s" forKey:key];
+//                    }
+//                } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]) {
+//                    [types setValue:@"d" forKey:key];
+//                } else {
+//                    [types setValue:@"s" forKey:key];
+//                }
+//                [keys addObject:key];
+//            }
+//        }
+//    }
     
     for (NSString *key in keys) {
         dataString = [NSMutableString stringWithFormat:@"%@%@%@%@%@",
@@ -286,7 +321,6 @@ static const NSUInteger kBatchSize = 50;
                 } else {
                     [value setValue:object[key] forKey:key];
                 }
-                
             } else {
                 if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:@"" forKey:key];

@@ -1000,7 +1000,6 @@ static NSString *defaultProjectToken;
 
 - (void)setUpListeners
 {
-    [self trackIntegration];
     [self trackStayTime];
     // cellular info
     [self setCurrentRadio];
@@ -1182,6 +1181,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
+    [self trackIntegration];
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
 
@@ -1484,6 +1484,13 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if ([pageInfos isKindOfClass:[NSArray class]]) {
         [[SugoPageInfos global].infos removeAllObjects];
         [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
+    }
+    
+    id dimensions = object[@"dimensions"];
+    if ([dimensions isKindOfClass:[NSArray class]]) {
+        [[NSUserDefaults standardUserDefaults] setObject:dimensions
+                                                  forKey:@"SugoDimensions"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     // Finished bindings are those which should no longer be run.
