@@ -172,7 +172,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
 - (id <MPABTestDesignerMessage>)designerMessageForMessage:(id)message
 {
-    MPLogInfo(@"raw message: %@", message);
+    MPLogDebug(@"raw message: %@", message);
 
     NSParameterAssert([message isKindOfClass:[NSString class]] || [message isKindOfClass:[NSData class]]);
 
@@ -211,7 +211,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         }
     }
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
-    MPLogInfo(@"WebSocket received message: %@", [designerMessage debugDescription]);
+    MPLogDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
 
     if (commandOperation) {
@@ -221,7 +221,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
 - (void)webSocketDidOpen:(MPWebSocket *)webSocket
 {
-    MPLogInfo(@"WebSocket %@ did open.", webSocket);
+    MPLogDebug(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
     [self showConnectedViewWithLoading:YES];
 }

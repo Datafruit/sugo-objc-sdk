@@ -9,6 +9,7 @@
 #import "Attributes.h"
 #import "MPObjectSelector.h"
 #import <UIKit/UIKit.h>
+#import "MPLogger.h"
 
 @implementation Attributes
 
@@ -28,39 +29,39 @@
         for (id object in (NSArray *)aObjects[key]) {
             
             if ([object isKindOfClass:[UISearchBar class]]) {
-                NSLog(@"attributes: UISearchBar");
+                MPLogDebug(@"attributes: UISearchBar");
                 if (((UISearchBar *)object).text) {
                     [aValues addEntriesFromDictionary:@{key: ((UISearchBar *)object).text}];
                 } else {
                     [aValues addEntriesFromDictionary:@{key: @""}];
                 }
             } else if ([object isKindOfClass:[UIButton class]]) {
-                NSLog(@"attributes: UIButton");
+                MPLogDebug(@"attributes: UIButton");
                 if (((UIButton *)object).titleLabel) {
                     [aValues addEntriesFromDictionary:@{key: ((UIButton *)object).titleLabel.text}];
                 } else {
                     [aValues addEntriesFromDictionary:@{key: @""}];
                 }
             } else if ([object isKindOfClass:[UIDatePicker class]]) {
-                NSLog(@"attributes: UIDatePicker");
+                MPLogDebug(@"attributes: UIDatePicker");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%@", ((UIDatePicker *)object).date]}];
             } else if ([object isKindOfClass:[UISegmentedControl class]]) {
-                NSLog(@"attributes: UISegmentedControl");
+                MPLogDebug(@"attributes: UISegmentedControl");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)object).selectedSegmentIndex]}];
             } else if ([object isKindOfClass:[UISlider class]]) {
-                NSLog(@"attributes: UISlider");
+                MPLogDebug(@"attributes: UISlider");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%f", ((UISlider *)object).value]}];
             } else if ([object isKindOfClass:[UISwitch class]]) {
-                NSLog(@"attributes: UISwitch");
+                MPLogDebug(@"attributes: UISwitch");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%i", ((UISwitch *)object).isOn]}];
             } else if ([object isKindOfClass:[UITextField class]]) {
-                NSLog(@"attributes: UITextField");
+                MPLogDebug(@"attributes: UITextField");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%@", ((UITextField *)object).text]}];
             } else {
-                NSLog(@"attributes class: %@", NSStringFromClass([object classForCoder]));
+                MPLogDebug(@"attributes class: %@", NSStringFromClass([object classForCoder]));
                 aValues[key] = [NSString stringWithFormat:@"%@", self.paths[key]];
             }
-            NSLog(@"%@ = %@", key, aValues[key]);
+            MPLogDebug(@"%@ = %@", key, aValues[key]);
             
         }
     }

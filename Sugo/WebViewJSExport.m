@@ -9,6 +9,7 @@
 #import "WebViewJSExport.h"
 #import "Sugo.h"
 #import "SugoPrivate.h"
+#import "MPLogger.h"
 
 @implementation WebViewJSExport
 
@@ -39,7 +40,7 @@
         [[Sugo sharedInstance] trackEventID:storage.eventID
                            eventName:storage.eventName];
     }
-    NSLog(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
+    MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
 }
 
 + (void)timeOfEvent:(NSString *)event

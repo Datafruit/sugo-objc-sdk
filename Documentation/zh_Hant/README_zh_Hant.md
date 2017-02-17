@@ -89,7 +89,6 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
     [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
     [[Sugo sharedInstance] setEnableLogging:YES]; 	// 如果需要查看SDK的Log，请设置为true
     [[Sugo sharedInstance] setFlushInterval:5];		// 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
-    [[Sugo sharedInstance] identify:[Sugo sharedInstance].distinctId];
 }
 ```
 #### 2.2.3 调用SDK对象初始化代码
@@ -171,24 +170,20 @@ Sugo *sugo = [Sugo sharedInstance];
 
 #### 3.2.1 代码埋点
 
-当需要把自定义事件发送到服务器时，可在相应位置调用
+当需要把自定义事件发送到服务器时，可在相应位置调用以下API
 
-* `- (void)track:(nullable NSString *)eventID eventName:(NSString *)eventName;`
+* `- (void)trackEvent:(NSString *)event;`
+* `- (void)trackEvent:(NSString *)event properties:(nullable NSDictionary *)properties;`
+* `- (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName;`
+* `- (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName properties:(nullable NSDictionary *)properties;`
 
-示例如下：
-
-```
-[[Sugo sharedInstance] track:@"EventId" eventName:@"EventName"];	//eventId可为空
-```
-
-当需要额外添加自定义的属性是，可调用
-
-* `- (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties`
-
-示例如下：
+示例如下(根据使用需求调用)：
 
 ```
-[[Sugo sharedInstance] track:@"EventId" eventName:@"EventName" properties:@{ @"key1": @"value2", @"key2": @"value2"}];	//eventId可为空
+[[Sugo sharedInstance] trackEvent:@"EventName"];
+[[Sugo sharedInstance] trackEvent:@"EventName" properties:@{ @"key1": @"value1", @"key2": @"value2"}];
+[[Sugo sharedInstance] trackEventID:@"EventId" eventName:@"EventName"];	//eventId可为空
+[[Sugo sharedInstance] trackEventID:@"EventId" eventName:@"EventName" properties:@{ @"key1": @"value2", @"key2": @"value2"}];	//eventId可为空
 ```
 
 #### 3.2.2 时长统计
@@ -207,18 +202,10 @@ Sugo *sugo = [Sugo sharedInstance];
 
 ##### 3.2.2.2 发送
 
-然后，在完成跟踪的位置调用
-```
-- (void)track:(nullable NSString *)eventID eventName:(NSString *)eventName;
-```
-或
-```
-- (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
-```
-即可，需要注意的是`eventName`需要与开始时的一样，如下：
+然后，在完成跟踪的位置调用`3.2.1`中的方法即可，需要注意的是`eventName`需要与开始时的一样，示例如下：
 
 ```
-[[Sugo sharedInstance] track:nil eventName:@"TimeEventName"];	//eventId可为空
+[[Sugo sharedInstance] trackEvent:@"TimeEventName"];	
 ```
 
 ##### 3.2.2.3 更新
