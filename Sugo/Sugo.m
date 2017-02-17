@@ -957,8 +957,8 @@ static NSString *defaultProjectToken;
     NSDictionary *key = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKey"]];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:key[@"AppBundleVersion"]];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:key[@"AppBundleShortVersionString"]];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:key[@"AppBundleShortVersionString"]];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:key[@"AppBundleVersion"]];
 //    [p setValue:[self IFA] forKey:@"ios_ifa"];
     
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
