@@ -14,6 +14,7 @@
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
 #import "WebViewBindings.h"
+#import "MPLogger.h"
 
 NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_request";
 

@@ -11,6 +11,7 @@
 #import "Sugo.h"
 #import "MPSwizzler.h"
 #import "SugoPrivate.h"
+#import "MPLogger.h"
 
 
 @implementation WebViewBindings (WKWebView)

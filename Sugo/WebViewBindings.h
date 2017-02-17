@@ -10,7 +10,6 @@
 #import "WebViewInfoStorage.h"
 #import "WebKit/WebKit.h"
 #import <JavaScriptCore/JavaScriptCore.h>
-#import "MPLogger.h"
 
 typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 {

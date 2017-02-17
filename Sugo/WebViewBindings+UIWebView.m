@@ -12,6 +12,7 @@
 #import "WebViewJSExport.h"
 #import "MPSwizzler.h"
 #import "SugoPrivate.h"
+#import "MPLogger.h"
 
 
 @implementation WebViewBindings (UIWebView)

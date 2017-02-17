@@ -17,6 +17,7 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
+#import "MPLogger.h"
 
 @implementation WebViewBindings (WebView)
 
