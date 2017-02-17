@@ -14,6 +14,7 @@
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
 #import "WebViewBindings.h"
+#import "MPLogger.h"
 
 NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_request";
 
@@ -69,7 +70,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSArray *commonEvents = [self payload][@"events"];
-            NSLog(@"Loading event bindings:\n%@", commonEvents);
+            MPLogDebug(@"Loading event bindings:\n%@", commonEvents);
             MPEventBindingCollection *bindingCollection = [conn sessionObjectForKey:@"event_bindings"];
             if (!bindingCollection) {
                 bindingCollection = [[MPEventBindingCollection alloc] init];

@@ -513,7 +513,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)didConnect
 {
-    MPLogInfo(@"Connected");
+    MPLogDebug(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
 
     // Set host first so it defaults

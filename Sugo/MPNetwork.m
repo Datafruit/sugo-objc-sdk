@@ -50,6 +50,10 @@ static const NSUInteger kBatchSize = 50;
         return;
     }
     
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"SugoDimensions"]) {
+        return;
+    }
+    
     while (queue.count > 0) {
         NSUInteger batchSize = MIN(queue.count, kBatchSize);
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
@@ -79,7 +83,7 @@ static const NSUInteger kBatchSize = 50;
                 NSString *response = [[NSString alloc] initWithData:responseData
                                                            encoding:NSUTF8StringEncoding];
                 if ([response intValue] == 0) {
-                    MPLogInfo(@"%@ %lu api rejected some items", self, endpoint);
+                    MPLogDebug(@"%@ %lu api rejected some items", self, endpoint);
                 }
             }
             
@@ -128,10 +132,12 @@ static const NSUInteger kBatchSize = 50;
 #pragma mark - Helpers
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID
+                                                andProjectID:(NSString *)projectID
                                                     andToken:(NSString *)token {
     NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
                                                               value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
     NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
+    NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
     NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
     NSURLQueryItem *itemDistinctID = [NSURLQueryItem queryItemWithName:@"distinct_id" value:distinctID];
     
@@ -143,7 +149,7 @@ static const NSUInteger kBatchSize = 50;
                                                        encoding:NSUTF8StringEncoding];
     NSURLQueryItem *itemProperties = [NSURLQueryItem queryItemWithName:@"properties" value:propertiesString];
     
-    return @[ itemVersion, itemLib, itemToken, itemDistinctID, itemProperties ];
+    return @[ itemVersion, itemLib, itemProjectID, itemToken, itemDistinctID, itemProperties ];
 }
 
 + (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {
@@ -195,7 +201,7 @@ static const NSUInteger kBatchSize = 50;
     [request setHTTPMethod:method];
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     
-    NSLog(@"build request: %@", [request URL].absoluteString);
+    MPLogDebug(@"build request: %@", [request URL].absoluteString);
     MPLogDebug(@"%@ http request: %@?%@", self, request, body);
     
     return [request copy];
@@ -232,6 +238,9 @@ static const NSUInteger kBatchSize = 50;
 // Encode data for Sugo special need
 + (NSString *)encodeArrayForBatch:(NSArray *)batch
 {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray *dimensions = [userDefaults objectForKey:@"SugoDimensions"];
+    
     NSMutableDictionary *types = [[NSMutableDictionary alloc] init];
     NSMutableArray *keys = [[NSMutableArray alloc] init];
     NSMutableArray *values = [[NSMutableArray alloc] init];
@@ -245,34 +254,50 @@ static const NSUInteger kBatchSize = 50;
     for (NSDictionary *object in batch) {
         for (NSString *key in object.allKeys.reverseObjectEnumerator) {
             if (![keys containsObject:key]) {
-                if ([[[object[key] classForCoder] description] isEqualToString:@"NSNumber"]) {
-                    if (strcmp([(NSNumber *)object[key] objCType], @encode(int)) == 0
-                        || (strcmp([(NSNumber *)object[key] objCType], @encode(long)) == 0)) {
-                        [types setValue:@"l" forKey:key];
-                    } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
-                                || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0))) {
-                        [types setValue:@"f" forKey:key];
-                    } else {
-                        [types setValue:@"s" forKey:key];
-                    }
-                } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]) {
-                    [types setValue:@"d" forKey:key];
-                } else {
-                    [types setValue:@"s" forKey:key];
-                }
                 [keys addObject:key];
             }
         }
     }
     
+    for (NSDictionary *dimension in dimensions) {
+        NSString *dimensionKey = dimension[@"name"];
+        NSNumber *dimensionType = dimension[@"type"];
+        NSString *type;
+        for (NSString *key in keys) {
+            if ([dimensionKey isEqualToString:key]) {
+                switch (dimensionType.integerValue) {
+                    case 0:
+                        type = @"l";
+                        break;
+                    case 1:
+                        type = @"f";
+                        break;
+                    case 2:
+                        type = @"s";
+                        break;
+                    case 4:
+                        type = @"d";
+                        break;
+                    default:
+                        break;
+                }
+                if (type) {
+                    [types setValue:type forKey:dimensionKey];
+                }
+                break;
+            }
+        }
+    }
+    
     for (NSString *key in keys) {
-        dataString = [NSMutableString stringWithFormat:@"%@%@%@%@%@",
-                      dataString,
-                      types[key],
-                      TypeSeperator,
-                      key,
-                      KeysSeperator];
-        
+        if (types[key]) {
+            dataString = [NSMutableString stringWithFormat:@"%@%@%@%@%@",
+                          dataString,
+                          types[key],
+                          TypeSeperator,
+                          key,
+                          KeysSeperator];
+        }
     }
     dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
     dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
@@ -286,7 +311,6 @@ static const NSUInteger kBatchSize = 50;
                 } else {
                     [value setValue:object[key] forKey:key];
                 }
-                
             } else {
                 if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:@"" forKey:key];
@@ -308,7 +332,7 @@ static const NSUInteger kBatchSize = 50;
         dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
         dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
     }
-    NSLog(@"Data:\n%@", dataString);
+    MPLogDebug(@"Data:\n%@", dataString);
     return [MPNetwork encodeBase64ForDataString:dataString];
 }
 

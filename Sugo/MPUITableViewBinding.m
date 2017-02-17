@@ -11,6 +11,7 @@
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
 #import "SugoPrivate.h"
+#import "MPLogger.h"
 
 @implementation MPUITableViewBinding
 
@@ -23,25 +24,25 @@
 {
     NSString *path = object[@"path"];
     if (![path isKindOfClass:[NSString class]] || path.length < 1) {
-        NSLog(@"must supply a view path to bind by");
+        MPLogDebug(@"must supply a view path to bind by");
         return nil;
     }
 
     NSString *eventID = object[@"event_id"];
     if (![eventID isKindOfClass:[NSString class]] || eventID.length < 1 ) {
-        NSLog(@"binding requires an event id");
+        MPLogDebug(@"binding requires an event id");
         return nil;
     }
     
     NSString *eventName = object[@"event_name"];
     if (![eventName isKindOfClass:[NSString class]] || eventName.length < 1 ) {
-        NSLog(@"binding requires an event name");
+        MPLogDebug(@"binding requires an event name");
         return nil;
     }
 
     Class tableDelegate = NSClassFromString(object[@"table_delegate"]);
     if (!tableDelegate) {
-        NSLog(@"binding requires a table_delegate class");
+        MPLogDebug(@"binding requires a table_delegate class");
         return nil;
     }
 

@@ -261,7 +261,7 @@ static NSString *defaultProjectToken;
         deviceId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
     if (!deviceId) {
-        MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
+        MPLogDebug(@"%@ error getting device identifier: falling back to uuid", self);
         deviceId = [[NSUUID UUID] UUIDString];
     }
     return deviceId;
@@ -353,7 +353,7 @@ static NSString *defaultProjectToken;
         return;
     }
     
-    NSLog(@"track:%@, %@, %@", eventID, eventName, properties);
+    MPLogDebug(@"track:%@, %@, %@", eventID, eventName, properties);
     if (eventName.length == 0) {
         MPLogWarning(@"%@ sugo track called with empty event parameter. using 'mp_event'", self);
         eventName = @"mp_event";
@@ -435,7 +435,7 @@ static NSString *defaultProjectToken;
         event[key[@"EventID"]] = eventID;
     }
     
-    //        MPLogInfo(@"%@ queueing event: %@", self, event);
+    MPLogDebug(@"%@ queueing event: %@", self, event);
     [self.eventsQueue addObject:event];
     if (self.eventsQueue.count > 5000) {
         [self.eventsQueue removeObjectAtIndex:0];
@@ -720,7 +720,7 @@ static NSString *defaultProjectToken;
     BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
                                   forKey: NSURLIsExcludedFromBackupKey error: &error];
     if (!success) {
-        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+        MPLogDebug(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
     }
     return success;
 }
@@ -957,8 +957,8 @@ static NSString *defaultProjectToken;
     NSDictionary *key = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKey"]];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:key[@"AppBundleVersion"]];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:key[@"AppBundleShortVersionString"]];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:key[@"AppBundleShortVersionString"]];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:key[@"AppBundleVersion"]];
 //    [p setValue:[self IFA] forKey:@"ios_ifa"];
     
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
@@ -1000,7 +1000,6 @@ static NSString *defaultProjectToken;
 
 - (void)setUpListeners
 {
-    [self trackIntegration];
     [self trackStayTime];
     // cellular info
     [self setCurrentRadio];
@@ -1094,8 +1093,12 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
     if (properties) {
         BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
-        properties[@"wifi"] = @(wifi);
-        MPLogInfo(@"%@ reachability changed, wifi=%d", self, wifi);
+        if (wifi) {
+            properties[@"has_wifi"] = @"true";
+        } else {
+            properties[@"has_wifi"] = @"false";
+        }
+        MPLogDebug(@"%@ reachability changed, wifi=%d", self, wifi);
         
         NSString *network = @"";
         if ((flags & kSCNetworkReachabilityFlagsReachable) == 0)
@@ -1174,7 +1177,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         properties[key[@"Reachability"]] = network;
         
         self.automaticProperties = [properties copy];
-        MPLogInfo(@"Reachability: %@", network);
+        MPLogDebug(@"Reachability: %@", network);
     }
 }
 
@@ -1182,6 +1185,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
+    [self trackIntegration];
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
 
@@ -1352,7 +1356,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         if ([NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"]) {
             
             NSData *cacheData = [NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"];
-            NSLog(@"Decide cacheData\n%@",[[NSString alloc] initWithData:cacheData encoding:NSUTF8StringEncoding]);
+            MPLogDebug(@"Decide cacheData\n%@",[[NSString alloc] initWithData:cacheData encoding:NSUTF8StringEncoding]);
             NSDictionary *object = [NSJSONSerialization JSONObjectWithData:cacheData options:(NSJSONReadingOptions)0 error:nil];
             NSDictionary *config = object[@"config"];
             if (config && [config isKindOfClass:NSDictionary.class]) {
@@ -1376,6 +1380,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             // Build a proper URL from our parameters
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
                                                             withDistinctID:self.people.distinctId ?: self.distinctId
+                                                              andProjectID:self.projectID
                                                                   andToken:self.apiToken];
             // Build a network request from the URL
             NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
@@ -1395,7 +1400,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
-                NSLog(@"Decide responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                MPLogDebug(@"Decide responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                 // Handle network response
                 NSDictionary *object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
                 if (error) {
@@ -1484,6 +1489,13 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if ([pageInfos isKindOfClass:[NSArray class]]) {
         [[SugoPageInfos global].infos removeAllObjects];
         [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
+    }
+    
+    id dimensions = object[@"dimensions"];
+    if ([dimensions isKindOfClass:[NSArray class]]) {
+        [[NSUserDefaults standardUserDefaults] setObject:dimensions
+                                                  forKey:@"SugoDimensions"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     // Finished bindings are those which should no longer be run.

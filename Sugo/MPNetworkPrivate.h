@@ -31,6 +31,7 @@
 
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID
+                                                andProjectID:(NSString *)projectID
                                                     andToken:(NSString *)token;
 
 - (NSURLRequest *)buildRequestForURL:(NSURL *)url

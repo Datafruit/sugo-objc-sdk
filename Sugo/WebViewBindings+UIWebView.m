@@ -12,6 +12,7 @@
 #import "WebViewJSExport.h"
 #import "MPSwizzler.h"
 #import "SugoPrivate.h"
+#import "MPLogger.h"
 
 
 @implementation WebViewBindings (UIWebView)
@@ -21,7 +22,7 @@
     void (^uiWebViewDidStartLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
         if (self.uiWebViewJavaScriptInjected) {
             self.uiWebViewJavaScriptInjected = NO;
-            NSLog(@"UIWebView Uninjected");
+            MPLogDebug(@"UIWebView Uninjected");
         }
     };
     
@@ -43,7 +44,7 @@
             [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewBindingsExcute]];
             
             self.uiWebViewJavaScriptInjected = YES;
-            NSLog(@"UIWebView Injected");
+            MPLogDebug(@"UIWebView Injected");
         }
     };
     
