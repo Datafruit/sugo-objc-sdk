@@ -7,6 +7,7 @@
 //
 
 #import "MPDesignerEventBindingMessage.h"
+#import "MPLogger.h"
 
 NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
 
@@ -46,7 +47,7 @@ NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:(NSJSONWritingOptions)0 error:&error];
     if (error) {
-        NSLog(@"Failed to serialize test designer message: %@", error);
+        MPLogDebug(@"Failed to serialize test designer message: %@", error);
     }
 
     return jsonData;

@@ -10,13 +10,14 @@
 #import "MPEventBinding.h"
 #import "MPUIControlBinding.h"
 #import "MPUITableViewBinding.h"
+#import "MPLogger.h"
 
 @implementation MPEventBinding
 
 + (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
 {
     if (object == nil) {
-        NSLog(@"must supply an JSON object to initialize from");
+        MPLogDebug(@"must supply an JSON object to initialize from");
         return nil;
     }
 

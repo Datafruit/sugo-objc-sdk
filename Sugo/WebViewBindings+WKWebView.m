@@ -34,7 +34,7 @@
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewBindingsTime"];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"WKWebViewReporter"];
         self.wkWebViewJavaScriptInjected = YES;
-        NSLog(@"WKWebView Injected");
+        MPLogDebug(@"WKWebView Injected");
     }
 }
 
@@ -68,7 +68,7 @@
         self.wkWebViewCurrentJSBindingExcute = [self wkWebViewCurrentJSBindingExcute];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingSource];
         [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingExcute];
-        NSLog(@"WKWebView Updated");
+        MPLogDebug(@"WKWebView Updated");
     }
 }
 
@@ -102,7 +102,7 @@
                 [[Sugo sharedInstance] trackEventID:storage.eventID
                                    eventName:storage.eventName];
             }
-            NSLog(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
+            MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
         } else if ([message.name isEqualToString:@"WKWebViewBindingsTime"]) {
             NSDictionary *body = [[NSDictionary alloc] initWithDictionary:(NSDictionary *)message.body];
             NSString *eventName = [[NSString alloc] initWithString:(NSString *)body[@"eventName"]];
@@ -130,7 +130,7 @@
             }
         }
     } else {
-        NSLog(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
+        MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
     }
 }
 

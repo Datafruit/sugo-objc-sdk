@@ -138,7 +138,7 @@
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context
 {
-    NSLog(@"Object: %@ = \nK: %@ = \nV: %@", object, keyPath, change[NSKeyValueChangeNewKey]);
+    MPLogDebug(@"Object: %@ = \nK: %@ = \nV: %@", object, keyPath, change[NSKeyValueChangeNewKey]);
     if ([keyPath isEqualToString:@"stringBindings"]) {
         if (self.mode == Codeless && [Sugo sharedInstance].isCodelessTesting) {
             self.isWebViewNeedReload = YES;
