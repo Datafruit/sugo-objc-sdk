@@ -49,12 +49,7 @@
     _wkDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
     _wkRemoveFromSuperviewBlockName = [[NSUUID UUID] UUIDString];
     _wkWebViewJavaScriptInjected = NO;
-    _wkWebViewCurrentJSSugo = [[WKUserScript alloc] init];
-    _wkWebViewCurrentJSTrack = [[WKUserScript alloc] init];
-    _wkWebViewCurrentJSBindingSource = [[WKUserScript alloc] init];
-    _wkWebViewCurrentJSBindingExcute = [[WKUserScript alloc] init];
-    _wkWebViewCurrentJSUtils = [[WKUserScript alloc] init];
-    _wkWebViewCurrentJSReportSource = [[WKUserScript alloc] init];
+    _wkWebViewCurrentJS = [[WKUserScript alloc] init];
     [self addObserver:self
            forKeyPath:@"stringBindings"
               options:NSKeyValueObservingOptionNew

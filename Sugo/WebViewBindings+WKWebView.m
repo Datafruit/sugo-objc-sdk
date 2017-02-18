@@ -19,18 +19,8 @@
 - (void)startWKWebViewBindings:(WKWebView **)webView
 {
     if (!self.wkWebViewJavaScriptInjected) {
-        self.wkWebViewCurrentJSSugo = [self wkJavaScriptSugo];
-        self.wkWebViewCurrentJSTrack = [self wkJavaScriptTrack];
-        self.wkWebViewCurrentJSBindingSource = [self wkJavaScriptBindingSource];
-        self.wkWebViewCurrentJSBindingExcute = [self wkJavaScriptBindingExcute];
-        self.wkWebViewCurrentJSUtils = [self wkJavaScriptUtils];
-        self.wkWebViewCurrentJSReportSource = [self wkJavaScriptReportSource];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSSugo];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSTrack];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingSource];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSUtils];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSReportSource];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingExcute];
+        self.wkWebViewCurrentJS = [self wkJavaScript];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
         [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
@@ -55,20 +45,16 @@
     if (self.wkWebViewJavaScriptInjected) {
         NSMutableArray<WKUserScript *> *userScripts = [[NSMutableArray<WKUserScript *> alloc]
                                                        initWithArray:(*webView).configuration.userContentController.userScripts];
-        if ([userScripts containsObject:self.wkWebViewCurrentJSBindingSource]) {
-            [userScripts removeObject:self.wkWebViewCurrentJSBindingSource];
-        }
-        if ([userScripts containsObject:self.wkWebViewCurrentJSBindingExcute]) {
-            [userScripts removeObject:self.wkWebViewCurrentJSBindingExcute];
+        
+        if ([userScripts containsObject:self.wkWebViewCurrentJS]) {
+            [userScripts removeObject:self.wkWebViewCurrentJS];
         }
         [(*webView).configuration.userContentController removeAllUserScripts];
         for (WKUserScript *userScript in userScripts) {
             [(*webView).configuration.userContentController addUserScript:userScript];
         }
-        self.wkWebViewCurrentJSBindingSource = [self wkJavaScriptBindingSource];
-        self.wkWebViewCurrentJSBindingExcute = [self wkWebViewCurrentJSBindingExcute];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingSource];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJSBindingExcute];
+        self.wkWebViewCurrentJS = [self wkJavaScript];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
         MPLogDebug(@"WKWebView Updated");
     }
 }
@@ -135,71 +121,48 @@
     }
 }
 
-- (WKUserScript *)wkJavaScriptSugo
+- (WKUserScript *)wkJavaScript
 {
-    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewSugo
+    NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
+                    [self jsWKWebViewUtils],
+                    [self jsWKWebViewSugoBegin],
+                    [self jsWKWebViewVariables],
+                    [self jsWKWebViewAPI],
+                    [self jsWKWebViewBindings],
+                    [self jsWKWebViewReport],
+                    [self jsWKWebViewExcute],
+                    [self jsWKWebViewSugoEnd]];
+    NSLog(@"WKWebView JavaScript:\n%@", js);
+    
+    return [[WKUserScript alloc] initWithSource:js
                                   injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                forMainFrameOnly:YES];
 }
 
-- (WKUserScript *)wkJavaScriptTrack
+- (NSString *)jsWKWebViewUtils
 {
-    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewTrack
-                                  injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                               forMainFrameOnly:YES];
+    return [self jsSourceOfFileName:@"Utils"];
 }
 
-- (WKUserScript *)wkJavaScriptBindingSource
+- (NSString *)jsWKWebViewSugoBegin
 {
-    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewBindingsSource
-                                  injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                               forMainFrameOnly:YES];
+    return [self jsSourceOfFileName:@"SugoBegin"];
 }
 
-- (WKUserScript *)wkJavaScriptBindingExcute
-{
-    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewBindingsExcute
-                                  injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                               forMainFrameOnly:YES];
-}
-
-- (WKUserScript *)wkJavaScriptUtils
-{
-    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewUtils
-                                  injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                               forMainFrameOnly:YES];
-}
-
-- (WKUserScript *)wkJavaScriptReportSource
-{
-    return [[WKUserScript alloc] initWithSource:self.jsWKWebViewReportSource
-                                  injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                               forMainFrameOnly:YES];
-}
-
-- (NSString *)jsWKWebViewSugo
-{
-    return [self jsSourceOfFileName:@"Sugo"];
-}
-
-- (NSString *)jsWKWebViewTrack
+- (NSString *)jsWKWebViewVariables
 {
     NSMutableString *nativePath = [[NSMutableString alloc] initWithString:self.wkWebView.URL.path];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
     if (replacements) {
-        for (NSDictionary *replacement in replacements) {
-            if ((replacement.allKeys.count <= 0)
-                || (((NSString *)replacement.allKeys.firstObject)).length <= 0) {
-                continue;
-            }
-            NSString *key = (NSString *)replacement.allKeys.firstObject;
-            NSString *value = (NSString *)replacement[key];
-            relativePath = [NSMutableString stringWithFormat:@"%@.replace(/%@/g, %@)",
+        for (NSString *replacement in replacements) {
+            NSDictionary *r = (NSDictionary *)replacements[replacement];
+            NSString *key = (NSString *)r.allKeys.firstObject;
+            NSString *value = (NSString *)r[key];
+            relativePath = [NSMutableString stringWithFormat:@"%@.replace('%@', %@)",
                             relativePath,
                             key,
                             value.length>0?value:@"''"];
-            
         }
         if (replacements[@"HomePath"]) {
             NSString *key = (NSString *)((NSDictionary *)replacements[@"HomePath"]).allKeys.firstObject;
@@ -214,53 +177,145 @@
                                                                    withTemplate:value.length>0?value:@""]];
         }
     }
-    relativePath = [NSMutableString stringWithFormat:@"%@;", relativePath];
+    relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
     
-    NSMutableString *pn = [[NSMutableString alloc] init];
-    NSMutableString *ic = [[NSMutableString alloc] init];
+    NSMutableString *code = [[NSMutableString alloc] init];
+    NSMutableString *pageName = [[NSMutableString alloc] init];
     if ([SugoPageInfos global].infos.count > 0) {
         for (NSDictionary *info in [SugoPageInfos global].infos) {
             if ([info[@"page"] isEqualToString:nativePath]) {
-                pn = info[@"page"];
-                ic = info[@"code"];
+                code = info[@"code"];
+                pageName = info[@"page"];
                 break;
             }
         }
     }
-    NSMutableString *pageName = [NSMutableString stringWithFormat:@"sugo.page_name = %@;", pn.length>0?pn:@"''"];
-    NSMutableString *initCode = [NSMutableString stringWithFormat:@"sugo.init_code = %@;", ic.length>0?ic:@"''"];
-
-    NSString *wk = [self jsSourceOfFileName:@"WebViewTrack.WK"];
     
-    return [[[relativePath stringByAppendingString:pageName]
-             stringByAppendingString:initCode]
-            stringByAppendingString:wk];
-}
-
-- (NSString *)jsWKWebViewBindingsSource
-{
+    NSString *initInfo = [NSString stringWithFormat:@"sugo.init = {code: %@, page_name: %@};\n", code.length>0?code:@"''", pageName.length>0?code:@"''"];
     NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + window.location.pathname;\n", self.wkVcPath];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
-    NSString *wk = [self jsSourceOfFileName:@"WebViewBindings.WK"];
+    NSString *variables = [self jsSourceOfFileName:@"WebViewVariables"];
     
-    return [[vcPath stringByAppendingString:bindings]
-            stringByAppendingString:wk];
+    return [[[[relativePath stringByAppendingString:initInfo]
+              stringByAppendingString:vcPath]
+             stringByAppendingString:bindings]
+            stringByAppendingString:variables];
+    
 }
 
-- (NSString *)jsWKWebViewBindingsExcute
+- (NSString *)jsWKWebViewAPI
 {
-    return [self jsSourceOfFileName:@"WebViewBindings.excute"];
+    NSString *api = [self jsSourceOfFileName:@"WebViewAPI.WK"];
+    
+    return api;
 }
 
-- (NSString *)jsWKWebViewUtils
+- (NSString *)jsWKWebViewBindings
 {
-    return [self jsSourceOfFileName:@"Utils"];
+    return [self jsSourceOfFileName:@"WebViewBindings.WK"];
 }
 
-- (NSString *)jsWKWebViewReportSource
+- (NSString *)jsWKWebViewReport
 {
     return [self jsSourceOfFileName:@"WebViewReport.WK"];
 }
+
+- (NSString *)jsWKWebViewExcute
+{
+    return [self jsSourceOfFileName:@"WebViewExcute"];
+}
+
+- (NSString *)jsWKWebViewSugoEnd
+{
+    return [self jsSourceOfFileName:@"SugoEnd"];
+}
+
+
+
+//- (NSString *)jsWKWebViewSugo
+//{
+//    return [self jsSourceOfFileName:@"Sugo"];
+//}
+//
+//- (NSString *)jsWKWebViewTrack
+//{
+//    NSMutableString *nativePath = [[NSMutableString alloc] initWithString:self.wkWebView.URL.path];
+//    NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
+//    NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
+//    if (replacements) {
+//        for (NSDictionary *replacement in replacements) {
+//            if ((replacement.allKeys.count <= 0)
+//                || (((NSString *)replacement.allKeys.firstObject)).length <= 0) {
+//                continue;
+//            }
+//            NSString *key = (NSString *)replacement.allKeys.firstObject;
+//            NSString *value = (NSString *)replacement[key];
+//            relativePath = [NSMutableString stringWithFormat:@"%@.replace(/%@/g, %@)",
+//                            relativePath,
+//                            key,
+//                            value.length>0?value:@"''"];
+//            
+//        }
+//        if (replacements[@"HomePath"]) {
+//            NSString *key = (NSString *)((NSDictionary *)replacements[@"HomePath"]).allKeys.firstObject;
+//            NSString *value = (NSString *)((NSDictionary *)replacements[@"HomePath"])[key];
+//            NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", key]
+//                                                                           options:NSRegularExpressionAnchorsMatchLines
+//                                                                             error:nil];
+//            nativePath = [NSMutableString
+//                          stringWithString:[re stringByReplacingMatchesInString:nativePath
+//                                                                        options:0
+//                                                                          range:NSMakeRange(0, nativePath.length)
+//                                                                   withTemplate:value.length>0?value:@""]];
+//        }
+//    }
+//    relativePath = [NSMutableString stringWithFormat:@"%@;", relativePath];
+//    
+//    NSMutableString *pn = [[NSMutableString alloc] init];
+//    NSMutableString *ic = [[NSMutableString alloc] init];
+//    if ([SugoPageInfos global].infos.count > 0) {
+//        for (NSDictionary *info in [SugoPageInfos global].infos) {
+//            if ([info[@"page"] isEqualToString:nativePath]) {
+//                pn = info[@"page"];
+//                ic = info[@"code"];
+//                break;
+//            }
+//        }
+//    }
+//    NSMutableString *pageName = [NSMutableString stringWithFormat:@"sugo.page_name = %@;", pn.length>0?pn:@"''"];
+//    NSMutableString *initCode = [NSMutableString stringWithFormat:@"sugo.init_code = %@;", ic.length>0?ic:@"''"];
+//
+//    NSString *wk = [self jsSourceOfFileName:@"WebViewTrack.WK"];
+//    
+//    return [[[relativePath stringByAppendingString:pageName]
+//             stringByAppendingString:initCode]
+//            stringByAppendingString:wk];
+//}
+//
+//- (NSString *)jsWKWebViewBindingsSource
+//{
+//    NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + window.location.pathname;\n", self.wkVcPath];
+//    NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
+//    NSString *wk = [self jsSourceOfFileName:@"WebViewBindings.WK"];
+//    
+//    return [[vcPath stringByAppendingString:bindings]
+//            stringByAppendingString:wk];
+//}
+//
+//- (NSString *)jsWKWebViewBindingsExcute
+//{
+//    return [self jsSourceOfFileName:@"WebViewBindings.excute"];
+//}
+//
+//- (NSString *)jsWKWebViewUtils
+//{
+//    return [self jsSourceOfFileName:@"Utils"];
+//}
+//
+//- (NSString *)jsWKWebViewReportSource
+//{
+//    return [self jsSourceOfFileName:@"WebViewReport.WK"];
+//}
 
 
 @end
