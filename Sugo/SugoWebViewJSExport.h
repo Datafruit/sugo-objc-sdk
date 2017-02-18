@@ -1,5 +1,5 @@
 //
-//  WebViewJSExport.h
+//  SugoWebViewJSExport.h
 //  Sugo
 //
 //  Created by Zack on 2/12/16.
@@ -10,7 +10,7 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "WebViewInfoStorage.h"
 
-@protocol WebViewJSExportProtocol <NSObject, JSExport>
+@protocol SugoWebViewJSExportProtocol <NSObject, JSExport>
 
 + (void)trackOfId:(NSString *)eventId
              name:(NSString *)eventName
@@ -25,7 +25,7 @@
 
 @end
 
-@interface WebViewJSExport : NSObject <WebViewJSExportProtocol>
+@interface SugoWebViewJSExport: NSObject <SugoWebViewJSExportProtocol>
 
 + (void)trackOfId:(NSString *)eventId
              name:(NSString *)eventName

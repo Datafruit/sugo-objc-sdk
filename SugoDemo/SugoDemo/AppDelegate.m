@@ -69,7 +69,6 @@
     [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
     [[Sugo sharedInstance] setEnableLogging:YES];
     [[Sugo sharedInstance] setFlushInterval:5];
-    [[Sugo sharedInstance] identify:[Sugo sharedInstance].distinctId];
 }
 
 @end

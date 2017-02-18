@@ -118,9 +118,9 @@
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
                 }
-                if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]) {
-                    NSDictionary *key = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]];
-                    p[key[@"EventType"]] = @"click";
+                if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]) {
+                    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
+                    p[keys[@"EventType"]] = @"click";
                 }
 
                 [[self class] track:[self eventID]

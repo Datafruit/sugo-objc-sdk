@@ -43,7 +43,7 @@ sugo.delegate = function(eventType) {
                                 'eventName'     : event.event_name,
                                 'properties'    : JSON.stringify(custom_props)
                             };
-                            window.webkit.messageHandlers.WKWebViewBindingsTrack.postMessage(track);
+                            window.webkit.messageHandlers.SugoWKWebViewBindingsTrack.postMessage(track);
                             break;
                         }
                         parentNode = parentNode.parentNode;

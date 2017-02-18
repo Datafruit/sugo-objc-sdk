@@ -9,7 +9,7 @@
 #import "WebViewBindings+UIWebView.h"
 #import "WebViewBindings+WebView.h"
 #import "SugoPageInfos.h"
-#import "WebViewJSExport.h"
+#import "SugoWebViewJSExport.h"
 #import "MPSwizzler.h"
 #import "SugoPrivate.h"
 #import "MPLogger.h"
@@ -34,7 +34,7 @@
         }
         if (!self.uiWebViewJavaScriptInjected) {
             JSContext *jsContext = [(UIWebView *)webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-            jsContext[@"WebViewJSExport"] = [WebViewJSExport class];
+            jsContext[@"SugoWebViewJSExport"] = [SugoWebViewJSExport class];
             
             [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewSugo]];
             [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebViewTrack]];
@@ -95,23 +95,32 @@
 {
     NSMutableString *nativePath = [[NSMutableString alloc] initWithString:self.uiWebView.request.URL.path];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
-    NSDictionary *replacement = [Sugo loadConfigurationPropertyListWithName:@"SugoResourcesPathReplacement"];
-    if (replacement) {
-        for (NSString *key in replacement.allKeys) {
+    NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
+    if (replacements) {
+        for (NSDictionary *replacement in replacements) {
+            if ((replacement.allKeys.count <= 0)
+                || (((NSString *)replacement.allKeys.firstObject)).length <= 0) {
+                continue;
+            }
+            NSString *key = (NSString *)replacement.allKeys.firstObject;
+            NSString *value = (NSString *)replacement[key];
             relativePath = [NSMutableString stringWithFormat:@"%@.replace(/%@/g, %@)",
                             relativePath,
-                            key.length>0?key:@" ",
-                            ((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@"''"];
+                            key,
+                            value.length>0?value:@"''"];
             
-            NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", key.length>0?key:@""]
+        }
+        if (replacements[@"HomePath"]) {
+            NSString *key = (NSString *)((NSDictionary *)replacements[@"HomePath"]).allKeys.firstObject;
+            NSString *value = (NSString *)((NSDictionary *)replacements[@"HomePath"])[key];
+            NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", key]
                                                                            options:NSRegularExpressionAnchorsMatchLines
                                                                              error:nil];
-            nativePath =  [NSMutableString
-                           stringWithString:[re stringByReplacingMatchesInString:nativePath
-                                                                         options:0
-                                                                           range:NSMakeRange(0, nativePath.length)
-                                                                    withTemplate:((NSString *)replacement[key]).length>0?((NSString *)replacement[key]):@""]];
-            
+            nativePath = [NSMutableString
+                          stringWithString:[re stringByReplacingMatchesInString:nativePath
+                                                                        options:0
+                                                                          range:NSMakeRange(0, nativePath.length)
+                                                                   withTemplate:value.length>0?value:@""]];
         }
     }
     relativePath = [NSMutableString stringWithFormat:@"%@;", relativePath];

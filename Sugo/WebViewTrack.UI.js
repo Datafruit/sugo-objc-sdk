@@ -7,11 +7,11 @@ sugo.track = function(event_name, props) {
     if (!props.page_name) {
         props.page_name = sugo.page_name;
     }
-    WebViewJSExport.trackOfIdNameProperties('', event_name, JSON.stringify(props));
+    SugoWebViewJSExport.trackOfIdNameProperties('', event_name, JSON.stringify(props));
 };
 
 sugo.timeEvent = function(event_name) {
-    WebViewJSExport.timeOfEvent(event_name);
+    SugoWebViewJSExport.timeOfEvent(event_name);
 };
 var init_code = new Function(sugo.init_code);
 init_code();

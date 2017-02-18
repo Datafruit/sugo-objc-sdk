@@ -12,14 +12,14 @@ sugo.track = function(event_name, props) {
         'eventName'     : event_name,
         'properties'    : JSON.stringify(props)
     };
-    window.webkit.messageHandlers.WKWebViewBindingsTrack.postMessage(track);
+    window.webkit.messageHandlers.SugoWKWebViewBindingsTrack.postMessage(track);
 };
 
 sugo.timeEvent = function(event_name) {
     var time = {
         'eventName'     : event_name
     };
-    window.webkit.messageHandlers.WKWebViewBindingsTime.postMessage(time);
+    window.webkit.messageHandlers.SugoWKWebViewBindingsTime.postMessage(time);
 };
 
 var init_code = new Function(sugo.init_code);

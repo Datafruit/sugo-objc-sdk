@@ -241,12 +241,12 @@
         if (self.attributes) {
             [p addEntriesFromDictionary:[self.attributes parse]];
         }
-        if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]) {
-            NSDictionary *key = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]];
+        if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]) {
+            NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
             if (self.controlEvent == UIControlEventEditingDidBegin) {
-                p[key[@"EventType"]] = @"focus";
+                p[keys[@"EventType"]] = @"focus";
             } else {
-                p[key[@"EventType"]] = @"click";
+                p[keys[@"EventType"]] = @"click";
             }
         }
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
