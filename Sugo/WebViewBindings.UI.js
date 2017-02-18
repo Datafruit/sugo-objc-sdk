@@ -1,4 +1,3 @@
-sugo.current_event_bindings = {};
 for (var i = 0; i < sugo.h5_event_bindings.length; i++) {
     var b_event = sugo.h5_event_bindings[i];
     if (b_event.target_activity === sugo.current_page) {
@@ -32,8 +31,12 @@ sugo.delegate = function(eventType) {
                         if (parentNode === ele) {
                             var custom_props = {};
                             if (event.code && event.code.replace(/(^\s*)|(\s*$)/g, '') != '') {
-                                var sugo_props = new Function('e', 'element', 'conf', 'instance', event.code);
-                                custom_props = sugo_props(e, ele, event, sugo);
+                                try {
+                                    var sugo_props = new Function('e', 'element', 'conf', 'instance', event.code);
+                                    custom_props = sugo_props(e, ele, event, sugo);
+                                } catch (e) {
+                                    console.log(event.code);
+                                }
                             }
                             custom_props.from_binding = true;
                             custom_props.event_type = eventType;
