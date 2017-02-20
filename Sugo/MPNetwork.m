@@ -242,6 +242,7 @@ static const NSUInteger kBatchSize = 50;
     NSArray *dimensions = [userDefaults objectForKey:@"SugoDimensions"];
     
     NSMutableDictionary *types = [[NSMutableDictionary alloc] init];
+    NSMutableArray *localKeys = [[NSMutableArray alloc] init];
     NSMutableArray *keys = [[NSMutableArray alloc] init];
     NSMutableArray *values = [[NSMutableArray alloc] init];
     NSMutableString *dataString = [[NSMutableString alloc] init];
@@ -250,10 +251,19 @@ static const NSUInteger kBatchSize = 50;
     NSString *KeysSeperator = @",";
     NSString *ValuesSeperator = [NSString stringWithFormat:@"%c", 1];
     NSString *LinesSeperator = [NSString stringWithFormat:@"%c", 2];
-    
+
     for (NSDictionary *object in batch) {
         for (NSString *key in object.allKeys.reverseObjectEnumerator) {
-            if (![keys containsObject:key]) {
+            if (![localKeys containsObject:key]) {
+                [localKeys addObject:key];
+            }
+        }
+    }
+    
+    for (NSDictionary *dimension in dimensions) {
+        NSString *dimensionKey = dimension[@"name"];
+        for (NSString *key in localKeys) {
+            if ([dimensionKey isEqualToString:key]) {
                 [keys addObject:key];
             }
         }
@@ -285,7 +295,7 @@ static const NSUInteger kBatchSize = 50;
                         break;
                 }
                 if (type) {
-                    [types setValue:type forKey:dimensionKey];
+                    [types setValue:type forKey:key];
                 }
                 break;
             }
