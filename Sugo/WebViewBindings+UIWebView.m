@@ -35,9 +35,9 @@
             return;
         }
         if (!self.uiWebViewJavaScriptInjected) {
-            
+            JSContext *jsContext = [(UIWebView *)webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+            jsContext[@"SugoWebViewJSExport"] = [SugoWebViewJSExport class];
             [((UIWebView *)webView) stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
-            
             self.uiWebViewJavaScriptInjected = YES;
             MPLogDebug(@"UIWebView Injected");
         }
@@ -92,7 +92,7 @@
                            [self jsUIWebViewReport],
                            [self jsUIWebViewExcute],
                            [self jsUIWebViewSugoEnd]];
-    NSLog(@"UIWebView JavaScript:\n%@", js);
+    MPLogDebug(@"UIWebView JavaScript:\n%@", js);
     return js;
 }
 

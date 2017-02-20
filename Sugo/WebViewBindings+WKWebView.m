@@ -132,8 +132,7 @@
                     [self jsWKWebViewReport],
                     [self jsWKWebViewExcute],
                     [self jsWKWebViewSugoEnd]];
-    NSLog(@"WKWebView JavaScript:\n%@", js);
-    
+    MPLogDebug(@"WKWebView JavaScript:\n%@", js);
     return [[WKUserScript alloc] initWithSource:js
                                   injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                forMainFrameOnly:YES];
