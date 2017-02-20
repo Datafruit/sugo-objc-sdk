@@ -41,12 +41,7 @@ sugo.delegate = function(eventType) {
                             custom_props.from_binding = true;
                             custom_props.event_type = eventType;
                             custom_props.event_label = ele.innerText;
-                            var track = {
-                                'eventID'       : event.event_id,
-                                'eventName'     : event.event_name,
-                                'properties'    : JSON.stringify(custom_props)
-                            };
-                            window.webkit.messageHandlers.SugoWKWebViewBindingsTrack.postMessage(track);
+                            sugo.rawTrack(event.event_id, event.event_name, custom_props);
                             break;
                         }
                         parentNode = parentNode.parentNode;

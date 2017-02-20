@@ -83,7 +83,7 @@ static const NSUInteger kBatchSize = 50;
                 NSString *response = [[NSString alloc] initWithData:responseData
                                                            encoding:NSUTF8StringEncoding];
                 if ([response intValue] == 0) {
-                    MPLogDebug(@"%@ %lu api rejected some items", self, endpoint);
+                    MPLogDebug(@"%@ %lu response value %d", self, endpoint, [response intValue]);
                 }
             }
             
@@ -277,6 +277,9 @@ static const NSUInteger kBatchSize = 50;
                         break;
                     case 4:
                         type = @"d";
+                        break;
+                    case 5:
+                        type = @"i";
                         break;
                     default:
                         break;

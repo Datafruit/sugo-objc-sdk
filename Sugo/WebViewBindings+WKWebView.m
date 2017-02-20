@@ -179,19 +179,24 @@
     }
     relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
     
-    NSMutableString *code = [[NSMutableString alloc] init];
-    NSMutableString *pageName = [[NSMutableString alloc] init];
+    NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
+                                                                                        @"page_name": @""}];
     if ([SugoPageInfos global].infos.count > 0) {
         for (NSDictionary *info in [SugoPageInfos global].infos) {
             if ([info[@"page"] isEqualToString:nativePath]) {
-                code = info[@"code"];
-                pageName = info[@"page"];
+                infoObject[@"code"] = info[@"code"];
+                infoObject[@"page_name"] = info[@"page_name"];
                 break;
             }
         }
     }
+    NSData *infoData = [NSJSONSerialization dataWithJSONObject:infoObject
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:nil];
+    NSString *infoString = [[NSString alloc] initWithData:infoData
+                                                 encoding:NSUTF8StringEncoding];
     
-    NSString *initInfo = [NSString stringWithFormat:@"sugo.init = {code: %@, page_name: %@};\n", code.length>0?code:@"''", pageName.length>0?code:@"''"];
+    NSString *initInfo = [NSString stringWithFormat:@"sugo.init = %@;\n", infoString];
     NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + window.location.pathname;\n", self.wkVcPath];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
     NSString *variables = [self jsSourceOfFileName:@"WebViewVariables"];

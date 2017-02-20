@@ -1,4 +1,4 @@
-sugo.track = function(event_name, props) {
+sugo.rawTrack = function(event_id, event_name, props) {
     if (!props) {
         props = {};
     }
@@ -6,7 +6,11 @@ sugo.track = function(event_name, props) {
     if (!props.page_name && sugo.init.page_name) {
         props.page_name = sugo.init.page_name;
     }
-    SugoWebViewJSExport.trackOfIdNameProperties('', event_name, JSON.stringify(props));
+    SugoWebViewJSExport.trackOfIdNameProperties(event_id, event_name, JSON.stringify(props));
+}
+
+sugo.track = function(event_name, props) {
+    sugo.rawTrack('', event_name, props);
 };
 
 sugo.timeEvent = function(event_name) {

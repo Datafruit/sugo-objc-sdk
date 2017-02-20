@@ -10,6 +10,7 @@
 #import "MPABTestDesignerConnection.h"
 #import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
+#import "SugoPageInfos.h"
 #import "MPEventBinding.h"
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
@@ -69,6 +70,13 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
         MPABTestDesignerConnection *conn = weak_connection;
 
         dispatch_sync(dispatch_get_main_queue(), ^{
+            
+            NSArray *pageInfos = [self payload][@"page_info"];
+            if (pageInfos) {
+                [[SugoPageInfos global].infos removeAllObjects];
+                [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
+            }
+            
             NSArray *commonEvents = [self payload][@"events"];
             MPLogDebug(@"Loading event bindings:\n%@", commonEvents);
             MPEventBindingCollection *bindingCollection = [conn sessionObjectForKey:@"event_bindings"];

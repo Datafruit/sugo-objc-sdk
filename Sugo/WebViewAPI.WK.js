@@ -1,4 +1,4 @@
-sugo.track = function(event_name, props) {
+sugo.rawTrack = function(event_id, event_name, props) {
     if (!props) {
         props = {};
     }
@@ -12,6 +12,10 @@ sugo.track = function(event_name, props) {
         'properties'    : JSON.stringify(props)
     };
     window.webkit.messageHandlers.SugoWKWebViewBindingsTrack.postMessage(track);
+}
+
+sugo.track = function(event_name, props) {
+    sugo.rawTrack('', event_name, props);
 };
 
 sugo.timeEvent = function(event_name) {
