@@ -101,7 +101,5 @@
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
 #endif
 
-+ (NSDictionary *)loadConfigurationPropertyListWithName:(NSString *)name;
-
 @end
 

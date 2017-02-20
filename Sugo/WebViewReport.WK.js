@@ -42,13 +42,13 @@ sugo.reportNodes = function() {
     sugo.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
     sugo.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
     sugo.handleNodeChild(childrens, jsonArray, parent_path);
-    if (window.webkit.messageHandlers.WKWebViewReporter) {
+    if (window.webkit.messageHandlers.SugoWKWebViewReporter) {
         var message = {
             'path': sugo.relative_path,
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,
             'nodes': JSON.stringify(jsonArray)
         };
-        window.webkit.messageHandlers.WKWebViewReporter.postMessage(message);
+        window.webkit.messageHandlers.SugoWKWebViewReporter.postMessage(message);
     }
 };

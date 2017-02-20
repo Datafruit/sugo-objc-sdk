@@ -1,17 +1,17 @@
 //
-//  WebViewJSExport.m
+//  SugoWebViewJSExport.m
 //  Sugo
 //
 //  Created by Zack on 2/12/16.
 //  Copyright © 2016年 Sugo. All rights reserved.
 //
 
-#import "WebViewJSExport.h"
+#import "SugoWebViewJSExport.h"
 #import "Sugo.h"
 #import "SugoPrivate.h"
 #import "MPLogger.h"
 
-@implementation WebViewJSExport
+@implementation SugoWebViewJSExport
 
 + (void)trackOfId:(NSString *)eventId
              name:(NSString *)eventName
@@ -27,10 +27,10 @@
                                                             error:nil];
     if (pJSON != nil)
     {
-        NSDictionary *value = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValue"]];
-        NSDictionary *key = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKey"]];
-        NSString *keyEventType = key[@"EventType"];
-        NSString *valueEventType = value[pJSON[keyEventType]];
+        NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
+        NSString *keyEventType = keys[@"EventType"];
+        NSString *valueEventType = values[pJSON[keyEventType]];
         [pJSON setValue:valueEventType forKey:keyEventType];
         [[Sugo sharedInstance] trackEventID:storage.eventID
                            eventName:storage.eventName

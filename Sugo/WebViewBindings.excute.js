@@ -1,1 +1,0 @@
-sugo.bindEvent();

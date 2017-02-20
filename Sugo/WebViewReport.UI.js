@@ -42,7 +42,7 @@ sugo.reportNodes = function() {
     sugo.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
     sugo.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
     sugo.handleNodeChild(childrens, jsonArray, parent_path);
-    if (WebViewJSExport.infoOfPathNodesWidthHeight) {
-        WebViewJSExport.infoOfPathNodesWidthHeight(sugo.relative_path, JSON.stringify(jsonArray), sugo.clientWidth, sugo.clientHeight);
+    if (SugoWebViewJSExport.infoOfPathNodesWidthHeight) {
+        SugoWebViewJSExport.infoOfPathNodesWidthHeight(sugo.relative_path, JSON.stringify(jsonArray), sugo.clientWidth, sugo.clientHeight);
     }
 };
