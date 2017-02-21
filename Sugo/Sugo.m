@@ -946,7 +946,7 @@ static NSString *defaultProjectToken;
              keys[@"Manufacturer"]:  @"Apple",
              keys[@"DeviceBrand"]:   deviceBrand,
              keys[@"DeviceModel"]:   deviceModel,
-             keys[@"SystemName"]:    @"iOS",//[device systemName],
+             keys[@"SystemName"]:    [device systemName],
              keys[@"SystemVersion"]: [device systemVersion],
              keys[@"ScreenWidth"]:   @((NSInteger)size.width),
              keys[@"ScreenHeight"]:  @((NSInteger)size.height),
