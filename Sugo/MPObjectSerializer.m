@@ -338,7 +338,7 @@
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
 {
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewReport.excute"]];
+    [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"]];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     return @{
              @"url": storage.path,
@@ -352,7 +352,7 @@
 {
     
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewReport.excute"] completionHandler:nil];
+    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"] completionHandler:nil];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     return @{
              @"url": storage.path,
