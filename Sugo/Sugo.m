@@ -796,7 +796,14 @@ static NSString *defaultProjectToken;
         if (!vc) {
             return;
         }
-
+        
+        NSArray *vcBlackList = (NSArray *)self.sugoConfiguration[@"VCFilterList"][@"Black"];
+        for (NSString *vcb in vcBlackList) {
+            if ([vcb isEqualToString:NSStringFromClass([vc classForCoder])]) {
+                return;
+            }
+        }
+        
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         if (values) {
             [self trackEvent:values[@"PageEnter"] properties:nil];
@@ -815,6 +822,13 @@ static NSString *defaultProjectToken;
             return;
         }
         
+        NSArray *vcBlackList = (NSArray *)self.sugoConfiguration[@"VCFilterList"][@"Black"];
+        for (NSString *vcb in vcBlackList) {
+            if ([vcb isEqualToString:NSStringFromClass([vc classForCoder])]) {
+                return;
+            }
+        }
+        
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         if (values) {
             [self trackEvent:values[@"PageStay"] properties:nil];
@@ -827,7 +841,6 @@ static NSString *defaultProjectToken;
                       withBlock:viewDidDisappearBlock
                           named:[[NSUUID UUID] UUIDString]];
 }
-
 
 #pragma mark - Application Helpers
 
@@ -933,7 +946,7 @@ static NSString *defaultProjectToken;
              keys[@"Manufacturer"]:  @"Apple",
              keys[@"DeviceBrand"]:   deviceBrand,
              keys[@"DeviceModel"]:   deviceModel,
-             keys[@"SystemName"]:    [device systemName],
+             keys[@"SystemName"]:    @"iOS",//[device systemName],
              keys[@"SystemVersion"]: [device systemVersion],
              keys[@"ScreenWidth"]:   @((NSInteger)size.width),
              keys[@"ScreenHeight"]:  @((NSInteger)size.height),
@@ -980,10 +993,14 @@ static NSString *defaultProjectToken;
     self.eventCollectionURL = urls[@"Collection"];
     self.switchboardURL = urls[@"Codeless"];
     
-    // For Custom dimension table
+    // For custom dimension table
     self.sugoConfiguration[@"DimensionKeys"] = [SugoConfigurationPropertyList loadWithName:@"SugoCustomDimensions" andKey:@"Keys"];
     self.sugoConfiguration[@"DimensionValues"] = [SugoConfigurationPropertyList loadWithName:@"SugoCustomDimensions" andKey:@"Values"];
     
+    // For ViewController filter list
+    self.sugoConfiguration[@"VCFilterList"] = [SugoConfigurationPropertyList loadWithName:@"SugoPageEventsViewControllerFilterList"];
+    
+    // For replacement of resources path
     NSString *homePathKey = @"HomePath";
     NSDictionary *rpr = @{NSHomeDirectory(): @""};
     [SugoConfigurationPropertyList adjustWithName:@"SugoResourcesPathReplacements"
