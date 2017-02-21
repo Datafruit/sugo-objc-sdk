@@ -35,9 +35,9 @@
 		<key>AppBundleName</key>
 		<string>app_name</string>
 		<key>AppBundleVersion</key>
-		<string>app_version</string>
-		<key>AppBundleShortVersionString</key>
 		<string>app_build_number</string>
+		<key>AppBundleShortVersionString</key>
+		<string>app_version</string>
 		<key>Duration</key>
 		<string>duration</string>
 		<key>Manufacturer</key>

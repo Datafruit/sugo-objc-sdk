@@ -184,7 +184,7 @@
 
 - (NSString *)jsUIWebViewExcute
 {
-    return [self jsSourceOfFileName:@"WebViewExcute"];
+    return [self jsSourceOfFileName:@"WebViewExcute.Sugo"];
 }
 
 - (NSString *)jsUIWebViewSugoEnd
