@@ -26,7 +26,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
         dispatch_sync(dispatch_get_main_queue(), ^{
             UIDevice *currentDevice = [UIDevice currentDevice];
 
-            deviceInfoResponseMessage.systemName = @"iOS"; //currentDevice.systemName;
+            deviceInfoResponseMessage.systemName = @"iOS";
             deviceInfoResponseMessage.systemVersion = currentDevice.systemVersion;
             deviceInfoResponseMessage.deviceName = currentDevice.name;
             deviceInfoResponseMessage.deviceModel = currentDevice.model;

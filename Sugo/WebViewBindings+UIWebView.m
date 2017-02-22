@@ -111,6 +111,17 @@
     NSMutableString *nativePath = [[NSMutableString alloc] initWithString:self.uiWebView.request.URL.path];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *rpr = (NSDictionary *)[userDefaults objectForKey:@"HomePath"];
+    if (rpr) {
+        NSString *homePath = (NSString *)rpr.allKeys.firstObject;
+        NSString *replacePath = (NSString *)rpr[homePath];
+        relativePath = [NSMutableString stringWithFormat:@"%@.replace('%@', %@)",
+                        relativePath,
+                        homePath,
+                        replacePath.length>0?replacePath:@"''"];
+        MPLogDebug(@"relativePath replace Home:\n%@", relativePath);
+    }
     if (replacements) {
         for (NSString *replacement in replacements) {
             NSDictionary *r = (NSDictionary *)replacements[replacement];
@@ -135,6 +146,7 @@
         }
     }
     relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
+    MPLogDebug(@"relativePath:\n%@", relativePath);
     
     NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
                                                                                         @"page_name": @""}];
