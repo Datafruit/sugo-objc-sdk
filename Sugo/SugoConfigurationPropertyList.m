@@ -32,16 +32,4 @@
     return [NSDictionary dictionaryWithDictionary:configuration];
 }
 
-+ (void)adjustWithName:(NSString *)name andKey:(NSString *)key andValue:(id)value
-{
-    NSBundle *bundle = [NSBundle bundleForClass:[Sugo class]];
-    NSString *path = [bundle pathForResource:name ofType:@"plist"];
-    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:[SugoConfigurationPropertyList loadWithName:name]];
-    
-    plist[key] = value;
-    [plist writeToFile:path atomically:YES];
-    
-    NSLog(@"Adjust %@ Property List: key = %@, value = %@", name, key, value);
-}
-
 @end
