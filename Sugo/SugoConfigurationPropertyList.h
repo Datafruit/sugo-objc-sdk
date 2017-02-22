@@ -12,6 +12,5 @@
 
 + (NSDictionary *)loadWithName:(NSString *)name;
 + (NSDictionary *)loadWithName:(NSString *)name andKey:(NSString *)key;
-+ (void)adjustWithName:(NSString *)name andKey:(NSString *)key andValue:(id)value;
 
 @end

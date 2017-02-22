@@ -1003,9 +1003,9 @@ static NSString *defaultProjectToken;
     // For replacement of resources path
     NSString *homePathKey = @"HomePath";
     NSDictionary *rpr = @{NSHomeDirectory(): @""};
-    [SugoConfigurationPropertyList adjustWithName:@"SugoResourcesPathReplacements"
-                                           andKey:homePathKey
-                                         andValue:rpr];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:rpr forKey:homePathKey];
+    [userDefaults synchronize];
     self.sugoConfiguration[@"ResourcesPathReplacements"] = [SugoConfigurationPropertyList loadWithName:@"SugoResourcesPathReplacements"];
 }
 
