@@ -101,9 +101,9 @@
     [self setPayloadObject:mainBundleIdentifier forKey:@"main_bundle_identifier"];
 }
 
-- (void)setTweaks:(NSArray *)tweaks
+- (void)setSecretKey:(NSString *)secretKey
 {
-    [self setPayloadObject:tweaks forKey:@"tweaks"];
+    [self setPayloadObject:secretKey forKey:@"secret_key"];
 }
 
 - (NSArray *)tweaks

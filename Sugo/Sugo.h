@@ -686,6 +686,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)handleURL:(NSURL *)url;
 
+/*!
+ @method
+ 
+ @abstract
+ Handle the url get from codeless qrcode
+ 
+ @param url             url of codeless qrcode
+ */
+- (void)connectToCodelessViaURL:(NSURL *)url;
+
 #endif // SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 
 #pragma mark - Deprecated
