@@ -103,7 +103,9 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 ### 2.3 扫码进入可视化埋点模式
 
-#### 2.3.1 配置App的URL Types
+#### 2.3.1 通过扫码App进行扫码
+
+##### 2.3.1.1 配置App的URL Types
 
 在Xcode中，点击App的`xcodeproj`文件，进入`info`便签页，添加`URL Types`。
 * Identifier: Sugo
@@ -111,7 +113,7 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 * Icon: (可随意)
 * Role: Editor
 
-#### 2.3.2 选择被调用的API
+##### 2.3.1.2 选择被调用的API
 
 `UIApplicationDelegate`中有3个可通过URL打开应用的方法，如下：
 
@@ -121,18 +123,28 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 请根据应用需适配的版本在`AppDelegate.m`中实现其中一个或多个方法。
 
-#### 2.3.3 可视化埋点模式API
+##### 2.3.1.3 可视化埋点模式API
 
 在选定的方法中调用如下：
 ```
 [[Sugo sharedInstance] handleURL:url];	//返回值为BOOL类型，可作为方法的返回值。
 ```
 
-#### 2.3.4 连接
+##### 2.3.1.4 连接
 
 登陆数果星盘，进入对应Token的可视化埋点界面，可看见二维码，保持埋点设备网络畅通，通过设备任意可扫二维码的应用扫一扫，然后用Safari打开链接，点击网页中的链接，即可进入可视化埋点模式。
 此时设备上方将出现可视化埋点连接条，网页可视化埋点界面将显示设备当前页面及相应可绑定控件信息。
 
+#### 2.3.2 通过自身应用进行扫码
+
+若集成SDK的应用已把扫码功能开发完毕，也可通过自身的扫码功能进行可视化埋点模式的连接。即在扫码后，将已获取的URL作为参数，调用以下的方法：
+
+* `- (void)connectToCodelessViaURL:(NSURL *)url;`
+
+该方法会对应用Token进行检验，若Token与初始化的值匹配，且已打开可视化埋点网页，则设备上方将出现可视化埋点连接条，网页可视化埋点界面将显示设备当前页面及相应可绑定控件信息，示例如下：
+```
+[[Sugo sharedInstance] connectToCodelessViaURL:url];	// url参数为扫描二维码后获得的值
+```
 
 ### 2.4 绑定事件
 

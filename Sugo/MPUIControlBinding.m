@@ -10,6 +10,7 @@
 #import "MPUIControlBinding.h"
 #import "Attributes.h"
 #import "SugoPrivate.h"
+#import "UIViewController+SugoHelpers.h"
 #import "MPLogger.h"
 
 @interface MPUIControlBinding()
@@ -247,6 +248,14 @@
                 p[keys[@"EventType"]] = @"focus";
             } else {
                 p[keys[@"EventType"]] = @"click";
+            }
+            p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
+            if ([SugoPageInfos global].infos.count > 0) {
+                for (NSDictionary *info in [SugoPageInfos global].infos) {
+                    if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                        p[keys[@"PageName"]] = info[@"page_name"];
+                    }
+                }
             }
         }
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];

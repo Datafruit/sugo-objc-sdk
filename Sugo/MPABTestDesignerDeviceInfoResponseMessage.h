@@ -17,6 +17,6 @@
 @property (nonatomic, copy) NSString *libVersion;
 @property (nonatomic, copy) NSArray *availableFontFamilies;
 @property (nonatomic, copy) NSString *mainBundleIdentifier;
-@property (nonatomic, copy) NSArray *tweaks;
+@property (nonatomic, copy) NSString *secretKey;
 
 @end
