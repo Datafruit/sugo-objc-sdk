@@ -361,14 +361,7 @@ static NSString *defaultProjectToken;
     NSNumber *eventStartTime = self.timedEvents[eventName];
     
     NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
-    if ([SugoPageInfos global].infos.count > 0) {
-        for (NSDictionary *info in [SugoPageInfos global].infos) {
-            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                p[keys[@"PageName"]] = info[@"page_name"];
-            }
-        }
-    }
+    
     p[keys[@"Token"]] = self.apiToken;
     p[keys[@"SessionID"]] = self.sessionId;
     if (eventStartTime) {
@@ -804,9 +797,19 @@ static NSString *defaultProjectToken;
             }
         }
         
+        NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-        if (values) {
-            [self trackEvent:values[@"PageEnter"] properties:nil];
+        if (keys && values) {
+            p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+            if ([SugoPageInfos global].infos.count > 0) {
+                for (NSDictionary *info in [SugoPageInfos global].infos) {
+                    if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                        p[keys[@"PageName"]] = info[@"page_name"];
+                    }
+                }
+            }
+            [self trackEvent:values[@"PageEnter"] properties:p];
             [self timeEvent:values[@"PageStay"]];
         }
     };
@@ -829,10 +832,20 @@ static NSString *defaultProjectToken;
             }
         }
         
+        NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-        if (values) {
-            [self trackEvent:values[@"PageStay"] properties:nil];
-            [self trackEvent:values[@"PageExit"] properties:nil];
+        if (keys && values) {
+            p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+            if ([SugoPageInfos global].infos.count > 0) {
+                for (NSDictionary *info in [SugoPageInfos global].infos) {
+                    if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                        p[keys[@"PageName"]] = info[@"page_name"];
+                    }
+                }
+            }
+            [self trackEvent:values[@"PageStay"] properties:p];
+            [self trackEvent:values[@"PageExit"] properties:p];
         }
     };
     

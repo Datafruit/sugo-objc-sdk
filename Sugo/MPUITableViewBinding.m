@@ -11,6 +11,7 @@
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
 #import "SugoPrivate.h"
+#import "UIViewController+SugoHelpers.h"
 #import "MPLogger.h"
 
 @implementation MPUITableViewBinding
@@ -121,6 +122,14 @@
                 if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]) {
                     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
                     p[keys[@"EventType"]] = @"click";
+                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
+                    if ([SugoPageInfos global].infos.count > 0) {
+                        for (NSDictionary *info in [SugoPageInfos global].infos) {
+                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                                p[keys[@"PageName"]] = info[@"page_name"];
+                            }
+                        }
+                    }
                 }
 
                 [[self class] track:[self eventID]
