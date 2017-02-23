@@ -2,6 +2,7 @@
 // Copyright (c) 2014 Sugo. All rights reserved.
 
 #import "Sugo.h"
+#import "SugoPrivate.h"
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerDeviceInfoResponseMessage.h"
@@ -35,6 +36,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
             deviceInfoResponseMessage.libVersion = [[Sugo sharedInstance] libVersion];
             deviceInfoResponseMessage.mainBundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
             deviceInfoResponseMessage.availableFontFamilies = [self availableFontFamilies];
+            deviceInfoResponseMessage.secretKey = [Sugo sharedInstance].urlSchemesKeyValue;
         });
 
         [conn sendMessage:deviceInfoResponseMessage];

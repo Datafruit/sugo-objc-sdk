@@ -1621,6 +1621,32 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     return false;
 }
 
+- (void)connectToCodelessViaURL:(NSURL *)url
+{
+    NSLog(@"url: %@", url.absoluteString);
+    for (NSString *queryItem in [url.query componentsSeparatedByString:@"&"]) {
+        NSArray *item = [queryItem componentsSeparatedByString:@"="];
+        if ([((NSString *)item.firstObject) isEqualToString:@"sKey"]) {
+            self.urlSchemesKeyValue = (NSString *)item.lastObject;
+            break;
+        }
+    }
+    
+    NSLog(@"url s k v: %@", self.urlSchemesKeyValue);
+    if (self.urlSchemesKeyValue.length <= 0) {
+        return;
+    }
+
+    for (NSString *queryItem in [url.query componentsSeparatedByString:@"&"]) {
+        NSArray *item = [queryItem componentsSeparatedByString:@"="];
+        if ([((NSString *)item.firstObject) isEqualToString:@"token"]
+            && [((NSString *)item.lastObject) isEqualToString:self.apiToken]) {
+            [self connectToABTestDesigner];
+            break;
+        }
+    }
+}
+
 #pragma mark - Sugo Event Bindings
 
 - (void)executeCachedEventBindings {
