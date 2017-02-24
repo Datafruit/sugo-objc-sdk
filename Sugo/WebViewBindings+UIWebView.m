@@ -121,28 +121,26 @@
                         homePath,
                         replacePath.length>0?replacePath:@"''"];
         MPLogDebug(@"relativePath replace Home:\n%@", relativePath);
+        
+        
+        NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", homePath]
+                                                                       options:NSRegularExpressionAnchorsMatchLines
+                                                                         error:nil];
+        nativePath = [NSMutableString
+                      stringWithString:[re stringByReplacingMatchesInString:nativePath
+                                                                    options:0
+                                                                      range:NSMakeRange(0, nativePath.length)
+                                                               withTemplate:replacePath.length>0?replacePath:@""]];
     }
     if (replacements) {
         for (NSString *replacement in replacements) {
             NSDictionary *r = (NSDictionary *)replacements[replacement];
             NSString *key = (NSString *)r.allKeys.firstObject;
             NSString *value = (NSString *)r[key];
-            relativePath = [NSMutableString stringWithFormat:@"%@.replace('%@', %@)",
+            relativePath = [NSMutableString stringWithFormat:@"%@.replace(%@, '%@')",
                             relativePath,
-                            key,
-                            value.length>0?value:@"''"];
-        }
-        if (replacements[@"HomePath"]) {
-            NSString *key = (NSString *)((NSDictionary *)replacements[@"HomePath"]).allKeys.firstObject;
-            NSString *value = (NSString *)((NSDictionary *)replacements[@"HomePath"])[key];
-            NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", key]
-                                                                           options:NSRegularExpressionAnchorsMatchLines
-                                                                             error:nil];
-            nativePath = [NSMutableString
-                          stringWithString:[re stringByReplacingMatchesInString:nativePath
-                                                                        options:0
-                                                                          range:NSMakeRange(0, nativePath.length)
-                                                                   withTemplate:value.length>0?value:@""]];
+                            key.length >= 2?key:@"''",
+                            value];
         }
     }
     relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
