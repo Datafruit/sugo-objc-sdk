@@ -186,7 +186,7 @@
         }
     }
     relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
-    relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path += window.location.hash;\n"];
+    relativePath = [NSMutableString stringWithFormat:@"%@sugo.relative_path += window.location.hash;\n", relativePath];
     MPLogDebug(@"relativePath:\n%@", relativePath);
     
     NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
