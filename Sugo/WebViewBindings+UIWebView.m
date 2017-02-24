@@ -116,10 +116,10 @@
     if (rpr) {
         NSString *homePath = (NSString *)rpr.allKeys.firstObject;
         NSString *replacePath = (NSString *)rpr[homePath];
-        relativePath = [NSMutableString stringWithFormat:@"%@.replace('%@', %@)",
+        relativePath = [NSMutableString stringWithFormat:@"%@.replace('%@', '%@')",
                         relativePath,
                         homePath,
-                        replacePath.length>0?replacePath:@"''"];
+                        replacePath];
         MPLogDebug(@"relativePath replace Home:\n%@", relativePath);
         
         
