@@ -117,7 +117,7 @@ static NSString *defaultProjectToken;
         
         NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        self.isCodelessTesting = NO;
+        
 #if defined(DISABLE_SUGO_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
 #else
@@ -344,8 +344,8 @@ static NSString *defaultProjectToken;
     
     MPLogDebug(@"track:%@, %@, %@", eventID, eventName, properties);
     if (eventName.length == 0) {
-        MPLogWarning(@"%@ sugo track called with empty event parameter. using 'mp_event'", self);
-        eventName = @"mp_event";
+        MPLogWarning(@"%@ sugo track called with empty event parameter.", self);
+        return;
     }
     
 #if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
@@ -403,13 +403,12 @@ static NSString *defaultProjectToken;
     NSMutableDictionary *event = [[NSMutableDictionary alloc]
                                   initWithDictionary:@{ keys[@"EventName"]: eventName}];
     
-    if (!self.abtestDesignerConnection.connected
-        || !self.isCodelessTesting) {
+    if (!self.abtestDesignerConnection.connected) {
         [p addEntriesFromDictionary:self.automaticProperties];
         p[keys[@"EventTime"]] = date;
         [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
     } else {
-        p[keys[@"EventTime"]] = @(epochInterval);
+        p[keys[@"EventTime"]] = [NSString stringWithFormat:@"%0.f", date.timeIntervalSince1970 * 1000];
         event[@"properties"] = p;
     }
     
@@ -423,8 +422,7 @@ static NSString *defaultProjectToken;
         [self.eventsQueue removeObjectAtIndex:0];
     }
     
-    if (self.abtestDesignerConnection.connected
-        && self.isCodelessTesting) {
+    if (self.abtestDesignerConnection.connected) {
         [self flushQueueViaWebSocket];
     }
     // Always archive
@@ -574,9 +572,6 @@ static NSString *defaultProjectToken;
 
 - (void)flushWithCompletion:(void (^)())handler
 {
-    if (self.isCodelessTesting) {
-        return;
-    }
     dispatch_async(self.serialQueue, ^{
 //        MPLogInfo(@"%@ flush starting", self);
         __strong id<SugoDelegate> strongDelegate = self.delegate;
