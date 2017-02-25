@@ -141,7 +141,7 @@
 {
     MPLogDebug(@"Object: %@ = \nK: %@ = \nV: %@", object, keyPath, change[NSKeyValueChangeNewKey]);
     if ([keyPath isEqualToString:@"stringBindings"]) {
-        if (self.mode == Codeless && [Sugo sharedInstance].isCodelessTesting) {
+        if (self.mode == Codeless) {
             self.isWebViewNeedReload = YES;
         }
         if (!self.isWebViewNeedReload) {

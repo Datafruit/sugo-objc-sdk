@@ -188,9 +188,6 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         NSString *type = messageDictionary[@"type"];
         NSDictionary *payload = messageDictionary[@"payload"];
 
-        if ([type isEqualToString:@"event_binding_request"]) {
-            [Sugo sharedInstance].isCodelessTesting = YES;
-        }
         designerMessage = [_typeToMessageClassMap[type] messageWithType:type payload:payload];
     } else {
         MPLogWarning(@"Badly formed socket message expected JSON dictionary: %@", error);
