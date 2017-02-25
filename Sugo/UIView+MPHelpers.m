@@ -163,7 +163,7 @@ static NSString *mp_encryptHelper(id input)
     NSString *SALT = @"1l0v3c4a8s4n018cl3d93kxled3kcle3j19384jdo2dk3";
     NSMutableString *encryptedStuff = nil;
     if ([input isKindOfClass:[NSString class]]) {
-        NSData *data = [[input stringByAppendingString:SALT]  dataUsingEncoding:NSASCIIStringEncoding];
+        NSData *data = [[input stringByAppendingString:SALT]  dataUsingEncoding:NSUnicodeStringEncoding];
         uint8_t digest[CC_SHA256_DIGEST_LENGTH];
         CC_SHA256(data.bytes, (CC_LONG)data.length, digest);
         encryptedStuff = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH * 2];

@@ -344,8 +344,8 @@ static NSString *defaultProjectToken;
     
     MPLogDebug(@"track:%@, %@, %@", eventID, eventName, properties);
     if (eventName.length == 0) {
-        MPLogWarning(@"%@ sugo track called with empty event parameter. using 'mp_event'", self);
-        eventName = @"mp_event";
+        MPLogWarning(@"%@ sugo track called with empty event parameter.", self);
+        return;
     }
     
 #if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
@@ -409,7 +409,7 @@ static NSString *defaultProjectToken;
         p[keys[@"EventTime"]] = date;
         [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
     } else {
-        p[keys[@"EventTime"]] = @(epochInterval);
+        p[keys[@"EventTime"]] = [NSString stringWithFormat:@"%0.f", date.timeIntervalSince1970 * 1000];
         event[@"properties"] = p;
     }
     
