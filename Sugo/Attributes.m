@@ -25,9 +25,8 @@
 {
     NSMutableDictionary *aValues = [[NSMutableDictionary alloc] init];
     NSDictionary *aObjects = [self parsePaths];
-    for (NSString *key in aObjects) {
+    for (NSString *key in aObjects.allKeys) {
         for (id object in (NSArray *)aObjects[key]) {
-            
             if ([object isKindOfClass:[UISearchBar class]]) {
                 MPLogDebug(@"attributes: UISearchBar");
                 if (((UISearchBar *)object).text) {
@@ -62,7 +61,7 @@
                 aValues[key] = [NSString stringWithFormat:@"%@", self.paths[key]];
             }
             MPLogDebug(@"%@ = %@", key, aValues[key]);
-            
+            break;
         }
     }
     return aValues;
@@ -72,11 +71,11 @@
 - (NSDictionary *)parsePaths
 {
     NSMutableDictionary *aObjects = [[NSMutableDictionary alloc] init];
-    for (NSString *key in self.paths) {
+    for (NSString *key in self.paths.allKeys) {
         MPObjectSelector *p = [[MPObjectSelector alloc] initWithString:self.paths[key]];
         if ([UIApplication sharedApplication].keyWindow.rootViewController) {
             NSMutableArray *objects = [[NSMutableArray alloc] init];
-            [objects addObjectsFromArray:[p fuzzySelectFromRoot:[UIApplication sharedApplication].keyWindow.rootViewController]];
+            [objects addObjectsFromArray:[p selectFromRoot:[UIApplication sharedApplication].keyWindow.rootViewController]];
             [aObjects setObject:objects forKey:key];
         }
     }
