@@ -117,7 +117,7 @@ static NSString *defaultProjectToken;
         
         NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        self.isCodelessTesting = NO;
+        
 #if defined(DISABLE_SUGO_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
 #else
@@ -403,8 +403,7 @@ static NSString *defaultProjectToken;
     NSMutableDictionary *event = [[NSMutableDictionary alloc]
                                   initWithDictionary:@{ keys[@"EventName"]: eventName}];
     
-    if (!self.abtestDesignerConnection.connected
-        || !self.isCodelessTesting) {
+    if (!self.abtestDesignerConnection.connected) {
         [p addEntriesFromDictionary:self.automaticProperties];
         p[keys[@"EventTime"]] = date;
         [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
@@ -423,8 +422,7 @@ static NSString *defaultProjectToken;
         [self.eventsQueue removeObjectAtIndex:0];
     }
     
-    if (self.abtestDesignerConnection.connected
-        && self.isCodelessTesting) {
+    if (self.abtestDesignerConnection.connected) {
         [self flushQueueViaWebSocket];
     }
     // Always archive
@@ -574,9 +572,6 @@ static NSString *defaultProjectToken;
 
 - (void)flushWithCompletion:(void (^)())handler
 {
-    if (self.isCodelessTesting) {
-        return;
-    }
     dispatch_async(self.serialQueue, ^{
 //        MPLogInfo(@"%@ flush starting", self);
         __strong id<SugoDelegate> strongDelegate = self.delegate;
