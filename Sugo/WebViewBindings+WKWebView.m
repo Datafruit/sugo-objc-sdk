@@ -151,8 +151,8 @@
 - (NSString *)jsWKWebViewVariables
 {
     NSMutableString *nativePath = [[NSMutableString alloc] initWithFormat:@"%@%@",
-                                   self.uiWebView.request.URL.path,
-                                   self.uiWebView.request.URL.fragment?[NSString stringWithFormat:@"#%@", self.uiWebView.request.URL.fragment]:@""];
+                                   self.wkWebView.URL.path,
+                                   self.wkWebView.URL.fragment?[NSString stringWithFormat:@"#%@", self.wkWebView.URL.fragment]:@""];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
