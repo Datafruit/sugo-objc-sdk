@@ -209,7 +209,7 @@
                                                  encoding:NSUTF8StringEncoding];
     
     NSString *initInfo = [NSString stringWithFormat:@"sugo.init = %@;\n", infoString];
-    NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + window.location.pathname;\n", self.wkVcPath];
+    NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + sugo.relative_path;\n", self.wkVcPath];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
     NSString *variables = [self jsSourceOfFileName:@"WebViewVariables"];
     
