@@ -108,7 +108,9 @@
 
 - (NSString *)jsUIWebViewVariables
 {
-    NSMutableString *nativePath = [[NSMutableString alloc] initWithString:self.uiWebView.request.URL.path];
+    NSMutableString *nativePath = [[NSMutableString alloc] initWithFormat:@"%@%@",
+                                   self.uiWebView.request.URL.path,
+                                   self.uiWebView.request.URL.fragment?[NSString stringWithFormat:@"#%@", self.uiWebView.request.URL.fragment]:@""];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -150,6 +152,8 @@
     NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
                                                                                         @"page_name": @""}];
     if ([SugoPageInfos global].infos.count > 0) {
+        NSLog(@"infos:\n%@", [SugoPageInfos global].infos);
+        NSLog(@"nativePath:%@", nativePath);
         for (NSDictionary *info in [SugoPageInfos global].infos) {
             if ([info[@"page"] isEqualToString:nativePath]) {
                 infoObject[@"code"] = info[@"code"];
