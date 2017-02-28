@@ -152,8 +152,6 @@
     NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
                                                                                         @"page_name": @""}];
     if ([SugoPageInfos global].infos.count > 0) {
-        NSLog(@"infos:\n%@", [SugoPageInfos global].infos);
-        NSLog(@"nativePath:%@", nativePath);
         for (NSDictionary *info in [SugoPageInfos global].infos) {
             if ([info[@"page"] isEqualToString:nativePath]) {
                 infoObject[@"code"] = info[@"code"];
