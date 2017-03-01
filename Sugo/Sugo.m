@@ -13,8 +13,6 @@
 #import "MPNetworkPrivate.h"
 #import "UIViewController+SugoHelpers.h"
 #import "SugoConfigurationPropertyList.h"
-#import "WebViewBindings+UIWebView.h"
-#import "WebViewBindings+WKWebView.h"
 
 #import "MPLogger.h"
 #import "MPFoundation.h"
@@ -943,16 +941,6 @@ static NSString *defaultProjectToken;
 + (NSString *)libVersion
 {
     return [[NSBundle bundleForClass:[Sugo class]] infoDictionary][@"CFBundleShortVersionString"];
-}
-
-- (NSString *)jsUIWebView
-{
-    WebViewBindings *bindings = [WebViewBindings globalBindings];
-    if (bindings.uiWebView) {
-        return [WebViewBindings globalBindings].jsUIWebView;
-    } else {
-        return @"";
-    }
 }
 
 - (NSDictionary *)collectDeviceProperties
