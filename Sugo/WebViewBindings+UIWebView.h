@@ -13,5 +13,6 @@
 - (void)startUIWebViewBindings:(UIWebView **)webView;
 - (void)stopUIWebViewBindings;
 - (void)updateUIWebViewBindings:(UIWebView **)webView;
+- (NSString *)jsUIWebView;
 
 @end
