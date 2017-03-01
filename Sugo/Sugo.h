@@ -661,6 +661,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)libVersion;
 + (NSString *)libVersion;
 
+- (NSString *)jsUIWebView;
+
 
 #if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Sugo A/B Testing and Codeless
