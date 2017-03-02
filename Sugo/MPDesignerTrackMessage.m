@@ -43,14 +43,10 @@ NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
 
 - (NSData *)JSONData
 {
-//    NSMutableDictionary *payload = [[NSMutableDictionary alloc] init];
-//    payload = [NSMutableDictionary dictionaryWithDictionary:_payload];
-//    NSMutableDictionary *jsonObject = @{ @"type": self.type, @"payload": @{@"events": @[_payload]}};
-    
     NSDictionary *jsonObject = @{ @"type": self.type, @"payload": [_payload copy] };
     NSLog(@"jsonObject:\n%@", jsonObject);
     
-    NSError *error = NULL;
+    NSError *error = nil;
     NSData *jsonData = nil;
     @try {
         jsonData = [NSJSONSerialization dataWithJSONObject:[MPNetwork convertFoundationTypesToJSON:jsonObject]

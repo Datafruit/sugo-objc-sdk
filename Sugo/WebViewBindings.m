@@ -98,14 +98,24 @@
     }
     
     if (self.bindings) {
-        NSData *jsonBindings = [NSJSONSerialization dataWithJSONObject:self.bindings
-                                                               options:NSJSONWritingPrettyPrinted
-                                                                 error:nil];
-        self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
-                                                           encoding:NSUTF8StringEncoding];
-        
+        NSError *error = nil;
+        NSData *jsonBindings = nil;
+        @try {
+            jsonBindings = [NSJSONSerialization dataWithJSONObject:self.bindings
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+            self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
+                                                               encoding:NSUTF8StringEncoding];
+        } @catch (NSException *exception) {
+            MPLogError(@"exception: %@, decoding jsonBindings data: %@ -> %@",
+                       exception,
+                       [self.bindings debugDescription],
+                       jsonBindings);
+        }
+        if (error) {
+            MPLogDebug(@"Failed to translate HTML bindings to String: %@", error);
+        }
     }
-    
 }
 
 @end
