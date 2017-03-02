@@ -829,6 +829,14 @@ static NSString *defaultProjectToken;
             }
         }
         
+        if ([[[viewController class] description] isEqualToString:@"CDVViewController"]) {
+            id webView = [viewController valueForKeyPath:@"webViewEngine.engineWebView"];
+            if (webView && [webView isKindOfClass:[UIWebView class]]) {
+                NSString *js = @"var duration = (new Date().getTime() - sugo.enter_time) / 1000;sugo.track('停留', {duration: duration});";
+                [((UIWebView *)webView) stringByEvaluatingJavaScriptFromString:js];
+            }
+        }
+        
         NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
         NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
