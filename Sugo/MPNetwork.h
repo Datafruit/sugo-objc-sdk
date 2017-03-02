@@ -34,4 +34,6 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
                           withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                                  andBody:(NSString *)body;
 
++ (id)convertFoundationTypesToJSON:(id)obj;
+
 @end
