@@ -410,7 +410,7 @@ static NSString *defaultProjectToken;
         p[keys[@"EventTime"]] = date;
         [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
     } else {
-        p[keys[@"EventTime"]] = [NSString stringWithFormat:@"%0.f", date.timeIntervalSince1970 * 1000];
+        p[keys[@"EventTime"]] = [NSString stringWithFormat:@"%.0f", date.timeIntervalSince1970 * 1000];
         event[@"properties"] = p;
     }
     
@@ -968,8 +968,8 @@ static NSString *defaultProjectToken;
              keys[@"DeviceModel"]:   deviceModel,
              keys[@"SystemName"]:    @"iOS",//[device systemName],
              keys[@"SystemVersion"]: [device systemVersion],
-             keys[@"ScreenWidth"]:   @((NSInteger)size.width),
-             keys[@"ScreenHeight"]:  @((NSInteger)size.height),
+             keys[@"ScreenWidth"]:   [NSNumber numberWithFloat:size.width],
+             keys[@"ScreenHeight"]:  [NSNumber numberWithFloat:size.height],
              };
 }
 
@@ -1125,13 +1125,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
     if (properties) {
-        BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
-        if (wifi) {
-            properties[@"has_wifi"] = @"true";
-        } else {
-            properties[@"has_wifi"] = @"false";
-        }
-        MPLogDebug(@"%@ reachability changed, wifi=%d", self, wifi);
+        
+        properties[@"has_wifi"] = @"false";
         
         NSString *network = @"";
         if ((flags & kSCNetworkReachabilityFlagsReachable) == 0)
@@ -1146,6 +1141,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
              If the target host is reachable and no connection is required then we'll assume (for now) that you're on Wi-Fi...
              */
             network = @"wifi";
+            properties[@"has_wifi"] = @"true";
         }
         
         if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) ||
@@ -1161,6 +1157,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                  ... and no [user] intervention is needed...
                  */
                 network = @"wifi";
+                properties[@"has_wifi"] = @"true";
             }
         }
         
@@ -1174,31 +1171,31 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyGPRS"]) {
                 
                 network = @"2G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
                 
                 network = @"2G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyWCDMA"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyWCDMA"]){
                 
                 network = @"3G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSDPA"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSDPA"]){
                 
                 network = @"3G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSUPA"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSUPA"]){
                 
                 network = @"3G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMA1x"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMA1x"]){
                 
                 network = @"2G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"]){
                 
                 network = @"3G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"]){
                 
                 network = @"3G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"]){
                 
                 network = @"3G";
-            }else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyLTE"]){
+            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyLTE"]){
                 
                 network = @"4G";
             } else {

@@ -242,12 +242,14 @@
         if (self.attributes) {
             [p addEntriesFromDictionary:[self.attributes parse]];
         }
-        if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]) {
+        if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]
+            && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
             NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
+            NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
             if (self.controlEvent == UIControlEventEditingDidBegin) {
-                p[keys[@"EventType"]] = @"focus";
+                p[keys[@"EventType"]] = values[@"focus"];
             } else {
-                p[keys[@"EventType"]] = @"click";
+                p[keys[@"EventType"]] = values[@"click"];
             }
             p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
             if ([SugoPageInfos global].infos.count > 0) {

@@ -119,9 +119,11 @@
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
                 }
-                if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]) {
+                if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]
+                    && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
                     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
-                    p[keys[@"EventType"]] = @"click";
+                    NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+                    p[keys[@"EventType"]] = values[@"click"];
                     p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
                     if ([SugoPageInfos global].infos.count > 0) {
                         for (NSDictionary *info in [SugoPageInfos global].infos) {
