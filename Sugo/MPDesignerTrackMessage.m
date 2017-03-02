@@ -7,6 +7,7 @@
 //
 
 #import "MPDesignerEventBindingMessage.h"
+#import "MPNetwork.h"
 #import "MPLogger.h"
 
 NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
@@ -42,10 +43,24 @@ NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
 
 - (NSData *)JSONData
 {
+//    NSMutableDictionary *payload = [[NSMutableDictionary alloc] init];
+//    payload = [NSMutableDictionary dictionaryWithDictionary:_payload];
+//    NSMutableDictionary *jsonObject = @{ @"type": self.type, @"payload": @{@"events": @[_payload]}};
+    
     NSDictionary *jsonObject = @{ @"type": self.type, @"payload": [_payload copy] };
-
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:(NSJSONWritingOptions)0 error:&error];
+    NSLog(@"jsonObject:\n%@", jsonObject);
+    
+    NSError *error = NULL;
+    NSData *jsonData = nil;
+    @try {
+        jsonData = [NSJSONSerialization dataWithJSONObject:[MPNetwork convertFoundationTypesToJSON:jsonObject]
+                                                   options:(NSJSONWritingOptions)0
+                                                     error:&error];
+    }
+    @catch (NSException *exception) {
+        MPLogError(@"exception encoding api data: %@", exception);
+    }
+    
     if (error) {
         MPLogDebug(@"Failed to serialize test designer message: %@", error);
     }
