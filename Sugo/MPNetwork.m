@@ -319,10 +319,27 @@ static const NSUInteger kBatchSize = 50;
         NSMutableDictionary *value = [[NSMutableDictionary alloc] init];
         for (NSString *key in keys) {
             if (object[key]) {
-                if ([types[key] isEqualToString:@"d"]) {
-                    [value setValue:[NSString stringWithFormat:@"%0.f", ((NSDate *)object[key]).timeIntervalSince1970 * 1000] forKey:key];
-                } else {
+                if ([[[object[key] classForCoder] description] isEqualToString:@"NSNumber"]) {
+                    if (strcmp([(NSNumber *)object[key] objCType], @encode(int)) == 0
+                        && [types[key] isEqualToString:@"i"]) {
+                        [value setValue:object[key] forKey:key];
+                    } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(long)) == 0)
+                        && [types[key] isEqualToString:@"l"]) {
+                        [value setValue:object[key] forKey:key];
+                    } else if (((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
+                          || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0)))
+                        && [types[key] isEqualToString:@"f"]) {
+                        [value setValue:object[key] forKey:key];
+                    } else {
+                        [value setValue:(NSNumber *)object[key] forKey:key];
+                    }
+                } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]
+                    && [types[key] isEqualToString:@"d"]) {
+                    [value setValue:[NSString stringWithFormat:@"%.0f", [((NSDate *)object[key]) timeIntervalSince1970] * 1000] forKey:key];
+                } else if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:object[key] forKey:key];
+                } else {
+                    [value setValue:@"0" forKey:key];
                 }
             } else {
                 if ([types[key] isEqualToString:@"s"]) {
