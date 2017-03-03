@@ -792,7 +792,7 @@ static NSString *defaultProjectToken;
             }
         }
         
-        if ([[[viewController class] description] isEqualToString:@"CDVViewController"]) {
+        if ([[[viewController class] description] isEqualToString:@"CordovaViewController"]) {
             id webView = [viewController valueForKeyPath:@"webViewEngine.engineWebView"];
             if (webView && [webView isKindOfClass:[UIWebView class]]) {
                 NSString *js = @"sugo.enter_time = new Date().getTime();";
