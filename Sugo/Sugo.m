@@ -835,7 +835,7 @@ static NSString *defaultProjectToken;
             }
         }
         
-        if ([[[viewController class] description] isEqualToString:@"CDVViewController"]) {
+        if ([[[viewController class] description] isEqualToString:@"CordovaViewController"]) {
             id webView = [viewController valueForKeyPath:@"webViewEngine.engineWebView"];
             if (webView && [webView isKindOfClass:[UIWebView class]]) {
                 NSString *js = @"var duration = (new Date().getTime() - sugo.enter_time) / 1000;sugo.track('停留', {duration: duration});";
@@ -856,7 +856,6 @@ static NSString *defaultProjectToken;
                 }
             }
             [self trackEvent:values[@"PageStay"] properties:p];
-            [self trackEvent:values[@"PageExit"] properties:p];
         }
     };
     
@@ -1262,7 +1261,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
         [self trackEvent:values[@"BackgroundEnter"]];
-        [self timeEvent:values[@"BackgroundStay"]];
     }
     
     dispatch_group_enter(bgGroup);
@@ -1287,7 +1285,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self trackEvent:values[@"BackgroundStay"]];
         [self trackEvent:values[@"BackgroundExit"]];
         [self.network flushEventQueue:self.eventsQueue];
     }
