@@ -15,7 +15,6 @@ window.addEventListener('beforeunload', function(e) {
     sugo.track('停留', {
         duration: duration
     });
-    sugo.track('页面退出');
 });
 
 sugo.bindEvent();
