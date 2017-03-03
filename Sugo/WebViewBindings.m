@@ -10,6 +10,7 @@
 #import "WebViewBindings+WebView.h"
 #import "WebViewBindings+UIWebView.h"
 #import "WebViewBindings+WKWebView.h"
+#import "MPLogger.h"
 
 @interface WebViewBindings ()
 
@@ -106,6 +107,7 @@
                                                              error:&error];
             self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
                                                                encoding:NSUTF8StringEncoding];
+            NSLog(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
         } @catch (NSException *exception) {
             MPLogError(@"exception: %@, decoding jsonBindings data: %@ -> %@",
                        exception,
