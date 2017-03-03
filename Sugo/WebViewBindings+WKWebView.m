@@ -150,9 +150,14 @@
 
 - (NSString *)jsWKWebViewVariables
 {
+    NSString *fragment = self.wkWebView.URL.fragment?[NSString stringWithFormat:@"#%@", self.wkWebView.URL.fragment]:@"";
+    if ([fragment containsString:@"?"]) {
+        fragment = [fragment substringToIndex:[fragment rangeOfString:@"?"].location];
+    }
+    
     NSMutableString *nativePath = [[NSMutableString alloc] initWithFormat:@"%@%@",
                                    self.wkWebView.URL.path,
-                                   self.wkWebView.URL.fragment?[NSString stringWithFormat:@"#%@", self.wkWebView.URL.fragment]:@""];
+                                   fragment];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -188,7 +193,7 @@
         }
     }
     relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
-    relativePath = [NSMutableString stringWithFormat:@"%@sugo.relative_path += window.location.hash;\n", relativePath];
+    relativePath = [NSMutableString stringWithFormat:@"%@sugo.hash = window.location.hash;\nsugo.hash = sugo.hash.indexOf('?') < 0 ? sugo.hash : sugo.hash.substring(0, sugo.hash.indexOf('?'));\nsugo.relative_path += sugo.hash;\n", relativePath];
     MPLogDebug(@"relativePath:\n%@", relativePath);
     
     NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
