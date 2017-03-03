@@ -108,9 +108,14 @@
 
 - (NSString *)jsUIWebViewVariables
 {
+    NSString *fragment = self.uiWebView.request.URL.fragment?[NSString stringWithFormat:@"#%@", self.uiWebView.request.URL.fragment]:@"";
+    if ([fragment containsString:@"?"]) {
+        fragment = [fragment substringToIndex:[fragment rangeOfString:@"?"].location];
+    }
+    
     NSMutableString *nativePath = [[NSMutableString alloc] initWithFormat:@"%@%@",
                                    self.uiWebView.request.URL.path,
-                                   self.uiWebView.request.URL.fragment?[NSString stringWithFormat:@"#%@", self.uiWebView.request.URL.fragment]:@""];
+                                   fragment];
     NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -123,7 +128,6 @@
                         homePath,
                         replacePath];
         MPLogDebug(@"relativePath replace Home:\n%@", relativePath);
-        
         
         NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", homePath]
                                                                        options:NSRegularExpressionAnchorsMatchLines
@@ -146,7 +150,7 @@
         }
     }
     relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
-    relativePath = [NSMutableString stringWithFormat:@"%@sugo.relative_path += window.location.hash;\n", relativePath];
+    relativePath = [NSMutableString stringWithFormat:@"%@sugo.hash = window.location.hash;\nsugo.hash = sugo.hash.indexOf('?') < 0 ? sugo.hash : sugo.hash.substring(0, sugo.hash.indexOf('?'));\nsugo.relative_path += sugo.hash;\n", relativePath];
     MPLogDebug(@"relativePath:\n%@", relativePath);
     
     NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
