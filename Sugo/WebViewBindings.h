@@ -41,7 +41,6 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property (atomic, weak) WKWebView* wkWebView;
 @property (atomic, strong) NSString* wkVcPath;
 @property (atomic, strong) NSString* wkDidMoveToWindowBlockName;
-@property (atomic, strong) NSString* wkRemoveFromSuperviewBlockName;
 @property BOOL wkWebViewJavaScriptInjected;
 @property (atomic, strong) WKUserScript *wkWebViewCurrentJS;
 

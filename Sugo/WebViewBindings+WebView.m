@@ -58,21 +58,18 @@
             if (!wkWebView) {
                 return;
             }
-            if (self.wkVcPath.length > 0) {
+            if (self.wkWebView
+                && self.wkWebView != wkWebView) {
+                self.wkVcPath = nil;
+                [self stopWKWebViewBindings:wkWebView];
+            } else if (self.wkWebView) {
+                self.wkVcPath = nil;
+                [self stopWKWebViewBindings:wkWebView];
                 return;
             }
             self.wkVcPath = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
             self.wkWebView = wkWebView;
             [self startWKWebViewBindings:&wkWebView];
-        };
-
-        void (^wkRemoveFromSuperviewBlock)(id, SEL) = ^(id webView, SEL command) {
-            WKWebView *wkWebView = (WKWebView *)webView;
-            if (!wkWebView) {
-                return;
-            }
-            self.wkVcPath = nil;
-            [self stopWKWebViewBindings:wkWebView];
         };
         
         [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
@@ -83,10 +80,6 @@
                             onClass:NSClassFromString(@"WKWebView")
                           withBlock:wkDidMoveToWindowBlock
                               named:self.wkDidMoveToWindowBlockName];
-        [MPSwizzler swizzleSelector:NSSelectorFromString(@"removeFromSuperview")
-                            onClass:NSClassFromString(@"WKWebView")
-                          withBlock:wkRemoveFromSuperviewBlock
-                              named:self.wkRemoveFromSuperviewBlockName];
         self.viewSwizzleRunning = YES;
     }
 }
@@ -107,9 +100,6 @@
         [MPSwizzler unswizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                               onClass:NSClassFromString(@"WKWebView")
                                 named:self.uiDidMoveToWindowBlockName];
-        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"removeFromSuperview")
-                              onClass:NSClassFromString(@"WKWebView")
-                                named:self.wkRemoveFromSuperviewBlockName];
         self.viewSwizzleRunning = NO;
     }
 }
