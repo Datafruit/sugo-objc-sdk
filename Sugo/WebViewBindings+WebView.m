@@ -30,7 +30,19 @@
             if (!uiWebView) {
                 return;
             }
-            if (self.uiVcPath.length > 0) {
+            if (self.uiWebView
+                && self.uiWebView != uiWebView) {
+                self.uiVcPath = nil;
+                [self stopUIWebViewBindings];
+                if (self.uiWebViewDelegate) {
+                    self.uiWebViewDelegate = nil;
+                }
+            } else if (self.uiWebView) {
+                self.uiVcPath = nil;
+                [self stopUIWebViewBindings];
+                if (self.uiWebViewDelegate) {
+                    self.uiWebViewDelegate = nil;
+                }
                 return;
             }
             self.uiVcPath = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
@@ -39,18 +51,6 @@
                 self.uiWebViewDelegate = self.uiWebView.delegate;
             }
             [self startUIWebViewBindings:&uiWebView];
-        };
-        
-        void (^uiRemoveFromSuperviewBlock)(id, SEL) = ^(id webView, SEL command) {
-            UIWebView *uiWebView = (UIWebView *)webView;
-            if (!uiWebView) {
-                return;
-            }
-            self.uiVcPath = nil;
-            [self stopUIWebViewBindings];
-            if (self.uiWebViewDelegate) {
-                self.uiWebViewDelegate = nil;
-            }
         };
         
         void (^wkDidMoveToWindowBlock)(id, SEL) = ^(id webView, SEL command) {
@@ -79,10 +79,6 @@
                             onClass:NSClassFromString(@"UIWebView")
                           withBlock:uiDidMoveToWindowBlock
                               named:self.uiDidMoveToWindowBlockName];
-        [MPSwizzler swizzleSelector:NSSelectorFromString(@"removeFromSuperview")
-                            onClass:NSClassFromString(@"UIWebView")
-                          withBlock:uiRemoveFromSuperviewBlock
-                              named:self.uiRemoveFromSuperviewBlockName];
         [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:NSClassFromString(@"WKWebView")
                           withBlock:wkDidMoveToWindowBlock
@@ -108,9 +104,6 @@
         [MPSwizzler unswizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                               onClass:NSClassFromString(@"UIWebView")
                                 named:self.uiDidMoveToWindowBlockName];
-        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"removeFromSuperview")
-                              onClass:NSClassFromString(@"UIWebView")
-                                named:self.uiRemoveFromSuperviewBlockName];
         [MPSwizzler unswizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                               onClass:NSClassFromString(@"WKWebView")
                                 named:self.uiDidMoveToWindowBlockName];

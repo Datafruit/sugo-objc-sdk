@@ -7,9 +7,9 @@ sugo.rawTrack = function(event_id, event_name, props) {
         props.page_name = sugo.init.page_name;
     }
     var track = {
-        'eventID'       : '',
-        'eventName'     : event_name,
-        'properties'    : JSON.stringify(props)
+        'eventID': '',
+        'eventName': event_name,
+        'properties': JSON.stringify(props)
     };
     window.webkit.messageHandlers.SugoWKWebViewBindingsTrack.postMessage(track);
 }
@@ -20,10 +20,20 @@ sugo.track = function(event_name, props) {
 
 sugo.timeEvent = function(event_name) {
     var time = {
-        'eventName'     : event_name
+        'eventName': event_name
     };
     window.webkit.messageHandlers.SugoWKWebViewBindingsTime.postMessage(time);
 };
+
+sugo.trackStayEvent = function() {
+    sugo.enter_time = new Date().getTime();
+    window.onunload = function() {
+        var duration = (new Date().getTime() - sugo.enter_time) / 1000;
+        sugo.track('停留', {
+            duration: duration
+        });
+    }
+}
 
 var sugoio = {
     track: sugo.track,
