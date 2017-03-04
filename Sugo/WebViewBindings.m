@@ -42,7 +42,6 @@
     _viewSwizzleRunning = NO;
     
     _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
-    _uiRemoveFromSuperviewBlockName = [[NSUUID UUID] UUIDString];
     _uiWebViewJavaScriptInjected = NO;
     _uiWebViewDidStartLoadBlockName = [[NSUUID UUID] UUIDString];
     _uiWebViewDidFinishLoadBlockName = [[NSUUID UUID] UUIDString];
