@@ -792,14 +792,6 @@ static NSString *defaultProjectToken;
             }
         }
         
-        if ([[[viewController class] description] isEqualToString:@"CordovaViewController"]) {
-            id webView = [viewController valueForKeyPath:@"webViewEngine.engineWebView"];
-            if (webView && [webView isKindOfClass:[UIWebView class]]) {
-                NSString *js = @"sugo.enter_time = new Date().getTime();";
-                [((UIWebView *)webView) stringByEvaluatingJavaScriptFromString:js];
-            }
-        }
-        
         NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
         NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
@@ -832,14 +824,6 @@ static NSString *defaultProjectToken;
         for (NSString *vcb in vcBlackList) {
             if ([vcb isEqualToString:NSStringFromClass([vc classForCoder])]) {
                 return;
-            }
-        }
-        
-        if ([[[viewController class] description] isEqualToString:@"CordovaViewController"]) {
-            id webView = [viewController valueForKeyPath:@"webViewEngine.engineWebView"];
-            if (webView && [webView isKindOfClass:[UIWebView class]]) {
-                NSString *js = @"var duration = (new Date().getTime() - sugo.enter_time) / 1000;sugo.track('停留', {duration: duration});";
-                [((UIWebView *)webView) stringByEvaluatingJavaScriptFromString:js];
             }
         }
         

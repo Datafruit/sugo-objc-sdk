@@ -17,6 +17,16 @@ sugo.timeEvent = function(event_name) {
     SugoWebViewJSExport.timeOfEvent(event_name);
 };
 
+sugo.trackStayEvent = function() {
+    sugo.enter_time = new Date().getTime();
+    window.onunload = function() {
+        var duration = (new Date().getTime() - sugo.enter_time) / 1000;
+        sugo.track('停留', {
+            duration: duration
+        });
+    }
+}
+
 var sugoio = {
     track: sugo.track,
     time_event: sugo.timeEvent
