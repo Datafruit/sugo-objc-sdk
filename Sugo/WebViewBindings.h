@@ -33,7 +33,6 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property (atomic, retain) id <UIWebViewDelegate> uiWebViewDelegate;
 @property (atomic, strong) NSString* uiVcPath;
 @property (atomic, strong) NSString* uiDidMoveToWindowBlockName;
-@property (atomic, strong) NSString* uiRemoveFromSuperviewBlockName;
 @property BOOL uiWebViewSwizzleRunning;
 @property (atomic, strong) NSString* uiWebViewDidStartLoadBlockName;
 @property (atomic, strong) NSString* uiWebViewDidFinishLoadBlockName;
