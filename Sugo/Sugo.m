@@ -1370,12 +1370,13 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     dispatch_async(self.serialQueue, ^{
         
         __block BOOL hadError = NO;
+        __block NSMutableDictionary *object = [[NSMutableDictionary alloc] init];
 
         if ([NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"]) {
             
             NSData *cacheData = [NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"];
             MPLogDebug(@"Decide cacheData\n%@",[[NSString alloc] initWithData:cacheData encoding:NSUTF8StringEncoding]);
-            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:cacheData options:(NSJSONReadingOptions)0 error:nil];
+            object = [NSJSONSerialization JSONObjectWithData:cacheData options:(NSJSONReadingOptions)0 error:nil];
             NSDictionary *config = object[@"config"];
             if (config && [config isKindOfClass:NSDictionary.class]) {
                 NSDictionary *validationConfig = config[@"ce"];
@@ -1390,8 +1391,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     }
                 }
             }
-
-            [self handleDecideObject:object];
         }
         
         if (!useCache || !self.decideResponseCached) {
@@ -1420,7 +1419,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 }
                 MPLogDebug(@"Decide responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                 // Handle network response
-                NSDictionary *object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
+                object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
                 if (error) {
                     MPLogError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                     hadError = YES;
@@ -1451,8 +1450,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                         }
                     }
                 }
-
-                [self handleDecideObject:object];
                 
                 self.decideResponseCached = YES;
 
@@ -1470,6 +1467,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 completion(nil);
             }
         } else {
+            [self handleDecideObject:object];
             MPLogInfo(@"%@ decide check found %lu tracking events, and %lu h5 tracking events",
                       self,
                       (unsigned long)self.eventBindings.count,

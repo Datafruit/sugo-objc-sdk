@@ -7,6 +7,7 @@
 //
 
 #import "Sugo.h"
+#import "SugoPrivate.h"
 #import "MPABTestDesignerConnection.h"
 #import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
@@ -37,7 +38,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
         }
     }
 
-    for (MPEventBinding *oldBinding in self.bindings) {
+    for (MPEventBinding *oldBinding in [Sugo sharedInstance].eventBindings) {
         [oldBinding stop];
     }
     self.bindings = newBindings;
