@@ -955,8 +955,8 @@ static NSString *defaultProjectToken;
              keys[@"DeviceModel"]:   deviceModel,
              keys[@"SystemName"]:    @"iOS",//[device systemName],
              keys[@"SystemVersion"]: [device systemVersion],
-             keys[@"ScreenWidth"]:   [NSNumber numberWithFloat:size.width],
-             keys[@"ScreenHeight"]:  [NSNumber numberWithFloat:size.height],
+             keys[@"ScreenWidth"]:   [NSNumber numberWithInt:((int)size.width)],
+             keys[@"ScreenHeight"]:  [NSNumber numberWithInt:((int)size.height)],
              };
 }
 
