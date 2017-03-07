@@ -108,78 +108,70 @@
 
 - (NSString *)jsUIWebViewVariables
 {
-    NSString *fragment = self.uiWebView.request.URL.fragment?[NSString stringWithFormat:@"#%@", self.uiWebView.request.URL.fragment]:@"";
-    if ([fragment containsString:@"?"]) {
-        fragment = [fragment substringToIndex:[fragment rangeOfString:@"?"].location];
-    }
-    
-    NSMutableString *nativePath = [[NSMutableString alloc] initWithFormat:@"%@%@",
-                                   self.uiWebView.request.URL.path,
-                                   fragment];
-    NSMutableString *relativePath = [NSMutableString stringWithFormat:@"sugo.relative_path = window.location.pathname"];
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *rpr = (NSDictionary *)[userDefaults objectForKey:@"HomePath"];
+    NSString *homePathKey = [[NSString alloc] init];
+    NSString *homePathValue = [[NSString alloc] init];
     if (rpr) {
-        NSString *homePath = (NSString *)rpr.allKeys.firstObject;
-        NSString *replacePath = (NSString *)rpr[homePath];
-        relativePath = [NSMutableString stringWithFormat:@"%@.replace('%@', '%@')",
-                        relativePath,
-                        homePath,
-                        replacePath];
-        MPLogDebug(@"relativePath replace Home:\n%@", relativePath);
-        
-        NSRegularExpression *re = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"^%@$", homePath]
-                                                                       options:NSRegularExpressionAnchorsMatchLines
-                                                                         error:nil];
-        nativePath = [NSMutableString
-                      stringWithString:[re stringByReplacingMatchesInString:nativePath
-                                                                    options:0
-                                                                      range:NSMakeRange(0, nativePath.length)
-                                                               withTemplate:replacePath.length>0?replacePath:@""]];
+        homePathKey = (NSString *)rpr.allKeys.firstObject;
+        homePathValue = (NSString *)rpr[homePathKey];
     }
+    NSMutableArray *res = [[NSMutableArray alloc] init];
+    NSMutableString *resString = nil;
     if (replacements) {
         for (NSString *replacement in replacements) {
             NSDictionary *r = (NSDictionary *)replacements[replacement];
             NSString *key = (NSString *)r.allKeys.firstObject;
             NSString *value = (NSString *)r[key];
-            relativePath = [NSMutableString stringWithFormat:@"%@.replace(%@, '%@')",
-                            relativePath,
-                            key.length >= 2?key:@"''",
-                            value];
+            [res addObject:@{key: value}];
+        }
+        NSError *error = nil;
+        NSData *resJSON = nil;
+        @try {
+            resJSON = [NSJSONSerialization dataWithJSONObject:res
+                                                      options:NSJSONWritingPrettyPrinted
+                                                        error:&error];
+            resString = [[NSMutableString alloc] initWithData:resJSON
+                                                     encoding:NSUTF8StringEncoding];
+        } @catch (NSException *exception) {
+            MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
+                       exception,
+                       resJSON,
+                       resString);
         }
     }
-    relativePath = [NSMutableString stringWithFormat:@"%@;\n", relativePath];
-    relativePath = [NSMutableString stringWithFormat:@"%@sugo.hash = window.location.hash;\nsugo.hash = sugo.hash.indexOf('?') < 0 ? sugo.hash : sugo.hash.substring(0, sugo.hash.indexOf('?'));\nsugo.relative_path += sugo.hash;\n", relativePath];
-    MPLogDebug(@"relativePath:\n%@", relativePath);
-    
-    NSMutableDictionary *infoObject = [[NSMutableDictionary alloc] initWithDictionary:@{@"code": @"",
-                                                                                        @"page_name": @""}];
+    NSMutableString *infosString = nil;
     if ([SugoPageInfos global].infos.count > 0) {
-        for (NSDictionary *info in [SugoPageInfos global].infos) {
-            if ([info[@"page"] isEqualToString:nativePath]) {
-                infoObject[@"code"] = info[@"code"];
-                infoObject[@"page_name"] = info[@"page_name"];
-                break;
-            }
+        NSError *error = nil;
+        NSData *infosJSON = nil;
+        @try {
+            infosJSON = [NSJSONSerialization dataWithJSONObject:[SugoPageInfos global].infos
+                                                      options:NSJSONWritingPrettyPrinted
+                                                        error:&error];
+            infosString = [[NSMutableString alloc] initWithData:infosJSON
+                                                     encoding:NSUTF8StringEncoding];
+        } @catch (NSException *exception) {
+            MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
+                       exception,
+                       infosJSON,
+                       infosString);
         }
     }
-    NSData *infoData = [NSJSONSerialization dataWithJSONObject:infoObject
-                                                       options:NSJSONWritingPrettyPrinted
-                                                         error:nil];
-    NSString *infoString = [[NSString alloc] initWithData:infoData
-                                                 encoding:NSUTF8StringEncoding];
-    
-    NSString *initInfo = [NSString stringWithFormat:@"sugo.init = %@;\n", infoString];
-    NSString *vcPath = [NSString stringWithFormat:@"sugo.current_page = '%@::' + sugo.relative_path;\n", self.uiVcPath];
+    NSString *vcPath = [NSString stringWithFormat:@"sugo.view_controller = '%@';\n", self.uiVcPath];
+    NSString *homePath = [NSString stringWithFormat:@"sugo.home_path = '%@';\n", homePathKey];
+    NSString *homePathReplacement = [NSString stringWithFormat:@"sugo.home_path_replacement = '%@';\n", homePathValue];
+    NSString *regularExpressions = [NSString stringWithFormat:@"sugo.regular_expressions = %@;\n", resString?resString:@"[]"];
+    NSString *pageInfos = [NSString stringWithFormat:@"sugo.page_infos = %@;\n", infosString?infosString:@"[]"];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
     NSString *variables = [self jsSourceOfFileName:@"WebViewVariables"];
     
-    return [[[[relativePath stringByAppendingString:initInfo]
-              stringByAppendingString:vcPath]
+    return [[[[[[vcPath stringByAppendingString:homePath]
+              stringByAppendingString:homePathReplacement]
+             stringByAppendingString:regularExpressions]
+              stringByAppendingString:pageInfos]
              stringByAppendingString:bindings]
             stringByAppendingString:variables];
-
 }
 
 - (NSString *)jsUIWebViewAPI
