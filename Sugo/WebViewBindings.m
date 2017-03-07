@@ -105,7 +105,7 @@
                                                              error:&error];
             self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
                                                                encoding:NSUTF8StringEncoding];
-            NSLog(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
+            MPLogDebug(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
         } @catch (NSException *exception) {
             MPLogError(@"exception: %@, decoding jsonBindings data: %@ -> %@",
                        exception,
