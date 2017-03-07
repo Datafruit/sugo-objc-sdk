@@ -10,13 +10,27 @@
 
 @implementation SugoPageInfos
 
+static SugoPageInfos *singleton = nil;
+
 + (instancetype)global
 {
-    static SugoPageInfos *singleton = nil;
-    if (!singleton) {
-        singleton = [[self alloc] initSingleton];
+    @synchronized(self) {
+        if (singleton == nil) {
+            singleton = [[self alloc] initSingleton];
+        }
     }
     return singleton;
+}
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
+    @synchronized(self) {
+        if (singleton == nil) {
+            singleton = [super allocWithZone:zone];
+            return singleton;
+        }
+    }
+    return nil;
 }
 
 - (instancetype)initSingleton
@@ -29,7 +43,7 @@
 - (instancetype)init
 {
     @throw [NSException exceptionWithName:@"WebViewBindings init exception"
-                                   reason:@"this is a singleton, try [WebViewBindings globalBindings]"
+                                   reason:@"this is a singleton, try [SugoPageInfos global]"
                                  userInfo:nil];
     return nil;
 }
