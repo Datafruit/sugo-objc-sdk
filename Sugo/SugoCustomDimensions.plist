@@ -90,7 +90,7 @@
 		<key>click</key>
 		<string>点击</string>
 		<key>focus</key>
-		<string>聚焦</string>
+		<string>对焦</string>
 		<key>change</key>
 		<string>改变</string>
 	</dict>

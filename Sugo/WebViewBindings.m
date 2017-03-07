@@ -18,13 +18,27 @@
 
 @implementation WebViewBindings
 
+static WebViewBindings *globalBindings = nil;
+
 + (instancetype)globalBindings
 {
-    static WebViewBindings *singleton = nil;
-    if (!singleton) {
-        singleton = [[self alloc] initSingleton];
+    @synchronized(self) {
+        if (globalBindings == nil) {
+            globalBindings = [[self alloc] initSingleton];
+        }
     }
-    return singleton;
+    return globalBindings;
+}
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
+    @synchronized(self) {
+        if (globalBindings == nil) {
+            globalBindings = [super allocWithZone:zone];
+            return globalBindings;
+        }
+    }
+    return nil;
 }
 
 - (instancetype)initSingleton
