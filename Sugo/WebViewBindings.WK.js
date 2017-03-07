@@ -1,8 +1,39 @@
-for (var i = 0; i < sugo.h5_event_bindings.length; i++) {
-    var b_event = sugo.h5_event_bindings[i];
-    if (b_event.target_activity === sugo.current_page) {
-        var key = JSON.stringify(b_event.path);
-        sugo.current_event_bindings[key] = b_event;
+sugo.init_path = function() {
+    sugo.relative_path = window.location.pathname.replace(sugo.home_path, sugo.home_path_replacement);
+    var keys = Object.keys(sugo.regular_expressions);
+    for (var i = keys.length - 1; i >= 0; i--) {
+        sugo.relative_path = sugo.relative_path.replace(/keys[i]/g, sugo.regular_expressions[keys[i]]);
+    }
+    sugo.hash = window.location.hash;
+    sugo.hash = sugo.hash.indexOf('?') < 0 ? sugo.hash : sugo.hash.substring(0, sugo.hash.indexOf('?'));
+    sugo.relative_path += sugo.hash;
+    for (var i = 0; i < sugo.page_infos.length; i++) {
+        var page_info = sugo.page_infos[i]
+        if (page_info.page === sugo.relative_path) {
+            sugo.init = {
+            code: page_info.code,
+            page_name: page_info.page_name
+            };
+            break;
+        }
+    }
+    sugo.current_page = sugo.view_controller + '::' + sugo.relative_path;
+    
+    for (var i = 0; i < sugo.h5_event_bindings.length; i++) {
+        var b_event = sugo.h5_event_bindings[i];
+        if (b_event.target_activity === sugo.current_page) {
+            var key = JSON.stringify(b_event.path);
+            sugo.current_event_bindings[key] = b_event;
+        }
+    };
+    
+    if (sugo.init.code) {
+        try {
+            var init_code = new Function(sugo.init.code);
+            init_code();
+        } catch (e) {
+            console.log(sugo.init.code);
+        }
     }
 };
 

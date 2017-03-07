@@ -18,13 +18,27 @@
 
 @implementation WebViewBindings
 
+static WebViewBindings *globalBindings = nil;
+
 + (instancetype)globalBindings
 {
-    static WebViewBindings *singleton = nil;
-    if (!singleton) {
-        singleton = [[self alloc] initSingleton];
+    @synchronized(self) {
+        if (globalBindings == nil) {
+            globalBindings = [[self alloc] initSingleton];
+        }
     }
-    return singleton;
+    return globalBindings;
+}
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
+    @synchronized(self) {
+        if (globalBindings == nil) {
+            globalBindings = [super allocWithZone:zone];
+            return globalBindings;
+        }
+    }
+    return nil;
 }
 
 - (instancetype)initSingleton
@@ -105,7 +119,7 @@
                                                              error:&error];
             self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
                                                                encoding:NSUTF8StringEncoding];
-            NSLog(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
+            MPLogDebug(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
         } @catch (NSException *exception) {
             MPLogError(@"exception: %@, decoding jsonBindings data: %@ -> %@",
                        exception,

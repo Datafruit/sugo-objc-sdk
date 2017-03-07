@@ -15,13 +15,27 @@
 
 @implementation WebViewInfoStorage
 
+static WebViewInfoStorage *singleton = nil;
+
 + (instancetype)globalStorage
 {
-    static WebViewInfoStorage *singleton = nil;
-    if (!singleton) {
-        singleton = [[self alloc] initSingleton];
+    @synchronized(self) {
+        if (singleton == nil) {
+            singleton = [[self alloc] initSingleton];
+        }
     }
     return singleton;
+}
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
+    @synchronized(self) {
+        if (singleton == nil) {
+            singleton = [super allocWithZone:zone];
+            return singleton;
+        }
+    }
+    return nil;
 }
 
 - (instancetype)initSingleton
