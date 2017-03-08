@@ -553,7 +553,7 @@ static NSString *defaultProjectToken;
                                                         selector:@selector(flush)
                                                         userInfo:nil
                                                          repeats:YES];
-            MPLogInfo(@"%@ started flush timer: %@", self, self.timer);
+            MPLogDebug(@"%@ started flush timer: %f", self, self.timer.timeInterval);
         }
     });
 }
@@ -563,7 +563,7 @@ static NSString *defaultProjectToken;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.timer) {
             [self.timer invalidate];
-            MPLogInfo(@"%@ stopped flush timer: %@", self, self.timer);
+            MPLogDebug(@"%@ stopped flush timer: %f", self, self.timer.timeInterval);
             self.timer = nil;
         }
     });
