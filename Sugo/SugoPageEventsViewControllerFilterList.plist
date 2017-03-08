@@ -3,7 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>Black</key>
-	<array/>
+	<array>
+		<string>UICompatibilityInputViewController</string>
+		<string>UIInputWindowController</string>
+	</array>
 	<key>White</key>
 	<array/>
 </dict>
