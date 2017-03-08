@@ -149,6 +149,17 @@ NS_ASSUME_NONNULL_BEGIN
  @property
  
  @abstract
+ Cache interval.
+ 
+ @discussion
+ Setting a cache interval, default to 3600.
+ */
+@property (atomic) double cacheInterval;
+
+/*!
+ @property
+ 
+ @abstract
  Control whether the library should flush data to Sugo when the app
  enters the background.
  
@@ -267,7 +278,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion
  This method will return a singleton instance of the <code>Sugo</code> class for
  you using the given project token. If an instance does not exist, this method will create
- one using <code>sharedInstanceWithID:launchOptions:andFlushInterval:</code>. If you only have one
+ one using <code>sharedInstanceWithID:launchOptions:andFlushInterval:andCacheInterval:</code>. If you only have one
  instance in your project, you can use <code>sharedInstance</code> to retrieve it.
  
  <pre>
@@ -331,8 +342,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param apiToken        your project token
  @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
+ @param cacheInterval   interval to cache event data
  */
-- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
 
 /*!
  @method
@@ -347,8 +359,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param projectID       your project ID
  @param apiToken        your project token
  @param flushInterval   interval to run background flushing
+ @param cacheInterval   interval to cache event data
  */
-- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
 
 /*!
  @property
