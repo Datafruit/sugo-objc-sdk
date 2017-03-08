@@ -381,6 +381,10 @@ static NSString *defaultProjectToken;
         p[keys[@"EventType"]] = eventName;
     }
     
+    if (!p[keys[@"PageName"]]) {
+        p[keys[@"PageName"]] = eventName;
+    }
+    
     [p addEntriesFromDictionary:self.superProperties];
     if (properties) {
         [p addEntriesFromDictionary:properties];
