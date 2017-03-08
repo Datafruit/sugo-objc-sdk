@@ -42,6 +42,7 @@
 {
     NSUInteger _flushInterval;
     BOOL _enableVisualABTestAndCodeless;
+    double _cacheInterval;
 }
 
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;

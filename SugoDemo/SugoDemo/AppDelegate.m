@@ -68,7 +68,8 @@
     NSString *appToken = @"Add_Your_App_Token_Here";
     [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
     [[Sugo sharedInstance] setEnableLogging:YES];
-    [[Sugo sharedInstance] setFlushInterval:5];
+    [[Sugo sharedInstance] setFlushInterval:5]; // default to 60
+    [[Sugo sharedInstance] setCacheInterval:60];// default to 3600
 }
 
 @end

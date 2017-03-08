@@ -37,8 +37,9 @@ static NSString *defaultProjectToken;
 #else
     const NSUInteger flushInterval = 60;
 #endif
+    const double cacheInterval = 3600;
 
-    Sugo *instance = [[self alloc] initWithID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval];
+    Sugo *instance = [[self alloc] initWithID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
     
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
     if (values) {
@@ -83,7 +84,7 @@ static NSString *defaultProjectToken;
     return self;
 }
 
-- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval
+- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval andCacheInterval:(double)cacheInterval
 {
     if (apiToken.length == 0) {
         if (apiToken == nil) {
@@ -100,6 +101,7 @@ static NSString *defaultProjectToken;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
+        _cacheInterval = cacheInterval;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
@@ -128,6 +130,12 @@ static NSString *defaultProjectToken;
                                       andEventCollectionURL:[NSURL URLWithString:self.eventCollectionURL]];
         self.people = [[SugoPeople alloc] initWithSugo:self];
 
+        if ([NSUserDefaults.standardUserDefaults dataForKey:@"SugoEventBindings"]) {
+            self.decideResponseCached = YES;
+        } else {
+            self.decideResponseCached = NO;
+        }
+        
         [self setUpListeners];
         [self unarchive];
 #if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
@@ -138,9 +146,9 @@ static NSString *defaultProjectToken;
     return self;
 }
 
-- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
+- (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval andCacheInterval:(double)cacheInterval
 {
-    return [self initWithID:projectID token:apiToken launchOptions:nil andFlushInterval:flushInterval];
+    return [self initWithID:projectID token:apiToken launchOptions:nil andFlushInterval:flushInterval andCacheInterval:cacheInterval];
 }
 
 - (void)dealloc
@@ -528,6 +536,17 @@ static NSString *defaultProjectToken;
 - (void)setServerURL:(NSString *)serverURL
 {
     _serverURL = serverURL.copy;
+}
+
+- (double)cacheInterval {
+    return _cacheInterval;
+}
+
+- (void)setCacheInterval:(double)interval
+{
+    @synchronized (self) {
+        _cacheInterval = interval;
+    }
 }
 
 - (NSUInteger)flushInterval {
@@ -1254,7 +1273,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     dispatch_group_enter(bgGroup);
     dispatch_async(_serialQueue, ^{
         [self archive];
-        self.decideResponseCached = NO;
         dispatch_group_leave(bgGroup);
     });
     
@@ -1373,11 +1391,13 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         __block BOOL hadError = NO;
         __block NSMutableDictionary *object = [[NSMutableDictionary alloc] init];
 
-        if ([NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"]) {
+        if (useCache && self.decideResponseCached) {
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             
             NSError *cacheError = nil;
-            NSData *cacheData = [NSUserDefaults.standardUserDefaults dataForKey:@"EventBindings"];
-            MPLogDebug(@"Decide cacheData\n%@",[[NSString alloc] initWithData:cacheData encoding:NSUTF8StringEncoding]);
+            NSData *cacheData = [userDefaults dataForKey:@"SugoEventBindings"];
+            MPLogDebug(@"Decide cacheData\n%@", [[NSString alloc] initWithData:cacheData encoding:NSUTF8StringEncoding]);
             @try {
                 object = [NSJSONSerialization JSONObjectWithData:cacheData
                                                          options:(NSJSONReadingOptions)0
@@ -1397,10 +1417,22 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     }
                 }
             } @catch (NSException *exception) {
+                self.decideResponseCached = NO;
                 MPLogError(@"exception: %@, cacheData: %@, object: %@",
                            exception,
                            cacheData,
                            object);
+            }
+            
+            double ci = 0;
+            if ([userDefaults doubleForKey:@"SugoEventBindingsCachedTime"]) {
+                double cachedTime = [userDefaults doubleForKey:@"SugoEventBindingsCachedTime"];
+                double now = [NSDate date].timeIntervalSince1970;
+                ci = now - cachedTime;
+            }
+            
+            if (ci > _cacheInterval) {
+                self.decideResponseCached = NO;
             }
         }
         
@@ -1445,7 +1477,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                         return;
                     }
                     
-                    
                     NSDictionary *config = object[@"config"];
                     if (config && [config isKindOfClass:NSDictionary.class]) {
                         NSDictionary *validationConfig = config[@"ce"];
@@ -1459,9 +1490,9 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                             }
                         }
                     }
-                    
-                    [NSUserDefaults.standardUserDefaults setObject:responseData
-                                                            forKey:@"EventBindings"];
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    [userDefaults setObject:responseData forKey:@"SugoEventBindings"];
+                    [userDefaults setDouble:[NSDate date].timeIntervalSince1970 forKey:@"SugoEventBindingsCachedTime"];
                     self.decideResponseCached = YES;
                     
                 } @catch (NSException *exception) {
