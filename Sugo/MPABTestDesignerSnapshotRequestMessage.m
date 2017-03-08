@@ -7,6 +7,7 @@
 #import "MPApplicationStateSerializer.h"
 #import "MPObjectIdentityProvider.h"
 #import "MPObjectSerializerConfig.h"
+#import "MPLogger.h"
 
 NSString * const MPABTestDesignerSnapshotRequestMessageType = @"snapshot_request";
 
@@ -76,7 +77,11 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         }
 
         snapshotMessage.serializedObjects = serializedObjects;
-        [conn sendMessage:snapshotMessage];
+        if (snapshotMessage.serializedObjects.count > 0) {
+            [conn sendMessage:snapshotMessage];
+        } else {
+            MPLogDebug(@"snapshotMessage.serializedObjects is Empty");
+        }
     }];
 
     return operation;

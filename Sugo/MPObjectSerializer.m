@@ -103,10 +103,10 @@
                                                                           @"selectors": delegateMethods
                                                                           }
                                                                   }];
-    if ([object isKindOfClass:[UIWebView class]]) {
+    if ([object isKindOfClass:[UIWebView class]] && !((UIWebView *)object).loading) {
         [serializedObject setObject:[self getUIWebViewHTMLInfoFrom:(UIWebView *)object]
                              forKey:@"htmlPage"];
-    } else if ([object isKindOfClass:[WKWebView class]]) {
+    } else if ([object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading) {
         [serializedObject setObject:[self getWKWebViewHTMLInfoFrom:(WKWebView *)object]
                              forKey:@"htmlPage"];
     }
