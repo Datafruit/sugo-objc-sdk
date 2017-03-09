@@ -43,6 +43,7 @@ static NSString *defaultProjectToken;
     
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
     if (values) {
+        [instance trackIntegration];
         [instance trackEvent:values[@"AppEnter"]];
         [instance timeEvent:values[@"AppStay"]];
     }
@@ -1222,7 +1223,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    [self trackIntegration];
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
 
