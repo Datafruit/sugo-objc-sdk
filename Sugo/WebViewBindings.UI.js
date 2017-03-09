@@ -29,8 +29,8 @@ sugo.init_path = function() {
     
     if (sugo.init.code) {
         try {
-            var init_code = new Function(sugo.init.code);
-            init_code();
+            var init_code = new Function('sugo', sugo.init.code);
+            init_code(sugo);
         } catch (e) {
             console.log(sugo.init.code);
         }
