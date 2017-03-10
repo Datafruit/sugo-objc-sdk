@@ -598,6 +598,19 @@ NS_ASSUME_NONNULL_BEGIN
  @method
  
  @abstract
+ fetch event binding data from the Sugo server.
+ 
+ @discussion
+ By default, event binding data is cache from the Sugo servers every hour (the
+ default for <code>cacheInterval</code>). You only need to call this
+ method manually if you want to force a cache at a particular moment.
+ */
+- (void)cache;
+
+/*!
+ @method
+ 
+ @abstract
  Uploads queued data to the Sugo server.
  
  @discussion
