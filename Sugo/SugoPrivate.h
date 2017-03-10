@@ -73,7 +73,8 @@
 @property (atomic, strong) NSString *urlSchemesKeyValue;
 @property (atomic, strong) NSDictionary *superProperties;
 @property (atomic, strong) NSDictionary *automaticProperties;
-@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSTimer *cacheTimer;
+@property (nonatomic, strong) NSTimer *flushTimer;
 @property (nonatomic, strong) NSMutableArray *eventsQueue;
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;

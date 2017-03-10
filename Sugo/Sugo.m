@@ -32,11 +32,7 @@ static NSString *defaultProjectToken;
         return instances[apiToken];
     }
 
-#if defined(DEBUG)
-    const NSUInteger flushInterval = 1;
-#else
     const NSUInteger flushInterval = 60;
-#endif
     const double cacheInterval = 3600;
 
     Sugo *instance = [[self alloc] initWithID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
@@ -46,6 +42,15 @@ static NSString *defaultProjectToken;
         [instance trackIntegration];
         [instance trackEvent:values[@"AppEnter"]];
         [instance timeEvent:values[@"AppStay"]];
+        
+        [instance checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                for (MPEventBinding *binding in eventBindings) {
+                    [binding execute];
+                }
+                [[WebViewBindings globalBindings] fillBindings];
+            });
+        }];
     }
     
     return instance;
@@ -131,11 +136,7 @@ static NSString *defaultProjectToken;
                                       andEventCollectionURL:[NSURL URLWithString:self.eventCollectionURL]];
         self.people = [[SugoPeople alloc] initWithSugo:self];
 
-        if ([NSUserDefaults.standardUserDefaults dataForKey:@"SugoEventBindings"]) {
-            self.decideResponseCached = YES;
-        } else {
-            self.decideResponseCached = NO;
-        }
+        self.decideResponseCached = NO;
         
         [self setUpListeners];
         [self unarchive];
@@ -393,7 +394,8 @@ static NSString *defaultProjectToken;
     if (!p[keys[@"PageName"]]) {
         p[keys[@"PageName"]] = eventName;
     }
-    
+
+    [p addEntriesFromDictionary:self.automaticProperties];
     [p addEntriesFromDictionary:self.superProperties];
     if (properties) {
         [p addEntriesFromDictionary:properties];
@@ -417,7 +419,6 @@ static NSString *defaultProjectToken;
                                   initWithDictionary:@{ keys[@"EventName"]: eventName}];
     
     if (!self.abtestDesignerConnection.connected) {
-        [p addEntriesFromDictionary:self.automaticProperties];
         p[keys[@"EventTime"]] = date;
         [event addEntriesFromDictionary:[NSDictionary dictionaryWithDictionary:p]];
     } else {
@@ -550,6 +551,45 @@ static NSString *defaultProjectToken;
     }
 }
 
+- (void)startCacheTimer
+{
+    [self stopCacheTimer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.cacheInterval > 0) {
+            self.cacheTimer = [NSTimer scheduledTimerWithTimeInterval:self.cacheInterval
+                                                          target:self
+                                                        selector:@selector(cache)
+                                                        userInfo:nil
+                                                         repeats:YES];
+            MPLogDebug(@"%@ started cache timer: %f", self, self.cacheTimer.timeInterval);
+        }
+    });
+}
+
+- (void)stopCacheTimer
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.cacheTimer) {
+            [self.cacheTimer invalidate];
+            MPLogDebug(@"%@ stopped cache timer: %f", self, self.cacheTimer.timeInterval);
+            self.cacheTimer = nil;
+        }
+    });
+}
+
+- (void)cache
+{
+    self.decideResponseCached = NO;
+    [self checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            for (MPEventBinding *binding in eventBindings) {
+                [binding execute];
+            }
+            [[WebViewBindings globalBindings] fillBindings];
+        });
+    }];
+}
+
 - (NSUInteger)flushInterval {
     return _flushInterval;
 }
@@ -568,12 +608,12 @@ static NSString *defaultProjectToken;
     [self stopFlushTimer];
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.flushInterval > 0) {
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
+            self.flushTimer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
                                                           target:self
                                                         selector:@selector(flush)
                                                         userInfo:nil
                                                          repeats:YES];
-            MPLogDebug(@"%@ started flush timer: %f", self, self.timer.timeInterval);
+            MPLogDebug(@"%@ started flush timer: %f", self, self.flushTimer.timeInterval);
         }
     });
 }
@@ -581,10 +621,10 @@ static NSString *defaultProjectToken;
 - (void)stopFlushTimer
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.timer) {
-            [self.timer invalidate];
-            MPLogDebug(@"%@ stopped flush timer: %f", self, self.timer.timeInterval);
-            self.timer = nil;
+        if (self.flushTimer) {
+            [self.flushTimer invalidate];
+            MPLogDebug(@"%@ stopped flush timer: %f", self, self.flushTimer.timeInterval);
+            self.flushTimer = nil;
         }
     });
 }
@@ -597,7 +637,6 @@ static NSString *defaultProjectToken;
 - (void)flushWithCompletion:(void (^)())handler
 {
     dispatch_async(self.serialQueue, ^{
-//        MPLogInfo(@"%@ flush starting", self);
         __strong id<SugoDelegate> strongDelegate = self.delegate;
         if (strongDelegate && [strongDelegate respondsToSelector:@selector(sugoWillFlush:)]) {
             if (![strongDelegate sugoWillFlush:self]) {
@@ -612,7 +651,6 @@ static NSString *defaultProjectToken;
         if (handler) {
             dispatch_async(dispatch_get_main_queue(), handler);
         }
-//        MPLogInfo(@"%@ flush complete", self);
     });
 }
 
@@ -1227,24 +1265,14 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
+    [self startCacheTimer];
     [self startFlushTimer];
-
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
-    
-    [self checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            for (MPEventBinding *binding in eventBindings) {
-                [binding execute];
-            }
-        });
-    }];
-#endif // SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will resign active", self);
+    [self stopCacheTimer];
     [self stopFlushTimer];
 }
 
@@ -1391,13 +1419,14 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         __block BOOL hadError = NO;
         __block NSMutableDictionary *object = [[NSMutableDictionary alloc] init];
 
-        if (useCache && self.decideResponseCached) {
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        if (useCache && [userDefaults dataForKey:@"SugoEventBindings"]) {
             
             NSError *cacheError = nil;
             NSData *cacheData = [userDefaults dataForKey:@"SugoEventBindings"];
-            MPLogDebug(@"Decide cacheData\n%@", [[NSString alloc] initWithData:cacheData encoding:NSUTF8StringEncoding]);
+            MPLogDebug(@"Decide cacheData\n%@", [[NSString alloc] initWithData:cacheData
+                                                                      encoding:NSUTF8StringEncoding]);
             @try {
                 object = [NSJSONSerialization JSONObjectWithData:cacheData
                                                          options:(NSJSONReadingOptions)0
@@ -1422,17 +1451,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                            exception,
                            cacheData,
                            object);
-            }
-            
-            double ci = 0;
-            if ([userDefaults doubleForKey:@"SugoEventBindingsCachedTime"]) {
-                double cachedTime = [userDefaults doubleForKey:@"SugoEventBindingsCachedTime"];
-                double now = [NSDate date].timeIntervalSince1970;
-                ci = now - cachedTime;
-            }
-            
-            if (ci > _cacheInterval) {
-                self.decideResponseCached = NO;
             }
         }
         
@@ -1490,9 +1508,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                             }
                         }
                     }
-                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                     [userDefaults setObject:responseData forKey:@"SugoEventBindings"];
-                    [userDefaults setDouble:[NSDate date].timeIntervalSince1970 forKey:@"SugoEventBindingsCachedTime"];
                     self.decideResponseCached = YES;
                     
                 } @catch (NSException *exception) {
@@ -1547,7 +1563,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if ([htmlEventBindings isKindOfClass:[NSArray class]]) {
         [[WebViewBindings globalBindings].designerBindings removeAllObjects];
         [[WebViewBindings globalBindings].designerBindings addObjectsFromArray:(NSArray *)htmlEventBindings];
-        [[WebViewBindings globalBindings] fillBindings];
     }
     
     id pageInfos = object[@"page_info"];
