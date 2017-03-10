@@ -51,6 +51,7 @@ static NSString *defaultProjectToken;
                 [[WebViewBindings globalBindings] fillBindings];
             });
         }];
+        [instance startCacheTimer];
     }
     
     return instance;
@@ -1265,14 +1266,12 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
-    [self startCacheTimer];
     [self startFlushTimer];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will resign active", self);
-    [self stopCacheTimer];
     [self stopFlushTimer];
 }
 
