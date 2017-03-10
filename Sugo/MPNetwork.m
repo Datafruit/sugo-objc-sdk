@@ -379,7 +379,11 @@ static const NSUInteger kBatchSize = 50;
 
 + (id)convertFoundationTypesToJSON:(id)obj {
     // valid json types
-    if ([obj isKindOfClass:NSString.class] || [obj isKindOfClass:NSNumber.class] || [obj isKindOfClass:NSNull.class]) {
+    if ([obj isKindOfClass:NSNull.class]) {
+        return @"";
+    }
+    
+    if ([obj isKindOfClass:NSString.class] || [obj isKindOfClass:NSNumber.class]) {
         return obj;
     }
     
