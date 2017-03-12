@@ -827,9 +827,10 @@ static NSString *defaultProjectToken;
     NSString *defaultKey = @"trackedKey";
     if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
         
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         if (values) {
-            [self trackEvent:values[@"Integration"]];
+            [self trackEvent:values[@"Integration"] properties:@{keys[@"PageName"]: values[@"Integration"]}];
             [NSUserDefaults.standardUserDefaults setBool:YES
                                                   forKey:defaultKey];
             [NSUserDefaults.standardUserDefaults synchronize];
