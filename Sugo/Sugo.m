@@ -37,10 +37,11 @@ static NSString *defaultProjectToken;
 
     Sugo *instance = [[self alloc] initWithID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
     if (values) {
         [instance trackIntegration];
-        [instance trackEvent:values[@"AppEnter"]];
+        [instance trackEvent:values[@"AppEnter"] properties:@{keys[@"PageName"]: values[@"AppEnter"]}];
         [instance timeEvent:values[@"AppStay"]];
         
         [instance checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
@@ -390,10 +391,6 @@ static NSString *defaultProjectToken;
 
     if (!p[keys[@"EventType"]]) {
         p[keys[@"EventType"]] = eventName;
-    }
-    
-    if (!p[keys[@"PageName"]]) {
-        p[keys[@"PageName"]] = eventName;
     }
 
     [p addEntriesFromDictionary:self.automaticProperties];
@@ -1292,9 +1289,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         [self flush];
     }
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self trackEvent:values[@"BackgroundEnter"]];
+        [self trackEvent:values[@"BackgroundEnter"] properties:@{keys[@"PageName"]: values[@"BackgroundEnter"]}];
     }
     
     dispatch_group_enter(bgGroup);
@@ -1316,9 +1314,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ will enter foreground", self);
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self trackEvent:values[@"BackgroundExit"]];
+        [self trackEvent:values[@"BackgroundExit"] properties:@{keys[@"PageName"]: values[@"BackgroundExit"]}];
         [self.network flushEventQueue:self.eventsQueue];
     }
     
@@ -1335,12 +1334,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ application will terminate", self);
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self rawTrack:nil eventName:values[@"BackgroundStay"] properties:nil];
-        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
-        [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
-        [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
+        [self rawTrack:nil eventName:values[@"AppStay"]  properties:@{keys[@"PageName"]: values[@"AppStay"]}];
+        [self rawTrack:nil eventName:values[@"AppExit"]  properties:@{keys[@"PageName"]: values[@"AppExit"]}];
     }
     
     dispatch_async(_serialQueue, ^{

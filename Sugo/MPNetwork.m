@@ -417,7 +417,7 @@ static const NSUInteger kBatchSize = 50;
     }
     
     // default to sending the object's description
-    NSString *s = [obj description];
+    NSString *s = obj?[obj description]:@"";
     MPLogWarning(@"%@ property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
     return s;
 }
