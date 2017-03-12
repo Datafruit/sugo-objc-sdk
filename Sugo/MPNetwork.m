@@ -339,13 +339,13 @@ static const NSUInteger kBatchSize = 50;
                 } else if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:object[key] forKey:key];
                 } else {
-                    [value setValue:@"0" forKey:key];
+                    [value setValue:@"" forKey:key];
                 }
             } else {
                 if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:@"" forKey:key];
                 } else {
-                    [value setValue:@"0" forKey:key];
+                    [value setValue:@"" forKey:key];
                 }
             }
         }
