@@ -356,7 +356,7 @@ static const NSUInteger kBatchSize = 50;
         for (NSString *key in keys) {
             dataString = [NSMutableString stringWithFormat:@"%@%@%@",
                           dataString,
-                          value[key],
+                          value[key]?value[key]:@"",
                           ValuesSeperator];
         }
         dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
