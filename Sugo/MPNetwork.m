@@ -339,13 +339,13 @@ static const NSUInteger kBatchSize = 50;
                 } else if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:object[key] forKey:key];
                 } else {
-                    [value setValue:@"0" forKey:key];
+                    [value setValue:@"" forKey:key];
                 }
             } else {
                 if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:@"" forKey:key];
                 } else {
-                    [value setValue:@"0" forKey:key];
+                    [value setValue:@"" forKey:key];
                 }
             }
         }
@@ -356,7 +356,7 @@ static const NSUInteger kBatchSize = 50;
         for (NSString *key in keys) {
             dataString = [NSMutableString stringWithFormat:@"%@%@%@",
                           dataString,
-                          value[key],
+                          value[key]?value[key]:@"",
                           ValuesSeperator];
         }
         dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
