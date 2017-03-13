@@ -3,7 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>Black</key>
-	<array/>
+	<array>
+		<string>LaunchViewController</string>
+		<string>PHIndexViewController</string>
+		<string>ProductHighlightsViewController</string>
+		<string>MainViewController</string>
+		<string>JCViewController</string>
+		<string>UIInputWindowController</string>
+		<string>UICompatibilityInputViewController</string>
+	</array>
 	<key>White</key>
 	<array/>
 </dict>
