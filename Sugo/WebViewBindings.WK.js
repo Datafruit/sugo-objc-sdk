@@ -7,6 +7,7 @@ sugo.init_path = function() {
     sugo.hash = window.location.hash;
     sugo.hash = sugo.hash.indexOf('?') < 0 ? sugo.hash : sugo.hash.substring(0, sugo.hash.indexOf('?'));
     sugo.relative_path += sugo.hash;
+    sugo.relative_path = sugo.relative_path.replace('#/', '#');
     for (var i = 0; i < sugo.page_infos.length; i++) {
         var page_info = sugo.page_infos[i]
         if (page_info.page === sugo.relative_path) {

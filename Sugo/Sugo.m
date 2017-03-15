@@ -1027,9 +1027,10 @@ static NSString *defaultProjectToken;
     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:keys[@"AppBundleVersion"]];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:keys[@"AppBundleShortVersionString"]];
-//    [p setValue:[self IFA] forKey:@"ios_ifa"];
+    NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
+    [p setValue:info[@"CFBundleDisplayName"]?info[@"CFBundleDisplayName"]:info[@"Bundle name"] forKey:keys[@"AppBundleName"]];
+    [p setValue:info[@"CFBundleVersion"] forKey:keys[@"AppBundleVersion"]];
+    [p setValue:info[@"CFBundleShortVersionString"] forKey:keys[@"AppBundleShortVersionString"]];
     
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:keys[@"Carrier"]];
@@ -1216,42 +1217,31 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
              */
             NSString *currentStatus = self.telephonyInfo.currentRadioAccessTechnology;
             
-            if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyGPRS"]) {
-                
-                network = @"2G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
-                
-                network = @"2G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyWCDMA"]){
-                
-                network = @"3G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSDPA"]){
-                
-                network = @"3G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyHSUPA"]){
-                
-                network = @"3G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMA1x"]){
-                
-                network = @"2G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"]){
-                
-                network = @"3G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"]){
-                
-                network = @"3G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"]){
-                
-                network = @"3G";
-            } else if ([currentStatus isEqualToString:@"CTRadioAccessTechnologyLTE"]){
-                
+            NSArray *status2G = @[CTRadioAccessTechnologyEdge,
+                                  CTRadioAccessTechnologyGPRS,
+                                  CTRadioAccessTechnologyCDMA1x];
+            
+            NSArray *status3G = @[CTRadioAccessTechnologyHSDPA,
+                                  CTRadioAccessTechnologyWCDMA,
+                                  CTRadioAccessTechnologyHSUPA,
+                                  CTRadioAccessTechnologyCDMAEVDORev0,
+                                  CTRadioAccessTechnologyCDMAEVDORevA,
+                                  CTRadioAccessTechnologyCDMAEVDORevB,
+                                  CTRadioAccessTechnologyeHRPD];
+            
+            NSArray *status4G = @[CTRadioAccessTechnologyLTE];
+            
+            if ([status4G containsObject:currentStatus]) {
                 network = @"4G";
+            } else if ([status3G containsObject:currentStatus]) {
+                network = @"3G";
+            } else if ([status2G containsObject:currentStatus]) {
+                network = @"2G";
             } else {
-                
                 network = @"other";
             }
         }
-        //
+        
         properties[keys[@"Reachability"]] = network;
         
         self.automaticProperties = [properties copy];
