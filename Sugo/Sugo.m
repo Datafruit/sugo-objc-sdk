@@ -40,10 +40,11 @@ static NSString *defaultProjectToken;
 
     Sugo *instance = [[self alloc] initWithID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
     if (values) {
         [instance trackIntegration];
-        [instance trackEvent:values[@"AppEnter"]];
+        [instance trackEvent:values[@"AppEnter"] properties:@{keys[@"PageName"]: values[@"AppEnter"]}];
         [instance timeEvent:values[@"AppStay"]];
         
         [instance checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
@@ -394,11 +395,7 @@ static NSString *defaultProjectToken;
     if (!p[keys[@"EventType"]]) {
         p[keys[@"EventType"]] = eventName;
     }
-    
-    if (!p[keys[@"PageName"]]) {
-        p[keys[@"PageName"]] = eventName;
-    }
-    
+
     [p addEntriesFromDictionary:self.automaticProperties];
     [p addEntriesFromDictionary:self.superProperties];
     if (properties) {
@@ -833,9 +830,10 @@ static NSString *defaultProjectToken;
     NSString *defaultKey = @"trackedKey";
     if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
         
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         if (values) {
-            [self trackEvent:values[@"Integration"]];
+            [self trackEvent:values[@"Integration"] properties:@{keys[@"PageName"]: values[@"Integration"]}];
             [NSUserDefaults.standardUserDefaults setBool:YES
                                                   forKey:defaultKey];
             [NSUserDefaults.standardUserDefaults synchronize];
@@ -906,7 +904,6 @@ static NSString *defaultProjectToken;
                 }
             }
             [self trackEvent:values[@"PageStay"] properties:p];
-            [self trackEvent:values[@"PageExit"] properties:p];
         }
     };
     
@@ -1020,7 +1017,7 @@ static NSString *defaultProjectToken;
              keys[@"Manufacturer"]:  @"Apple",
              keys[@"DeviceBrand"]:   deviceBrand,
              keys[@"DeviceModel"]:   deviceModel,
-             keys[@"SystemName"]:    [device systemName],
+             keys[@"SystemName"]:    @"iOS",//[device systemName],
              keys[@"SystemVersion"]: [device systemVersion],
              keys[@"ScreenWidth"]:   [NSNumber numberWithInt:((int)size.width)],
              keys[@"ScreenHeight"]:  [NSNumber numberWithInt:((int)size.height)],
@@ -1037,7 +1034,6 @@ static NSString *defaultProjectToken;
     [p setValue:info[@"CFBundleDisplayName"]?info[@"CFBundleDisplayName"]:info[@"Bundle name"] forKey:keys[@"AppBundleName"]];
     [p setValue:info[@"CFBundleVersion"] forKey:keys[@"AppBundleVersion"]];
     [p setValue:info[@"CFBundleShortVersionString"] forKey:keys[@"AppBundleShortVersionString"]];
-//    [p setValue:[self IFA] forKey:@"ios_ifa"];
     
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:keys[@"Carrier"]];
@@ -1149,7 +1145,7 @@ static NSString *defaultProjectToken;
                              object:nil];
 #endif // SUGO_NO_APP_LIFECYCLE_SUPPORT
 
-    [self initializeGestureRecognizer];
+//    [self initializeGestureRecognizer];
 }
 
 - (void) initializeGestureRecognizer {
@@ -1299,10 +1295,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         [self flush];
     }
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self trackEvent:values[@"BackgroundEnter"]];
-        [self timeEvent:values[@"BackgroundStay"]];
+        [self trackEvent:values[@"BackgroundEnter"] properties:@{keys[@"PageName"]: values[@"BackgroundEnter"]}];
     }
     
     dispatch_group_enter(bgGroup);
@@ -1324,10 +1320,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ will enter foreground", self);
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self trackEvent:values[@"BackgroundStay"]];
-        [self trackEvent:values[@"BackgroundExit"]];
+        [self trackEvent:values[@"BackgroundExit"] properties:@{keys[@"PageName"]: values[@"BackgroundExit"]}];
         [self.network flushEventQueue:self.eventsQueue];
     }
     
@@ -1344,12 +1340,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ application will terminate", self);
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self rawTrack:nil eventName:values[@"BackgroundStay"] properties:nil];
-        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
-        [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
-        [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
+        [self rawTrack:nil eventName:values[@"AppStay"]  properties:@{keys[@"PageName"]: values[@"AppStay"]}];
+        [self rawTrack:nil eventName:values[@"AppExit"]  properties:@{keys[@"PageName"]: values[@"AppExit"]}];
     }
     
     dispatch_async(_serialQueue, ^{
@@ -1426,7 +1421,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         
         __block BOOL hadError = NO;
         __block NSMutableDictionary *object = [[NSMutableDictionary alloc] init];
-        
+
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
         if (useCache && [userDefaults dataForKey:@"SugoEventBindings"]) {
@@ -1472,7 +1467,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
                                                             andEndpoint:MPNetworkEndpointDecide
                                                          withQueryItems:queryItems];
-            
+
             // Send the network request
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             NSURLSession *session = [NSURLSession sharedSession];
@@ -1525,16 +1520,16 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                                responseData,
                                object);
                 }
-                
+
                 dispatch_semaphore_signal(semaphore);
             }] resume];
             
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-            
+
         } else {
             MPLogInfo(@"%@ decide cache found, skipping network request", self);
         }
-        
+
         if (hadError) {
             if (completion) {
                 completion(nil);
@@ -1545,14 +1540,13 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                       self,
                       (unsigned long)self.eventBindings.count,
                       [[WebViewBindings globalBindings].designerBindings count]);
-            
+
             if (completion) {
                 completion(self.eventBindings);
             }
         }
     });
 }
-
 - (void)handleDecideObject:(NSDictionary *)object
 {
     id commonEventBindings = object[@"event_bindings"];
