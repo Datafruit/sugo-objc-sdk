@@ -20,6 +20,9 @@
 #define SUGO_NO_APP_LIFECYCLE_SUPPORT (defined(SUGO_APP_EXTENSION))
 #define SUGO_NO_UIAPPLICATION_ACCESS (defined(SUGO_APP_EXTENSION))
 
+NSString *SugoBindingsURL;
+NSString *SugoCollectionURL;
+NSString *SugoCodelessURL;
 
 @implementation Sugo
 
@@ -1062,9 +1065,21 @@ static NSString *defaultProjectToken;
     // For URLs
     self.sugoConfiguration[@"URLs"] = [SugoConfigurationPropertyList loadWithName:@"SugoURLs"];
     NSDictionary *urls = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"URLs"]];
-    self.serverURL = urls[@"Bindings"];
-    self.eventCollectionURL = urls[@"Collection"];
-    self.switchboardURL = urls[@"Codeless"];
+    if (SugoBindingsURL) {
+        self.serverURL = SugoBindingsURL;
+    } else {
+        self.serverURL = urls[@"Bindings"];
+    }
+    if (SugoCollectionURL) {
+        self.eventCollectionURL = SugoCollectionURL;
+    } else {
+        self.eventCollectionURL = urls[@"Collection"];
+    }
+    if (SugoCodelessURL) {
+        self.switchboardURL = SugoCodelessURL;
+    } else {
+        self.switchboardURL = urls[@"Codeless"];
+    }
     
     // For custom dimension table
     self.sugoConfiguration[@"DimensionKeys"] = [SugoConfigurationPropertyList loadWithName:@"SugoCustomDimensions" andKey:@"Keys"];
