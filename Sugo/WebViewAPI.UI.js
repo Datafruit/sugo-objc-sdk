@@ -21,11 +21,11 @@ sugo.trackStayEvent = function() {
     sugo.enter_time = new Date().getTime();
     window.onunload = function() {
         var duration = (new Date().getTime() - sugo.enter_time) / 1000;
-        sugo.track('停留', {
-            duration: duration
-        });
+        var tmp_props = JSON.parse(JSON.stringify(sugo.view_props));
+        tmp_props.duration = duration;
+        sugo.track('停留', tmp_props);
     }
-}
+};
 
 var sugoio = {
     track: sugo.track,
