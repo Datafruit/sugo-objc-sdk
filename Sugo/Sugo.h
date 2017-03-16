@@ -32,6 +32,10 @@ FOUNDATION_EXPORT const unsigned char SugoVersionString[];
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString *SugoBindingsURL;
+extern NSString *SugoCollectionURL;
+extern NSString *SugoCodelessURL;
+
 /*!
  @class
  Sugo API.

@@ -4,8 +4,13 @@
 <dict>
 	<key>Black</key>
 	<array>
-		<string>UICompatibilityInputViewController</string>
+		<string>LaunchViewController</string>
+		<string>PHIndexViewController</string>
+		<string>ProductHighlightsViewController</string>
+		<string>MainViewController</string>
+		<string>JCViewController</string>
 		<string>UIInputWindowController</string>
+		<string>UICompatibilityInputViewController</string>
 	</array>
 	<key>White</key>
 	<array/>
