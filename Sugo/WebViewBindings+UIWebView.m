@@ -17,7 +17,7 @@
 
 @implementation WebViewBindings (UIWebView)
 
-- (void)startUIWebViewBindings:(UIWebView **)webView
+- (void)startUIWebViewBindings:(UIWebView *)webView
 {
     void (^uiWebViewDidStartLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
         JSContext *jsContext = [(UIWebView *)webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
@@ -29,28 +29,29 @@
     };
     
     void (^uiWebViewDidFinishLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
-        if (![webView isKindOfClass:[UIWebView class]]
-            || ((UIWebView *)webView).request.URL.absoluteString.length <= 0
-            || ((UIWebView *)webView).isLoading) {
+        UIWebView *uiWebView = (UIWebView *)webView;
+        if (uiWebView.request.URL.absoluteString.length <= 0
+            || uiWebView.isLoading) {
             return;
         }
         if (!self.uiWebViewJavaScriptInjected) {
-            JSContext *jsContext = [(UIWebView *)webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+            JSContext *jsContext = [uiWebView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
             jsContext[@"SugoWebViewJSExport"] = [SugoWebViewJSExport class];
-            [((UIWebView *)webView) stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
+            [uiWebView stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
             self.uiWebViewJavaScriptInjected = YES;
             MPLogDebug(@"UIWebView Injected");
         }
     };
     
+    UIWebView *uiWebView = (UIWebView *)webView;
     if (!self.uiWebViewSwizzleRunning) {
-        if ((*webView).delegate) {
+        if (uiWebView.delegate) {
             [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
-                                onClass:[(*webView).delegate class]
+                                onClass:[uiWebView.delegate class]
                               withBlock:uiWebViewDidStartLoadBlock
                                   named:self.uiWebViewDidStartLoadBlockName];
             [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
-                                onClass:[(*webView).delegate class]
+                                onClass:[uiWebView.delegate class]
                               withBlock:uiWebViewDidFinishLoadBlock
                                   named:self.uiWebViewDidFinishLoadBlockName];
             self.uiWebViewSwizzleRunning = YES;
@@ -75,7 +76,7 @@
     }
 }
 
-- (void)updateUIWebViewBindings:(UIWebView **)webView
+- (void)updateUIWebViewBindings:(UIWebView *)webView
 {
    if (self.uiWebViewSwizzleRunning) {
    }
