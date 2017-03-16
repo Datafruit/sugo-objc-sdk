@@ -586,6 +586,7 @@ static NSString *defaultProjectToken;
             for (MPEventBinding *binding in eventBindings) {
                 [binding execute];
             }
+            [WebViewBindings globalBindings].isWebViewNeedInject = NO;
             [[WebViewBindings globalBindings] fillBindings];
         });
     }];

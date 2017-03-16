@@ -92,6 +92,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
                 [[WebViewBindings globalBindings].codelessBindings removeAllObjects];
                 [[WebViewBindings globalBindings].codelessBindings addObjectsFromArray:htmlEvents];
                 [WebViewBindings globalBindings].mode = Codeless;
+                [WebViewBindings globalBindings].isWebViewNeedInject = YES;
                 [[WebViewBindings globalBindings] fillBindings];
             }
         });

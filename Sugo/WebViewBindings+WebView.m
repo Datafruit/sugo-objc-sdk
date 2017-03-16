@@ -50,7 +50,7 @@
             if (self.uiWebView.delegate) {
                 self.uiWebViewDelegate = self.uiWebView.delegate;
             }
-            [self startUIWebViewBindings:&uiWebView];
+            [self startUIWebViewBindings:self.uiWebView];
         };
         
         void (^wkDidMoveToWindowBlock)(id, SEL) = ^(id webView, SEL command) {
@@ -127,9 +127,12 @@
         if (self.mode == Codeless) {
             self.isWebViewNeedReload = YES;
         }
-        if (!self.isWebViewNeedReload) {
+        if (!self.isWebViewNeedReload && self.isWebViewNeedInject) {
             [self stop];
             [self excute];
+            if (self.isWebViewNeedInject) {
+                self.isWebViewNeedInject = NO;
+            }
         }
     }
     
@@ -138,8 +141,7 @@
             return;
         }
         if (self.uiWebView) {
-            UIWebView *webView = self.uiWebView;
-            [self updateUIWebViewBindings:&webView];
+            [self updateUIWebViewBindings:self.uiWebView];
             [self.uiWebView performSelectorOnMainThread:@selector(reload)
                                              withObject:nil
                                           waitUntilDone:NO];
