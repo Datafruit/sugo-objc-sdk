@@ -53,6 +53,7 @@ static WebViewBindings *globalBindings = nil;
     _uiVcPath = [[NSMutableString alloc] init];
     _wkVcPath = [[NSMutableString alloc] init];
     _isWebViewNeedReload = NO;
+    _isWebViewNeedInject = YES;
     _viewSwizzleRunning = NO;
     
     _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
