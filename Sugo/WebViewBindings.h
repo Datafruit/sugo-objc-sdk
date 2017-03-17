@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 
 @property (atomic, strong) NSMutableString* stringBindings;
 @property BOOL isWebViewNeedReload;
+@property BOOL isWebViewNeedInject;
 
 @property (atomic, weak) UIWebView* uiWebView;
 @property (atomic, retain) id <UIWebViewDelegate> uiWebViewDelegate;
