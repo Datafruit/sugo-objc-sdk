@@ -42,6 +42,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
         [oldBinding stop];
     }
     self.bindings = newBindings;
+    [Sugo sharedInstance].eventBindings = newBindings;
     for (MPEventBinding *newBinding in self.bindings) {
         [newBinding execute];
     }
@@ -85,6 +86,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
                 bindingCollection = [[MPEventBindingCollection alloc] init];
                 [conn setSessionObject:bindingCollection forKey:@"event_bindings"];
             }
+            
             [bindingCollection updateBindings:commonEvents];
             
             NSArray *htmlEvents = [self payload][@"h5_events"];
