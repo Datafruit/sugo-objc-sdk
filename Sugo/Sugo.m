@@ -1670,6 +1670,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                                                                     connectCallback:connectCallback
                                                                  disconnectCallback:disconnectCallback];
     [self.eventsQueue removeAllObjects];
+    [self stopFlushTimer];
+    [self stopCacheTimer];
 }
 
 - (BOOL)handleURL:(NSURL *)url

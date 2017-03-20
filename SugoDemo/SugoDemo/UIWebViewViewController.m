@@ -1,31 +1,29 @@
 //
-//  UIWebViewController.m
+//  UIWebViewViewController.m
 //  SugoDemo
 //
-//  Created by Zack on 28/12/16.
-//  Copyright © 2016年 sugo. All rights reserved.
+//  Created by Zack on 20/3/17.
+//  Copyright © 2017年 sugo. All rights reserved.
 //
 
-#import "UIWebViewController.h"
+#import "UIWebViewViewController.h"
 
-@interface UIWebViewController ()
+@interface UIWebViewViewController ()
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @end
 
-@implementation UIWebViewController
+@implementation UIWebViewViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.title = @"UIWebView";
+    // Do any additional setup after loading the view.self.webView.delegate = self;
     
     self.webView.delegate = self;
     NSURL *url = [[NSURL alloc] initWithString:@"https://www.jd.com/"];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [self.webView loadRequest:request];
-    
 }
 
 - (void)didReceiveMemoryWarning {
