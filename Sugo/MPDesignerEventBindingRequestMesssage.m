@@ -42,7 +42,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
         [oldBinding stop];
     }
     self.bindings = newBindings;
-    [Sugo sharedInstance].eventBindings = newBindings;
+    [Sugo sharedInstance].eventBindings = [NSSet setWithArray:[newBindings copy]];
     for (MPEventBinding *newBinding in self.bindings) {
         [newBinding execute];
     }
