@@ -277,6 +277,19 @@ extern NSString *SugoCodelessURL;
  @method
  
  @abstract
+ Register an immutable NSDictionary with highest priority before object initialized.
+ 
+ @discussion
+ The API must be called before initializer.
+ 
+ @param priorityProperties  highest priority properties
+ */
++ (void)registerPriorityProperties:(NSDictionary *)priorityProperties;
+
+/*!
+ @method
+ 
+ @abstract
  Returns (and creates, if needed) a singleton instance of the API.
  
  @discussion
@@ -325,11 +338,9 @@ extern NSString *SugoCodelessURL;
  Returns a previously instantiated singleton instance of the API.
  
  @discussion
- The API must be initialized with <code>sharedInstanceWithToken:</code> or
- <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
+ The API must be initialized with initializer before calling this class method.
  This method will return <code>nil</code> if there are no instances created. If there is more than
- one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code>
- or <code>initWithToken:launchOptions:andFlushInterval:</code>.
+ one instace, it will return the first one that was created by using initializer.
  */
 + (Sugo *)sharedInstance;
 
@@ -340,7 +351,7 @@ extern NSString *SugoCodelessURL;
  Initializes an instance of the API with the given project token.
  
  @discussion
- Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
+ Creates and initializes a new API object. See also initializer.
  
  @param projectID       your project ID
  @param apiToken        your project token
