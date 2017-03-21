@@ -26,6 +26,7 @@
 		14BA1A8C1E13EC9B002F0C4B /* UIWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A8B1E13EC9B002F0C4B /* UIWebViewController.m */; };
 		14BA1A8F1E13ECAB002F0C4B /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A8E1E13ECAB002F0C4B /* WKWebViewController.m */; };
 		14BA1A921E13ECD7002F0C4B /* ActionCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A911E13ECD7002F0C4B /* ActionCompleteViewController.m */; };
+		14BACBE21E80D6200048D781 /* SwitchModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BACBE11E80D6200048D781 /* SwitchModeViewController.m */; };
 		14D3A06D1E7F6B4A00DDE9EA /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06C1E7F6B4A00DDE9EA /* ScanViewController.m */; };
 		14D3A0701E7F6B8500DDE9EA /* InstructionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06F1E7F6B8500DDE9EA /* InstructionsViewController.m */; };
 		14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */; };
@@ -78,6 +79,8 @@
 		14BA1A8E1E13ECAB002F0C4B /* WKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
 		14BA1A901E13ECD7002F0C4B /* ActionCompleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionCompleteViewController.h; sourceTree = "<group>"; };
 		14BA1A911E13ECD7002F0C4B /* ActionCompleteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionCompleteViewController.m; sourceTree = "<group>"; };
+		14BACBE01E80D6200048D781 /* SwitchModeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchModeViewController.h; sourceTree = "<group>"; };
+		14BACBE11E80D6200048D781 /* SwitchModeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchModeViewController.m; sourceTree = "<group>"; };
 		14D3A06B1E7F6B4A00DDE9EA /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
 		14D3A06C1E7F6B4A00DDE9EA /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		14D3A06E1E7F6B8500DDE9EA /* InstructionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstructionsViewController.h; sourceTree = "<group>"; };
@@ -135,6 +138,8 @@
 			children = (
 				14D3A06B1E7F6B4A00DDE9EA /* ScanViewController.h */,
 				14D3A06C1E7F6B4A00DDE9EA /* ScanViewController.m */,
+				14BACBE01E80D6200048D781 /* SwitchModeViewController.h */,
+				14BACBE11E80D6200048D781 /* SwitchModeViewController.m */,
 			);
 			name = Scan;
 			sourceTree = "<group>";
@@ -344,6 +349,7 @@
 				14BA1A891E13EC7D002F0C4B /* CodelessCommonViewController.m in Sources */,
 				14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */,
 				140CECAD1E7FD37300422EA8 /* UITableViewViewController.m in Sources */,
+				14BACBE21E80D6200048D781 /* SwitchModeViewController.m in Sources */,
 				14BA1A8F1E13ECAB002F0C4B /* WKWebViewController.m in Sources */,
 				14BA1A8C1E13EC9B002F0C4B /* UIWebViewController.m in Sources */,
 				140CECB61E7FD6DB00422EA8 /* UIWebViewViewController.m in Sources */,
