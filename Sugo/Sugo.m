@@ -29,6 +29,13 @@ NSString *SugoCodelessURL;
 static NSMutableDictionary *instances;
 static NSString *defaultProjectToken;
 
++ (void)registerPriorityProperties:(NSDictionary *)priorityProperties
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setValue:priorityProperties forKey:@"SugoPriorityProperties"];
+    [userDefaults synchronize];
+}
+
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
     if (instances[projectID] && instances[apiToken]) {
