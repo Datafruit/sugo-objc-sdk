@@ -29,6 +29,13 @@ NSString *SugoCodelessURL;
 static NSMutableDictionary *instances;
 static NSString *defaultProjectToken;
 
++ (void)registerPriorityProperties:(NSDictionary *)priorityProperties
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setValue:priorityProperties forKey:@"SugoPriorityProperties"];
+    [userDefaults synchronize];
+}
+
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
     if (instances[projectID] && instances[apiToken]) {
@@ -126,6 +133,7 @@ static NSString *defaultProjectToken;
         self.superProperties = [NSMutableDictionary dictionary];
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
         self.automaticProperties = [self collectAutomaticProperties];
+        self.priorityProperties = [self obtainPriorityProperties];
         self.taskId = UIBackgroundTaskInvalid;
         
         NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
@@ -398,6 +406,7 @@ static NSString *defaultProjectToken;
 
     [p addEntriesFromDictionary:self.automaticProperties];
     [p addEntriesFromDictionary:self.superProperties];
+    [p addEntriesFromDictionary:self.priorityProperties];
     if (properties) {
         [p addEntriesFromDictionary:properties];
     }
@@ -1005,6 +1014,19 @@ static NSString *defaultProjectToken;
 + (NSString *)libVersion
 {
     return [[NSBundle bundleForClass:[Sugo class]] infoDictionary][@"CFBundleShortVersionString"];
+}
+
+- (NSDictionary *)obtainPriorityProperties
+{
+    NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *priorityProperties = [userDefaults objectForKey:@"SugoPriorityProperties"];
+    if (priorityProperties) {
+        for (NSString *key in priorityProperties.allKeys) {
+            [p setValue:priorityProperties[key] forKey:key];
+        }
+    }
+    return [p copy];
 }
 
 - (NSDictionary *)collectDeviceProperties
