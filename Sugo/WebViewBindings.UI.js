@@ -48,7 +48,9 @@ sugo.delegate = function(eventType) {
             var path_str = paths[idx];
             var event = sugo.current_event_bindings[path_str];
             if (event.event_type != eventType) {
-                continue;
+                if (!(eventType === 'touchend' && event.event_type === 'click')) {
+                    continue;
+                }
             }
             var path = event.path.path;
             if (event.similar === true) {
@@ -89,4 +91,5 @@ sugo.bindEvent = function() {
     sugo.delegate('click');
     sugo.delegate('focus');
     sugo.delegate('change');
+    sugo.delegate('touchend');
 };
