@@ -55,7 +55,9 @@
         scanRect = CGRectMake(scanRect.origin.y/windowSize.height, scanRect.origin.x/windowSize.width, scanRect.size.height/windowSize.height,scanRect.size.width/windowSize.width);
         
         self.device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-        
+        if (!self.device) {
+            return;
+        }
         self.input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
         
         self.output = [[AVCaptureMetadataOutput alloc]init];
@@ -98,6 +100,7 @@
             case AVAuthorizationStatusDenied:
             case AVAuthorizationStatusRestricted:
             case AVAuthorizationStatusNotDetermined:
+                [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:nil];
                 break;
         }
     }
