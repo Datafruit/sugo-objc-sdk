@@ -42,7 +42,7 @@
 
 - (void)setupScanner {
     
-    if (![self hasCameraPemission]) {
+    if (![self hasCameraPermission]) {
         return;
     }
     
@@ -84,8 +84,8 @@
     [self.session startRunning];
 }
 
-- (BOOL)hasCameraPemission {
-    BOOL isHavePemission = NO;
+- (BOOL)hasCameraPermission {
+    BOOL isHavePermission = NO;
     if ([AVCaptureDevice respondsToSelector:@selector(authorizationStatusForMediaType:)])
     {
         AVAuthorizationStatus permission =
@@ -93,18 +93,16 @@
         
         switch (permission) {
             case AVAuthorizationStatusAuthorized:
-                isHavePemission = YES;
+                isHavePermission = YES;
                 break;
             case AVAuthorizationStatusDenied:
             case AVAuthorizationStatusRestricted:
-                break;
             case AVAuthorizationStatusNotDetermined:
-                isHavePemission = YES;
                 break;
         }
     }
     
-    return isHavePemission;
+    return isHavePermission;
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
