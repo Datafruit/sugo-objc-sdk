@@ -152,9 +152,7 @@ static NSString *defaultProjectToken;
         
         [self setUpListeners];
         [self unarchive];
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
-        [self executeCachedEventBindings];
-#endif
+
         instances[apiToken] = self;
     }
     return self;
@@ -1728,16 +1726,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             && [((NSString *)item.lastObject) isEqualToString:self.apiToken]) {
             [self connectToABTestDesigner];
             break;
-        }
-    }
-}
-
-#pragma mark - Sugo Event Bindings
-
-- (void)executeCachedEventBindings {
-    for (id binding in self.eventBindings) {
-        if ([binding isKindOfClass:[MPEventBinding class]]) {
-            [binding execute];
         }
     }
 }

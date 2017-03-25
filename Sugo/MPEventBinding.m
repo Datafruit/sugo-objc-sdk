@@ -10,6 +10,7 @@
 #import "MPEventBinding.h"
 #import "MPUIControlBinding.h"
 #import "MPUITableViewBinding.h"
+#import "MPUITextViewBinding.h"
 #import "MPLogger.h"
 
 @implementation MPEventBinding
@@ -35,9 +36,10 @@
 {
     NSDictionary *classTypeMap = @{
                                    [MPUIControlBinding typeName]: [MPUIControlBinding class],
-                                   [MPUITableViewBinding typeName]: [MPUITableViewBinding class]
+                                   [MPUITableViewBinding typeName]: [MPUITableViewBinding class],
+                                   [MPUITextViewBinding typeName]: [MPUITextViewBinding class]
                                    };
-    return[classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
+    return [classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
 }
 
 + (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties

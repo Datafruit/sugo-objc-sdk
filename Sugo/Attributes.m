@@ -56,6 +56,9 @@
             } else if ([object isKindOfClass:[UITextField class]]) {
                 MPLogDebug(@"attributes: UITextField");
                 [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%@", ((UITextField *)object).text]}];
+            } else if ([object isKindOfClass:[UITextView class]]) {
+                MPLogDebug(@"attributes: UITextView");
+                [aValues addEntriesFromDictionary:@{key: [NSString stringWithFormat:@"%@", ((UITextView *)object).text]}];
             } else {
                 MPLogDebug(@"attributes class: %@", NSStringFromClass([object classForCoder]));
                 aValues[key] = [NSString stringWithFormat:@"%@", self.paths[key]];

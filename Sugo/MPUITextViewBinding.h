@@ -1,14 +1,14 @@
 //
-//  MPUITableViewBinding.h
+//  MPUITextViewBinding.h
 //  Sugo
 //
-//  Created by Amanda Canyon on 8/5/14.
-//  Copyright (c) 2014 Sugo. All rights reserved.
+//  Created by Zack on 24/3/17.
+//  Copyright © 2017年 sugo. All rights reserved.
 //
 
 #import "MPEventBinding.h"
 
-@interface MPUITableViewBinding : MPEventBinding
+@interface MPUITextViewBinding : MPEventBinding
 
 - (instancetype)init __unavailable;
 - (instancetype)initWithEventID:(NSString *)eventID
@@ -16,6 +16,5 @@
                          onPath:(NSString *)path
                    withDelegate:(Class)delegateClass
                      attributes:(Attributes *)attributes;
-
 
 @end

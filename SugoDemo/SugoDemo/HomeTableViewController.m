@@ -34,6 +34,48 @@ static int deprecatedTimes = 0;
     
 }
 
+- (IBAction)scan:(id)sender {
+    [self checkCameraPermissionForScan];
+}
+
+
+- (void)checkCameraPermissionForScan {
+    if ([AVCaptureDevice respondsToSelector:@selector(authorizationStatusForMediaType:)])
+    {
+        AVAuthorizationStatus permission = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+        
+        switch (permission) {
+            case AVAuthorizationStatusAuthorized:
+                [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"Scan"] animated:YES];
+                break;
+            case AVAuthorizationStatusDenied:
+            case AVAuthorizationStatusRestricted:
+                [self presentViewController:[self createCameraAlertController] animated:YES completion:nil];
+                break;
+            case AVAuthorizationStatusNotDetermined:
+                [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                    if (granted) {
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"Scan"] animated:YES];
+                        });
+                    }
+                }];
+                break;
+        }
+    }
+}
+
+- (UIAlertController *)createCameraAlertController {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"相机权限不足"
+                                                                             message:@"请到 设置->隐私->相机 中设置"
+                                                                      preferredStyle:UIAlertControllerStyleAlert ];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"好"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:nil];
+    [alertController addAction:cancelAction];
+    return alertController;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

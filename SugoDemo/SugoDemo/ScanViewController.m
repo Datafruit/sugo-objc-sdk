@@ -100,7 +100,6 @@
             case AVAuthorizationStatusDenied:
             case AVAuthorizationStatusRestricted:
             case AVAuthorizationStatusNotDetermined:
-                [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:nil];
                 break;
         }
     }
