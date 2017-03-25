@@ -47,23 +47,23 @@ static NSString *defaultProjectToken;
 
     Sugo *instance = [[self alloc] initWithID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
     
+    [instance trackIntegration];
+
     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
-        [instance trackIntegration];
+    if (keys && values) {
         [instance trackEvent:values[@"AppEnter"] properties:@{keys[@"PageName"]: values[@"AppEnter"]}];
-        [instance timeEvent:values[@"AppStay"]];
-        
-        [instance checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                for (MPEventBinding *binding in eventBindings) {
-                    [binding execute];
-                }
-                [[WebViewBindings globalBindings] fillBindings];
-            });
-        }];
-        [instance startCacheTimer];
     }
+    
+    [instance checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            for (MPEventBinding *binding in eventBindings) {
+                [binding execute];
+            }
+            [[WebViewBindings globalBindings] fillBindings];
+        });
+    }];
+    [instance startCacheTimer];
     
     return instance;
 }
@@ -1292,6 +1292,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+    if (keys && values) {
+        [self timeEvent:values[@"AppStay"]];
+    }
     [self startFlushTimer];
 }
 
@@ -1320,8 +1325,9 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
+    if (keys && values) {
         [self trackEvent:values[@"BackgroundEnter"] properties:@{keys[@"PageName"]: values[@"BackgroundEnter"]}];
+        [self trackEvent:values[@"AppStay"]  properties:@{keys[@"PageName"]: values[@"AppStay"]}];
     }
     
     dispatch_group_enter(bgGroup);
@@ -1345,10 +1351,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
+    if (keys && values) {
         [self trackEvent:values[@"BackgroundExit"] properties:@{keys[@"PageName"]: values[@"BackgroundExit"]}];
-        [self.network flushEventQueue:self.eventsQueue];
     }
+    [self.network flushEventQueue:self.eventsQueue];
     
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
@@ -1362,13 +1368,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will terminate", self);
-    
-    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
-        [self rawTrack:nil eventName:values[@"AppStay"]  properties:@{keys[@"PageName"]: values[@"AppStay"]}];
-        [self rawTrack:nil eventName:values[@"AppExit"]  properties:@{keys[@"PageName"]: values[@"AppExit"]}];
-    }
     
     dispatch_async(_serialQueue, ^{
        [self archive];
