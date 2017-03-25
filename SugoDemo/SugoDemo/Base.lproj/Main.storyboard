@@ -181,7 +181,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="扫一扫"/>
                                     <connections>
-                                        <segue destination="9HR-se-WtH" kind="show" id="MCB-Ug-LUO"/>
+                                        <action selector="scan:" destination="Bh2-Q1-xvm" eventType="touchUpInside" id="rkX-Mu-9ze"/>
                                     </connections>
                                 </button>
                             </barButtonItem>
@@ -473,9 +473,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cgw-Vl-6Fz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-152" y="1869"/>
+            <point key="canvasLocation" x="-499" y="1869"/>
         </scene>
-        <!--Table View View Controller-->
+        <!--列表控件-->
         <scene sceneID="0bf-Qd-Qx6">
             <objects>
                 <viewController id="rhN-fY-CaE" customClass="UITableViewViewController" sceneMemberID="viewController">
@@ -487,7 +487,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    文本列表测试" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pQQ-TG-Kxc" userLabel="文本列表测试">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    列表测试" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pQQ-TG-Kxc" userLabel="文本列表测试">
                                 <rect key="frame" x="0.0" y="64" width="320" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -533,13 +533,14 @@
                             <constraint firstItem="pQQ-TG-Kxc" firstAttribute="top" secondItem="ePt-NE-V4K" secondAttribute="bottom" id="n2T-ac-ezR"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="列表控件" id="xSY-Sa-0Jh"/>
                     <connections>
                         <outlet property="tableView" destination="sYF-O8-9Qe" id="I0q-p0-vHD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rhF-rk-HGe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="458" y="1869"/>
+            <point key="canvasLocation" x="150" y="1869"/>
         </scene>
         <!--原生埋点-->
         <scene sceneID="H79-uU-tIa">
@@ -592,6 +593,26 @@
                                             <segue destination="rhN-fY-CaE" kind="show" id="KJB-pb-cCc"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="idb-ai-dhd" style="IBUITableViewCellStyleDefault" id="tgx-Te-kZF">
+                                        <rect key="frame" x="0.0" y="100" width="320" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tgx-Te-kZF" id="w51-oy-jQx">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="49.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="文本控件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="idb-ai-dhd">
+                                                    <rect key="frame" x="15" y="0.0" width="270" height="49.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="PaB-dU-VPX" kind="show" id="wR0-A5-W5c"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -609,7 +630,7 @@
         <!--扫一扫-->
         <scene sceneID="znt-dX-aic">
             <objects>
-                <viewController id="9HR-se-WtH" customClass="ScanViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Scan" id="9HR-se-WtH" customClass="ScanViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="e9v-gc-JUS"/>
                         <viewControllerLayoutGuide type="bottom" id="kdR-zW-KAP"/>
@@ -765,6 +786,56 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ads-ca-ZIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1763" y="1081"/>
+        </scene>
+        <!--文本控件-->
+        <scene sceneID="mZ4-e0-HR4">
+            <objects>
+                <viewController id="PaB-dU-VPX" customClass="UITextViewViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Hjs-Qb-OGa"/>
+                        <viewControllerLayoutGuide type="bottom" id="wa7-cq-P9o"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="42i-sV-rmp">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    文本测试" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5rd-2s-xZF">
+                                <rect key="frame" x="0.0" y="64" width="320" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="ycG-Oa-1x0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="b0v-9z-dKq">
+                                <rect key="frame" x="0.0" y="114" width="320" height="454"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">数果智能(SUGO)是一家专业的大数据分析服务公司，致力于帮助客户实现数据商业价值。公司针对企业提供大数据分析产品和完整解决方案，以及针对传统企业提供大数据相关咨询和解决方案。
+公司致力于通过“智能实时分析平台 + 智能场景化服务”全新模式的实践，构筑全新的数据智能服务商业体系。</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="5rd-2s-xZF" firstAttribute="width" secondItem="42i-sV-rmp" secondAttribute="width" id="3OS-PW-OZg"/>
+                            <constraint firstItem="5rd-2s-xZF" firstAttribute="centerX" secondItem="42i-sV-rmp" secondAttribute="centerX" id="5Yj-eb-0eg"/>
+                            <constraint firstItem="b0v-9z-dKq" firstAttribute="width" secondItem="42i-sV-rmp" secondAttribute="width" id="ZHI-wr-hWM"/>
+                            <constraint firstItem="5rd-2s-xZF" firstAttribute="top" secondItem="Hjs-Qb-OGa" secondAttribute="bottom" id="nUH-A6-hi0"/>
+                            <constraint firstItem="b0v-9z-dKq" firstAttribute="centerX" secondItem="42i-sV-rmp" secondAttribute="centerX" id="nhB-8d-PAf"/>
+                            <constraint firstItem="b0v-9z-dKq" firstAttribute="top" secondItem="5rd-2s-xZF" secondAttribute="bottom" id="q3A-nq-vCc"/>
+                            <constraint firstItem="wa7-cq-P9o" firstAttribute="top" secondItem="b0v-9z-dKq" secondAttribute="bottom" id="tac-So-y6n"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="文本控件" id="Z3t-zd-iT7"/>
+                    <connections>
+                        <outlet property="textView" destination="b0v-9z-dKq" id="4Mi-7r-m0G"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J2x-8m-Mio" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="804.375" y="1868.661971830986"/>
         </scene>
         <!--UIWebView-->
         <scene sceneID="OVS-fM-xfT">

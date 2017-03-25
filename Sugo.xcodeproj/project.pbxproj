@@ -135,6 +135,8 @@
 		141AC8FF1E137088008D67F6 /* SugoWebViewJSExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8601E137088008D67F6 /* SugoWebViewJSExport.m */; };
 		141DFD221E442A0400714BA7 /* SugoPageInfos.h in Headers */ = {isa = PBXBuildFile; fileRef = 141DFD201E442A0400714BA7 /* SugoPageInfos.h */; };
 		141DFD231E442A0400714BA7 /* SugoPageInfos.m in Sources */ = {isa = PBXBuildFile; fileRef = 141DFD211E442A0400714BA7 /* SugoPageInfos.m */; };
+		144496971E8522010076BC50 /* MPUITextViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 144496951E8522010076BC50 /* MPUITextViewBinding.h */; };
+		144496981E8522010076BC50 /* MPUITextViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 144496961E8522010076BC50 /* MPUITextViewBinding.m */; };
 		144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */; };
 		144D2E461E20C5A800387FD2 /* WebViewAPI.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3D1E20C5A800387FD2 /* WebViewAPI.UI.js */; };
 		144D2E471E20C5A800387FD2 /* Utils.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3E1E20C5A800387FD2 /* Utils.js */; };
@@ -304,6 +306,8 @@
 		141AC8601E137088008D67F6 /* SugoWebViewJSExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoWebViewJSExport.m; sourceTree = "<group>"; };
 		141DFD201E442A0400714BA7 /* SugoPageInfos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPageInfos.h; sourceTree = "<group>"; };
 		141DFD211E442A0400714BA7 /* SugoPageInfos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoPageInfos.m; sourceTree = "<group>"; };
+		144496951E8522010076BC50 /* MPUITextViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITextViewBinding.h; sourceTree = "<group>"; };
+		144496961E8522010076BC50 /* MPUITextViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITextViewBinding.m; sourceTree = "<group>"; };
 		144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.UI.js; sourceTree = "<group>"; };
 		144D2E3D1E20C5A800387FD2 /* WebViewAPI.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewAPI.UI.js; sourceTree = "<group>"; };
 		144D2E3E1E20C5A800387FD2 /* Utils.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Utils.js; sourceTree = "<group>"; };
@@ -463,6 +467,8 @@
 				141AC8361E137088008D67F6 /* MPUIControlBinding.m */,
 				141AC83A1E137088008D67F6 /* MPUITableViewBinding.h */,
 				141AC83B1E137088008D67F6 /* MPUITableViewBinding.m */,
+				144496951E8522010076BC50 /* MPUITextViewBinding.h */,
+				144496961E8522010076BC50 /* MPUITextViewBinding.m */,
 			);
 			name = CommonBindings;
 			sourceTree = "<group>";
@@ -783,6 +789,7 @@
 				141AC8681E137088008D67F6 /* SugoExceptionHandler.h in Headers */,
 				141AC8F41E137088008D67F6 /* WebViewBindings.h in Headers */,
 				141AC8DD1E137088008D67F6 /* MPValueTransformers.h in Headers */,
+				144496971E8522010076BC50 /* MPUITextViewBinding.h in Headers */,
 				141AC8E41E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h in Headers */,
 				141AC8BB1E137088008D67F6 /* MPResources.h in Headers */,
 				141AC8721E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
@@ -941,6 +948,7 @@
 				141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */,
 				141AC8BC1E137088008D67F6 /* MPResources.m in Sources */,
 				14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */,
+				144496981E8522010076BC50 /* MPUITextViewBinding.m in Sources */,
 				141AC8861E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				141AC8771E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				141AC87D1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,

@@ -1,24 +1,24 @@
 //
-//  MPUITableViewBinding.m
+//  MPUITextViewBinding.m
 //  Sugo
 //
-//  Created by Amanda Canyon on 8/5/14.
-//  Copyright (c) 2014 Sugo. All rights reserved.
+//  Created by Zack on 24/3/17.
+//  Copyright © 2017年 sugo. All rights reserved.
 //
 
+#import "MPUITextViewBinding.h"
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
 #import "MPSwizzler.h"
-#import "MPUITableViewBinding.h"
 #import "SugoPrivate.h"
 #import "UIViewController+SugoHelpers.h"
 #import "MPLogger.h"
 
-@implementation MPUITableViewBinding
+@implementation MPUITextViewBinding
 
 + (NSString *)typeName
 {
-    return @"ui_table_view";
+    return @"ui_text_view";
 }
 
 + (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
@@ -28,7 +28,7 @@
         MPLogDebug(@"must supply a view path to bind by");
         return nil;
     }
-
+    
     NSString *eventID = object[@"event_id"];
     if (![eventID isKindOfClass:[NSString class]] || eventID.length < 1 ) {
         MPLogDebug(@"binding requires an event id");
@@ -40,21 +40,21 @@
         MPLogDebug(@"binding requires an event name");
         return nil;
     }
-
+    
     Class delegate = NSClassFromString(object[@"table_delegate"]);
-    if (!delegate || ![delegate instancesRespondToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+    if (!delegate || ![delegate instancesRespondToSelector:@selector(textViewDidBeginEditing:)]) {
         MPLogDebug(@"binding requires a delegate class");
         return nil;
     }
-
+    
     NSDictionary *attributesPaths = object[@"attributes"];
     Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
     
-    return [[MPUITableViewBinding alloc] initWithEventID:(NSString *)eventID
-                                               eventName:eventName
-                                                  onPath:path
-                                            withDelegate:delegate
-                                              attributes:attributes];
+    return [[MPUITextViewBinding alloc] initWithEventID:(NSString *)eventID
+                                              eventName:eventName
+                                                 onPath:path
+                                           withDelegate:delegate
+                                             attributes:attributes];
 }
 
 #pragma clang diagnostic push
@@ -94,28 +94,20 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"UITableView Event Tracking: '%@' for '%@'", [self eventName], [self path]];
+    return [NSString stringWithFormat:@"UITextView Event Tracking: '%@' for '%@'", [self eventName], [self path]];
 }
-
 
 #pragma mark -- Executing Actions
 
 - (void)execute
 {
     if (!self.running && self.swizzleClass != nil) {
-        void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
+        void (^block)(id, SEL, id) = ^(id view, SEL command, UITextView *textView) {
             NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
             // select targets based off path
-            if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
-                UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-                NSString *label = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
-                
-                NSMutableDictionary *p = [[NSMutableDictionary alloc]
-                                          initWithDictionary:@{
-                                                               @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
-                                                               @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
-                                                               @"Cell Label": label
-                                                               }];
+            if (textView && [self.path isLeafSelected:textView fromRoot:root]) {
+                NSString *text = textView.text?textView.text:@"";
+                NSMutableDictionary *p = [NSMutableDictionary dictionary];
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
                 }
@@ -123,7 +115,8 @@
                     && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
                     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
                     NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
-                    p[keys[@"EventType"]] = values[@"click"];
+                    p[keys[@"EventLabel"]] = text;
+                    p[keys[@"EventType"]] = values[@"focus"];
                     p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
                     if ([SugoPageInfos global].infos.count > 0) {
                         for (NSDictionary *info in [SugoPageInfos global].infos) {
@@ -133,14 +126,14 @@
                         }
                     }
                 }
-
+                
                 [[self class] track:[self eventID]
                           eventName:[self eventName]
                          properties:p];
             }
         };
-
-        [MPSwizzler swizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)
+        
+        [MPSwizzler swizzleSelector:@selector(textViewDidBeginEditing:)
                             onClass:self.swizzleClass
                           withBlock:block
                               named:self.name];
@@ -151,25 +144,21 @@
 - (void)stop
 {
     if (self.running && self.swizzleClass != nil) {
-        [MPSwizzler unswizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)
+        [MPSwizzler unswizzleSelector:@selector(textViewDidBeginEditing:)
                               onClass:self.swizzleClass
                                 named:self.name];
         self.running = false;
     }
 }
 
-#pragma mark -- Helper Methods
-
-- (UITableView *)parentTableView:(UIView *)cell {
-    // iterate up the view hierarchy to find the table containing this cell/view
-    UIView *aView = cell.superview;
-    while (aView != nil) {
-        if ([aView isKindOfClass:[UITableView class]]) {
-            return (UITableView *)aView;
-        }
-        aView = aView.superview;
-    }
-    return nil; // this view is not within a tableView
-}
-
 @end
+
+
+
+
+
+
+
+
+
+

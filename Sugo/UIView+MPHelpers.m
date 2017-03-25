@@ -147,6 +147,8 @@
         text = ((UILabel *)self).text;
     } else if ([self isKindOfClass:[UIButton class]]) {
         text = [((UIButton *)self) titleForState:UIControlStateNormal];
+    } else if ([self isKindOfClass:[UITextView class]]) {
+        text = ((UITextView *)self).text;
     } else if ([self respondsToSelector:titleSelector]) {
         IMP titleImp = [self methodForSelector:titleSelector];
         void *(*func)(id, SEL) = (void *(*)(id, SEL))titleImp;

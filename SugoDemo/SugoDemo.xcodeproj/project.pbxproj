@@ -20,6 +20,7 @@
 		141AC7A91E1366DB008D67F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 141AC7A71E1366DB008D67F6 /* LaunchScreen.storyboard */; };
 		14282F1E1E1F381C00B3E4FA /* SugoDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 14282F1D1E1F381C00B3E4FA /* SugoDemoTests.m */; };
 		142D75621E7BCE3B00DB2E00 /* Deprecated.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 142D75611E7BCE3B00DB2E00 /* Deprecated.storyboard */; };
+		14776B641E8616F50034ECB7 /* UITextViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14776B631E8616F50034ECB7 /* UITextViewViewController.m */; };
 		14BA1A831E13EC18002F0C4B /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A821E13EC18002F0C4B /* TrackingViewController.m */; };
 		14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A851E13EC58002F0C4B /* UtilityViewController.m */; };
 		14BA1A891E13EC7D002F0C4B /* CodelessCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BA1A881E13EC7D002F0C4B /* CodelessCommonViewController.m */; };
@@ -67,6 +68,8 @@
 		14282F1D1E1F381C00B3E4FA /* SugoDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SugoDemoTests.m; sourceTree = "<group>"; };
 		14282F1F1E1F381C00B3E4FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		142D75611E7BCE3B00DB2E00 /* Deprecated.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Deprecated.storyboard; sourceTree = "<group>"; };
+		14776B621E8616F50034ECB7 /* UITextViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextViewViewController.h; sourceTree = "<group>"; };
+		14776B631E8616F50034ECB7 /* UITextViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextViewViewController.m; sourceTree = "<group>"; };
 		14BA1A811E13EC18002F0C4B /* TrackingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingViewController.h; sourceTree = "<group>"; };
 		14BA1A821E13EC18002F0C4B /* TrackingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackingViewController.m; sourceTree = "<group>"; };
 		14BA1A841E13EC58002F0C4B /* UtilityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityViewController.h; sourceTree = "<group>"; };
@@ -116,6 +119,8 @@
 				140CECA61E7FD20C00422EA8 /* UIControlViewController.m */,
 				140CECAB1E7FD37300422EA8 /* UITableViewViewController.h */,
 				140CECAC1E7FD37300422EA8 /* UITableViewViewController.m */,
+				14776B621E8616F50034ECB7 /* UITextViewViewController.h */,
+				14776B631E8616F50034ECB7 /* UITextViewViewController.m */,
 			);
 			name = Native;
 			sourceTree = "<group>";
@@ -350,6 +355,7 @@
 				14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */,
 				140CECAD1E7FD37300422EA8 /* UITableViewViewController.m in Sources */,
 				14BACBE21E80D6200048D781 /* SwitchModeViewController.m in Sources */,
+				14776B641E8616F50034ECB7 /* UITextViewViewController.m in Sources */,
 				14BA1A8F1E13ECAB002F0C4B /* WKWebViewController.m in Sources */,
 				14BA1A8C1E13EC9B002F0C4B /* UIWebViewController.m in Sources */,
 				140CECB61E7FD6DB00422EA8 /* UIWebViewViewController.m in Sources */,
