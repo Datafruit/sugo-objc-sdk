@@ -1,5 +1,0 @@
-framework module SugoAppExtension {
-    umbrella header "Sugo.h"
-    export *
-    module * { export * }
-}

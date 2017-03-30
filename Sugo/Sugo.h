@@ -22,10 +22,6 @@ FOUNDATION_EXPORT const unsigned char SugoVersionString[];
 
 #import "SugoPeople.h"
 
-#define SUGO_NO_EXCEPTION_HANDLING (defined(SUGO_APP_EXTENSION))
-#define SUGO_FLUSH_IMMEDIATELY (defined(SUGO_APP_EXTENSION))
-#define SUGO_NO_AUTOMATIC_EVENTS_SUPPORT (defined(SUGO_APP_EXTENSION))
-#define SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT (defined(SUGO_APP_EXTENSION))
 
 @class    SugoPeople;
 @protocol SugoDelegate;
@@ -702,8 +698,6 @@ extern NSString *SugoCodelessURL;
 - (NSString *)libVersion;
 + (NSString *)libVersion;
 
-
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Sugo A/B Testing and Codeless
 
 /*!
@@ -736,8 +730,6 @@ extern NSString *SugoCodelessURL;
  @param url             url of codeless qrcode
  */
 - (void)connectToCodelessViaURL:(NSURL *)url;
-
-#endif // SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 
 #pragma mark - Deprecated
 /*!

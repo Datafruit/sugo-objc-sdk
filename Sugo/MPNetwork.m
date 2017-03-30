@@ -12,7 +12,6 @@
 #import "Sugo.h"
 #import <UIKit/UIKit.h>
 
-#define SUGO_NO_NETWORK_ACTIVITY_INDICATOR (defined(SUGO_APP_EXTENSION))
 
 static const NSUInteger kBatchSize = 50;
 
@@ -448,11 +447,10 @@ static const NSUInteger kBatchSize = 50;
 }
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
-#if !SUGO_NO_NETWORK_ACTIVITY_INDICATOR
+
     if (self.shouldManageNetworkActivityIndicator) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
     }
-#endif
 }
 
 @end
