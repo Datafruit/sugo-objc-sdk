@@ -153,9 +153,7 @@ static NSString *defaultProjectToken;
         
         [self setUpListeners];
         [self unarchive];
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
-        [self executeCachedEventBindings];
-#endif
+
         instances[apiToken] = self;
     }
     return self;
@@ -938,12 +936,7 @@ static NSString *defaultProjectToken;
         case UIUserInterfaceIdiomPhone:
             return @"iPhone";
         case UIUserInterfaceIdiomPad:
-            return @"iPhone";
-        case UIUserInterfaceIdiomTV:
-            return @"TV";
-        case UIUserInterfaceIdiomCarPlay:
-            return @"CarPlay";
-        case UIUserInterfaceIdiomUnspecified:
+            return @"iPad";
         default:
             return @"Unrecognized";
     }
@@ -1659,39 +1652,28 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         MPLogWarning(@"A/B test designer connection already exists");
         return;
     }
-    static NSUInteger oldInterval;
+
     NSString *designerURLString = [NSString stringWithFormat:@"%@/connect/%@", self.switchboardURL, self.apiToken];
     NSURL *designerURL = [NSURL URLWithString:designerURLString];
     __weak Sugo *weakSelf = self;
     void (^connectCallback)(void) = ^{
         __strong Sugo *strongSelf = weakSelf;
-        oldInterval = strongSelf.flushInterval;
-        strongSelf.flushInterval = 1;
+        [strongSelf.eventsQueue removeAllObjects];
+        [strongSelf stopFlushTimer];
+        [strongSelf stopCacheTimer];
         [UIApplication sharedApplication].idleTimerDisabled = YES;
-        if (strongSelf) {
-            for (MPEventBinding *binding in self.eventBindings) {
-                [binding stop];
-            }
-        }
     };
     void (^disconnectCallback)(void) = ^{
         __strong Sugo *strongSelf = weakSelf;
-        strongSelf.flushInterval = oldInterval;
+        [strongSelf.eventsQueue removeAllObjects];
+        [strongSelf startFlushTimer];
+        [strongSelf startCacheTimer];
         [UIApplication sharedApplication].idleTimerDisabled = NO;
-        if (strongSelf) {
-            for (MPEventBinding *binding in self.eventBindings) {
-                [binding execute];
-            }
-            [MPSwizzler unswizzleSelector:@selector(track:eventName:properties:) onClass:[Sugo class] named:@"track_properties"];
-        }
     };
     self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
                                                                          keepTrying:reconnect
                                                                     connectCallback:connectCallback
                                                                  disconnectCallback:disconnectCallback];
-    [self.eventsQueue removeAllObjects];
-    [self stopFlushTimer];
-    [self stopCacheTimer];
 }
 
 - (BOOL)handleURL:(NSURL *)url
@@ -1726,16 +1708,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             && [((NSString *)item.lastObject) isEqualToString:self.apiToken]) {
             [self connectToABTestDesigner];
             break;
-        }
-    }
-}
-
-#pragma mark - Sugo Event Bindings
-
-- (void)executeCachedEventBindings {
-    for (id binding in self.eventBindings) {
-        if ([binding isKindOfClass:[MPEventBinding class]]) {
-            [binding execute];
         }
     }
 }
