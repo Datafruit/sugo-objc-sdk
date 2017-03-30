@@ -9,22 +9,17 @@
 #import "Sugo.h"
 #import "MPNetwork.h"
 
-#if !SUGO_NO_EXCEPTION_HANDLING
 #import "SugoExceptionHandler.h"
-#endif
 
 #if TARGET_OS_IPHONE
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
-#if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
 #import "Sugo+AutomaticEvents.h"
 #import "AutomaticEventsConstants.h"
 #endif
-#endif
 
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 #import "MPResources.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
@@ -35,7 +30,6 @@
 #import "MPEventBinding.h"
 #import "MPSwizzler.h"
 #import "MPWebSocket.h"
-#endif
 
 
 @interface Sugo ()
@@ -48,16 +42,12 @@
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 @property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
 @property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
-#endif
 
-#if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
 @property (nonatomic) AutomaticEventMode validationMode;
 @property (nonatomic) NSUInteger validationEventCount;
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
-#endif
 
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
@@ -98,10 +88,8 @@
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
 
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
-#endif
 
 @end
 

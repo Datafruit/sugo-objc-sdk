@@ -17,8 +17,6 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
-#define SUGO_NO_APP_LIFECYCLE_SUPPORT (defined(SUGO_APP_EXTENSION))
-#define SUGO_NO_UIAPPLICATION_ACCESS (defined(SUGO_APP_EXTENSION))
 
 NSString *SugoBindingsURL;
 NSString *SugoCollectionURL;
@@ -110,10 +108,10 @@ static NSString *defaultProjectToken;
         MPLogWarning(@"%@ empty api token", self);
     }
     if (self = [self init:apiToken]) {
-#if !SUGO_NO_EXCEPTION_HANDLING
+
         // Install uncaught exception handlers first
         [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
-#endif
+
         self.projectID = projectID;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
@@ -179,7 +177,6 @@ static NSString *defaultProjectToken;
     }
 }
 
-#if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
 - (void)setValidationEnabled:(BOOL)validationEnabled {
     _validationEnabled = validationEnabled;
     
@@ -189,7 +186,6 @@ static NSString *defaultProjectToken;
         [Sugo setSharedAutomatedInstance:nil];
     }
 }
-#endif
 
 - (BOOL)shouldManageNetworkActivityIndicator {
     return self.network.shouldManageNetworkActivityIndicator;
@@ -311,9 +307,6 @@ static NSString *defaultProjectToken;
         self.distinctId = distinctId;
         [self archiveProperties];
     });
-#if SUGO_FLUSH_IMMEDIATELY
-    [self flush];
-#endif
 }
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
@@ -350,9 +343,6 @@ static NSString *defaultProjectToken;
     dispatch_async(self.serialQueue, ^{
         [self rawTrack:eventID eventName:eventName properties:properties];
     });
-#if SUGO_FLUSH_IMMEDIATELY
-    [self flush];
-#endif
 }
 
 - (void)rawTrack:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
@@ -368,11 +358,9 @@ static NSString *defaultProjectToken;
         return;
     }
     
-#if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
     // Safety check
     BOOL isAutomaticEvent = [eventName isEqualToString:kAutomaticEventName];
     if (isAutomaticEvent && !self.isValidationEnabled) return;
-#endif
     
     properties = [properties copy];
     [Sugo assertPropertyTypes:properties];
@@ -408,7 +396,6 @@ static NSString *defaultProjectToken;
         [p addEntriesFromDictionary:properties];
     }
     
-#if !SUGO_NO_AUTOMATIC_EVENTS_SUPPORT
     if (self.validationEnabled) {
         if (self.validationMode == AutomaticEventModeCount) {
             if (isAutomaticEvent) {
@@ -421,7 +408,7 @@ static NSString *defaultProjectToken;
             }
         }
     }
-#endif
+    
     NSMutableDictionary *event = [[NSMutableDictionary alloc]
                                   initWithDictionary:@{ keys[@"EventName"]: eventName}];
     
@@ -1063,11 +1050,7 @@ static NSString *defaultProjectToken;
 
 + (BOOL)inBackground
 {
-#if !SUGO_NO_UIAPPLICATION_ACCESS
     return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
-#else
-    return NO;
-#endif
 }
 
 - (void)setupConfiguration
@@ -1130,7 +1113,6 @@ static NSString *defaultProjectToken;
         }
     }
 
-#if !SUGO_NO_APP_LIFECYCLE_SUPPORT
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     // Application lifecycle events
@@ -1158,13 +1140,11 @@ static NSString *defaultProjectToken;
                            selector:@selector(appLinksNotificationRaised:)
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
-#endif // SUGO_NO_APP_LIFECYCLE_SUPPORT
 
     [self initializeGestureRecognizer];
 }
 
 - (void) initializeGestureRecognizer {
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
     dispatch_async(dispatch_get_main_queue(), ^{
         self.testDesignerGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                            action:@selector(connectGestureRecognized:)];
@@ -1180,7 +1160,6 @@ static NSString *defaultProjectToken;
         self.testDesignerGestureRecognizer.enabled = self.enableVisualABTestAndCodeless;
         [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.testDesignerGestureRecognizer];
     });
-#endif // SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 }
 
 static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
@@ -1278,8 +1257,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         MPLogDebug(@"Reachability: %@", network);
     }
 }
-
-#if !SUGO_NO_APP_LIFECYCLE_SUPPORT
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
@@ -1380,8 +1357,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     }
 }
 
-#endif // SUGO_NO_APP_LIFECYCLE_SUPPORT
-
 #pragma mark - Logging
 - (void)setEnableLogging:(BOOL)enableLogging {
     gLoggingEnabled = enableLogging;
@@ -1398,7 +1373,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     return gLoggingEnabled;
 }
 
-#if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 
 #pragma mark - Decide
 
@@ -1713,7 +1687,5 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         }
     }
 }
-
-#endif // SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 
 @end
