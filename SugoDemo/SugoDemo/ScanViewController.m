@@ -9,7 +9,7 @@
 #import "ScanViewController.h"
 #import "SwitchModeViewController.h"
 
-@interface ScanViewController () <AVCaptureMetadataOutputObjectsDelegate, UIAlertViewDelegate>
+@interface ScanViewController () <AVCaptureMetadataOutputObjectsDelegate>
 
 @property (nonatomic, strong) UIView *scanView;
 
@@ -87,7 +87,7 @@
 }
 
 - (BOOL)hasCameraPermission {
-    BOOL isHavePermission = NO;
+    BOOL hasPermission = NO;
     if ([AVCaptureDevice respondsToSelector:@selector(authorizationStatusForMediaType:)])
     {
         AVAuthorizationStatus permission =
@@ -95,7 +95,7 @@
         
         switch (permission) {
             case AVAuthorizationStatusAuthorized:
-                isHavePermission = YES;
+                hasPermission = YES;
                 break;
             case AVAuthorizationStatusDenied:
             case AVAuthorizationStatusRestricted:
@@ -104,7 +104,7 @@
         }
     }
     
-    return isHavePermission;
+    return hasPermission;
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
