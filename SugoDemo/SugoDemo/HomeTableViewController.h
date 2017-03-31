@@ -11,6 +11,4 @@
 
 @interface HomeTableViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *wvURL;
-
 @end
