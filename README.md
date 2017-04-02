@@ -35,6 +35,7 @@ pod 'sugo-objc-sdk'
 #### 1.1.2 执行集成命令
 
 关闭Xcode，并在`Podfile`目录下执行以下命令：
+
 ```
 pod install
 ```
@@ -55,7 +56,7 @@ pod install
 git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 ```
 
-现在在仓库中能看见Sugo项目文件`Sugo.xcodeproj`了。 
+现在在仓库中能看见Sugo项目文件`Sugo.xcodeproj`了。
 
 #### 1.2.2 把`Sugo.xcodeproj`拖到你的项目（或工作空间）中
 
@@ -76,28 +77,34 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 #### 2.2.1 添加头文件
 
 在集成了SDK的项目中，打开`AppDelegate.m`，在文件头部添加：
+
 ```
 @import Sugo;
 ```
+
 #### 2.2.2 添加SDK对象初始化代码
 
 把以下代码复制到`AppDelegate.m`中，并填入已获得的项目ID与Token：
+
 ```
 - (void)initSugo {
-    NSString *projectID = @"Add_Your_Project_ID_Here";
-    NSString *appToken = @"Add_Your_App_Token_Here";
-    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
-    [[Sugo sharedInstance] setEnableLogging:YES]; 	// 如果需要查看SDK的Log，请设置为true
-    [[Sugo sharedInstance] setFlushInterval:5];		// 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
+	NSString *projectID = @"Add_Your_Project_ID_Here";
+	NSString *appToken = @"Add_Your_App_Token_Here";
+	[Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
+	[[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
+	[[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的时间间隔，单位是秒，如若不设置，默认时间是60秒
+	[[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
 }
 ```
+
 #### 2.2.3 调用SDK对象初始化代码
 添加`initSugo`后，在`AppDelegate`方法中调用，如下：
+
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    [self initSugo];	//调用 `initSugo`
-    return YES;
+	// Override point for customization after application launch.
+	[self initSugo];	//调用 `initSugo`
+	return YES;
 }
 ```
 
@@ -108,6 +115,7 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 ##### 2.3.1.1 配置App的URL Types
 
 在Xcode中，点击App的`xcodeproj`文件，进入`info`便签页，添加`URL Types`。
+
 * Identifier: Sugo
 * URL Schemes: sugo.*	(“*”位置替换成Token)
 * Icon: (可随意)
@@ -126,6 +134,7 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 ##### 2.3.1.3 可视化埋点模式API
 
 在选定的方法中调用如下：
+
 ```
 [[Sugo sharedInstance] handleURL:url];	//返回值为BOOL类型，可作为方法的返回值。
 ```
@@ -142,6 +151,7 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 * `- (void)connectToCodelessViaURL:(NSURL *)url;`
 
 该方法会对应用Token进行检验，若Token与初始化的值匹配，且已打开可视化埋点网页，则设备上方将出现可视化埋点连接条，网页可视化埋点界面将显示设备当前页面及相应可绑定控件信息，示例如下：
+
 ```
 [[Sugo sharedInstance] connectToCodelessViaURL:url];	// url参数为扫描二维码后获得的值
 ```
@@ -152,22 +162,22 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 ##### UIControl
 
-所有UIControl类及其子类，皆可被埋点绑定事件。
+所有`UIControl`类及其子类，皆可被埋点绑定事件。
 
 ##### UITableView
 
-所有UITableView类及其子类，需要指定其`delegate`属性，方可被埋点绑定事件。基于UITableView运行原理的特殊性，埋点绑定事件的时候只需要整个圈选，SDK会自动上报UITableView被选中的详细位置信息。
+所有`UITableView`类及其子类，需要指定其`delegate`属性，方可被埋点绑定事件。基于`UITableView`运行原理的特殊性，埋点绑定事件的时候只需要整个圈选，SDK会自动上报`UITableView`被选中的详细位置信息。
 
 #### 2.4.2 UIWebView
 
-所有UIWebView类及其子类下的网页元素，需要指定其`delegate`属性，且在`delegate`指定类中实现以下指定的方法，方可被埋点绑定事件。
+所有`UIWebView`类及其子类下的网页元素，需要指定其`delegate`属性，且在`delegate`指定类中实现以下指定的方法，方可被埋点绑定事件。
 
 * `- (void)webViewDidStartLoad:(UIWebView *)webView;`
 * `- (void)webViewDidFinishLoad:(UIWebView *)webView;`
 
 #### 2.4.3 WKWebView
 
-所有WKWebView类及其子类下的网页元素，皆可被埋点绑定事件。
+所有`WKWebView`类及其子类下的网页元素，皆可被埋点绑定事件。
 
 ## 3. SDK的进阶调用
 
@@ -217,7 +227,7 @@ Sugo *sugo = [Sugo sharedInstance];
 然后，在完成跟踪的位置调用`3.2.1`中的方法即可，需要注意的是`eventName`需要与开始时的一样，示例如下：
 
 ```
-[[Sugo sharedInstance] trackEvent:@"TimeEventName"];	
+[[Sugo sharedInstance] trackEvent:@"TimeEventName"];
 ```
 
 ##### 3.2.2.3 更新
@@ -286,7 +296,7 @@ Sugo *sugo = [Sugo sharedInstance];
 示例如下：
 
 ```
- [[Sugo sharedInstance] clearSuperProperties];
+[[Sugo sharedInstance] clearSuperProperties];
 ```
 
 #### 3.2.4 WebView埋点
@@ -294,10 +304,9 @@ Sugo *sugo = [Sugo sharedInstance];
 当需要在WebView(UIWebView或WKWebView)中进行代码埋点时，在页面加载完毕后，可调用以下API(是`3.2.1`与`3.2.2`同名方法在JavaScript中的接口，实现机制相同)进行JavaScript内容的代码埋点
 
 ```
-sugo.timeEvent(event_name);					// 在开始统计时长的时候调用
+sugo.timeEvent(event_name);	// 在开始统计时长的时候调用
 sugo.track(event_id, event_name, props);	// 准备把自定义事件发送到服务器时
 ```
-
 
 ## 4. 反馈
 
