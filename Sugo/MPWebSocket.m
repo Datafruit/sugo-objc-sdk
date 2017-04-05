@@ -1770,9 +1770,9 @@ static NSRunLoop *networkRunLoop = nil;
         CFRunLoopSourceRef source = CFRunLoopSourceCreate(NULL, 0, &sourceCtx);
         CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
         CFRelease(source);
-
-        while ([_runLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) {
-
+        
+        while (_runLoop) {
+            [_runLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         }
         assert(NO);
     }
