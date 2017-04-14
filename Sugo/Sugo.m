@@ -1586,6 +1586,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     [newEventBindings minusSet:self.eventBindings];
     
     NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
+    [allEventBindings minusSet:finishedEventBindings];
     [allEventBindings unionSet:newEventBindings];
     
     self.eventBindings = [allEventBindings copy];
