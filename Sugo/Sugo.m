@@ -1347,7 +1347,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (keys && values) {
         [self trackEvent:values[@"BackgroundExit"] properties:@{keys[@"PageName"]: values[@"BackgroundExit"]}];
     }
-    [self.network flushEventQueue:self.eventsQueue];
     
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
