@@ -10,6 +10,8 @@
 
 @interface UIViewController (SugoHelpers)
 
-+ (UIViewController *)sugoCurrentViewController;
++ (UIViewController *)sugoCurrentUIViewController;
++ (UINavigationController *)sugoCurrentUINavigationController;
++ (UITabBarController *)sugoCurrentUITabBarController;
 
 @end
