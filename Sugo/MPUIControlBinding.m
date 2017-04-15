@@ -144,7 +144,7 @@
                         objects = @[];
                     }
                 } else {
-                    objects = [self.path fuzzySelectFromRoot:root];
+                    objects = [self.path selectFromRoot:root];
                 }
 
                 for (UIControl *control in objects) {
