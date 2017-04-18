@@ -1334,8 +1334,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
-        [self rawTrack:nil eventName:values[@"BackgroundStay"] properties:nil];
-        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
+//        [self rawTrack:nil eventName:values[@"BackgroundStay"] properties:nil];
+//        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
         [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
         [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
     }
