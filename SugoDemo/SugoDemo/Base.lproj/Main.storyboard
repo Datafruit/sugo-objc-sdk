@@ -53,6 +53,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="使用说明" id="Imj-wC-yfD"/>
+                    <connections>
+                        <outlet property="webView" destination="c9b-AJ-JHU" id="22y-na-bQv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tKx-dg-g9T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
