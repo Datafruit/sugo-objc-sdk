@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *SugoBindingsURL;
 extern NSString *SugoCollectionURL;
 extern NSString *SugoCodelessURL;
+extern BOOL SugoCanTrackNativePage;
+extern BOOL SugoCanTrackWebPage;
 
 /*!
  @class

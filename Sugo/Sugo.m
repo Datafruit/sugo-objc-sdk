@@ -21,6 +21,8 @@
 NSString *SugoBindingsURL;
 NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
+BOOL SugoCanTrackNativePage = false;
+BOOL SugoCanTrackWebPage = false;
 
 @implementation Sugo
 
@@ -1095,7 +1097,9 @@ static NSString *defaultProjectToken;
 
 - (void)setUpListeners
 {
-    [self trackStayTime];
+    if (SugoCanTrackNativePage) {
+        [self trackStayTime];
+    }
     // cellular info
     [self setCurrentRadio];
     [[NSNotificationCenter defaultCenter] addObserver:self

@@ -165,13 +165,15 @@
     NSString *regularExpressions = [NSString stringWithFormat:@"sugo.regular_expressions = %@;\n", resString?resString:@"[]"];
     NSString *pageInfos = [NSString stringWithFormat:@"sugo.page_infos = %@;\n", infosString?infosString:@"[]"];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
+    NSString *canTrackWebPage = [NSString stringWithFormat:@"sugo.can_track_web_page = %@;\n", SugoCanTrackWebPage?@"true":@"false"];
     NSString *variables = [self jsSourceOfFileName:@"WebViewVariables"];
     
-    return [[[[[[vcPath stringByAppendingString:homePath]
-              stringByAppendingString:homePathReplacement]
-             stringByAppendingString:regularExpressions]
-              stringByAppendingString:pageInfos]
-             stringByAppendingString:bindings]
+    return [[[[[[[vcPath stringByAppendingString:homePath]
+                 stringByAppendingString:homePathReplacement]
+                stringByAppendingString:regularExpressions]
+               stringByAppendingString:pageInfos]
+              stringByAppendingString:bindings]
+             stringByAppendingString:canTrackWebPage]
             stringByAppendingString:variables];
 }
 
