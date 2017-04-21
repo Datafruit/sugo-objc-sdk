@@ -253,6 +253,9 @@ static const NSUInteger kBatchSize = 50;
     NSString *LinesSeperator = [NSString stringWithFormat:@"%c", 2];
 
     for (NSDictionary *object in batch) {
+        if (![object isKindOfClass:[NSDictionary class]]) {
+            continue;
+        }
         for (NSString *key in object.allKeys.reverseObjectEnumerator) {
             if (![localKeys containsObject:key]) {
                 [localKeys addObject:key];
