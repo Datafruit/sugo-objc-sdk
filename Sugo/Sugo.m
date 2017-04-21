@@ -355,8 +355,8 @@ static NSString *defaultProjectToken;
     }
     
     MPLogDebug(@"track:%@, %@, %@", eventID, eventName, properties);
-    if (eventName.length == 0) {
-        MPLogWarning(@"%@ sugo track called with empty event parameter.", self);
+    if (!eventName && eventName.length == 0) {
+        MPLogWarning(@"sugo track called with nil or empty event name: %@", eventName);
         return;
     }
     
@@ -411,8 +411,8 @@ static NSString *defaultProjectToken;
         }
     }
     
-    NSMutableDictionary *event = [[NSMutableDictionary alloc]
-                                  initWithDictionary:@{ keys[@"EventName"]: eventName}];
+    NSMutableDictionary *event = [NSMutableDictionary dictionary];
+    event[keys[@"EventName"]] = eventName;
     
     if (!self.abtestDesignerConnection.connected) {
         p[keys[@"EventTime"]] = date;
@@ -427,7 +427,9 @@ static NSString *defaultProjectToken;
     }
     
     MPLogDebug(@"%@ queueing event: %@", self, event);
-    [self.eventsQueue addObject:event];
+    if (event) {
+        [self.eventsQueue addObject:event];
+    }
     if (self.eventsQueue.count > 5000) {
         [self.eventsQueue removeObjectAtIndex:0];
     }
