@@ -9,6 +9,7 @@
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
 #import "MPObjectSelector.h"
+#import "UIViewController+SugoHelpers.h"
 
 @interface MPObjectFilter : NSObject
 
@@ -363,14 +364,26 @@
             [result addObject:nextResponder];
         }
     } else if ([obj isKindOfClass:[UIViewController class]]) {
-        UIViewController *parentViewController = [(UIViewController *)obj parentViewController];
-        if (parentViewController) {
-            [result addObject:parentViewController];
-        }
-        UIViewController *presentingViewController = [(UIViewController *)obj presentingViewController];
-        if (presentingViewController) {
-            [result addObject:presentingViewController];
-        }
+        UIViewController *viewController = (UIViewController *)obj;
+        
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            if (viewController == [UIViewController sugoCurrentUINavigationController]) {
+                [result addObject:[UIViewController sugoCurrentUIViewController]];
+            }
+        } else if ([viewController isKindOfClass:[UITabBarController class]]) {
+            if (viewController == [UIViewController sugoCurrentUITabBarController]) {
+                [result addObject:[UIViewController sugoCurrentUIViewController]];
+            }
+        } else {
+            UIViewController *parentViewController = [viewController parentViewController];
+            if (parentViewController) {
+                [result addObject:parentViewController];
+            }
+            UIViewController *presentingViewController = [viewController presentingViewController];
+            if (presentingViewController) {
+                [result addObject:presentingViewController];
+            }
+            }
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         if (keyWindow.rootViewController == obj) {
             //TODO is there a better way to get the actual window that has this VC
@@ -402,15 +415,45 @@
         }
     } else if ([obj isKindOfClass:[UIViewController class]]) {
         UIViewController *viewController = (UIViewController *)obj;
-        for (NSObject *child in [viewController childViewControllers]) {
-            if (!class || [child isKindOfClass:class]) {
-                [children addObject:child];
+        
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            // UINavigationController
+            UINavigationController *navigationController = (UINavigationController *)viewController;
+            UIViewController *topViewController = navigationController.topViewController;
+            if (topViewController) {
+                [children addObject:topViewController];
+            }
+        } else if ([viewController isKindOfClass:[UITabBarController class]]) {
+            // UITabBarController
+            UITabBarController *tabBarController = (UITabBarController *)viewController;
+            UIViewController *selectedViewController = tabBarController.selectedViewController;
+            if (selectedViewController) {
+                [children addObject:selectedViewController];
+            }
+        } else {
+            // UIViewController
+            for (NSObject *child in [viewController childViewControllers]) {
+                if (!class || [child isKindOfClass:class]) {
+                    [children addObject:child];
+                }
+            }
+            // UINavigationController
+            UINavigationController *navigationController = viewController.navigationController;
+            if (navigationController && (!class || [navigationController isKindOfClass:class])) {
+                [children addObject:navigationController];
+            }
+            // UITabBarController
+            UITabBarController *tabBarController = viewController.tabBarController;
+            if (tabBarController && (!class || [tabBarController isKindOfClass:class])) {
+                [children addObject:tabBarController];
+            }
+            // UIViewController
+            UIViewController *presentedViewController = viewController.presentedViewController;
+            if (presentedViewController && (!class || [presentedViewController isKindOfClass:class])) {
+                [children addObject:presentedViewController];
             }
         }
-        UIViewController *presentedViewController = viewController.presentedViewController;
-        if (presentedViewController && (!class || [presentedViewController isKindOfClass:class])) {
-            [children addObject:presentedViewController];
-        }
+        // UIView
         if (!class || (viewController.isViewLoaded && [viewController.view isKindOfClass:class])) {
             [children addObject:viewController.view];
         }

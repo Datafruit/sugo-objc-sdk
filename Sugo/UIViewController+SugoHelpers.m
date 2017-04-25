@@ -10,8 +10,18 @@
 
 @implementation UIViewController (SugoHelpers)
 
-+ (UIViewController *)sugoCurrentViewController
-{
+
++ (UITabBarController *)sugoCurrentUITabBarController {
+    UIViewController *vc = [UIViewController sugoCurrentUIViewController];
+    return vc.tabBarController;
+}
+
++ (UINavigationController *)sugoCurrentUINavigationController {
+    UIViewController *vc = [UIViewController sugoCurrentUIViewController];
+    return vc.navigationController;
+}
+
++ (UIViewController *)sugoCurrentUIViewController {
     UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     return [UIViewController searchViewControllerFrom:viewController];
 }
