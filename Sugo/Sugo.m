@@ -1322,7 +1322,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (values) {
         [self trackEvent:values[@"BackgroundStay"]];
         [self trackEvent:values[@"BackgroundExit"]];
-        [self.network flushEventQueue:self.eventsQueue];
     }
     
     dispatch_async(self.serialQueue, ^{
