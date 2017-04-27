@@ -169,6 +169,8 @@
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
 		14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */; };
 		14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */; };
+		14C607D71EB1C88E00990411 /* HeatMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C607D51EB1C88E00990411 /* HeatMap.h */; };
+		14C607D81EB1C88E00990411 /* HeatMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C607D61EB1C88E00990411 /* HeatMap.m */; };
 		14C7BE6A1E4D6DB4000BD790 /* SugoBegin.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE691E4D6DB4000BD790 /* SugoBegin.js */; };
 		14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */; };
 /* End PBXBuildFile section */
@@ -338,6 +340,8 @@
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SugoHelpers.h"; sourceTree = "<group>"; };
 		14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SugoHelpers.m"; sourceTree = "<group>"; };
+		14C607D51EB1C88E00990411 /* HeatMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMap.h; sourceTree = "<group>"; };
+		14C607D61EB1C88E00990411 /* HeatMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMap.m; sourceTree = "<group>"; };
 		14C7BE691E4D6DB4000BD790 /* SugoBegin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoBegin.js; sourceTree = "<group>"; };
 		14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.WK.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -505,6 +509,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7FE1E137088008D67F6 /* MPFoundation.h */,
+				14C607D91EB1C89E00990411 /* HeatMap */,
 				141AC9501E13C86A008D67F6 /* Logger */,
 				141AC94F1E13C81F008D67F6 /* Helpers */,
 				141AC94D1E13C6FE008D67F6 /* Transformer */,
@@ -736,6 +741,15 @@
 			name = WebViewExcute;
 			sourceTree = "<group>";
 		};
+		14C607D91EB1C89E00990411 /* HeatMap */ = {
+			isa = PBXGroup;
+			children = (
+				14C607D51EB1C88E00990411 /* HeatMap.h */,
+				14C607D61EB1C88E00990411 /* HeatMap.m */,
+			);
+			name = HeatMap;
+			sourceTree = "<group>";
+		};
 		14DEB5241E32F7B0009F0F80 /* WebViewAPI */ = {
 			isa = PBXGroup;
 			children = (
@@ -768,6 +782,7 @@
 				14656FEC1E2379BF006B7107 /* Attributes.h in Headers */,
 				141AC8F21E137088008D67F6 /* UIViewController+AutomaticEvents.h in Headers */,
 				141AC8E81E137088008D67F6 /* UIApplication+AutomaticEvents.h in Headers */,
+				14C607D71EB1C88E00990411 /* HeatMap.h in Headers */,
 				141AC87E1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */,
 				141AC8821E137088008D67F6 /* MPABTestDesignerMessage.h in Headers */,
 				141AC8FA1E137088008D67F6 /* WebViewBindings+WKWebView.h in Headers */,
@@ -964,6 +979,7 @@
 				141AC8ED1E137088008D67F6 /* UIImage+MPAverageColor.m in Sources */,
 				14656FED1E2379BF006B7107 /* Attributes.m in Sources */,
 				141AC8B11E137088008D67F6 /* MPObjectSelector.m in Sources */,
+				14C607D81EB1C88E00990411 /* HeatMap.m in Sources */,
 				141AC8791E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				141AC8731E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				141AC8F51E137088008D67F6 /* WebViewBindings.m in Sources */,
