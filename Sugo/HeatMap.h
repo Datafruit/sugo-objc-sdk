@@ -12,6 +12,8 @@
 
 @property BOOL mode;
 @property (atomic, strong) NSData *data;
+@property (atomic, strong) NSDictionary *coldColor;
+@property (atomic, strong) NSDictionary *hotColor;
 
 - (instancetype)initWithData:(NSData *)data;
 
