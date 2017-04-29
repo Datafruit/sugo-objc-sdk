@@ -132,12 +132,12 @@
             NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
             if (view && [self.appliedTo containsObject:view]) {
                 if (![self.path fuzzyIsLeafSelected:view fromRoot:root]) {
+                    if ([Sugo sharedInstance].heatMap.mode) {
+                        [[Sugo sharedInstance].heatMap wipeObjectOfPath:self.path.string];
+                    }
                     [self stopOnView:view];
                     [self.appliedTo removeObject:view];
-                    if ([Sugo sharedInstance].heatMap.mode
-                        && [[Sugo sharedInstance].heatMap.hmPaths containsObject:self.path.string]) {
-                        [[Sugo sharedInstance].heatMap.hmPaths removeObject:self.path.string];
-                    }
+                    
                 }
             } else {
                 // select targets based off path

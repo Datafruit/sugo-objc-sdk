@@ -22,7 +22,7 @@
         _data = data;
         _coldColor = @{@"red": @211, @"green": @177, @"blue": @125};
         _hotColor = @{@"red": @255, @"green": @45, @"blue": @81};
-        _hmPaths = [NSMutableArray array];
+        _hmLayers = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -42,7 +42,7 @@
     
     NSDictionary *heats = [self parse];
     
-    if (!heats[path] || [self.hmPaths containsObject:path]) {
+    if (!heats[path] || [self.hmLayers.allKeys containsObject:path]) {
         return;
     }
     
@@ -54,7 +54,15 @@
                                                                heat:[self colorOfRate:[heats[path] doubleValue]]];
         [hmLayer setNeedsDisplay];
         [control.layer addSublayer:hmLayer];
-        [self.hmPaths addObject:path];
+        [self.hmLayers addEntriesFromDictionary:@{path: hmLayer}];
+    }
+}
+
+- (void)wipeObjectOfPath:(NSString *)path {
+    
+    if ([self.hmLayers.allKeys containsObject:path]) {
+        [(CALayer *)self.hmLayers[path] removeFromSuperlayer];
+        [self.hmLayers removeObjectForKey:path];
     }
 }
 
