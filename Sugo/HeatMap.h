@@ -14,9 +14,12 @@
 @property (atomic, strong) NSData *data;
 @property (atomic, strong) NSDictionary *coldColor;
 @property (atomic, strong) NSDictionary *hotColor;
+@property (atomic, strong) NSMutableArray *hmPaths;
 
 - (instancetype)initWithData:(NSData *)data;
 
 - (void)switchMode:(BOOL)mode;
+
+- (void)renderObjectOfPath:(NSString *)path;
 
 @end

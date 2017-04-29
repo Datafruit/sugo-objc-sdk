@@ -22,6 +22,7 @@
         _data = data;
         _coldColor = @{@"red": @211, @"green": @177, @"blue": @125};
         _hotColor = @{@"red": @255, @"green": @45, @"blue": @81};
+        _hmPaths = [NSMutableArray array];
     }
     return self;
 }
@@ -31,9 +32,29 @@
         return;
     }
     if (mode == true) {
-        [self turnOn];
+        self.mode = true;
     } else if (mode == false) {
-        [self turnOff];
+        self.mode = false;
+    }
+}
+
+- (void)renderObjectOfPath:(NSString *)path {
+    
+    NSDictionary *heats = [self parse];
+    
+    if (!heats[path] && [self.hmPaths containsObject:path]) {
+        return;
+    }
+    
+    NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
+    MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:path];
+    NSArray *objects = [selector selectFromRoot:root];
+    for (UIControl *control in objects) {
+        HeatMapLayer *hmLayer = [[HeatMapLayer alloc] initWithFrame:control.layer.bounds
+                                                               heat:[self colorOfRate:[heats[path] doubleValue]]];
+        [hmLayer setNeedsDisplay];
+        [control.layer addSublayer:hmLayer];
+        [self.hmPaths addObject:path];
     }
 }
 
@@ -50,34 +71,6 @@
     color[@"blue"] = @([color[@"blue"] doubleValue] + blue);
     
     return color;
-}
-
-- (UIView *)heatViewWithBounds:(CGRect)bounds {
-    UIView *heatView = [[UIView alloc] initWithFrame:bounds];
-    return heatView;
-}
-
-// On mode
-- (void)turnOn {
-    [self renderNative];
-}
-
-- (void)renderNative {
-    
-    NSDictionary *heats = [self parse];
-    
-    NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
-    for (NSString *path in heats.allKeys) {
-        MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:path];
-        NSArray *objects = [selector selectFromRoot:root];
-        for (UIControl *control in objects) {
-            // TODO: render control
-            HeatMapLayer *hmLayer = [[HeatMapLayer alloc] initWithFrame:control.layer.bounds
-                                                                   heat:[self colorOfRate:[heats[path] doubleValue]]];
-            [hmLayer setNeedsDisplay];
-            [control.layer addSublayer:hmLayer];
-        }
-    }
 }
 
 - (NSDictionary *)parse {
@@ -169,15 +162,6 @@
     }
     
     return nativeEventBindings;
-}
-
-// Off mode
-- (void)turnOff {
-    [self wipe];
-}
-
-- (void)wipe {
-    
 }
 
 @end

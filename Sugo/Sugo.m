@@ -143,7 +143,7 @@ static NSString *defaultProjectToken;
 #else
         self.enableVisualABTestAndCodeless = YES;
 #endif
-        
+        self.heatMap = [[HeatMap alloc] initWithData:[NSData data]];
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]
                                       andEventCollectionURL:[NSURL URLWithString:self.eventCollectionURL]];
         self.people = [[SugoPeople alloc] initWithSugo:self];
@@ -1726,13 +1726,16 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         && querys[@"sKey"]) {
         self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
         [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
-            HeatMap *hm = [[HeatMap alloc] initWithData:heatMap];
-            [hm switchMode:true];
+            if (heatMap) {
+                self.heatMap.data = heatMap;
+                [self.heatMap switchMode:true];
+            }
         }];
         return true;
     } else if (querys[@"sKey"]) {
         self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
         [self connectToABTestDesigner];
+        return true;
     }
 
     return false;
@@ -1789,8 +1792,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
         [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
-            HeatMap *hm = [[HeatMap alloc] initWithData:heatMap];
-            [hm switchMode:true];
+            if (heatMap) {
+                self.heatMap.data = heatMap;
+                [self.heatMap switchMode:true];
+            }
         }];
     }
 }

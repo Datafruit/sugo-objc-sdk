@@ -56,6 +56,7 @@
 // re-declare internally as readwrite
 @property (atomic, strong) SugoPeople *people;
 @property (atomic, strong) MPNetwork *network;
+@property (atomic, strong) HeatMap *heatMap;
 @property (atomic, copy) NSString *deviceId;
 @property (atomic, copy) NSString *distinctId;
 @property (atomic, strong) NSString *sessionId;
