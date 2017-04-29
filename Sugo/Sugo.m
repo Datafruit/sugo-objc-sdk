@@ -1543,6 +1543,55 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     });
 }
 
+- (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion {
+    
+    dispatch_async(self.serialQueue, ^{
+        
+        __block BOOL hadError = NO;
+        __block NSData *data = [[NSData alloc] init];
+        
+        NSArray *queryItems = [MPNetwork buildHeatQueryForToken:self.apiToken
+                                                   andSecretKey:self.urlHeatMapSecretKey];
+        // Build a network request from the URL
+        NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
+                                                        andEndpoint:MPNetworkEndpointHeat
+                                                     withQueryItems:queryItems];
+        
+        // Send the network request
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            if (error) {
+                MPLogError(@"%@ heat request http error: %@", self, error);
+                hadError = YES;
+                dispatch_semaphore_signal(semaphore);
+                return;
+            }
+            MPLogDebug(@"Heat responseData\n%@",[[NSString alloc] initWithData:responseData
+                                                                      encoding:NSUTF8StringEncoding]);
+            
+            // Handle network response
+            data = responseData;
+            
+            dispatch_semaphore_signal(semaphore);
+        }] resume];
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        if (hadError) {
+            if (completion) {
+                completion(nil);
+            }
+        } else {
+            if (completion) {
+                completion(data);
+            }
+        }
+    });
+}
+
 - (void)handleDecideObject:(NSDictionary *)object
 {
     id commonEventBindings = object[@"event_bindings"];
@@ -1660,38 +1709,100 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (BOOL)handleURL:(NSURL *)url
 {
-    if ([[url.query componentsSeparatedByString:@"="] lastObject]) {
-        self.urlSchemesKeyValue = [[url.query componentsSeparatedByString:@"="] lastObject];
-        [self connectToABTestDesigner];
-        return true;
+    NSLog(@"url: %@", url.absoluteString);
+    NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
+    NSMutableDictionary *querys = [NSMutableDictionary dictionary];
+    
+    for (NSString *query in rawQuerys) {
+        NSArray *item = [query componentsSeparatedByString:@"="];
+        if (item.count != 2) {
+            continue;
+        }
+        [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
     }
+    
+    if (querys[@"type"]
+        && [querys[@"type"] isEqualToString:@"heatmap"]
+        && querys[@"sKey"]) {
+        self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
+        [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
+            HeatMap *hm = [[HeatMap alloc] initWithData:heatMap];
+            [hm switchMode:true];
+        }];
+        return true;
+    } else if (querys[@"sKey"]) {
+        self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
+        [self connectToABTestDesigner];
+    }
+
     return false;
 }
 
 - (void)connectToCodelessViaURL:(NSURL *)url
 {
     NSLog(@"url: %@", url.absoluteString);
-    for (NSString *queryItem in [url.query componentsSeparatedByString:@"&"]) {
-        NSArray *item = [queryItem componentsSeparatedByString:@"="];
-        if ([((NSString *)item.firstObject) isEqualToString:@"sKey"]) {
-            self.urlSchemesKeyValue = (NSString *)item.lastObject;
-            break;
+    NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
+    NSMutableDictionary *querys = [NSMutableDictionary dictionary];
+    
+    for (NSString *query in rawQuerys) {
+        NSArray *item = [query componentsSeparatedByString:@"="];
+        if (item.count != 2) {
+            continue;
         }
+        [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
     }
     
-    NSLog(@"url s k v: %@", self.urlSchemesKeyValue);
-    if (self.urlSchemesKeyValue.length <= 0) {
+    if (querys.count <= 0) {
         return;
     }
+    
+    if (querys[@"sKey"] && ((NSString *)querys[@"sKey"]).length > 0) {
+        self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
+    }
+    
+    if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
+        [self connectToABTestDesigner];
+    }
+}
 
-    for (NSString *queryItem in [url.query componentsSeparatedByString:@"&"]) {
-        NSArray *item = [queryItem componentsSeparatedByString:@"="];
-        if ([((NSString *)item.firstObject) isEqualToString:@"token"]
-            && [((NSString *)item.lastObject) isEqualToString:self.apiToken]) {
-            [self connectToABTestDesigner];
-            break;
+- (void)requestForHeatMapViaURL:(NSURL *)url
+{
+    NSLog(@"url: %@", url.absoluteString);
+    NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
+    NSMutableDictionary *querys = [NSMutableDictionary dictionary];
+    
+    for (NSString *query in rawQuerys) {
+        NSArray *item = [query componentsSeparatedByString:@"="];
+        if (item.count != 2) {
+            continue;
         }
+        [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
+    }
+    
+    if (querys.count <= 0) {
+        return;
+    }
+    
+    if (querys[@"sKey"] && ((NSString *)querys[@"sKey"]).length > 0) {
+        self.urlHeatMapSecretKey = (NSString *)querys[@"sKey"];
+    }
+    
+    if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
+        [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
+            HeatMap *hm = [[HeatMap alloc] initWithData:heatMap];
+            [hm switchMode:true];
+        }];
     }
 }
 
 @end
+
+
+
+
+
+
+
+
+
+

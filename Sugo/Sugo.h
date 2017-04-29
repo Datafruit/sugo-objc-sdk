@@ -733,6 +733,16 @@ extern BOOL SugoCanTrackWebPage;
  */
 - (void)connectToCodelessViaURL:(NSURL *)url;
 
+/*!
+ @method
+ 
+ @abstract
+ Handle the url get from codeless qrcode
+ 
+ @param url             url of codeless qrcode
+ */
+- (void)requestForHeatMapViaURL:(NSURL *)url;
+
 #pragma mark - Deprecated
 /*!
  @property

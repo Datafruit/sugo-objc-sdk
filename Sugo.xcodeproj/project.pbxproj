@@ -173,6 +173,8 @@
 		14C607D81EB1C88E00990411 /* HeatMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C607D61EB1C88E00990411 /* HeatMap.m */; };
 		14C7BE6A1E4D6DB4000BD790 /* SugoBegin.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE691E4D6DB4000BD790 /* SugoBegin.js */; };
 		14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */; };
+		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
+		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -344,6 +346,8 @@
 		14C607D61EB1C88E00990411 /* HeatMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMap.m; sourceTree = "<group>"; };
 		14C7BE691E4D6DB4000BD790 /* SugoBegin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoBegin.js; sourceTree = "<group>"; };
 		14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.WK.js; sourceTree = "<group>"; };
+		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
+		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -746,6 +750,8 @@
 			children = (
 				14C607D51EB1C88E00990411 /* HeatMap.h */,
 				14C607D61EB1C88E00990411 /* HeatMap.m */,
+				14F173471EB4297000BCD9B6 /* HeatMapLayer.h */,
+				14F173481EB4297000BCD9B6 /* HeatMapLayer.m */,
 			);
 			name = HeatMap;
 			sourceTree = "<group>";
@@ -803,6 +809,7 @@
 				144496971E8522010076BC50 /* MPUITextViewBinding.h in Headers */,
 				141AC8E41E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h in Headers */,
 				141AC8BB1E137088008D67F6 /* MPResources.h in Headers */,
+				14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */,
 				141AC8721E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
 				141AC89D1E137088008D67F6 /* MPEventBinding.h in Headers */,
 				14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */,
@@ -959,6 +966,7 @@
 				141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */,
 				141AC8BC1E137088008D67F6 /* MPResources.m in Sources */,
 				14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */,
+				14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */,
 				144496981E8522010076BC50 /* MPUITextViewBinding.m in Sources */,
 				141AC8861E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				141AC8771E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m in Sources */,
