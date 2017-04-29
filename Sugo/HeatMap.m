@@ -7,6 +7,7 @@
 //
 
 #import "HeatMap.h"
+#import "HeatMapLayer.h"
 #import <UIKit/UIKit.h>
 #import "MPLogger.h"
 #import "MPObjectSelector.h"
@@ -71,60 +72,12 @@
         NSArray *objects = [selector selectFromRoot:root];
         for (UIControl *control in objects) {
             // TODO: render control
-            CALayer *heatLayer = [self heatLayerWithFrame:control.layer.bounds rate:[heats[path] doubleValue]];
-            [control.layer addSublayer:heatLayer];
+            HeatMapLayer *hmLayer = [[HeatMapLayer alloc] initWithFrame:control.layer.bounds
+                                                                   heat:[self colorOfRate:[heats[path] doubleValue]]];
+            [hmLayer setNeedsDisplay];
+            [control.layer addSublayer:hmLayer];
         }
     }
-}
-
-- (CALayer *)heatLayerWithFrame:(CGRect)frame rate:(double)rate {
-    
-    CALayer *heatLayer = [CALayer layer];
-    heatLayer.frame = frame;
-    heatLayer.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0].CGColor;
-    
-    NSDictionary *color = [self colorOfRate:rate];
-    UIColor *heatColor = [UIColor colorWithRed:[color[@"red"] doubleValue] / 255
-                                         green:[color[@"green"] doubleValue] / 255
-                                          blue:[color[@"blue"] doubleValue] / 255
-                                         alpha:1];
-    UIColor *centerColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0];
-    
-    
-    CAGradientLayer *gradientLayer1 = [CAGradientLayer layer];
-    gradientLayer1.frame = CGRectMake(0, 0, frame.size.width / 2, frame.size.width / 2);
-    gradientLayer1.colors = @[(id)heatColor.CGColor, (id)centerColor.CGColor];
-    gradientLayer1.locations = @[@0.0f, @1.0f];
-    gradientLayer1.startPoint = CGPointMake(0, 0);
-    gradientLayer1.endPoint = CGPointMake(1, 1);
-    
-    CAGradientLayer *gradientLayer2 = [CAGradientLayer layer];
-    gradientLayer2.frame = CGRectMake(frame.size.width / 2, 0, frame.size.width / 2, frame.size.width / 2);
-    gradientLayer2.colors = @[(id)heatColor.CGColor, (id)centerColor.CGColor];
-    gradientLayer2.locations = @[@0.0f, @1.0f];
-    gradientLayer2.startPoint = CGPointMake(1, 0);
-    gradientLayer2.endPoint = CGPointMake(0, 1);
-    
-    CAGradientLayer *gradientLayer3 = [CAGradientLayer layer];
-    gradientLayer3.frame = CGRectMake(0, frame.size.height / 2, frame.size.width / 2, frame.size.width / 2);
-    gradientLayer3.colors = @[(id)heatColor.CGColor, (id)centerColor.CGColor];
-    gradientLayer3.locations = @[@0.0f, @1.0f];
-    gradientLayer3.startPoint = CGPointMake(0, 1);
-    gradientLayer3.endPoint = CGPointMake(1, 0);
-
-    CAGradientLayer *gradientLayer4 = [CAGradientLayer layer];
-    gradientLayer4.frame = CGRectMake(frame.size.width / 2, frame.size.height / 2, frame.size.width / 2, frame.size.width / 2);
-    gradientLayer4.colors = @[(id)heatColor.CGColor, (id)centerColor.CGColor];
-    gradientLayer4.locations = @[@0.0f, @1.0f];
-    gradientLayer4.startPoint = CGPointMake(1, 1);
-    gradientLayer4.endPoint = CGPointMake(0, 0);
-    
-    [heatLayer addSublayer:gradientLayer1];
-    [heatLayer addSublayer:gradientLayer2];
-    [heatLayer addSublayer:gradientLayer3];
-    [heatLayer addSublayer:gradientLayer4];
-    
-    return heatLayer;
 }
 
 - (NSDictionary *)parse {
