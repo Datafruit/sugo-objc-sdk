@@ -42,7 +42,7 @@
     
     NSDictionary *heats = [self parse];
     
-    if (!heats[path] && [self.hmPaths containsObject:path]) {
+    if (!heats[path] || [self.hmPaths containsObject:path]) {
         return;
     }
     
