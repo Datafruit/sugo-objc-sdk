@@ -1545,6 +1545,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion {
     
+    if (self.abtestDesignerConnection.connected) return;
+    
     dispatch_async(self.serialQueue, ^{
         
         __block BOOL hadError = NO;
@@ -1676,6 +1678,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)connectToABTestDesigner:(BOOL)reconnect
 {
+    if (self.heatMap.mode) return;
+    
     // Ignore the gesture if the AB test designer is disabled.
     if (!self.enableVisualABTestAndCodeless) return;
     
