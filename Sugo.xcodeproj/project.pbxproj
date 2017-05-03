@@ -173,6 +173,7 @@
 		14C607D81EB1C88E00990411 /* HeatMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C607D61EB1C88E00990411 /* HeatMap.m */; };
 		14C7BE6A1E4D6DB4000BD790 /* SugoBegin.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE691E4D6DB4000BD790 /* SugoBegin.js */; };
 		14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */; };
+		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
 		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
 /* End PBXBuildFile section */
@@ -346,6 +347,7 @@
 		14C607D61EB1C88E00990411 /* HeatMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMap.m; sourceTree = "<group>"; };
 		14C7BE691E4D6DB4000BD790 /* SugoBegin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoBegin.js; sourceTree = "<group>"; };
 		14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.WK.js; sourceTree = "<group>"; };
+		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
 		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -681,6 +683,7 @@
 				14C7BE691E4D6DB4000BD790 /* SugoBegin.js */,
 				145CAACA1E58497C00E53E8C /* SugoEnd.js */,
 				145CAACC1E584BF700E53E8C /* WebViewVariables.js */,
+				14D6FEE81EB885850009A39F /* WebViewHeatmap.js */,
 				14DEB5241E32F7B0009F0F80 /* WebViewAPI */,
 				144D2E501E20C5E000387FD2 /* WebViewBindings */,
 				144D2E4F1E20C5CE00387FD2 /* WebViewReport */,
@@ -904,6 +907,7 @@
 				144D2E461E20C5A800387FD2 /* WebViewAPI.UI.js in Resources */,
 				145CAAD11E584E5200E53E8C /* WebViewExcute.Sugo.js in Resources */,
 				14015FC11E2DBDD2003DB275 /* SugoURLs.plist in Resources */,
+				14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */,
 				144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */,
 				14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */,
 				145CAACD1E584BF700E53E8C /* WebViewVariables.js in Resources */,

@@ -1729,6 +1729,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             if (heatMap) {
                 self.heatMap.data = heatMap;
                 [self.heatMap switchMode:true];
+                [[WebViewBindings globalBindings] switchHeatMapMode:self.heatMap.mode
+                                                           withData:self.heatMap.data];
             }
         }];
         return true;
@@ -1795,6 +1797,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             if (heatMap) {
                 self.heatMap.data = heatMap;
                 [self.heatMap switchMode:true];
+                [[WebViewBindings globalBindings] switchHeatMapMode:self.heatMap.mode
+                                                           withData:self.heatMap.data];
             }
         }];
     }
