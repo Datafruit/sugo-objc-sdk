@@ -1415,9 +1415,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     dispatch_async(self.serialQueue, ^{
         
         __block BOOL hadError = NO;
-        __block NSMutableDictionary *object = [[NSMutableDictionary alloc] init];
+        __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSMutableDictionary *cacheObject = [[NSMutableDictionary alloc] init];
+        NSNumber *cacheVersion = @(-1);
         
         if (useCache && [userDefaults dataForKey:@"SugoEventBindings"]) {
             
@@ -1426,29 +1428,18 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             MPLogDebug(@"Decide cacheData\n%@", [[NSString alloc] initWithData:cacheData
                                                                       encoding:NSUTF8StringEncoding]);
             @try {
-                object = [NSJSONSerialization JSONObjectWithData:cacheData
+                cacheObject = [NSJSONSerialization JSONObjectWithData:cacheData
                                                          options:(NSJSONReadingOptions)0
                                                            error:&cacheError];
-                NSDictionary *config = object[@"config"];
-                if (config && [config isKindOfClass:NSDictionary.class]) {
-                    NSDictionary *validationConfig = config[@"ce"];
-                    if (validationConfig && [validationConfig isKindOfClass:NSDictionary.class]) {
-                        self.validationEnabled = [validationConfig[@"enabled"] boolValue];
-                        
-                        NSString *method = validationConfig[@"method"];
-                        if (method && [method isKindOfClass:NSString.class]) {
-                            if ([method isEqualToString:@"count"]) {
-                                self.validationMode = AutomaticEventModeCount;
-                            }
-                        }
-                    }
+                if (cacheObject[@"event_bindings_version"]) {
+                    cacheVersion = cacheObject[@"event_bindings_version"];
                 }
             } @catch (NSException *exception) {
                 self.decideResponseCached = NO;
                 MPLogError(@"exception: %@, cacheData: %@, object: %@",
                            exception,
                            cacheData,
-                           object);
+                           cacheObject);
             }
         }
         
@@ -1457,7 +1448,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
                                                             withDistinctID:self.people.distinctId ?: self.distinctId
                                                               andProjectID:self.projectID
-                                                                  andToken:self.apiToken];
+                                                                  andToken:self.apiToken
+                                                    andEventBindingVersion:cacheVersion];
             // Build a network request from the URL
             NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
                                                             andEndpoint:MPNetworkEndpointDecide
@@ -1479,41 +1471,29 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 
                 // Handle network response
                 @try {
-                    object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
+                    responseObject = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
                     if (error) {
                         MPLogError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                         hadError = YES;
                         dispatch_semaphore_signal(semaphore);
                         return;
                     }
-                    if (object[@"error"]) {
-                        MPLogError(@"%@ decide check api error: %@", self, object[@"error"]);
+                    if (responseObject[@"error"]) {
+                        MPLogError(@"%@ decide check api error: %@", self, responseObject[@"error"]);
                         hadError = YES;
                         dispatch_semaphore_signal(semaphore);
                         return;
                     }
                     
-                    NSDictionary *config = object[@"config"];
-                    if (config && [config isKindOfClass:NSDictionary.class]) {
-                        NSDictionary *validationConfig = config[@"ce"];
-                        if (validationConfig && [validationConfig isKindOfClass:NSDictionary.class]) {
-                            self.validationEnabled = [validationConfig[@"enabled"] boolValue];
-                            NSString *method = validationConfig[@"method"];
-                            if (method && [method isKindOfClass:NSString.class]) {
-                                if ([method isEqualToString:@"count"]) {
-                                    self.validationMode = AutomaticEventModeCount;
-                                }
-                            }
-                        }
-                    }
                     [userDefaults setObject:responseData forKey:@"SugoEventBindings"];
+                    [userDefaults synchronize];
                     self.decideResponseCached = YES;
                     
                 } @catch (NSException *exception) {
                     MPLogError(@"exception: %@, responseData: %@, object: %@",
                                exception,
                                responseData,
-                               object);
+                               responseObject);
                 }
                 
                 dispatch_semaphore_signal(semaphore);
@@ -1530,7 +1510,13 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 completion(nil);
             }
         } else {
-            [self handleDecideObject:object];
+            NSNumber *responseVersion = responseObject[@"event_bindings_version"];
+            if (cacheVersion != responseVersion) {
+                [self handleDecideObject:responseObject];
+            } else {
+                [self handleDecideObject:cacheObject];
+            }
+            
             MPLogInfo(@"%@ decide check found %lu tracking events, and %lu h5 tracking events",
                       self,
                       (unsigned long)self.eventBindings.count,
