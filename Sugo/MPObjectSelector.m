@@ -419,9 +419,15 @@
         if ([viewController isKindOfClass:[UINavigationController class]]) {
             // UINavigationController
             UINavigationController *navigationController = (UINavigationController *)viewController;
+            UIViewController *visibleViewController = navigationController.visibleViewController;
             UIViewController *topViewController = navigationController.topViewController;
-            if (topViewController) {
+            UIViewController *childViewController = navigationController.childViewControllers.lastObject;
+            if (visibleViewController) {
+                [children addObject:visibleViewController];
+            } else if (topViewController) {
                 [children addObject:topViewController];
+            } else if (childViewController) {
+                [children addObject:childViewController];
             }
         } else if ([viewController isKindOfClass:[UITabBarController class]]) {
             // UITabBarController
