@@ -132,8 +132,12 @@
             NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
             if (view && [self.appliedTo containsObject:view]) {
                 if (![self.path fuzzyIsLeafSelected:view fromRoot:root]) {
+                    if ([Sugo sharedInstance].heatMap.mode) {
+                        [[Sugo sharedInstance].heatMap wipeObjectOfPath:self.path.string];
+                    }
                     [self stopOnView:view];
                     [self.appliedTo removeObject:view];
+                    
                 }
             } else {
                 // select targets based off path
@@ -160,6 +164,9 @@
                           forControlEvents:self.controlEvent];
                         [self.appliedTo addObject:control];
                     }
+                }
+                if ([Sugo sharedInstance].heatMap.mode) {
+                    [[Sugo sharedInstance].heatMap renderObjectOfPath:self.path.string];
                 }
             }
         };

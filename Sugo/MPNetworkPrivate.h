@@ -34,6 +34,8 @@
                                                 andProjectID:(NSString *)projectID
                                                     andToken:(NSString *)token;
 
++ (NSArray<NSURLQueryItem *> *)buildHeatQueryForToken:(NSString *)token andSecretKey:(NSString *)secretKey;
+
 - (NSURLRequest *)buildRequestForURL:(NSURL *)url
                          andEndpoint:(NSString *)endpoint
                         byHTTPMethod:(NSString *)method

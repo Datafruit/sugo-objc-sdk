@@ -123,13 +123,14 @@
 
 - (WKUserScript *)wkJavaScript
 {
-    NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
+    NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
                     [self jsWKWebViewUtils],
                     [self jsWKWebViewSugoBegin],
                     [self jsWKWebViewVariables],
                     [self jsWKWebViewAPI],
                     [self jsWKWebViewBindings],
                     [self jsWKWebViewReport],
+                    [self jsWKHeatMap],
                     [self jsWKWebViewExcute],
                     [self jsWKWebViewSugoEnd]];
     MPLogDebug(@"WKWebView JavaScript:\n%@", js);
@@ -207,15 +208,24 @@
     NSString *pageInfos = [NSString stringWithFormat:@"sugo.page_infos = %@;\n", infosString?infosString:@"[]"];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
     NSString *canTrackWebPage = [NSString stringWithFormat:@"sugo.can_track_web_page = %@;\n", SugoCanTrackWebPage?@"true":@"false"];
-    NSString *variables = [self jsSourceOfFileName:@"WebViewVariables"];
+    NSString *canShowHeatMap = [NSString stringWithFormat:@"sugo.can_show_heat_map = %@;\n", self.isHeatMapModeOn?@"true":@"false"];
+    NSString *heats = [NSString stringWithFormat:@"sugo.h5_heats = %@;\n", self.stringHeats];
+    NSString *vars = [self jsSourceOfFileName:@"WebViewVariables"];
     
-    return [[[[[[[vcPath stringByAppendingString:homePath]
-                 stringByAppendingString:homePathReplacement]
-                stringByAppendingString:regularExpressions]
-               stringByAppendingString:pageInfos]
-              stringByAppendingString:bindings]
-             stringByAppendingString:canTrackWebPage]
-            stringByAppendingString:variables];
+    
+    NSString *variables = [[NSString alloc] initWithFormat:@"%@%@%@%@%@%@%@%@%@%@",
+                           vcPath,
+                           homePath,
+                           homePathReplacement,
+                           regularExpressions,
+                           pageInfos,
+                           bindings,
+                           canTrackWebPage,
+                           canShowHeatMap,
+                           heats,
+                           vars];
+    
+    return variables;
 }
 
 - (NSString *)jsWKWebViewAPI
@@ -233,6 +243,11 @@
 - (NSString *)jsWKWebViewReport
 {
     return [self jsSourceOfFileName:@"WebViewReport.WK"];
+}
+
+- (NSString *)jsWKHeatMap
+{
+    return [self jsSourceOfFileName:@"WebViewHeatmap"];
 }
 
 - (NSString *)jsWKWebViewExcute

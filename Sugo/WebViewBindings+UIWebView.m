@@ -84,15 +84,16 @@
 
 - (NSString *)jsUIWebView
 {
-    NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
-                           [self jsUIWebViewUtils],
-                           [self jsUIWebViewSugoBegin],
-                           [self jsUIWebViewVariables],
-                           [self jsUIWebViewAPI],
-                           [self jsUIWebViewBindings],
-                           [self jsUIWebViewReport],
-                           [self jsUIWebViewExcute],
-                           [self jsUIWebViewSugoEnd]];
+    NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
+                    [self jsUIWebViewUtils],
+                    [self jsUIWebViewSugoBegin],
+                    [self jsUIWebViewVariables],
+                    [self jsUIWebViewAPI],
+                    [self jsUIWebViewBindings],
+                    [self jsUIWebViewReport],
+                    [self jsUIHeatMap],
+                    [self jsUIWebViewExcute],
+                    [self jsUIWebViewSugoEnd]];
     MPLogDebug(@"UIWebView JavaScript:\n%@", js);
     return js;
 }
@@ -166,15 +167,23 @@
     NSString *pageInfos = [NSString stringWithFormat:@"sugo.page_infos = %@;\n", infosString?infosString:@"[]"];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
     NSString *canTrackWebPage = [NSString stringWithFormat:@"sugo.can_track_web_page = %@;\n", SugoCanTrackWebPage?@"true":@"false"];
-    NSString *variables = [self jsSourceOfFileName:@"WebViewVariables"];
+    NSString *canShowHeatMap = [NSString stringWithFormat:@"sugo.can_show_heat_map = %@;\n", self.isHeatMapModeOn?@"true":@"false"];
+    NSString *heats = [NSString stringWithFormat:@"sugo.h5_heats = %@;\n", self.stringHeats];
+    NSString *vars = [self jsSourceOfFileName:@"WebViewVariables"];
     
-    return [[[[[[[vcPath stringByAppendingString:homePath]
-                 stringByAppendingString:homePathReplacement]
-                stringByAppendingString:regularExpressions]
-               stringByAppendingString:pageInfos]
-              stringByAppendingString:bindings]
-             stringByAppendingString:canTrackWebPage]
-            stringByAppendingString:variables];
+    NSString *variables = [[NSString alloc] initWithFormat:@"%@%@%@%@%@%@%@%@%@%@",
+                           vcPath,
+                           homePath,
+                           homePathReplacement,
+                           regularExpressions,
+                           pageInfos,
+                           bindings,
+                           canTrackWebPage,
+                           canShowHeatMap,
+                           heats,
+                           vars];
+    
+    return variables;
 }
 
 - (NSString *)jsUIWebViewAPI
@@ -192,6 +201,11 @@
 - (NSString *)jsUIWebViewReport
 {
     return [self jsSourceOfFileName:@"WebViewReport.UI"];
+}
+
+- (NSString *)jsUIHeatMap
+{
+    return [self jsSourceOfFileName:@"WebViewHeatmap"];
 }
 
 - (NSString *)jsUIWebViewExcute

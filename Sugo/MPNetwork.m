@@ -151,12 +151,23 @@ static const NSUInteger kBatchSize = 50;
     return @[ itemVersion, itemLib, itemProjectID, itemToken, itemDistinctID, itemProperties ];
 }
 
++ (NSArray<NSURLQueryItem *> *)buildHeatQueryForToken:(NSString *)token andSecretKey:(NSString *)secretKey {
+    NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
+                                                              value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
+    NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
+    NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
+    NSURLQueryItem *itemSecretKey = [NSURLQueryItem queryItemWithName:@"sKey" value:secretKey];
+    
+    return @[itemVersion, itemLib, itemToken, itemSecretKey];
+}
+
 + (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {
     static NSDictionary *endPointToPath = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
-                            @(MPNetworkEndpointDecide): @"/api/sdk/decide" };
+                            @(MPNetworkEndpointDecide): @"/api/sdk/decide",
+                            @(MPNetworkEndpointHeat): @"/api/sdk/heat"};
     });
     NSNumber *key = @(endpoint);
     return endPointToPath[key];
