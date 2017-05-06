@@ -32,7 +32,8 @@
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID
                                                 andProjectID:(NSString *)projectID
-                                                    andToken:(NSString *)token;
+                                                    andToken:(NSString *)token
+                                      andEventBindingVersion:(NSNumber *)eventBindingVersion;
 
 + (NSArray<NSURLQueryItem *> *)buildHeatQueryForToken:(NSString *)token andSecretKey:(NSString *)secretKey;
 
