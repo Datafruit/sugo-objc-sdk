@@ -132,13 +132,15 @@ static const NSUInteger kBatchSize = 50;
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID
                                                 andProjectID:(NSString *)projectID
-                                                    andToken:(NSString *)token {
+                                                    andToken:(NSString *)token
+                                      andEventBindingVersion:(NSNumber *)eventBindingVersion {
     NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
                                                               value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
     NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
     NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
     NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
     NSURLQueryItem *itemDistinctID = [NSURLQueryItem queryItemWithName:@"distinct_id" value:distinctID];
+    NSURLQueryItem *itemEventBindingsVersion = [NSURLQueryItem queryItemWithName:@"event_bindings_version" value:[eventBindingVersion stringValue]];
     
     // Convert properties dictionary to a string
     NSData *propertiesData = [NSJSONSerialization dataWithJSONObject:properties
@@ -148,7 +150,23 @@ static const NSUInteger kBatchSize = 50;
                                                        encoding:NSUTF8StringEncoding];
     NSURLQueryItem *itemProperties = [NSURLQueryItem queryItemWithName:@"properties" value:propertiesString];
     
-    return @[ itemVersion, itemLib, itemProjectID, itemToken, itemDistinctID, itemProperties ];
+    return @[itemVersion,
+             itemLib,
+             itemProjectID,
+             itemToken,
+             itemDistinctID,
+             itemEventBindingsVersion,
+             itemProperties];
+}
+
++ (NSArray<NSURLQueryItem *> *)buildHeatQueryForToken:(NSString *)token andSecretKey:(NSString *)secretKey {
+    NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
+                                                              value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
+    NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
+    NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
+    NSURLQueryItem *itemSecretKey = [NSURLQueryItem queryItemWithName:@"sKey" value:secretKey];
+    
+    return @[itemVersion, itemLib, itemToken, itemSecretKey];
 }
 
 + (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {
@@ -156,7 +174,8 @@ static const NSUInteger kBatchSize = 50;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
-                            @(MPNetworkEndpointDecide): @"/api/sdk/decide" };
+                            @(MPNetworkEndpointDecide): @"/api/sdk/decide",
+                            @(MPNetworkEndpointHeat): @"/api/sdk/heat"};
     });
     NSNumber *key = @(endpoint);
     return endPointToPath[key];
