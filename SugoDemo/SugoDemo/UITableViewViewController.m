@@ -31,7 +31,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSLog(@"%s: indexPath: %ld.%ld", __func__, indexPath.section, indexPath.row);
+    NSLog(@"%s: indexPath: %ld.%ld", __func__, (long)indexPath.section, (long)indexPath.row);
     
 }
 
