@@ -1714,7 +1714,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (querys[@"type"]
         && [querys[@"type"] isEqualToString:@"heatmap"]
         && querys[@"sKey"]) {
-        self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
+        self.urlHeatMapSecretKey = (NSString *)querys[@"sKey"];
         [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
             if (heatMap) {
                 self.heatMap.data = heatMap;
