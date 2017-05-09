@@ -1507,7 +1507,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                         dispatch_semaphore_signal(semaphore);
                         return;
                     }
-                    resultData = responseData
+                    resultData = responseData;
                     self.decideResponseCached = YES;
                     
                 } @catch (NSException *exception) {
