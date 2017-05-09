@@ -23,9 +23,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.type = [self handleURL];
-    if ([self.type isEqualToString:@"heatmap"]) {
+    if ([self.type isEqualToString:@"heat"]) {
         self.switchLabel.text = @"切换至热图模式";
-    } else if ([self.type isEqualToString:@"codeless"]){
+    } else if ([self.type isEqualToString:@"track"]){
         self.switchLabel.text = @"切换至可视化埋点模式";
     } else {
         self.switchLabel.text = @"信息错误，请重新扫码";
@@ -50,13 +50,9 @@
         }
         [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
     }
-    
-    if (querys[@"type"]
-        && [querys[@"type"] isEqualToString:@"heatmap"]
-        && querys[@"sKey"]) {
-        return @"heatmap";
-    } else if (querys[@"sKey"]) {
-        return @"codeless";
+    NSString *type = [url.path componentsSeparatedByString:@"/"].lastObject;
+    if (type && querys[@"sKey"]) {
+        return type;
     }
     return @"";
 }
@@ -65,9 +61,9 @@
     
     NSLog(@"url: %@", self.urlString);
     NSURL *url = [[NSURL alloc] initWithString:self.urlString];
-    if ([self.type isEqualToString:@"heatmap"]) {
+    if ([self.type isEqualToString:@"heat"]) {
         [[Sugo sharedInstance] requestForHeatMapViaURL:url];
-    } else if ([self.type isEqualToString:@"codeless"]){
+    } else if ([self.type isEqualToString:@"track"]){
         [[Sugo sharedInstance] connectToCodelessViaURL:url];
         [self.navigationController popToRootViewControllerAnimated:YES];
     } else {
