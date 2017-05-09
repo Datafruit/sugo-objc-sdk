@@ -1437,6 +1437,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     dispatch_async(self.serialQueue, ^{
         
         __block BOOL hadError = NO;
+        __block NSData *resultData = [NSData data];
         __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -1506,9 +1507,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                         dispatch_semaphore_signal(semaphore);
                         return;
                     }
-                    
-                    [userDefaults setObject:responseData forKey:@"SugoEventBindings"];
-                    [userDefaults synchronize];
+                    resultData = responseData
                     self.decideResponseCached = YES;
                     
                 } @catch (NSException *exception) {
@@ -1534,6 +1533,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         } else {
             NSNumber *responseVersion = responseObject[@"event_bindings_version"];
             if (cacheVersion != responseVersion) {
+                [userDefaults setObject:resultData forKey:@"SugoEventBindings"];
+                [userDefaults synchronize];
                 [self handleDecideObject:responseObject];
             } else {
                 [self handleDecideObject:cacheObject];
