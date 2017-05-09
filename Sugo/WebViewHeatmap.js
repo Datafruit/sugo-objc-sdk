@@ -85,7 +85,7 @@ sugo.showHeatMap = function() {
                 div.style.left = rect.left + 'px';
                 div.style.width = rect.width + 'px';
                 div.style.height = rect.height + 'px';
-                div.style.background = `radial-gradient(rgb(${color.red}, ${color.green}, ${color.blue}), white)`;
+                div.style.background = `radial-gradient(rgb(${Math.round(color.red)}, ${Math.round(color.green)}, ${Math.round(color.blue)}), white)`;
                 hmDiv.appendChild(div);
             }
         }
