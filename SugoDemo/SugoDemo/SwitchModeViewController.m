@@ -63,6 +63,7 @@
     NSURL *url = [[NSURL alloc] initWithString:self.urlString];
     if ([self.type isEqualToString:@"heat"]) {
         [[Sugo sharedInstance] requestForHeatMapViaURL:url];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     } else if ([self.type isEqualToString:@"track"]){
         [[Sugo sharedInstance] connectToCodelessViaURL:url];
         [self.navigationController popToRootViewControllerAnimated:YES];
