@@ -272,7 +272,7 @@ static NSString *defaultProjectToken;
     }
     if (!deviceId) {
         MPLogDebug(@"%@ error getting device identifier: falling back to uuid", self);
-        deviceId = [[NSUUID UUID] UUIDString];
+        deviceId = @"";
     }
     return deviceId;
 }
