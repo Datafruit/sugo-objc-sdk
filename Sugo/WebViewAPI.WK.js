@@ -7,7 +7,7 @@
             props.page_name = sugo.init.page_name;
         }
         var track = {
-            'eventID': '',
+            'eventID': event_id,
             'eventName': event_name,
             'properties': JSON.stringify(props)
         };
