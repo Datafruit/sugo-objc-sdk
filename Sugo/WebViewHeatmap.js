@@ -22,7 +22,9 @@ sugo.showHeatMap = function() {
     for (var i = 0; i < pathsOfCurrentEventBindings.length; i++) {
         let eventId = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].event_id;
         if (sugo.h5_heats.heat_map[eventId]) {
-            events = events + sugo.h5_heats.heat_map[eventId];
+            if (events < sugo.h5_heats.heat_map[eventId]) {
+                events = sugo.h5_heats.heat_map[eventId];
+            }
         }
     }
     for (var i = 0; i < pathsOfCurrentEventBindings.length; i++) {

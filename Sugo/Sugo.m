@@ -1533,6 +1533,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion {
     
     if (self.abtestDesignerConnection.connected) return;
+    if (self.heatMap.mode) return;
     
     dispatch_async(self.serialQueue, ^{
         
