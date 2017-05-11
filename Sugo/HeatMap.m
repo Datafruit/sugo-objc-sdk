@@ -114,7 +114,9 @@
         for (NSString *page in pages.allKeys) {
             double events = 0.0;
             for (NSString *path in pages[page]) {
-                events = events + [hs[path] doubleValue];
+                if (events < [hs[path] doubleValue]) {
+                    events = [hs[path] doubleValue];
+                }
             }
             for (NSString *path in pages[page]) {
                 if (hs[path]) {
