@@ -1636,7 +1636,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     self.eventBindings = [allEventBindings copy];
 }
 
-#pragma mark - Sugo A/B Testing and Codeless (Designer)
+#pragma mark - Sugo Codeless and Heat Map
 - (void)setEnableVisualABTestAndCodeless:(BOOL)enableVisualABTestAndCodeless {
     _enableVisualABTestAndCodeless = enableVisualABTestAndCodeless;
 

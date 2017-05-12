@@ -700,7 +700,7 @@ extern BOOL SugoCanTrackWebPage;
 - (NSString *)libVersion;
 + (NSString *)libVersion;
 
-#pragma mark - Sugo A/B Testing and Codeless
+#pragma mark - Sugo Codeless and Heat Map
 
 /*!
  @method
@@ -737,9 +737,9 @@ extern BOOL SugoCanTrackWebPage;
  @method
  
  @abstract
- Handle the url get from codeless qrcode
+ Handle the url get from heat map qrcode
  
- @param url             url of codeless qrcode
+ @param url             url of heat map qrcode
  */
 - (void)requestForHeatMapViaURL:(NSURL *)url;
 
