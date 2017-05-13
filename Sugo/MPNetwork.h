@@ -11,7 +11,8 @@
 
 typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
     MPNetworkEndpointTrack,
-    MPNetworkEndpointDecide
+    MPNetworkEndpointDecide,
+    MPNetworkEndpointHeat
 };
 
 @interface MPNetwork : NSObject

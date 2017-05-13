@@ -8,6 +8,7 @@
 
 #import "Sugo.h"
 #import "MPNetwork.h"
+#import "HeatMap.h"
 
 #if !SUGO_NO_EXCEPTION_HANDLING
 #import "SugoExceptionHandler.h"
@@ -65,12 +66,14 @@
 // re-declare internally as readwrite
 @property (atomic, strong) SugoPeople *people;
 @property (atomic, strong) MPNetwork *network;
+@property (atomic, strong) HeatMap *heatMap;
 @property (atomic, copy) NSString *deviceId;
 @property (atomic, copy) NSString *distinctId;
 @property (atomic, strong) NSString *sessionId;
 
 @property (nonatomic, copy) NSString *apiToken;
-@property (atomic, strong) NSString *urlSchemesKeyValue;
+@property (atomic, strong) NSString *urlCodelessSecretKey;
+@property (atomic, strong) NSString *urlHeatMapSecretKey;
 @property (atomic, strong) NSDictionary *superProperties;
 @property (atomic, strong) NSDictionary *automaticProperties;
 @property (atomic, strong) NSDictionary *priorityProperties;
@@ -102,6 +105,8 @@
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
 #endif
+
+- (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion;
 
 @end
 

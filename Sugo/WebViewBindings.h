@@ -27,8 +27,10 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property BOOL viewSwizzleRunning;
 
 @property (atomic, strong) NSMutableString* stringBindings;
+@property (atomic, strong) NSMutableString* stringHeats;
 @property BOOL isWebViewNeedReload;
 @property BOOL isWebViewNeedInject;
+@property BOOL isHeatMapModeOn;
 
 @property (atomic, weak) UIWebView* uiWebView;
 @property (atomic, retain) id <UIWebViewDelegate> uiWebViewDelegate;
@@ -48,5 +50,6 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 + (instancetype)globalBindings;
 
 - (void)fillBindings;
+- (void)switchHeatMapMode:(BOOL)mode withData:(NSData *)data;
 
 @end

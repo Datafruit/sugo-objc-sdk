@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *SugoBindingsURL;
 extern NSString *SugoCollectionURL;
 extern NSString *SugoCodelessURL;
+extern BOOL SugoCanTrackNativePage;
+extern BOOL SugoCanTrackWebPage;
 
 /*!
  @class
@@ -736,6 +738,16 @@ extern NSString *SugoCodelessURL;
  @param url             url of codeless qrcode
  */
 - (void)connectToCodelessViaURL:(NSURL *)url;
+
+/*!
+ @method
+ 
+ @abstract
+ Handle the url get from heat map qrcode
+ 
+ @param url             url of heat map qrcode
+ */
+- (void)requestForHeatMapViaURL:(NSURL *)url;
 
 #endif // SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 
