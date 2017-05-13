@@ -21,8 +21,8 @@
 NSString *SugoBindingsURL;
 NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
-BOOL SugoCanTrackNativePage = false;
-BOOL SugoCanTrackWebPage = false;
+BOOL SugoCanTrackNativePage = true;
+BOOL SugoCanTrackWebPage = true;
 
 @implementation Sugo
 
