@@ -48,12 +48,14 @@ static WebViewBindings *globalBindings = nil;
     _designerBindings = [[NSMutableArray alloc] init];
     _bindings = [[NSMutableArray alloc] init];
     _stringBindings = [[NSMutableString alloc] init];
+    _stringHeats = [[NSMutableString alloc] initWithString:@"{}"];
     self  = [super init];
     
     _uiVcPath = [[NSMutableString alloc] init];
     _wkVcPath = [[NSMutableString alloc] init];
     _isWebViewNeedReload = NO;
     _isWebViewNeedInject = YES;
+    _isHeatMapModeOn = false;
     _viewSwizzleRunning = NO;
     
     _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
@@ -70,6 +72,10 @@ static WebViewBindings *globalBindings = nil;
               context:nil];
     [self addObserver:self
            forKeyPath:@"isWebViewNeedReload"
+              options:NSKeyValueObservingOptionNew
+              context:nil];
+    [self addObserver:self
+           forKeyPath:@"isHeatMapModeOn"
               options:NSKeyValueObservingOptionNew
               context:nil];
     
@@ -92,6 +98,10 @@ static WebViewBindings *globalBindings = nil;
     [_bindings removeAllObjects];
     _stringBindings = nil;
     _isWebViewNeedReload = NO;
+    _isWebViewNeedInject = YES;
+    
+    _stringHeats = nil;
+    _isHeatMapModeOn = false;
     
     _uiWebView = nil;
     _uiWebViewDelegate = nil;
@@ -130,6 +140,18 @@ static WebViewBindings *globalBindings = nil;
         if (error) {
             MPLogDebug(@"Failed to translate HTML bindings to String: %@", error);
         }
+    }
+}
+
+- (void)switchHeatMapMode:(BOOL)mode withData:(NSData *)data
+{
+    @try {
+        self.stringHeats = [[NSMutableString alloc] initWithData:data
+                                                           encoding:NSUTF8StringEncoding];
+        self.isHeatMapModeOn = mode;
+        MPLogDebug(@"stringHeats:\n%@\n", self.stringHeats);
+    } @catch (NSException *exception) {
+        MPLogError(@"exception: %@, decoding heat map data: %@", exception, data);
     }
 }
 

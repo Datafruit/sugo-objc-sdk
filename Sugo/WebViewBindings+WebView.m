@@ -123,6 +123,7 @@
                        context:(void *)context
 {
     MPLogDebug(@"Object: %@ = \nK: %@ = \nV: %@", object, keyPath, change[NSKeyValueChangeNewKey]);
+
     if ([keyPath isEqualToString:@"stringBindings"]) {
         if (self.mode == Codeless) {
             self.isWebViewNeedReload = YES;
@@ -153,7 +154,13 @@
                                              withObject:nil
                                           waitUntilDone:NO];
         }
+        self.isWebViewNeedReload = false;
     }
+    
+    if ([keyPath isEqualToString:@"isHeatMapModeOn"]) {
+        self.isWebViewNeedReload = YES;
+    }
+    
 }
 
 @end
