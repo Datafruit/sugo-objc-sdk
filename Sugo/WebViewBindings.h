@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "WebViewInfoStorage.h"
 #import "WebKit/WebKit.h"
-#import <JavaScriptCore/JavaScriptCore.h>
 
 typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 {
