@@ -15,7 +15,6 @@
 #import "NSInvocation+MPHelpers.h"
 #import "WebViewBindings+WebView.h"
 #import "WebViewInfoStorage.h"
-#import "SugoWebViewJSExport.h"
 
 
 @interface MPObjectSerializer (WebViewSerializer)
