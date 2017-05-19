@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>Bindings</key>
-	<string>http://dev220.sugo.net:8000</string>
+	<string>http://astro.sugo.io</string>
 	<key>Collection</key>
-	<string>http://dev220.sugo.net</string>
+	<string>http://collect.sugo.io</string>
 	<key>Codeless</key>
-	<string>ws://dev220.sugo.net:8887</string>
+	<string>ws://58.63.110.97:8887</string>
 </dict>
 </plist>
