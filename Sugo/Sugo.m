@@ -1147,7 +1147,7 @@ static NSString *defaultProjectToken;
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
 
-    [self initializeGestureRecognizer];
+//    [self initializeGestureRecognizer];
 }
 
 - (void) initializeGestureRecognizer {

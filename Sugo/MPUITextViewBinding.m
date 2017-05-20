@@ -103,7 +103,7 @@
 {
     if (!self.running && self.swizzleClass != nil) {
         void (^block)(id, SEL, id) = ^(id view, SEL command, UITextView *textView) {
-            NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
+            NSObject *root = [UIApplication sharedApplication].keyWindow;
             // select targets based off path
             if (textView && [self.path isLeafSelected:textView fromRoot:root]) {
                 NSString *text = textView.text?textView.text:@"";

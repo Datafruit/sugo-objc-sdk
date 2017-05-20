@@ -129,7 +129,7 @@
     if (!self.running) {
         void (^executeBlock)(id, SEL) = ^(id view, SEL command) {
             NSArray *objects;
-            NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
+            NSObject *root = [[UIApplication sharedApplication] keyWindow];
             if (view && [self.appliedTo containsObject:view]) {
                 if (![self.path fuzzyIsLeafSelected:view fromRoot:root]) {
                     if ([Sugo sharedInstance].heatMap.mode) {
@@ -166,7 +166,7 @@
                     }
                 }
                 if ([Sugo sharedInstance].heatMap.mode) {
-                    [[Sugo sharedInstance].heatMap renderObjectOfPath:self.path.string];
+                    [[Sugo sharedInstance].heatMap renderObjectOfPath:self.path.string fromRoot:root];
                 }
             }
         };
@@ -223,7 +223,7 @@
 
 - (BOOL)verifyControlMatchesPath:(id)control
 {
-    NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
+    NSObject *root = [[UIApplication sharedApplication] keyWindow];
     return [self.path isLeafSelected:control fromRoot:root];
 }
 

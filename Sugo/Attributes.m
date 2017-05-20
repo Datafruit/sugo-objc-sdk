@@ -76,9 +76,9 @@
     NSMutableDictionary *aObjects = [[NSMutableDictionary alloc] init];
     for (NSString *key in self.paths.allKeys) {
         MPObjectSelector *p = [[MPObjectSelector alloc] initWithString:self.paths[key]];
-        if ([UIApplication sharedApplication].keyWindow.rootViewController) {
+        if ([UIApplication sharedApplication].keyWindow) {
             NSMutableArray *objects = [[NSMutableArray alloc] init];
-            [objects addObjectsFromArray:[p selectFromRoot:[UIApplication sharedApplication].keyWindow.rootViewController]];
+            [objects addObjectsFromArray:[p selectFromRoot:[UIApplication sharedApplication].keyWindow]];
             [aObjects setObject:objects forKey:key];
         }
     }

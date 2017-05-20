@@ -368,10 +368,24 @@
         
         if ([viewController isKindOfClass:[UINavigationController class]]) {
             if (viewController == [UIViewController sugoCurrentUINavigationController]) {
+                UINavigationController *navigationController = [UIViewController sugoCurrentUINavigationController];
+                if (navigationController.tabBarController) {
+                    [result addObject:navigationController.tabBarController];
+                }
+                if (navigationController.navigationController) {
+                    [result addObject:navigationController.navigationController];
+                }
                 [result addObject:[UIViewController sugoCurrentUIViewController]];
             }
         } else if ([viewController isKindOfClass:[UITabBarController class]]) {
             if (viewController == [UIViewController sugoCurrentUITabBarController]) {
+                UITabBarController *tabBarController = [UIViewController sugoCurrentUITabBarController];
+                if (tabBarController.navigationController) {
+                    [result addObject:tabBarController.navigationController];
+                }
+                if (tabBarController.tabBarController) {
+                    [result addObject:tabBarController.tabBarController];
+                }
                 [result addObject:[UIViewController sugoCurrentUIViewController]];
             }
         } else {
@@ -383,7 +397,7 @@
             if (presentingViewController) {
                 [result addObject:presentingViewController];
             }
-            }
+        }
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         if (keyWindow.rootViewController == obj) {
             //TODO is there a better way to get the actual window that has this VC
