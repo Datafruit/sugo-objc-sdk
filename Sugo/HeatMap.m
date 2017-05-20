@@ -38,7 +38,7 @@
     }
 }
 
-- (void)renderObjectOfPath:(NSString *)path {
+- (void)renderObjectOfPath:(NSString *)path fromRoot:(id)root {
     
     NSDictionary *heats = [self parse];
     
@@ -46,7 +46,6 @@
         return;
     }
     
-    NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
     MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:path];
     NSArray *objects = [selector selectFromRoot:root];
     for (UIControl *control in objects) {

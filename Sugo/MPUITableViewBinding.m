@@ -104,7 +104,7 @@
 {
     if (!self.running && self.swizzleClass != nil) {
         void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
-            NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
+            NSObject *root = [UIApplication sharedApplication].keyWindow;
             // select targets based off path
             if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
                 UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];

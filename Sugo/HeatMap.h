@@ -20,7 +20,7 @@
 
 - (void)switchMode:(BOOL)mode;
 
-- (void)renderObjectOfPath:(NSString *)path;
+- (void)renderObjectOfPath:(NSString *)path fromRoot:(id)root;
 - (void)wipeObjectOfPath:(NSString *)path;
 
 @end
