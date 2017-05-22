@@ -131,8 +131,6 @@
 		141AC8FB1E137088008D67F6 /* WebViewBindings+WKWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85C1E137088008D67F6 /* WebViewBindings+WKWebView.m */; };
 		141AC8FC1E137088008D67F6 /* WebViewInfoStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC85D1E137088008D67F6 /* WebViewInfoStorage.h */; };
 		141AC8FD1E137088008D67F6 /* WebViewInfoStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */; };
-		141AC8FE1E137088008D67F6 /* SugoWebViewJSExport.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC85F1E137088008D67F6 /* SugoWebViewJSExport.h */; };
-		141AC8FF1E137088008D67F6 /* SugoWebViewJSExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8601E137088008D67F6 /* SugoWebViewJSExport.m */; };
 		141DFD221E442A0400714BA7 /* SugoPageInfos.h in Headers */ = {isa = PBXBuildFile; fileRef = 141DFD201E442A0400714BA7 /* SugoPageInfos.h */; };
 		141DFD231E442A0400714BA7 /* SugoPageInfos.m in Sources */ = {isa = PBXBuildFile; fileRef = 141DFD211E442A0400714BA7 /* SugoPageInfos.m */; };
 		144496971E8522010076BC50 /* MPUITextViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 144496951E8522010076BC50 /* MPUITextViewBinding.h */; };
@@ -305,8 +303,6 @@
 		141AC85C1E137088008D67F6 /* WebViewBindings+WKWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+WKWebView.m"; sourceTree = "<group>"; };
 		141AC85D1E137088008D67F6 /* WebViewInfoStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewInfoStorage.h; sourceTree = "<group>"; };
 		141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewInfoStorage.m; sourceTree = "<group>"; };
-		141AC85F1E137088008D67F6 /* SugoWebViewJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoWebViewJSExport.h; sourceTree = "<group>"; };
-		141AC8601E137088008D67F6 /* SugoWebViewJSExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoWebViewJSExport.m; sourceTree = "<group>"; };
 		141DFD201E442A0400714BA7 /* SugoPageInfos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPageInfos.h; sourceTree = "<group>"; };
 		141DFD211E442A0400714BA7 /* SugoPageInfos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoPageInfos.m; sourceTree = "<group>"; };
 		144496951E8522010076BC50 /* MPUITextViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITextViewBinding.h; sourceTree = "<group>"; };
@@ -444,8 +440,6 @@
 				141AC85C1E137088008D67F6 /* WebViewBindings+WKWebView.m */,
 				141AC85D1E137088008D67F6 /* WebViewInfoStorage.h */,
 				141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */,
-				141AC85F1E137088008D67F6 /* SugoWebViewJSExport.h */,
-				141AC8601E137088008D67F6 /* SugoWebViewJSExport.m */,
 			);
 			name = WebViewBindings;
 			sourceTree = "<group>";
@@ -825,7 +819,6 @@
 				141AC8A31E137088008D67F6 /* MPNetworkPrivate.h in Headers */,
 				141AC8EA1E137088008D67F6 /* UIColor+MPColor.h in Headers */,
 				141AC88B1E137088008D67F6 /* MPApplicationStateSerializer.h in Headers */,
-				141AC8FE1E137088008D67F6 /* SugoWebViewJSExport.h in Headers */,
 				141AC8661E137088008D67F6 /* Sugo+AutomaticEvents.h in Headers */,
 				141DFD221E442A0400714BA7 /* SugoPageInfos.h in Headers */,
 				145CAAC41E57EB9E00E53E8C /* SugoConfigurationPropertyList.h in Headers */,
@@ -948,7 +941,6 @@
 				141AC8EF1E137088008D67F6 /* UIImage+MPImageEffects.m in Sources */,
 				141AC8751E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				141AC87F1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
-				141AC8FF1E137088008D67F6 /* SugoWebViewJSExport.m in Sources */,
 				141AC8711E137088008D67F6 /* MPAbstractABTestDesignerMessage.m in Sources */,
 				141AC8F11E137088008D67F6 /* UIView+MPHelpers.m in Sources */,
 				141AC8B71E137088008D67F6 /* MPObjectSerializerContext.m in Sources */,
