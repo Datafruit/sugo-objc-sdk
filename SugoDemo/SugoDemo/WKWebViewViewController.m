@@ -24,7 +24,7 @@
     self.webView = [[WKWebView alloc] initWithFrame:self.view.frame
                                       configuration:configuration];
     self.webView.navigationDelegate = self;
-    NSURL *url = [[NSURL alloc] initWithString:@"https://www.jd.com/"];
+    NSURL *url = [[NSURL alloc] initWithString:@"https://m.jd.com/"];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [self.webView loadRequest:request];
     [self.view addSubview:self.webView];

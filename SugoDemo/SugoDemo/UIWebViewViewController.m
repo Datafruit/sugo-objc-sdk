@@ -21,7 +21,7 @@
     // Do any additional setup after loading the view.self.webView.delegate = self;
     
     self.webView.delegate = self;
-    NSURL *url = [[NSURL alloc] initWithString:@"https://www.jd.com/"];
+    NSURL *url = [[NSURL alloc] initWithString:@"https://m.jd.com/"];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [self.webView loadRequest:request];
 }
