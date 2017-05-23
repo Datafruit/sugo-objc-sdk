@@ -15,7 +15,13 @@
 
     sugo.callNative = function (npi, id) {
         location = sugo.scheme + '://' + npi + '?eventUUID=' + id;
-    }
+    };
+
+    sugo.dataOf = function (id) {
+        let data = sugo.data[id];
+        delete sugo.data[id];
+        return data;
+    };
 
     sugo.rawTrack = function (event_id, event_name, props) {
         if (!props) {

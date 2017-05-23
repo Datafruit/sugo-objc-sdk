@@ -18,57 +18,57 @@
 
 - (void)startUIWebViewBindings:(UIWebView *)webView
 {
-    void (^uiWebViewDidStartLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
-        if (self.uiWebViewJavaScriptInjected) {
-            self.uiWebViewJavaScriptInjected = NO;
-            MPLogDebug(@"UIWebView Uninjected");
-        }
-    };
-    
-    void (^uiWebViewDidFinishLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
-        UIWebView *uiWebView = (UIWebView *)webView;
-        if (uiWebView.request.URL.absoluteString.length <= 0
-            || uiWebView.isLoading) {
-            return;
-        }
-        if (!self.uiWebViewJavaScriptInjected) {
-            [uiWebView stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
-            self.uiWebViewJavaScriptInjected = YES;
-            MPLogDebug(@"UIWebView Injected");
-        }
-    };
-    
-    UIWebView *uiWebView = (UIWebView *)webView;
-    if (!self.uiWebViewSwizzleRunning) {
-        if (uiWebView.delegate) {
-            [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
-                                onClass:[uiWebView.delegate class]
-                              withBlock:uiWebViewDidStartLoadBlock
-                                  named:self.uiWebViewDidStartLoadBlockName];
-            [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
-                                onClass:[uiWebView.delegate class]
-                              withBlock:uiWebViewDidFinishLoadBlock
-                                  named:self.uiWebViewDidFinishLoadBlockName];
-            self.uiWebViewSwizzleRunning = YES;
-        }
-    }
+//    void (^uiWebViewDidStartLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
+//        if (self.uiWebViewJavaScriptInjected) {
+//            self.uiWebViewJavaScriptInjected = NO;
+//            MPLogDebug(@"UIWebView Uninjected");
+//        }
+//    };
+//    
+//    void (^uiWebViewDidFinishLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
+//        UIWebView *uiWebView = (UIWebView *)webView;
+//        if (uiWebView.request.URL.absoluteString.length <= 0
+//            || uiWebView.isLoading) {
+//            return;
+//        }
+//        if (!self.uiWebViewJavaScriptInjected) {
+//            [uiWebView stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
+//            self.uiWebViewJavaScriptInjected = YES;
+//            NSLog(@"UIWebView Injected");
+//        }
+//    };
+//    
+//    UIWebView *uiWebView = (UIWebView *)webView;
+//    if (!self.uiWebViewSwizzleRunning) {
+//        if (uiWebView.delegate) {
+//            [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
+//                                onClass:[uiWebView.delegate class]
+//                              withBlock:uiWebViewDidStartLoadBlock
+//                                  named:self.uiWebViewDidStartLoadBlockName];
+//            [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
+//                                onClass:[uiWebView.delegate class]
+//                              withBlock:uiWebViewDidFinishLoadBlock
+//                                  named:self.uiWebViewDidFinishLoadBlockName];
+//            self.uiWebViewSwizzleRunning = YES;
+//        }
+//    }
 }
 
 - (void)stopUIWebViewBindings
 {
-    if (self.uiWebViewSwizzleRunning) {
-        if (self.uiWebViewDelegate) {
-            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
-                                  onClass:[self.uiWebViewDelegate class]
-                                    named:self.uiWebViewDidStartLoadBlockName];
-            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
-                                  onClass:[self.uiWebViewDelegate class]
-                                    named:self.uiWebViewDidFinishLoadBlockName];
-        }
-        self.uiWebViewJavaScriptInjected = NO;
-        self.uiWebViewSwizzleRunning = NO;
-        self.uiWebView = nil;
-    }
+//    if (self.uiWebViewSwizzleRunning) {
+//        if (self.uiWebViewDelegate) {
+//            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
+//                                  onClass:[self.uiWebViewDelegate class]
+//                                    named:self.uiWebViewDidStartLoadBlockName];
+//            [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
+//                                  onClass:[self.uiWebViewDelegate class]
+//                                    named:self.uiWebViewDidFinishLoadBlockName];
+//        }
+//        self.uiWebViewJavaScriptInjected = NO;
+//        self.uiWebViewSwizzleRunning = NO;
+//        self.uiWebView = nil;
+//    }
 }
 
 - (void)updateUIWebViewBindings:(UIWebView *)webView
@@ -81,10 +81,12 @@
 {
     MPLogDebug(@"%@: request = %@", NSStringFromSelector(_cmd), request.URL);
     
+    [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
+    
     if ([request.URL.scheme isEqualToString:@"sugo.npi"]) {
         NSString *npi = [request.URL.absoluteString.lastPathComponent componentsSeparatedByString:@"?"].firstObject;
         NSString *uuid = [request.URL.query componentsSeparatedByString:@"="].lastObject;
-        NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"sugo.data['%@']", uuid]];
+        NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"sugo.dataOf('%@');", uuid]];
         NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
                                                               options:NSJSONReadingMutableContainers
