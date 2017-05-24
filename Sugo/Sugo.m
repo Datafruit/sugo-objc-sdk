@@ -547,6 +547,12 @@ static NSString *defaultProjectToken;
     });
 }
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    return [[WebViewBindings globalBindings] npiWithWebView:webView
+                                 shouldStartLoadWithRequest:request
+                                             navigationType:navigationType];
+}
+
 #pragma mark - Network control
 - (void)setServerURL:(NSString *)serverURL
 {

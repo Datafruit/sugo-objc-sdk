@@ -50,5 +50,6 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 
 - (void)fillBindings;
 - (void)switchHeatMapMode:(BOOL)mode withData:(NSData *)data;
+- (BOOL)npiWithWebView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 
 @end

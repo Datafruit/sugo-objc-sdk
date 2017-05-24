@@ -14,4 +14,6 @@
 - (void)stopUIWebViewBindings;
 - (void)updateUIWebViewBindings:(UIWebView *)webView;
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+
 @end

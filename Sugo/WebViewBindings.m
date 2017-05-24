@@ -155,4 +155,9 @@ static WebViewBindings *globalBindings = nil;
     }
 }
 
+- (BOOL)npiWithWebView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    return [self webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+}
+
 @end
