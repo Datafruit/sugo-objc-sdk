@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "WebViewInfoStorage.h"
 #import "WebKit/WebKit.h"
-#import <JavaScriptCore/JavaScriptCore.h>
 
 typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 {
@@ -51,5 +50,6 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 
 - (void)fillBindings;
 - (void)switchHeatMapMode:(BOOL)mode withData:(NSData *)data;
+- (BOOL)npiWithWebView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 
 @end

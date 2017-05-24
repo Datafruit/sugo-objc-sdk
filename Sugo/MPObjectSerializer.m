@@ -4,7 +4,6 @@
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 #import "UIView+MPHelpers.h"
 #import "MPClassDescription.h"
 #import "MPEnumDescription.h"
@@ -16,7 +15,6 @@
 #import "NSInvocation+MPHelpers.h"
 #import "WebViewBindings+WebView.h"
 #import "WebViewInfoStorage.h"
-#import "SugoWebViewJSExport.h"
 
 
 @interface MPObjectSerializer (WebViewSerializer)
