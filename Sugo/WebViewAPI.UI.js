@@ -1,4 +1,3 @@
-
     sugo.scheme = 'sugo.npi'
     sugo.data = {};
     sugo.generateUUID = function () {
@@ -14,8 +13,19 @@
     };
 
     sugo.callNative = function (npi, id) {
-        location = sugo.scheme + '://' + npi + '?eventUUID=' + id;
-    };
+        let native;
+        if (document.getElementsByName(sugo.scheme).length > 0) {
+            native = document.getElementsByName(sugo.scheme)[0];
+        } else {
+            native = document.createElement('iframe');
+            native.name = sugo.scheme;
+            native.style.display = 'none';
+            document
+                .documentElement
+                .appendChild(native);
+        }
+        native.src = sugo.scheme + '://' + npi + '?eventUUID=' + id;
+    }
 
     sugo.dataOf = function (id) {
         let data = sugo.data[id];
