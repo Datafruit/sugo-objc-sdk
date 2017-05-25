@@ -118,7 +118,7 @@
             [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
             MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
         } else if ([npi isEqualToString:@"time"]) {
-            NSString *eventName = [[NSString alloc] initWithString:event[@"eventName"]];
+            NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
             if (eventName) {
                 [[Sugo sharedInstance] timeEvent:eventName];
             }
