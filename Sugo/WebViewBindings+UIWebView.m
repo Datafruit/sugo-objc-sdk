@@ -103,7 +103,7 @@
     NSURL *url = request.URL;
     MPLogDebug(@"%@: request = %@", NSStringFromSelector(_cmd), url.absoluteString);
     if ([url.scheme isEqualToString:@"sugo.npi"]) {
-        NSString *npi = [url.absoluteString.lastPathComponent componentsSeparatedByString:@"?"].firstObject;
+        NSString *npi = url.host;
         NSString *uuid = [url.query componentsSeparatedByString:@"="].lastObject;
         NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"sugo.dataOf('%@');", uuid]];
         NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
@@ -112,9 +112,9 @@
                                                                 error:nil];
         WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
         if ([npi isEqualToString:@"track"]) {
-            storage.eventID = event[@"eventID"];
-            storage.eventName = event[@"eventName"];
-            storage.properties = event[@"properties"];
+            storage.eventID = (NSString *)event[@"eventID"];
+            storage.eventName = (NSString *)event[@"eventName"];
+            storage.properties = (NSString *)event[@"properties"];
             [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
             MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
         } else if ([npi isEqualToString:@"time"]) {
@@ -124,16 +124,16 @@
             }
         } else if ([npi isEqualToString:@"report"]) {
             if (event[@"path"]) {
-                storage.path = event[@"path"];
+                storage.path = (NSString *)event[@"path"];
             }
             if (event[@"clientWidth"]) {
-                storage.width = event[@"clientWidth"];
+                storage.width = (NSString *)event[@"clientWidth"];
             }
             if (event[@"clientHeight"]) {
-                storage.height = event[@"clientHeight"];
+                storage.height = (NSString *)event[@"clientHeight"];
             }
             if (event[@"nodes"]) {
-                storage.nodes = event[@"nodes"];
+                storage.nodes = (NSString *)event[@"nodes"];
             }
 
         }
