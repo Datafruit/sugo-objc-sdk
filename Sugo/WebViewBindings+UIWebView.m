@@ -97,6 +97,23 @@
     }
 }
 
+- (void)trackStayEventOfWebView:(UIWebView *)webView {
+    NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:@"sugo.trackStayEvent();"];
+    NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                          options:NSJSONReadingMutableContainers
+                                                            error:nil];
+    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+    if (event[@"eventID"] && event[@"eventName"] && event[@"properties"]) {
+        storage.eventID = (NSString *)event[@"eventID"];
+        storage.eventName = (NSString *)event[@"eventName"];
+        storage.properties = (NSString *)event[@"properties"];
+        [self trackEventID:storage.eventID
+                 eventName:storage.eventName
+                properties:storage.properties];
+    }
+}
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     BOOL shouldStartLoad = YES;
@@ -140,18 +157,7 @@
         shouldStartLoad = NO;
     }
     if (shouldStartLoad) {
-        NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:@"sugo.trackStayEvent();"];
-        NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
-                                                              options:NSJSONReadingMutableContainers
-                                                                error:nil];
-        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-        if (event[@"eventID"] && event[@"eventName"] && event[@"properties"]) {
-            storage.eventID = event[@"eventID"];
-            storage.eventName = event[@"eventName"];
-            storage.properties = event[@"properties"];
-            [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
-        }
+        [self trackStayEventOfWebView:webView];
     }
     return shouldStartLoad;
 }
