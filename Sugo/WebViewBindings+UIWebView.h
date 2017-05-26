@@ -16,4 +16,6 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 
+- (void)trackStayEventOfWebView:(UIWebView *)webView;
+
 @end

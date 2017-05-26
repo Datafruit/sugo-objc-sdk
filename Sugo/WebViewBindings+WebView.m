@@ -31,12 +31,14 @@
             }
             if (self.uiWebView
                 && self.uiWebView != uiWebView) {
+                [self trackStayEventOfWebView:self.uiWebView];
                 self.uiVcPath = nil;
                 [self stopUIWebViewBindings];
                 if (self.uiWebViewDelegate) {
                     self.uiWebViewDelegate = nil;
                 }
             } else if (self.uiWebView) {
+                [self trackStayEventOfWebView:self.uiWebView];
                 self.uiVcPath = nil;
                 [self stopUIWebViewBindings];
                 if (self.uiWebViewDelegate) {
