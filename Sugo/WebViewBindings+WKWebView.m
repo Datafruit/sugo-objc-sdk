@@ -252,7 +252,7 @@
 
 - (NSString *)jsWKWebViewExcute
 {
-    return [self jsSourceOfFileName:@"WebViewExcute.Sugo"];
+    return [self jsSourceOfFileName:@"WebViewExcute.Sugo.WK"];
 }
 
 - (NSString *)jsWKWebViewSugoEnd
