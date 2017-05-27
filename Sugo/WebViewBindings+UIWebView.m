@@ -140,24 +140,10 @@
             if (eventName) {
                 [[Sugo sharedInstance] timeEvent:eventName];
             }
-        } else if ([npi isEqualToString:@"report"]) {
-            if (event[@"path"]) {
-                storage.path = (NSString *)event[@"path"];
-            }
-            if (event[@"clientWidth"]) {
-                storage.width = (NSString *)event[@"clientWidth"];
-            }
-            if (event[@"clientHeight"]) {
-                storage.height = (NSString *)event[@"clientHeight"];
-            }
-            if (event[@"nodes"]) {
-                storage.nodes = (NSString *)event[@"nodes"];
-            }
-
         }
         shouldStartLoad = NO;
     }
-    if (shouldStartLoad) {
+    if (shouldStartLoad && webView.window != nil) {
         [self trackStayEventOfWebView:webView];
     }
     return shouldStartLoad;
