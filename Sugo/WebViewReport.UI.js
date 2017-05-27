@@ -45,6 +45,5 @@
             'clientHeight': sugo.clientHeight,
             'nodes': JSON.stringify(jsonArray)
         };
-        sugo.data[eventUUID] = JSON.stringify(event);
-        sugo.callNative('report', eventUUID);
+        return JSON.stringify(event)
     };
