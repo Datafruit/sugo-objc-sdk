@@ -153,7 +153,6 @@
                                              withObject:nil
                                           waitUntilDone:NO];
         }
-        self.isWebViewNeedReload = false;
     }
     
     if ([keyPath isEqualToString:@"isHeatMapModeOn"]) {

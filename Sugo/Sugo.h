@@ -655,6 +655,8 @@ extern BOOL SugoCanTrackWebPage;
  */
 - (void)flushWithCompletion:(nullable void (^)())handler;
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+
 /*!
  @method
  
