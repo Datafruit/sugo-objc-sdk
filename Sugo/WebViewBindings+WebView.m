@@ -16,7 +16,6 @@
 #import "MPSwizzler.h"
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 #import "MPLogger.h"
 
 @implementation WebViewBindings (WebView)
@@ -154,7 +153,6 @@
                                              withObject:nil
                                           waitUntilDone:NO];
         }
-        self.isWebViewNeedReload = false;
     }
     
     if ([keyPath isEqualToString:@"isHeatMapModeOn"]) {

@@ -1,3 +1,6 @@
-if (sugo && sugo.reportNodes) {
-    sugo.reportNodes();
-}
+(function (){
+    if (sugo && sugo.reportNodes) {
+      return sugo.reportNodes();
+    }
+    return {};
+}());

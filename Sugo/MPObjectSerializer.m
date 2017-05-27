@@ -4,7 +4,6 @@
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 #import "UIView+MPHelpers.h"
 #import "MPClassDescription.h"
 #import "MPEnumDescription.h"
@@ -16,7 +15,6 @@
 #import "NSInvocation+MPHelpers.h"
 #import "WebViewBindings+WebView.h"
 #import "WebViewInfoStorage.h"
-#import "SugoWebViewJSExport.h"
 
 
 @interface MPObjectSerializer (WebViewSerializer)
@@ -103,7 +101,8 @@
                                                                           @"selectors": delegateMethods
                                                                           }
                                                                   }];
-    if ([object isKindOfClass:[UIWebView class]] && !((UIWebView *)object).loading) {
+    if ([object isKindOfClass:[UIWebView class]]
+        && ((UIWebView *)object).window != nil) {
         [serializedObject setObject:[self getUIWebViewHTMLInfoFrom:(UIWebView *)object]
                              forKey:@"htmlPage"];
     } else if ([object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading) {
@@ -338,8 +337,24 @@
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
 {
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"]];
+    NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"]];
+    NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                          options:NSJSONReadingMutableContainers
+                                                            error:nil];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+    if (event[@"path"]
+        && event[@"clientWidth"]
+        && event[@"clientHeight"]
+        && event[@"nodes"]) {
+        storage.path = (NSString *)event[@"path"];
+        storage.width = (NSString *)event[@"clientWidth"];
+        storage.height = (NSString *)event[@"clientHeight"];
+        storage.nodes = (NSString *)event[@"nodes"];
+    }
+    eventString = nil;
+    eventData = nil;
+    event = nil;
     return @{
              @"url": storage.path,
              @"clientWidth": storage.width,
