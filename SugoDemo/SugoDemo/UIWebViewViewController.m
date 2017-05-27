@@ -7,6 +7,7 @@
 //
 
 #import "UIWebViewViewController.h"
+@import Sugo;
 
 @interface UIWebViewViewController ()
 
@@ -21,7 +22,7 @@
     // Do any additional setup after loading the view.self.webView.delegate = self;
     
     self.webView.delegate = self;
-    NSURL *url = [[NSURL alloc] initWithString:@"https://www.jd.com/"];
+    NSURL *url = [[NSURL alloc] initWithString:@"https://jd.com/"];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [self.webView loadRequest:request];
 }
@@ -29,6 +30,12 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    return [[Sugo sharedInstance] webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView

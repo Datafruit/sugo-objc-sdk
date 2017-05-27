@@ -101,7 +101,8 @@
                                                                           @"selectors": delegateMethods
                                                                           }
                                                                   }];
-    if ([object isKindOfClass:[UIWebView class]] && !((UIWebView *)object).loading) {
+    if ([object isKindOfClass:[UIWebView class]]
+        && ((UIWebView *)object).window != nil) {
         [serializedObject setObject:[self getUIWebViewHTMLInfoFrom:(UIWebView *)object]
                              forKey:@"htmlPage"];
     } else if ([object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading) {
@@ -336,8 +337,24 @@
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
 {
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"]];
+    NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"]];
+    NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                          options:NSJSONReadingMutableContainers
+                                                            error:nil];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+    if (event[@"path"]
+        && event[@"clientWidth"]
+        && event[@"clientHeight"]
+        && event[@"nodes"]) {
+        storage.path = (NSString *)event[@"path"];
+        storage.width = (NSString *)event[@"clientWidth"];
+        storage.height = (NSString *)event[@"clientHeight"];
+        storage.nodes = (NSString *)event[@"nodes"];
+    }
+    eventString = nil;
+    eventData = nil;
+    event = nil;
     return @{
              @"url": storage.path,
              @"clientWidth": storage.width,
