@@ -352,7 +352,9 @@
         storage.height = (NSString *)event[@"clientHeight"];
         storage.nodes = (NSString *)event[@"nodes"];
     }
-    
+    eventString = nil;
+    eventData = nil;
+    event = nil;
     return @{
              @"url": storage.path,
              @"clientWidth": storage.width,
