@@ -907,7 +907,6 @@ static NSString *defaultProjectToken;
                 }
             }
             [self trackEvent:values[@"PageStay"] properties:p];
-            [self trackEvent:values[@"PageExit"] properties:p];
         }
     };
     
