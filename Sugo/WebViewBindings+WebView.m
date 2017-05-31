@@ -25,32 +25,35 @@
     if (!self.viewSwizzleRunning) {
         
         void (^uiDidMoveToWindowBlock)(id, SEL) = ^(id webView, SEL command) {
+            if (![webView isKindOfClass:[UIWebView class]]) {
+                return;
+            }
             UIWebView *uiWebView = (UIWebView *)webView;
-            if (!uiWebView) {
-                return;
-            }
-            if (self.uiWebView
-                && self.uiWebView != uiWebView) {
-                self.uiVcPath = nil;
-                [self stopUIWebViewBindings];
-                if (self.uiWebViewDelegate) {
-                    self.uiWebViewDelegate = nil;
+            if (!self.uiWebView || uiWebView.window) {
+                if (self.uiWebView && self.uiWebView == uiWebView) {
+                    return;
                 }
-            } else if (self.uiWebView) {
-                [self trackStayEventOfWebView:self.uiWebView];
-                self.uiVcPath = nil;
-                [self stopUIWebViewBindings];
-                if (self.uiWebViewDelegate) {
-                    self.uiWebViewDelegate = nil;
+                if (self.uiWebView
+                    && self.uiWebView != uiWebView
+                    && self.uiWebViewSwizzleRunning) {
+                    [self trackStayEventOfWebView:self.uiWebView];
+                    [self stopUIWebViewBindings];
                 }
-                return;
+                self.uiVcPath = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+                self.uiWebView = uiWebView;
+                if (self.uiWebView.delegate) {
+                    self.uiWebViewDelegate = self.uiWebView.delegate;
+                }
+                [self startUIWebViewBindings:self.uiWebView];
+            } else {
+                if (self.uiWebView != uiWebView) {
+                    return;
+                }
+                if (self.uiWebView && self.uiWebViewSwizzleRunning) {
+                    [self trackStayEventOfWebView:self.uiWebView];
+                    [self stopUIWebViewBindings];
+                }
             }
-            self.uiVcPath = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
-            self.uiWebView = uiWebView;
-            if (self.uiWebView.delegate) {
-                self.uiWebViewDelegate = self.uiWebView.delegate;
-            }
-            [self startUIWebViewBindings:self.uiWebView];
         };
         
         void (^wkDidMoveToWindowBlock)(id, SEL) = ^(id webView, SEL command) {
