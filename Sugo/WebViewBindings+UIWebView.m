@@ -63,10 +63,11 @@
             [MPSwizzler unswizzleSelector:NSSelectorFromString(@"webViewDidFinishLoad:")
                                   onClass:[self.uiWebViewDelegate class]
                                     named:self.uiWebViewDidFinishLoadBlockName];
+            self.uiWebViewDelegate = nil;
         }
         self.uiWebViewJavaScriptInjected = NO;
         self.uiWebViewSwizzleRunning = NO;
-        self.uiWebView = nil;
+        self.uiVcPath = nil;
     }
 }
 
