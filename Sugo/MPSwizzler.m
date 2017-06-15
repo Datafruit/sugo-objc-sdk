@@ -65,7 +65,12 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
 
 static void mp_swizzledMethod_3_BOOL(id self, SEL _cmd, BOOL arg)
 {
-    Method aMethod = class_getInstanceMethod([self class], _cmd);
+    Method aMethod;
+    if ([self isKindOfClass:[UIViewController class]]) {
+        aMethod = class_getInstanceMethod([UIViewController class], _cmd);
+    } else {
+        aMethod = class_getInstanceMethod([self class], _cmd);
+    }
     MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:MAPTABLE_ID(aMethod)];
     if (swizzle) {
         ((void(*)(id, SEL, BOOL))swizzle.originalMethod)(self, _cmd, arg);
