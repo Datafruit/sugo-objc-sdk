@@ -170,10 +170,20 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 #### 2.4.2 UIWebView
 
-所有`UIWebView`类及其子类下的网页元素，需要指定其`delegate`属性，且在`delegate`指定类中实现以下指定的方法，方可被埋点绑定事件。
+所有`UIWebView`类及其子类下的网页元素，需要指定其`delegate`属性，且在`delegate`指定类中实现以下指定的方法:
 
+* `- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType`
 * `- (void)webViewDidStartLoad:(UIWebView *)webView;`
 * `- (void)webViewDidFinishLoad:(UIWebView *)webView;`
+
+其中，`- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType`内需指定返回值（若有类似功能的实现，请确保SDK的返回值优先级最低，在此方法最后调用即可），例子如下：
+
+```
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    return [[Sugo sharedInstance] webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+}
+```
 
 #### 2.4.3 WKWebView
 
