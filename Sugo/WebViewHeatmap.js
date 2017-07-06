@@ -4,12 +4,12 @@ sugo.showHeatMap = function() {
         return;
     }
     
-    let events = 0;
-    let pathsOfCurrentEventBindings = Object.keys(sugo.current_event_bindings);
+    var events = 0;
+    var pathsOfCurrentEventBindings = Object.keys(sugo.current_event_bindings);
     
-    let hasValidHeatMap = false;
+    var hasValidHeatMap = false;
     for (var i = 0; i < pathsOfCurrentEventBindings.length; i++) {
-        let eventId = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].event_id;
+        var eventId = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].event_id;
         if (Object.keys(sugo.h5_heats.heat_map).includes(eventId)) {
             hasValidHeatMap = true;
         }
@@ -20,7 +20,7 @@ sugo.showHeatMap = function() {
     }
     
     for (var i = 0; i < pathsOfCurrentEventBindings.length; i++) {
-        let eventId = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].event_id;
+        var eventId = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].event_id;
         if (sugo.h5_heats.heat_map[eventId]) {
             if (events < sugo.h5_heats.heat_map[eventId]) {
                 events = sugo.h5_heats.heat_map[eventId];
@@ -28,30 +28,30 @@ sugo.showHeatMap = function() {
         }
     }
     for (var i = 0; i < pathsOfCurrentEventBindings.length; i++) {
-        let eventId = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].event_id;
+        var eventId = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].event_id;
         if (sugo.h5_heats.heat_map[eventId]) {
-            let rate = sugo.h5_heats.heat_map[eventId] / events;
+            var rate = sugo.h5_heats.heat_map[eventId] / events;
             sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].heat = rate;
         }
     }
-    let coldColor = {
+    var coldColor = {
         'red': 211,
         'green': 177,
         'blue': 125
     };
-    let hotColor = {
+    var hotColor = {
         'red': 255,
         'green': 45,
         'blue': 81
     };
-    let differenceColor = {
+    var differenceColor = {
         'red': hotColor.red - coldColor.red,
         'green': hotColor.green - coldColor.green,
         'blue': hotColor.blue - coldColor.blue
     };
-    let idOfHeatMap = 'sugo_heat_map';
-    let defaultZIndex = 1000;
-    let hmDiv = document.getElementById(idOfHeatMap);
+    var idOfHeatMap = 'sugo_heat_map';
+    var defaultZIndex = 1000;
+    var hmDiv = document.getElementById(idOfHeatMap);
     if (hmDiv || hmDiv != null) {
         document.body.removeChild(document.getElementById(idOfHeatMap));
     }
@@ -68,26 +68,32 @@ sugo.showHeatMap = function() {
         var path = event.path.path;
         var eles = document.querySelectorAll(path);
         if (eles && event.heat) {
-            let rate = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].heat;
-            let color = {
+            var rate = sugo.current_event_bindings[pathsOfCurrentEventBindings[i]].heat;
+            var color = {
                 'red': differenceColor.red * rate + coldColor.red,
                 'green': differenceColor.green * rate + coldColor.green,
                 'blue': differenceColor.blue * rate + coldColor.blue
             };
             for (var index = 0; index < eles.length; index++) {
-                let div = document.createElement('div');
+                var div = document.createElement('div');
                 div.id = event.event_id;
                 div.style.position = 'absolute';
                 div.style.pointerEvents = 'none';
                 div.style.opacity = 0.8;
-                let z = eles[index].style.zIndex;
+                var z = eles[index].style.zIndex;
                 div.style.zIndex = z ? parseInt(z) + 1 : defaultZIndex;
-                let rect = eles[index].getBoundingClientRect()
+                var rect = eles[index].getBoundingClientRect()
                 div.style.top = rect.top + 'px';
                 div.style.left = rect.left + 'px';
                 div.style.width = rect.width + 'px';
                 div.style.height = rect.height + 'px';
-                div.style.background = `radial-gradient(rgb(${Math.round(color.red)}, ${Math.round(color.green)}, ${Math.round(color.blue)}), white)`;
+                div.style.background = 'radial-gradient(rgb('
+                    + Math.round(color.red)
+                    + ', '
+                    + Math.round(color.green)
+                    + ','
+                    + Math.round(color.blue)
+                    + '), white)';
                 hmDiv.appendChild(div);
             }
         }
