@@ -343,10 +343,12 @@
                                                           options:NSJSONReadingMutableContainers
                                                             error:nil];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-    if (event[@"path"]
+    if (event[@"title"]
+        && event[@"path"]
         && event[@"clientWidth"]
         && event[@"clientHeight"]
         && event[@"nodes"]) {
+        storage.title = (NSString *)event[@"title"];
         storage.path = (NSString *)event[@"path"];
         storage.width = (NSString *)event[@"clientWidth"];
         storage.height = (NSString *)event[@"clientHeight"];
@@ -356,6 +358,7 @@
     eventData = nil;
     event = nil;
     return @{
+             @"title": storage.title,
              @"url": storage.path,
              @"clientWidth": storage.width,
              @"clientHeight": storage.height,
@@ -370,6 +373,7 @@
     [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"] completionHandler:nil];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
     return @{
+             @"title": storage.title,
              @"url": storage.path,
              @"clientWidth": storage.width,
              @"clientHeight": storage.height,
