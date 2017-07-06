@@ -2,8 +2,8 @@
     sugo.scheme = 'sugo.npi'
     sugo.data = {};
     sugo.generateUUID = function() {
-        let d = new Date().getTime();
-        let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = (d + Math.random() * 16) % 16 | 0;
             d = Math.floor(d / 16)
             return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16)
@@ -12,7 +12,7 @@
     };
 
     sugo.callNative = function(npi, id) {
-        let native;
+        var native;
         if (document.getElementsByName(sugo.scheme).length > 0) {
             native = document.getElementsByName(sugo.scheme)[0];
         } else {
@@ -28,7 +28,7 @@
     }
 
     sugo.dataOf = function(id) {
-        let data = sugo.data[id];
+        var data = sugo.data[id];
         delete sugo.data[id];
         return data;
     };
@@ -42,8 +42,8 @@
             props.page_name = sugo.init.page_name;
         }
 
-        let eventUUID = sugo.generateUUID();
-        let event = {
+        var eventUUID = sugo.generateUUID();
+        var event = {
             'eventID': event_id,
             'eventName': event_name,
             'properties': JSON.stringify(props)
@@ -58,8 +58,8 @@
 
     sugo.timeEvent = function(event_name) {
 
-        let eventUUID = sugo.generateUUID();
-        let event = {
+        var eventUUID = sugo.generateUUID();
+        var event = {
             'eventName': event_name
         };
         sugo.data[eventUUID] = JSON.stringify(event);
@@ -67,7 +67,7 @@
     };
 
     sugo.trackStayEvent = function() {
-        let event = {};
+        var event = {};
         if (sugo.enter_time) {
             var duration = (new Date().getTime() - sugo.enter_time) / 1000;
             var tmp_props = JSON.parse(JSON.stringify(sugo.view_props));

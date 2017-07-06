@@ -38,8 +38,8 @@
         sugo.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
         sugo.handleNodeChild(childrens, jsonArray, parent_path);
 
-        let eventUUID = sugo.generateUUID();
-        let event = {
+        var eventUUID = sugo.generateUUID();
+        var event = {
             'path': sugo.relative_path,
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,
