@@ -22,7 +22,7 @@ sugo.init_path = function() {
     
     for (var i = 0; i < sugo.h5_event_bindings.length; i++) {
         var b_event = sugo.h5_event_bindings[i];
-        if (b_event.target_activity === sugo.current_page) {
+        if (b_event.target_activity === sugo.current_page || b_event.cross_page === true) {
             var key = JSON.stringify(b_event.path);
             sugo.current_event_bindings[key] = b_event;
         }
