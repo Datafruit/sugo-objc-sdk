@@ -13,7 +13,8 @@ sugo.init_path = function() {
         if (page_info.page === sugo.relative_path) {
             sugo.init = {
             code: page_info.code,
-            page_name: page_info.page_name
+            page_name: page_info.page_name,
+            category: page_info.category ? page_info.category : ''
             };
             break;
         }
