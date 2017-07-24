@@ -44,6 +44,7 @@ sugo.reportNodes = function() {
     sugo.handleNodeChild(childrens, jsonArray, parent_path);
     if (window.webkit.messageHandlers.SugoWKWebViewReporter) {
         var message = {
+            'title': window.document.title,
             'path': sugo.relative_path,
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,

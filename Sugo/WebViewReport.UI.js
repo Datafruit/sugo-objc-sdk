@@ -40,6 +40,7 @@
 
         let eventUUID = sugo.generateUUID();
         let event = {
+            'title': window.document.title,
             'path': sugo.relative_path,
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,
