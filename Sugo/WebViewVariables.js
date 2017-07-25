@@ -3,5 +3,5 @@ sugo.current_event_bindings = {};
 sugo.init = {
 	code: '',
 	page_name: '',
-    category: ''
+    page_category: ''
 };

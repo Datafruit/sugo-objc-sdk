@@ -868,8 +868,8 @@ static NSString *defaultProjectToken;
                 for (NSDictionary *info in [SugoPageInfos global].infos) {
                     if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
                         p[keys[@"PageName"]] = info[@"page_name"];
-                        if (info[@"category"]) {
-                            p[keys[@"Category"]] = info[@"category"];
+                        if (info[@"page_category"]) {
+                            p[keys[@"PageCategory"]] = info[@"page_category"];
                         }
                     }
                 }
@@ -906,8 +906,8 @@ static NSString *defaultProjectToken;
                 for (NSDictionary *info in [SugoPageInfos global].infos) {
                     if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
                         p[keys[@"PageName"]] = info[@"page_name"];
-                        if (info[@"category"]) {
-                            p[keys[@"Category"]] = info[@"category"];
+                        if (info[@"page_category"]) {
+                            p[keys[@"PageCategory"]] = info[@"page_category"];
                         }
                     }
                 }

@@ -14,7 +14,7 @@ sugo.init_path = function() {
             sugo.init = {
             code: page_info.code,
             page_name: page_info.page_name,
-            category: page_info.category ? page_info.category : ''
+            page_category: page_info.page_category ? page_info.page_category : ''
             };
             break;
         }

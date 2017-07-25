@@ -5,8 +5,8 @@
         props.path_name = sugo.relative_path;
         if (!props.page_name && sugo.init.page_name) {
             props.page_name = sugo.init.page_name;
-            if (sugo.init.category !== undefined) {
-                props.category = sugo.init.category;
+            if (sugo.init.page_category !== undefined) {
+                props.page_category = sugo.init.page_category;
             }
         }
         var track = {
