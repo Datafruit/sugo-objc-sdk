@@ -56,6 +56,8 @@
 		<string>path_name</string>
 		<key>PageName</key>
 		<string>page_name</string>
+		<key>PageCategory</key>
+		<string>page_category</string>
 		<key>FromBinding</key>
 		<string>from_binding</string>
 	</dict>

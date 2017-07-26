@@ -44,6 +44,7 @@ static WebViewInfoStorage *singleton = nil;
     _eventID = @"";
     _eventName = @"";
     _properties = @"";
+    _title = @"";
     _path = @"";
     _width = @"";
     _height = @"";
