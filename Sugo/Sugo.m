@@ -379,6 +379,11 @@ static NSString *defaultProjectToken;
         p[keys[@"Duration"]] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
     }
     
+    NSTimeInterval firstTime = [NSUserDefaults.standardUserDefaults doubleForKey:@"FirstTime"];
+    if (firstTime) {
+        p[keys[@"FirstTime"]] = @([[NSString stringWithFormat:@"%.0f", firstTime] integerValue]);
+    }
+    
     if (self.deviceId) {
         p[keys[@"DeviceID"]] = self.deviceId;
     }
@@ -837,8 +842,13 @@ static NSString *defaultProjectToken;
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         if (values) {
             [self trackEvent:values[@"Integration"]];
+            [self trackEvent:values[@"FirstAccess"]];
             [NSUserDefaults.standardUserDefaults setBool:YES
                                                   forKey:defaultKey];
+            NSDate *date = [NSDate date];
+            NSTimeInterval firstTime = [date timeIntervalSince1970] * 1000;
+            [NSUserDefaults.standardUserDefaults setDouble:firstTime
+                                                    forKey:@"FirstTime"];
             [NSUserDefaults.standardUserDefaults synchronize];
         }
     }

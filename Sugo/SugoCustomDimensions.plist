@@ -60,11 +60,15 @@
 		<string>page_category</string>
 		<key>FromBinding</key>
 		<string>from_binding</string>
+		<key>FirstTime</key>
+		<string>first_time</string>
 	</dict>
 	<key>Values</key>
 	<dict>
 		<key>Integration</key>
 		<string>APP安装</string>
+		<key>FirstAccess</key>
+		<string>首次访问</string>
 		<key>AppEnter</key>
 		<string>启动</string>
 		<key>AppStay</key>
