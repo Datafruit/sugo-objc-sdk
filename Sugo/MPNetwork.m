@@ -168,6 +168,13 @@ static const NSUInteger kBatchSize = 50;
     
     return @[itemVersion, itemLib, itemToken, itemSecretKey];
 }
+    
++ (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer {
+    
+    NSURLQueryItem *itemIdentifer = [NSURLQueryItem queryItemWithName:@"userId" value:identifer];
+    
+    return @[itemIdentifer];
+}
 
 + (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {
     static NSDictionary *endPointToPath = nil;
@@ -175,7 +182,8 @@ static const NSUInteger kBatchSize = 50;
     dispatch_once(&onceToken, ^{
         endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
                             @(MPNetworkEndpointDecide): @"/api/sdk/decide",
-                            @(MPNetworkEndpointHeat): @"/api/sdk/heat"};
+                            @(MPNetworkEndpointHeat): @"/api/sdk/heat",
+                            @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time"};
     });
     NSNumber *key = @(endpoint);
     return endPointToPath[key];

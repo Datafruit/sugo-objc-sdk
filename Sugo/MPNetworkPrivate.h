@@ -36,6 +36,8 @@
                                       andEventBindingVersion:(NSNumber *)eventBindingVersion;
 
 + (NSArray<NSURLQueryItem *> *)buildHeatQueryForToken:(NSString *)token andSecretKey:(NSString *)secretKey;
+    
++ (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer;
 
 - (NSURLRequest *)buildRequestForURL:(NSURL *)url
                          andEndpoint:(NSString *)endpoint
