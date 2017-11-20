@@ -379,11 +379,6 @@ static NSString *defaultProjectToken;
         p[keys[@"Duration"]] = @([[NSString stringWithFormat:@"%.2f", epochInterval - [eventStartTime doubleValue]] floatValue]);
     }
     
-    NSTimeInterval firstTime = [NSUserDefaults.standardUserDefaults doubleForKey:@"FirstTime"];
-    if (firstTime) {
-        p[keys[@"FirstTime"]] = @([[NSString stringWithFormat:@"%.0f", firstTime] integerValue]);
-    }
-    
     if (self.deviceId) {
         p[keys[@"DeviceID"]] = self.deviceId;
     }
@@ -401,6 +396,11 @@ static NSString *defaultProjectToken;
     [p addEntriesFromDictionary:self.priorityProperties];
     if (properties) {
         [p addEntriesFromDictionary:properties];
+    }
+    
+    NSTimeInterval firstTime = [NSUserDefaults.standardUserDefaults doubleForKey:@"FirstVisitTime"];
+    if (firstTime) {
+        p[keys[@"FirstVisitTime"]] = @([[NSString stringWithFormat:@"%.0f", firstTime] integerValue]);
     }
     
     if (self.validationEnabled) {
@@ -541,6 +541,125 @@ static NSString *defaultProjectToken;
     return [[WebViewBindings globalBindings] npiWithWebView:webView
                                  shouldStartLoadWithRequest:request
                                              navigationType:navigationType];
+}
+    
+- (void)trackFirstLoginWith:(nullable NSString *)identifer {
+    
+    __block NSString *firstLoginKey = @"FirstLoginTime";
+    __block NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+    __block NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+    __block NSMutableDictionary *firstLoginTimes = [NSMutableDictionary dictionary];
+    NSDictionary *times = [NSUserDefaults.standardUserDefaults dictionaryForKey:firstLoginKey];
+    if (times) {
+        [firstLoginTimes addEntriesFromDictionary:times];
+    }
+    for (NSString *firstLoginTimeKey in firstLoginTimes.allKeys) {
+        if ([identifer isEqualToString:firstLoginTimeKey]) {
+            NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+            properties[keys[firstLoginKey]] = firstLoginTimes[firstLoginTimeKey];
+            [self registerSuperProperties:properties];
+            return;
+        }
+    }
+    
+    __weak Sugo *weakSelf = self;
+    
+    [self requestForFirstLoginWithIdentifer:identifer completion:^(NSData *firstLoginData) {
+        
+        __strong Sugo *strongSelf = weakSelf;
+        if (!firstLoginData) {
+            return;
+        }
+        @try {
+            NSDictionary *firstLoginResult = [NSJSONSerialization JSONObjectWithData:firstLoginData
+                                                                             options:(NSJSONReadingOptions)0
+                                                                               error:nil][@"result"];
+            NSNumber *firstLoginTime = [NSNumber numberWithDouble:[firstLoginResult[@"firstLoginTime"] doubleValue]];
+            BOOL isFirstLogin = [firstLoginResult[@"isFirstLogin"] boolValue];
+            
+            firstLoginTimes[identifer] = firstLoginTime;
+            
+            NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+            properties[keys[firstLoginKey]] = firstLoginTime;
+            
+            NSMutableDictionary *sps = [NSMutableDictionary dictionaryWithDictionary:strongSelf.superProperties];
+            [sps addEntriesFromDictionary:properties];
+            strongSelf.superProperties = [NSDictionary dictionaryWithDictionary:sps];
+            [strongSelf archiveProperties];
+            
+            if (isFirstLogin) {
+                [NSUserDefaults.standardUserDefaults setObject:firstLoginTimes forKey:firstLoginKey];
+                [NSUserDefaults.standardUserDefaults synchronize];
+                [strongSelf trackEvent:values[@"FirstLogin"]];
+            }
+        } @catch (NSException *exception) {
+            MPLogError(@"unable to request first login with identifer");
+        } @finally {
+            return;
+        }
+        
+    }];
+}
+    
+- (void)requestForFirstLoginWithIdentifer:(NSString *)identifer completion:(void (^)(NSData *firstLoginData))completion {
+    
+    dispatch_async(self.serialQueue, ^{
+        
+        __block BOOL hadError = NO;
+        __block NSData *data = [[NSData alloc] init];
+        
+        NSArray *queryItems = [MPNetwork buildFirstLoginQueryForIdentifer:identifer];
+        // Build a network request from the URL
+        NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
+                                                        andEndpoint:MPNetworkEndpointFirstLogin
+                                                     withQueryItems:queryItems];
+        // Send the network request
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            if (error) {
+                MPLogError(@"%@ first login request http error: %@", self, error);
+                hadError = YES;
+                dispatch_semaphore_signal(semaphore);
+                return;
+            }
+            MPLogDebug(@"first login responseData\n%@",[[NSString alloc] initWithData:responseData
+                                                                      encoding:NSUTF8StringEncoding]);
+            
+            // Handle network response
+            data = responseData;
+            
+            dispatch_semaphore_signal(semaphore);
+        }] resume];
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        // handle response
+        if (hadError) {
+            if (completion) {
+                completion(nil);
+            }
+        } else {
+            if (completion) {
+                completion(data);
+            }
+        }
+    });
+}
+
+- (void)untrackFirstLogin {
+    
+    NSString *firstLoginKey = @"FirstLoginTime";
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+    if ([self.currentSuperProperties.allKeys containsObject:keys[firstLoginKey]]) {
+        NSMutableDictionary *sps = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
+        sps[keys[firstLoginKey]] = nil;
+        self.superProperties = [NSDictionary dictionaryWithDictionary:sps];
+        [self archiveProperties];
+    }
+    
 }
 
 #pragma mark - Network control
@@ -842,13 +961,13 @@ static NSString *defaultProjectToken;
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         if (values) {
             [self trackEvent:values[@"Integration"]];
-            [self trackEvent:values[@"FirstAccess"]];
+            [self trackEvent:values[@"FirstVisitTime"]];
             [NSUserDefaults.standardUserDefaults setBool:YES
                                                   forKey:defaultKey];
             NSDate *date = [NSDate date];
-            NSTimeInterval firstTime = [date timeIntervalSince1970] * 1000;
-            [NSUserDefaults.standardUserDefaults setDouble:firstTime
-                                                    forKey:@"FirstTime"];
+            NSTimeInterval firstVisitTime = [date timeIntervalSince1970] * 1000;
+            [NSUserDefaults.standardUserDefaults setDouble:firstVisitTime
+                                                    forKey:@"FirstVisitTime"];
             [NSUserDefaults.standardUserDefaults synchronize];
         }
     }

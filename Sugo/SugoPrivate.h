@@ -95,6 +95,7 @@
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
 
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion;
+- (void)requestForFirstLoginWithIdentifer:(NSString *)identifer completion:(void (^)(NSData *firstLoginData))completion;
 
 @end
 

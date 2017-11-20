@@ -469,8 +469,6 @@ extern BOOL SugoCanTrackWebPage;
  */
 - (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName properties:(nullable NSDictionary *)properties;
 
-
-
 /*!
  @method
  
@@ -653,6 +651,10 @@ extern BOOL SugoCanTrackWebPage;
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 
+- (void)trackFirstLoginWith:(nullable NSString *)identifer;
+
+- (void)untrackFirstLogin;
+    
 /*!
  @method
  
