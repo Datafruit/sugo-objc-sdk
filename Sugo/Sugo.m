@@ -400,10 +400,11 @@ static NSString *defaultProjectToken;
     
     NSString *loginUserId = [NSUserDefaults.standardUserDefaults stringForKey:keys[@"LoginUserId"]];
     NSDictionary *firstLoginTimes = [NSUserDefaults.standardUserDefaults dictionaryForKey:keys[@"FirstLoginTime"]];
-    if (loginUserId && firstLoginTimes) {
+    if (loginUserId && firstLoginTimes && firstLoginTimes[loginUserId]) {
         p[keys[@"FirstLoginTime"]] = firstLoginTimes[loginUserId];
-    } else {
-        NSTimeInterval firstVisitTime = [NSUserDefaults.standardUserDefaults doubleForKey:keys[@"FirstVisitTime"]];
+    }
+    NSTimeInterval firstVisitTime = [NSUserDefaults.standardUserDefaults doubleForKey:keys[@"FirstVisitTime"]];
+    if (firstVisitTime) {
         p[keys[@"FirstVisitTime"]] = @([[NSString stringWithFormat:@"%.0f", firstVisitTime] integerValue]);
     }
     
@@ -580,10 +581,10 @@ static NSString *defaultProjectToken;
             
             [NSUserDefaults.standardUserDefaults setObject:identifer forKey:keys[@"LoginUserId"]];
             [NSUserDefaults.standardUserDefaults synchronize];
-            NSNumber *firstLoginTime = [NSNumber numberWithDouble:[firstLoginResult[@"firstLoginTime"] doubleValue]];
             BOOL isFirstLogin = [firstLoginResult[@"isFirstLogin"] boolValue];
-            firstLoginTimes[identifer] = firstLoginTime;
             if (isFirstLogin) {
+                NSNumber *firstLoginTime = [NSNumber numberWithDouble:[firstLoginResult[@"firstLoginTime"] doubleValue]];
+                firstLoginTimes[identifer] = firstLoginTime;
                 [NSUserDefaults.standardUserDefaults setObject:firstLoginTimes forKey:keys[firstLoginKey]];
                 [NSUserDefaults.standardUserDefaults synchronize];
                 [strongSelf trackEvent:values[@"FirstLogin"]];
