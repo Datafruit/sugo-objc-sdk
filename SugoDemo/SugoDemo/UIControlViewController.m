@@ -7,6 +7,7 @@
 //
 
 #import "UIControlViewController.h"
+@import Sugo;
 
 @interface UIControlViewController ()
 
@@ -34,4 +35,16 @@
 }
 */
 
+- (IBAction)signIn:(UIButton *)sender {
+    
+    NSString *userId = self.userId.text;
+    if (userId) {
+        [[Sugo sharedInstance] trackFirstLoginWith:userId];
+    }
+}
+
+- (IBAction)signOut:(UIButton *)sender {
+    
+    [[Sugo sharedInstance] untrackFirstLogin];
+}
 @end

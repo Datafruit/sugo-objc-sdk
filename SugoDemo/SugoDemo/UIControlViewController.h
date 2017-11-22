@@ -10,4 +10,9 @@
 
 @interface UIControlViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITextField *userId;
+
+- (IBAction)signIn:(UIButton *)sender;
+- (IBAction)signOut:(UIButton *)sender;
+
 @end
