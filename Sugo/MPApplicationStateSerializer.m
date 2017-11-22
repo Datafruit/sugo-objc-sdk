@@ -36,7 +36,7 @@
 
     UIWindow *window = [self windowAtIndex:index];
     if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
-        UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, window.screen.scale);
+        UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 1);
         if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
             MPLogError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
         }
