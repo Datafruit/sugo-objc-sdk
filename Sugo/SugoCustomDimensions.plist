@@ -76,7 +76,7 @@
 		<key>FirstVisit</key>
 		<string>首次访问</string>
 		<key>FirstLogin</key>
-		<string>首次登陆</string>
+		<string>首次登录</string>
 		<key>AppEnter</key>
 		<string>启动</string>
 		<key>AppStay</key>
