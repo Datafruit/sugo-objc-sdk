@@ -651,7 +651,7 @@ extern BOOL SugoCanTrackWebPage;
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 
-- (void)trackFirstLoginWith:(nullable NSString *)identifer;
+- (void)trackFirstLoginWith:(nullable NSString *)identifer dimension:(nullable NSString *)dimension;
 
 - (void)untrackFirstLogin;
     

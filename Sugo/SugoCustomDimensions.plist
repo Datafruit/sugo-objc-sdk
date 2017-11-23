@@ -60,6 +60,8 @@
 		<string>page_category</string>
 		<key>FromBinding</key>
 		<string>from_binding</string>
+		<key>LoginUserIdDimension</key>
+		<string>sugo_login_user_id_dimension</string>
 		<key>LoginUserId</key>
 		<string>sugo_login_user_id</string>
 		<key>FirstVisitTime</key>

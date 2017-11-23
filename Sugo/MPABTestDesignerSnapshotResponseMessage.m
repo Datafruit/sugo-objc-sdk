@@ -16,7 +16,7 @@
     id payloadObject = nil;
     id imageHash = nil;
     if (screenshot) {
-        NSData *jpegSnapshotImageData = UIImageJPEGRepresentation(screenshot, 0.5);
+        NSData *jpegSnapshotImageData = UIImageJPEGRepresentation(screenshot, 0);
         if (jpegSnapshotImageData) {
             payloadObject = [jpegSnapshotImageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
             imageHash = [self getImageHash:jpegSnapshotImageData];

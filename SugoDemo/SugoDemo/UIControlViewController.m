@@ -39,7 +39,7 @@
     
     NSString *userId = self.userId.text;
     if (userId) {
-        [[Sugo sharedInstance] trackFirstLoginWith:userId];
+        [[Sugo sharedInstance] trackFirstLoginWith:userId dimension: @"test_user_id"];
     }
 }
 
