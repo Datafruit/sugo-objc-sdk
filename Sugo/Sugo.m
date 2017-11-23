@@ -398,9 +398,11 @@ static NSString *defaultProjectToken;
         [p addEntriesFromDictionary:properties];
     }
     
+    NSString *loginUserIdDimension = [NSUserDefaults.standardUserDefaults stringForKey:keys[@"LoginUserIdDimension"]];
     NSString *loginUserId = [NSUserDefaults.standardUserDefaults stringForKey:keys[@"LoginUserId"]];
     NSDictionary *firstLoginTimes = [NSUserDefaults.standardUserDefaults dictionaryForKey:keys[@"FirstLoginTime"]];
-    if (loginUserId && firstLoginTimes && firstLoginTimes[loginUserId]) {
+    if (loginUserIdDimension && loginUserId && firstLoginTimes && firstLoginTimes[loginUserId]) {
+        p[loginUserIdDimension] = loginUserId;
         p[keys[@"FirstLoginTime"]] = firstLoginTimes[loginUserId];
     }
     NSTimeInterval firstVisitTime = [NSUserDefaults.standardUserDefaults doubleForKey:keys[@"FirstVisitTime"]];
@@ -548,7 +550,7 @@ static NSString *defaultProjectToken;
                                              navigationType:navigationType];
 }
     
-- (void)trackFirstLoginWith:(nullable NSString *)identifer {
+- (void)trackFirstLoginWith:(nullable NSString *)identifer dimension:(nullable NSString *)dimension {
     
     __block NSString *firstLoginKey = @"FirstLoginTime";
     __block NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
@@ -578,7 +580,7 @@ static NSString *defaultProjectToken;
             NSDictionary *firstLoginResult = [NSJSONSerialization JSONObjectWithData:firstLoginData
                                                                              options:(NSJSONReadingOptions)0
                                                                                error:nil][@"result"];
-            
+            [NSUserDefaults.standardUserDefaults setObject:dimension forKey:keys[@"LoginUserIdDimension"]];
             [NSUserDefaults.standardUserDefaults setObject:identifer forKey:keys[@"LoginUserId"]];
             [NSUserDefaults.standardUserDefaults synchronize];
             BOOL isFirstLogin = [firstLoginResult[@"isFirstLogin"] boolValue];
