@@ -951,19 +951,17 @@ static NSString *defaultProjectToken;
 {
     NSString *defaultKey = @"trackedKey";
     if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
+        [NSUserDefaults.standardUserDefaults setBool:YES forKey:defaultKey];
         
         NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+        NSDate *date = [NSDate date];
+        NSTimeInterval firstVisitTime = [date timeIntervalSince1970] * 1000;
+        [NSUserDefaults.standardUserDefaults setDouble:firstVisitTime forKey:keys[@"FirstVisitTime"]];
+        [NSUserDefaults.standardUserDefaults synchronize];
         if (values) {
             [self trackEvent:values[@"Integration"]];
             [self trackEvent:values[@"FirstVisitTime"]];
-            [NSUserDefaults.standardUserDefaults setBool:YES
-                                                  forKey:defaultKey];
-            NSDate *date = [NSDate date];
-            NSTimeInterval firstVisitTime = [date timeIntervalSince1970] * 1000;
-            [NSUserDefaults.standardUserDefaults setDouble:firstVisitTime
-                                                    forKey:keys[@"FirstVisitTime"]];
-            [NSUserDefaults.standardUserDefaults synchronize];
         }
     }
 }
