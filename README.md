@@ -160,6 +160,8 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 #### 2.4.1 原生控件
 
+**对于所有`UIView`，都有一个`String?`类型的`sugoViewId`属性，可以用于唯一指定容易混淆的可视化埋点视图，推荐初始化时设置使用**
+
 ##### UIControl
 
 所有`UIControl`类及其子类，皆可被埋点绑定事件。
