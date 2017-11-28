@@ -169,12 +169,14 @@ static const NSUInteger kBatchSize = 50;
     return @[itemVersion, itemLib, itemToken, itemSecretKey];
 }
     
-+ (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer andProjectID: (NSString *)projectID{
++ (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer
+                                                   andProjectID: (NSString *)projectID andToken: (NSString *)token {
     
     NSURLQueryItem *itemIdentifer = [NSURLQueryItem queryItemWithName:@"userId" value:identifer];
     NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
+    NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
     
-    return @[itemIdentifer, itemProjectID];
+    return @[itemIdentifer, itemProjectID, itemToken];
 }
 
 + (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {

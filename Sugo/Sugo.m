@@ -607,7 +607,7 @@ static NSString *defaultProjectToken;
         __block BOOL hadError = NO;
         __block NSData *data = [[NSData alloc] init];
         
-        NSArray *queryItems = [MPNetwork buildFirstLoginQueryForIdentifer:identifer andProjectID:self.projectID];
+        NSArray *queryItems = [MPNetwork buildFirstLoginQueryForIdentifer:identifer andProjectID:self.projectID andToken:self.apiToken];
         // Build a network request from the URL
         NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
                                                         andEndpoint:MPNetworkEndpointFirstLogin
