@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode9.1
+osx_image: xcode9
 podfile: SugoDemo/Podfile
 branches:
   only:
@@ -9,7 +9,7 @@ env:
   global:
   - WORKSPACE=SugoDemo.xcworkspace
   - SCHEME=SugoDemo
-  - IOS_SDK=iphonesimulator10.2
+  - IOS_SDK=iphonesimulator11.0
   matrix:
     - DESTINATION='platform=iOS Simulator, OS=8.1, name=iPhone 5'          SCHEME="$SCHEME"     SDK="$IOS_SDK"     RUN_TESTS="YES" POD_LINT="YES"
 before_install:

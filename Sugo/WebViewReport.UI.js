@@ -6,7 +6,7 @@
         var index_map = {};
         for (var i = 0; i < childrens.length; i++) {
             var children = childrens[i];
-            var path = UTILS.cssPath(children);
+            var path = sugoioKit.cssPath(children);
             var htmlNode = {};
             htmlNode.innerText = children.innerText;
             htmlNode.path = path;

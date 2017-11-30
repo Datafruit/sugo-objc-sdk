@@ -137,7 +137,7 @@
 		144496981E8522010076BC50 /* MPUITextViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 144496961E8522010076BC50 /* MPUITextViewBinding.m */; };
 		144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */; };
 		144D2E461E20C5A800387FD2 /* WebViewAPI.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3D1E20C5A800387FD2 /* WebViewAPI.UI.js */; };
-		144D2E471E20C5A800387FD2 /* Utils.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3E1E20C5A800387FD2 /* Utils.js */; };
+		144D2E471E20C5A800387FD2 /* SugoioKit.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3E1E20C5A800387FD2 /* SugoioKit.js */; };
 		144D2E491E20C5A800387FD2 /* WebViewBindings.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */; };
 		144D2E4B1E20C5A800387FD2 /* WebViewExcute.Report.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E421E20C5A800387FD2 /* WebViewExcute.Report.js */; };
 		144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */; };
@@ -309,7 +309,7 @@
 		144496961E8522010076BC50 /* MPUITextViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITextViewBinding.m; sourceTree = "<group>"; };
 		144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.UI.js; sourceTree = "<group>"; };
 		144D2E3D1E20C5A800387FD2 /* WebViewAPI.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewAPI.UI.js; sourceTree = "<group>"; };
-		144D2E3E1E20C5A800387FD2 /* Utils.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Utils.js; sourceTree = "<group>"; };
+		144D2E3E1E20C5A800387FD2 /* SugoioKit.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoioKit.js; sourceTree = "<group>"; };
 		144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.UI.js; sourceTree = "<group>"; };
 		144D2E421E20C5A800387FD2 /* WebViewExcute.Report.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewExcute.Report.js; sourceTree = "<group>"; };
 		144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.WK.js; sourceTree = "<group>"; };
@@ -673,7 +673,7 @@
 		144D2E4E1E20C5AD00387FD2 /* JavaScript */ = {
 			isa = PBXGroup;
 			children = (
-				144D2E3E1E20C5A800387FD2 /* Utils.js */,
+				144D2E3E1E20C5A800387FD2 /* SugoioKit.js */,
 				14C7BE691E4D6DB4000BD790 /* SugoBegin.js */,
 				145CAACA1E58497C00E53E8C /* SugoEnd.js */,
 				145CAACC1E584BF700E53E8C /* WebViewVariables.js */,
@@ -908,7 +908,7 @@
 				14C7BE6A1E4D6DB4000BD790 /* SugoBegin.js in Resources */,
 				144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */,
 				14CA172A1ED5659800CA96F1 /* WebViewExcute.Sugo.UI.js in Resources */,
-				144D2E471E20C5A800387FD2 /* Utils.js in Resources */,
+				144D2E471E20C5A800387FD2 /* SugoioKit.js in Resources */,
 				145CAAC71E57EEA400E53E8C /* SugoCustomDimensions.plist in Resources */,
 				144D2E4B1E20C5A800387FD2 /* WebViewExcute.Report.js in Resources */,
 				145CAACB1E58497C00E53E8C /* SugoEnd.js in Resources */,

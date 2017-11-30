@@ -153,7 +153,7 @@
 - (NSString *)jsUIWebView
 {
     NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
-                    [self jsUIWebViewUtils],
+                    [self jsUIWebViewSugoioKit],
                     [self jsUIWebViewSugoBegin],
                     [self jsUIWebViewVariables],
                     [self jsUIWebViewAPI],
@@ -166,9 +166,9 @@
     return js;
 }
 
-- (NSString *)jsUIWebViewUtils
+- (NSString *)jsUIWebViewSugoioKit
 {
-    return [self jsSourceOfFileName:@"Utils"];
+    return [self jsSourceOfFileName:@"SugoioKit"];
 }
 
 - (NSString *)jsUIWebViewSugoBegin

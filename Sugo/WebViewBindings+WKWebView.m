@@ -128,7 +128,7 @@
 - (WKUserScript *)wkJavaScript
 {
     NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
-                    [self jsWKWebViewUtils],
+                    [self jsWKWebViewSugoioKit],
                     [self jsWKWebViewSugoBegin],
                     [self jsWKWebViewVariables],
                     [self jsWKWebViewAPI],
@@ -143,9 +143,9 @@
                                forMainFrameOnly:YES];
 }
 
-- (NSString *)jsWKWebViewUtils
+- (NSString *)jsWKWebViewSugoioKit
 {
-    return [self jsSourceOfFileName:@"Utils"];
+    return [self jsSourceOfFileName:@"SugoioKit"];
 }
 
 - (NSString *)jsWKWebViewSugoBegin
