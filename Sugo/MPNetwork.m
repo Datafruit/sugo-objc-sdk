@@ -311,6 +311,8 @@ static const NSUInteger kBatchSize = 50;
                     case 0:
                         type = @"l";
                         break;
+                    case 7:
+                    case 8:
                     case 1:
                         type = @"f";
                         break;
