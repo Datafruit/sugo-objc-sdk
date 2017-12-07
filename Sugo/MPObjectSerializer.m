@@ -348,37 +348,27 @@
         && event[@"clientWidth"]
         && event[@"clientHeight"]
         && event[@"nodes"]) {
-        storage.title = (NSString *)event[@"title"];
-        storage.path = (NSString *)event[@"path"];
-        storage.width = (NSString *)event[@"clientWidth"];
-        storage.height = (NSString *)event[@"clientHeight"];
-        storage.nodes = (NSString *)event[@"nodes"];
+        [storage setHTMLInfoWithTitle:(NSString *)event[@"title"]
+                                 path:(NSString *)event[@"path"]
+                                width:(NSString *)event[@"clientWidth"]
+                               height:(NSString *)event[@"clientHeight"]
+                                nodes:(NSString *)event[@"nodes"]];
     }
     eventString = nil;
     eventData = nil;
     event = nil;
-    return @{
-             @"title": storage.title,
-             @"url": storage.path,
-             @"clientWidth": storage.width,
-             @"clientHeight": storage.height,
-             @"nodes": storage.nodes
-             };
+    return [storage getHTMLInfo];
 }
 
 - (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView
 {
     
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"] completionHandler:nil];
-    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-    return @{
-             @"title": storage.title,
-             @"url": storage.path,
-             @"clientWidth": storage.width,
-             @"clientHeight": storage.height,
-             @"nodes": storage.nodes
-             };
+    if (wvBindings.wkWebViewJavaScriptInjected) {
+        [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"] completionHandler:nil];
+    }
+
+    return [[WebViewInfoStorage globalStorage] getHTMLInfo];
 }
 
 @end

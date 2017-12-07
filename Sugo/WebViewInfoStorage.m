@@ -11,6 +11,13 @@
 
 @interface WebViewInfoStorage ()
 
+@property BOOL newFrame;
+@property NSString *title;
+@property NSString *path;
+@property NSString *width;
+@property NSString *height;
+@property NSString *nodes;
+    
 @end
 
 @implementation WebViewInfoStorage
@@ -44,6 +51,7 @@ static WebViewInfoStorage *singleton = nil;
     _eventID = @"";
     _eventName = @"";
     _properties = @"";
+    _newFrame = false;
     _title = @"";
     _path = @"";
     _width = @"";
@@ -58,6 +66,48 @@ static WebViewInfoStorage *singleton = nil;
                                    reason:@"this is a singleton, try [WebViewInfoStorage globalStorage]"
                                  userInfo:nil];
     return nil;
+}
+
+- (BOOL)hasNewFrame {
+    
+    @synchronized(self) {
+        return _newFrame;
+    }
+}
+    
+- (void)setHasNewFrame:(BOOL)hasNewFrame {
+    
+    @synchronized(self) {
+        _newFrame = hasNewFrame;
+    }
+}
+
+- (NSDictionary *)getHTMLInfo
+{
+    @synchronized(self) {
+        if (_newFrame) {
+            _newFrame = false;
+        }
+        return @{
+                 @"title": _title,
+                 @"url": _path,
+                 @"clientWidth": _width,
+                 @"clientHeight": _height,
+                 @"nodes": _nodes
+                 };
+    }
+}
+
+- (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height nodes:(NSString *)nodes
+{
+     @synchronized(self) {
+         _title = title;
+         _path = path;
+         _width = width;
+         _height = height;
+         _nodes = nodes;
+         _newFrame = true;
+     }
 }
 
 @end

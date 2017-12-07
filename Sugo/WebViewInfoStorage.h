@@ -13,12 +13,12 @@
 @property NSString *eventID;
 @property NSString *eventName;
 @property NSString *properties;
-@property NSString *title;
-@property NSString *path;
-@property NSString *width;
-@property NSString *height;
-@property NSString *nodes;
 
 + (instancetype)globalStorage;
+
+- (BOOL)hasNewFrame;
+- (void)setHasNewFrame:(BOOL)hasNewFrame;
+- (NSDictionary *)getHTMLInfo;
+- (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height nodes:(NSString *)nodes;
 
 @end
