@@ -8,6 +8,7 @@
 #import "MPObjectIdentityProvider.h"
 #import "MPObjectSerializerConfig.h"
 #import "MPLogger.h"
+#import "WebViewInfoStorage.h"
 
 NSString * const MPABTestDesignerSnapshotRequestMessageType = @"snapshot_request";
 
@@ -68,7 +69,17 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         snapshotMessage.screenshot = screenshot;
 
         if ([imageHash isEqualToString:snapshotMessage.imageHash]) {
-            serializedObjects = [connection sessionObjectForKey:@"snapshot_hierarchy"];
+            if ([WebViewInfoStorage.globalStorage hasNewFrame]) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    serializedObjects = [serializer objectHierarchyForWindowAtIndex:0];
+                });
+                [connection setSessionObject:serializedObjects forKey:@"snapshot_hierarchy"];
+                if ([WebViewInfoStorage.globalStorage hasNewFrame]) {
+                    [WebViewInfoStorage.globalStorage setHasNewFrame:false];
+                }
+            } else {
+                serializedObjects = [connection sessionObjectForKey:@"snapshot_hierarchy"];
+            }
         } else {
             dispatch_sync(dispatch_get_main_queue(), ^{
                 serializedObjects = [serializer objectHierarchyForWindowAtIndex:0];

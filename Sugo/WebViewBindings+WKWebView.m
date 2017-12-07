@@ -99,25 +99,13 @@
         } else if ([message.name  isEqual: @"SugoWKWebViewReporter"]) {
             NSDictionary *body = (NSDictionary *)message.body;
             WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-            if (body[@"title"])
-            {
-                storage.title = (NSString *)body[@"title"];
-            }
-            if (body[@"path"])
-            {
-                storage.path = (NSString *)body[@"path"];
-            }
-            if (body[@"clientWidth"])
-            {
-                storage.width = (NSString *)body[@"clientWidth"];
-            }
-            if (body[@"clientHeight"])
-            {
-                storage.height = (NSString *)body[@"clientHeight"];
-            }
-            if (body[@"nodes"])
-            {
-                storage.nodes = (NSString *)body[@"nodes"];
+            
+            if (body[@"title"] && body[@"path"] && body[@"clientWidth"] && body[@"clientHeight"] && body[@"nodes"]) {
+                [storage setHTMLInfoWithTitle:(NSString *)body[@"title"]
+                                         path:(NSString *)body[@"path"]
+                                        width:(NSString *)body[@"clientWidth"]
+                                       height:(NSString *)body[@"clientHeight"]
+                                        nodes:(NSString *)body[@"nodes"]];
             }
         }
     } else {

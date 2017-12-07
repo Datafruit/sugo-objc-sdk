@@ -311,6 +311,8 @@ static const NSUInteger kBatchSize = 50;
                     case 0:
                         type = @"l";
                         break;
+                    case 7:
+                    case 8:
                     case 1:
                         type = @"f";
                         break;
@@ -482,7 +484,9 @@ static const NSUInteger kBatchSize = 50;
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
 
     if (self.shouldManageNetworkActivityIndicator) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
+        });
     }
 }
 
