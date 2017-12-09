@@ -100,34 +100,6 @@
 
 #pragma mark -- Executing Actions
 
-- (NSString *)contentInfoOfView:(UIView *)view
-{
-    NSMutableString *infos = [NSMutableString string];
-    for (UIView *subview in view.subviews) {
-        if ([subview isKindOfClass:[UISearchBar class]] && ((UISearchBar *)subview).text) {
-            [infos appendString:((UISearchBar *)subview).text];
-        } else if ([subview isKindOfClass:[UIButton class]] && ((UIButton *)subview).titleLabel.text) {
-            [infos appendString:((UIButton *)subview).titleLabel.text];
-        } else if ([subview isKindOfClass:[UIDatePicker class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UIDatePicker *)subview).date]];
-        } else if ([subview isKindOfClass:[UISegmentedControl class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)subview).selectedSegmentIndex]];
-        } else if ([subview isKindOfClass:[UISlider class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%f", ((UISlider *)subview).value]];
-        } else if ([subview isKindOfClass:[UISwitch class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%i", ((UISwitch *)subview).isOn]];
-        } else if ([subview isKindOfClass:[UITextField class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextField *)subview).text]];
-        } else if ([subview isKindOfClass:[UITextView class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextView *)subview).text]];
-        } else if ([subview isKindOfClass:[UILabel class]] && ((UILabel *)subview).text) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UILabel *)subview).text]];
-        }
-        [infos appendString:[NSString stringWithFormat:@",%@", [self contentInfoOfView:subview]]];
-    }
-    return infos;
-}
-
 - (void)execute
 {
     if (!self.running && self.swizzleClass != nil) {
@@ -194,6 +166,34 @@
 }
 
 #pragma mark -- Helper Methods
+
+- (NSString *)contentInfoOfView:(UIView *)view
+{
+    NSMutableString *infos = [NSMutableString string];
+    for (UIView *subview in view.subviews) {
+        if ([subview isKindOfClass:[UISearchBar class]] && ((UISearchBar *)subview).text) {
+            [infos appendString:((UISearchBar *)subview).text];
+        } else if ([subview isKindOfClass:[UIButton class]] && ((UIButton *)subview).titleLabel.text) {
+            [infos appendString:((UIButton *)subview).titleLabel.text];
+        } else if ([subview isKindOfClass:[UIDatePicker class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UIDatePicker *)subview).date]];
+        } else if ([subview isKindOfClass:[UISegmentedControl class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)subview).selectedSegmentIndex]];
+        } else if ([subview isKindOfClass:[UISlider class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%f", ((UISlider *)subview).value]];
+        } else if ([subview isKindOfClass:[UISwitch class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%i", ((UISwitch *)subview).isOn]];
+        } else if ([subview isKindOfClass:[UITextField class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextField *)subview).text]];
+        } else if ([subview isKindOfClass:[UITextView class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextView *)subview).text]];
+        } else if ([subview isKindOfClass:[UILabel class]] && ((UILabel *)subview).text) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UILabel *)subview).text]];
+        }
+        [infos appendString:[NSString stringWithFormat:@",%@", [self contentInfoOfView:subview]]];
+    }
+    return infos;
+}
 
 - (UITableView *)parentTableView:(UIView *)cell {
     // iterate up the view hierarchy to find the table containing this cell/view
