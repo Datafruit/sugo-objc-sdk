@@ -100,6 +100,34 @@
 
 #pragma mark -- Executing Actions
 
+- (NSString *)contentInfoOfView:(UIView *)view
+{
+    NSMutableString *infos = [NSMutableString string];
+    for (UIView *subview in view.subviews) {
+        if ([subview isKindOfClass:[UISearchBar class]] && ((UISearchBar *)subview).text) {
+            [infos appendString:((UISearchBar *)subview).text];
+        } else if ([subview isKindOfClass:[UIButton class]] && ((UIButton *)subview).titleLabel.text) {
+            [infos appendString:((UIButton *)subview).titleLabel.text];
+        } else if ([subview isKindOfClass:[UIDatePicker class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UIDatePicker *)subview).date]];
+        } else if ([subview isKindOfClass:[UISegmentedControl class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)subview).selectedSegmentIndex]];
+        } else if ([subview isKindOfClass:[UISlider class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%f", ((UISlider *)subview).value]];
+        } else if ([subview isKindOfClass:[UISwitch class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%i", ((UISwitch *)subview).isOn]];
+        } else if ([subview isKindOfClass:[UITextField class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextField *)subview).text]];
+        } else if ([subview isKindOfClass:[UITextView class]]) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextView *)subview).text]];
+        } else if ([subview isKindOfClass:[UILabel class]] && ((UILabel *)subview).text) {
+            [infos appendString:[NSString stringWithFormat:@"%@", ((UILabel *)subview).text]];
+        }
+        [infos appendString:[NSString stringWithFormat:@",%@", [self contentInfoOfView:subview]]];
+    }
+    return infos;
+}
+
 - (void)execute
 {
     if (!self.running && self.swizzleClass != nil) {
@@ -108,13 +136,17 @@
             // select targets based off path
             if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
                 UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-                NSString *label = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
+                NSString *textLabel = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
+                NSString *detailTextLabel = (cell && cell.detailTextLabel && cell.detailTextLabel.text) ? cell.detailTextLabel.text : @"";
+                NSString *contentInfo = [self contentInfoOfView:cell.contentView];
                 
                 NSMutableDictionary *p = [[NSMutableDictionary alloc]
                                           initWithDictionary:@{
                                                                @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
                                                                @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
-                                                               @"Cell Label": label
+                                                               @"Cell Label": textLabel,
+                                                               @"Cell Detail Label": detailTextLabel,
+                                                               @"Cell Content Info": contentInfo
                                                                }];
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
