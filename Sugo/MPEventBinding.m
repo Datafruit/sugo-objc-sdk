@@ -9,8 +9,9 @@
 #import "Sugo.h"
 #import "MPEventBinding.h"
 #import "MPUIControlBinding.h"
-#import "MPUITableViewBinding.h"
 #import "MPUITextViewBinding.h"
+#import "MPUITableViewBinding.h"
+#import "MPUICollectionViewBinding.h"
 #import "MPLogger.h"
 
 @implementation MPEventBinding
@@ -36,8 +37,9 @@
 {
     NSDictionary *classTypeMap = @{
                                    [MPUIControlBinding typeName]: [MPUIControlBinding class],
+                                   [MPUITextViewBinding typeName]: [MPUITextViewBinding class],
                                    [MPUITableViewBinding typeName]: [MPUITableViewBinding class],
-                                   [MPUITextViewBinding typeName]: [MPUITextViewBinding class]
+                                   [MPUICollectionViewBinding typeName]: [MPUICollectionViewBinding class]
                                    };
     return [classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
 }

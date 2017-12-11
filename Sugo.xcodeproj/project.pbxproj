@@ -174,6 +174,8 @@
 		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
 		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
+		A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */; };
+		A74C45451FDE702900D91B0F /* MPUICollectionViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -346,6 +348,8 @@
 		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
 		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
+		A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUICollectionViewBinding.h; sourceTree = "<group>"; };
+		A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUICollectionViewBinding.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -467,6 +471,8 @@
 				141AC8361E137088008D67F6 /* MPUIControlBinding.m */,
 				141AC83A1E137088008D67F6 /* MPUITableViewBinding.h */,
 				141AC83B1E137088008D67F6 /* MPUITableViewBinding.m */,
+				A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */,
+				A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */,
 				144496951E8522010076BC50 /* MPUITextViewBinding.h */,
 				144496961E8522010076BC50 /* MPUITextViewBinding.m */,
 			);
@@ -829,6 +835,7 @@
 				141AC8AE1E137088008D67F6 /* MPObjectIdentityProvider.h in Headers */,
 				141AC8801E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h in Headers */,
 				141AC8FC1E137088008D67F6 /* WebViewInfoStorage.h in Headers */,
+				A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */,
 				141AC8AD1E137088008D67F6 /* MPObjectIdentifierProvider.h in Headers */,
 				141AC8701E137088008D67F6 /* MPAbstractABTestDesignerMessage.h in Headers */,
 				141AC8A01E137088008D67F6 /* MPLogger.h in Headers */,
@@ -965,6 +972,7 @@
 				14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */,
 				144496981E8522010076BC50 /* MPUITextViewBinding.m in Sources */,
 				141AC8861E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
+				A74C45451FDE702900D91B0F /* MPUICollectionViewBinding.m in Sources */,
 				141AC8771E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				141AC87D1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				141AC8671E137088008D67F6 /* Sugo+AutomaticEvents.m in Sources */,

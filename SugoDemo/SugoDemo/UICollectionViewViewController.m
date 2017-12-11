@@ -55,6 +55,10 @@
 
 #pragma mark <UICollectionViewDelegate>
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:true];
+}
+
 /*
  // Uncomment this method to specify if the specified item should be highlighted during tracking
  - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
