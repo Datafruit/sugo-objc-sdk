@@ -88,11 +88,13 @@ __unused static id transformValue(id value, NSString *toType)
         return [transformer transformedValue:value];
     }
 
+    /*
     NSString *reverseTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", toType, fromType];
     transformer = [NSValueTransformer valueTransformerForName:reverseTransformerName];
     if (transformer && [[transformer class] allowsReverseTransformation]) {
         return [transformer reverseTransformedValue:value];
     }
+     */
 
     return [[NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"] transformedValue:value];
 }

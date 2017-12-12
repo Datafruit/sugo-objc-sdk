@@ -12,7 +12,7 @@
 
 + (BOOL)allowsReverseTransformation
 {
-    return YES;
+    return NO;
 }
 
 - (id)transformedValue:(id)value

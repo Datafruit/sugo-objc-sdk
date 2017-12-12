@@ -92,7 +92,7 @@ static BOOL MPCATransform3DMakeWithDictionaryRepresentation(NSDictionary *dictio
 
 + (BOOL)allowsReverseTransformation
 {
-    return YES;
+    return NO;
 }
 
 - (id)transformedValue:(id)value
