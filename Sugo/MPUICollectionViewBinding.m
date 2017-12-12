@@ -114,9 +114,9 @@
                 
                 NSMutableDictionary *p = [[NSMutableDictionary alloc]
                                           initWithDictionary:@{
-                                                               @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
-                                                               @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
-                                                               @"Cell Content Info": contentInfo
+                                                               @"cell_index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
+                                                               @"cell_section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
+                                                               @"cell_content_info": contentInfo
                                                                }];
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
