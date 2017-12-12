@@ -193,7 +193,7 @@
     return infos;
 }
 
-- (UICollectionView *)parentTableView:(UIView *)cell {
+- (UICollectionView *)parentCollectionView:(UIView *)cell {
     // iterate up the view hierarchy to find the table containing this cell/view
     UIView *aView = cell.superview;
     while (aView != nil) {
