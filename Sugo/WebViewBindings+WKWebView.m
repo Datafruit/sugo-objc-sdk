@@ -20,10 +20,12 @@
 {
     if (!self.wkWebViewJavaScriptInjected) {
         self.wkWebViewCurrentJS = [self wkJavaScript];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
-        [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
-        [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
-        [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
+        if (![(*webView).configuration.userContentController.userScripts containsObject:self.wkWebViewCurrentJS]) {
+            [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
+            [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
+            [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
+            [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
+        }
         self.wkWebViewJavaScriptInjected = YES;
         MPLogDebug(@"WKWebView Injected");
     }
