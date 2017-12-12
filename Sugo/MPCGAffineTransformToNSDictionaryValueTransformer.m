@@ -49,7 +49,7 @@ static BOOL MPCGAffineTransformMakeWithDictionaryRepresentation(NSDictionary *di
 
 + (BOOL)allowsReverseTransformation
 {
-    return YES;
+    return NO;
 }
 
 - (id)transformedValue:(id)value
