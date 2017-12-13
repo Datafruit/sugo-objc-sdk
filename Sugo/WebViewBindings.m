@@ -64,7 +64,6 @@ static WebViewBindings *globalBindings = nil;
     _uiWebViewDidFinishLoadBlockName = [[NSUUID UUID] UUIDString];
     
     _wkDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
-    _wkWebViewJavaScriptInjected = NO;
     _wkWebViewCurrentJS = [[WKUserScript alloc] init];
     [self addObserver:self
            forKeyPath:@"stringBindings"

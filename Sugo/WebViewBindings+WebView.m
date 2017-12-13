@@ -61,15 +61,13 @@
             if (!wkWebView) {
                 return;
             }
-            if (self.wkWebView
-                && self.wkWebView != wkWebView) {
-                self.wkVcPath = nil;
-                [self stopWKWebViewBindings:wkWebView];
-            } else if (self.wkWebView) {
+           if (self.wkWebView) {
                 self.wkVcPath = nil;
                 [self stopWKWebViewBindings:wkWebView];
                 return;
             }
+            self.wkVcPath = nil;
+            [self stopWKWebViewBindings:wkWebView];
             self.wkVcPath = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
             self.wkWebView = wkWebView;
             [self startWKWebViewBindings:&wkWebView];
