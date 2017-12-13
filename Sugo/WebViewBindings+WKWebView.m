@@ -21,7 +21,6 @@
     if (!self.wkWebViewJavaScriptInjected) {
         self.wkWebViewCurrentJS = [self wkJavaScript];
         if (![(*webView).configuration.userContentController.userScripts containsObject:self.wkWebViewCurrentJS]) {
-            self.wkWebViewCurrentJS = [self wkJavaScript];
             [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
             [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
             [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
