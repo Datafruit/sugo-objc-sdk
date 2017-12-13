@@ -113,7 +113,13 @@ static NSString *defaultProjectToken;
 
         // Install uncaught exception handlers first
         [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
-
+#if DEBUG
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        id overlayClass = NSClassFromString(@"UIDebuggingInformationOverlay");
+        [overlayClass performSelector:NSSelectorFromString(@"prepareDebuggingOverlay")];
+#pragma clang diagnostic pop
+#endif
         self.projectID = projectID;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
