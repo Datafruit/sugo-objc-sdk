@@ -18,47 +18,37 @@
 
 - (void)startWKWebViewBindings:(WKWebView **)webView
 {
-    if (!self.wkWebViewJavaScriptInjected) {
-        self.wkWebViewCurrentJS = [self wkJavaScript];
-        if (![(*webView).configuration.userContentController.userScripts containsObject:self.wkWebViewCurrentJS]) {
-            [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
-            [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
-            [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
-            [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
-        }
-        self.wkWebViewJavaScriptInjected = YES;
-        MPLogDebug(@"WKWebView Injected");
-    }
+    self.wkWebViewCurrentJS = [self wkJavaScript];
+    [(*webView).configuration.userContentController addUserScript:[self wkWebViewCurrentJS]];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
+    MPLogDebug(@"WKWebView Injected");
 }
 
 - (void)stopWKWebViewBindings:(WKWebView *)webView
 {
-    if (self.wkWebViewJavaScriptInjected) {
-        [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTrack"];
-        [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTime"];
-        [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
-        self.wkWebViewJavaScriptInjected = NO;
-        self.wkWebView = nil;
-    }
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTrack"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTime"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
+    self.wkWebView = nil;
 }
 
 - (void)updateWKWebViewBindings:(WKWebView **)webView
 {
-    if (self.wkWebViewJavaScriptInjected) {
-        NSMutableArray<WKUserScript *> *userScripts = [[NSMutableArray<WKUserScript *> alloc]
-                                                       initWithArray:(*webView).configuration.userContentController.userScripts];
-        
-        if ([userScripts containsObject:self.wkWebViewCurrentJS]) {
-            [userScripts removeObject:self.wkWebViewCurrentJS];
-        }
-        [(*webView).configuration.userContentController removeAllUserScripts];
-        for (WKUserScript *userScript in userScripts) {
-            [(*webView).configuration.userContentController addUserScript:userScript];
-        }
-        self.wkWebViewCurrentJS = [self wkJavaScript];
-        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
-        MPLogDebug(@"WKWebView Updated");
+    NSMutableArray<WKUserScript *> *userScripts = [[NSMutableArray<WKUserScript *> alloc]
+                                                   initWithArray:(*webView).configuration.userContentController.userScripts];
+    
+    if ([userScripts containsObject:self.wkWebViewCurrentJS]) {
+        [userScripts removeObject:self.wkWebViewCurrentJS];
     }
+    [(*webView).configuration.userContentController removeAllUserScripts];
+    for (WKUserScript *userScript in userScripts) {
+        [(*webView).configuration.userContentController addUserScript:userScript];
+    }
+    self.wkWebViewCurrentJS = [self wkJavaScript];
+    [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
+    MPLogDebug(@"WKWebView Updated");
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
