@@ -364,9 +364,7 @@
 {
     
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    if (wvBindings.wkWebViewJavaScriptInjected) {
-        [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"] completionHandler:nil];
-    }
+    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"] completionHandler:nil];
 
     return [[WebViewInfoStorage globalStorage] getHTMLInfo];
 }

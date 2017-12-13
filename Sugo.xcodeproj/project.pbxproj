@@ -174,6 +174,7 @@
 		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
 		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
+		A7BF45B71FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -346,6 +347,7 @@
 		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
 		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
+		A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+UIDebuggingInformationOverlayInjector.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -664,6 +666,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7FF1E137088008D67F6 /* MPLogger.h */,
+				A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */,
 				141AC94C1E13C6A6008D67F6 /* Description */,
 				141AC9491E13C4DE008D67F6 /* Exception */,
 			);
@@ -979,6 +982,7 @@
 				141AC88C1E137088008D67F6 /* MPApplicationStateSerializer.m in Sources */,
 				141AC8651E137088008D67F6 /* Sugo.m in Sources */,
 				141AC8D91E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
+				A7BF45B71FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m in Sources */,
 				141AC8911E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
 				141AC8ED1E137088008D67F6 /* UIImage+MPAverageColor.m in Sources */,
 				14656FED1E2379BF006B7107 /* Attributes.m in Sources */,
