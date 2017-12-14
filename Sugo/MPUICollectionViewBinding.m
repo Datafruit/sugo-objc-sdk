@@ -42,7 +42,7 @@
         return nil;
     }
     
-    Class delegate = NSClassFromString(object[@"collection_delegate"]);
+    Class delegate = NSClassFromString(object[@"table_delegate"]);
     if (!delegate || ![delegate instancesRespondToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
         MPLogDebug(@"binding requires a delegate class");
         return nil;
