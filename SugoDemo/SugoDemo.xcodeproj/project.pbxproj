@@ -31,6 +31,7 @@
 		14D3A06D1E7F6B4A00DDE9EA /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06C1E7F6B4A00DDE9EA /* ScanViewController.m */; };
 		14D3A0701E7F6B8500DDE9EA /* InstructionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06F1E7F6B8500DDE9EA /* InstructionsViewController.m */; };
 		14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */; };
+		A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +91,8 @@
 		14D3A06F1E7F6B8500DDE9EA /* InstructionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstructionsViewController.m; sourceTree = "<group>"; };
 		14D3A0771E7F6CFA00DDE9EA /* HomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTableViewController.h; sourceTree = "<group>"; };
 		14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTableViewController.m; sourceTree = "<group>"; };
+		A7097E251FDBD51A008EC6F4 /* UICollectionViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UICollectionViewViewController.h; sourceTree = "<group>"; };
+		A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UICollectionViewViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,10 +120,12 @@
 				140CECA31E7FD18A00422EA8 /* NativeTableViewController.m */,
 				140CECA51E7FD20C00422EA8 /* UIControlViewController.h */,
 				140CECA61E7FD20C00422EA8 /* UIControlViewController.m */,
-				140CECAB1E7FD37300422EA8 /* UITableViewViewController.h */,
-				140CECAC1E7FD37300422EA8 /* UITableViewViewController.m */,
 				14776B621E8616F50034ECB7 /* UITextViewViewController.h */,
 				14776B631E8616F50034ECB7 /* UITextViewViewController.m */,
+				140CECAB1E7FD37300422EA8 /* UITableViewViewController.h */,
+				140CECAC1E7FD37300422EA8 /* UITableViewViewController.m */,
+				A7097E251FDBD51A008EC6F4 /* UICollectionViewViewController.h */,
+				A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */,
 			);
 			name = Native;
 			sourceTree = "<group>";
@@ -355,6 +360,7 @@
 				14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */,
 				140CECAD1E7FD37300422EA8 /* UITableViewViewController.m in Sources */,
 				14BACBE21E80D6200048D781 /* SwitchModeViewController.m in Sources */,
+				A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */,
 				14776B641E8616F50034ECB7 /* UITextViewViewController.m in Sources */,
 				14BA1A8F1E13ECAB002F0C4B /* WKWebViewController.m in Sources */,
 				14BA1A8C1E13EC9B002F0C4B /* UIWebViewController.m in Sources */,
