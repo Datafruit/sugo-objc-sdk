@@ -64,6 +64,10 @@
     NSParameterAssert(object != nil);
     NSParameterAssert(context != nil);
 
+    if ([object isKindOfClass:[UIView class]] && !((UIView *)object).translatesAutoresizingMaskIntoConstraints) {
+        [((UIView *)object) setTranslatesAutoresizingMaskIntoConstraints:YES];
+    }
+    
     [context addVisitedObject:object];
 
     NSMutableDictionary *propertyValues = [NSMutableDictionary dictionary];
