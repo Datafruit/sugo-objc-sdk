@@ -967,7 +967,7 @@ static NSString *defaultProjectToken;
         [NSUserDefaults.standardUserDefaults synchronize];
         if (values) {
             [self trackEvent:values[@"Integration"]];
-            [self trackEvent:values[@"FirstVisitTime"]];
+            [self trackEvent:values[@"FirstVisit"]];
         }
     }
 }
