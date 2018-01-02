@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.homepage              = 'https://github.com/Datafruit/sugo-objc-sdk'
   s.author                = { 'sugo.io' => 'developer@sugo.io' }
   s.source                = { :git => 'https://github.com/Datafruit/sugo-objc-sdk.git', :tag => s.version }
-  s.deployment_target     = '8.0'
+  s.ios.deployment_target = '8.0'
   s.module_name           = 'Sugo'
   s.default_subspec       = 'Core'
 
