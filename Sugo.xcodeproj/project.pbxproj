@@ -97,8 +97,8 @@
 		141AC8D31E137088008D67F6 /* MPTypeDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8321E137088008D67F6 /* MPTypeDescription.h */; };
 		141AC8D41E137088008D67F6 /* MPTypeDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8331E137088008D67F6 /* MPTypeDescription.m */; };
 		141AC8D51E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8341E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m */; };
-		141AC8D61E137088008D67F6 /* MPUIControlBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8351E137088008D67F6 /* MPUIControlBinding.h */; };
-		141AC8D71E137088008D67F6 /* MPUIControlBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8361E137088008D67F6 /* MPUIControlBinding.m */; };
+		141AC8D61E137088008D67F6 /* MPUIViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8351E137088008D67F6 /* MPUIViewBinding.h */; };
+		141AC8D71E137088008D67F6 /* MPUIViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8361E137088008D67F6 /* MPUIViewBinding.m */; };
 		141AC8D81E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8371E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */; };
 		141AC8D91E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8381E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m */; };
 		141AC8DA1E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8391E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m */; };
@@ -272,8 +272,8 @@
 		141AC8321E137088008D67F6 /* MPTypeDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypeDescription.h; sourceTree = "<group>"; };
 		141AC8331E137088008D67F6 /* MPTypeDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypeDescription.m; sourceTree = "<group>"; };
 		141AC8341E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIColorToNSStringValueTransformer.m; sourceTree = "<group>"; };
-		141AC8351E137088008D67F6 /* MPUIControlBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIControlBinding.h; sourceTree = "<group>"; };
-		141AC8361E137088008D67F6 /* MPUIControlBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIControlBinding.m; sourceTree = "<group>"; };
+		141AC8351E137088008D67F6 /* MPUIViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIViewBinding.h; sourceTree = "<group>"; };
+		141AC8361E137088008D67F6 /* MPUIViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIViewBinding.m; sourceTree = "<group>"; };
 		141AC8371E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIEdgeInsetsToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		141AC8381E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIFontToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		141AC8391E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIImageToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
@@ -469,8 +469,8 @@
 			children = (
 				141AC7FC1E137088008D67F6 /* MPEventBinding.h */,
 				141AC7FD1E137088008D67F6 /* MPEventBinding.m */,
-				141AC8351E137088008D67F6 /* MPUIControlBinding.h */,
-				141AC8361E137088008D67F6 /* MPUIControlBinding.m */,
+				141AC8351E137088008D67F6 /* MPUIViewBinding.h */,
+				141AC8361E137088008D67F6 /* MPUIViewBinding.m */,
 				141AC83A1E137088008D67F6 /* MPUITableViewBinding.h */,
 				141AC83B1E137088008D67F6 /* MPUITableViewBinding.m */,
 				A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */,
@@ -781,7 +781,7 @@
 				141AC7871E1364D7008D67F6 /* Sugo.h in Headers */,
 				141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */,
 				141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */,
-				141AC8D61E137088008D67F6 /* MPUIControlBinding.h in Headers */,
+				141AC8D61E137088008D67F6 /* MPUIViewBinding.h in Headers */,
 				141AC8961E137088008D67F6 /* MPDesignerEventBindingMessage.h in Headers */,
 				141AC8851E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				141AC8B01E137088008D67F6 /* MPObjectSelector.h in Headers */,
@@ -982,7 +982,7 @@
 				141AC89E1E137088008D67F6 /* MPEventBinding.m in Sources */,
 				14149DEF1E1A6D9D0006DF6A /* WebViewBindings+WebView.m in Sources */,
 				141AC8DC1E137088008D67F6 /* MPUITableViewBinding.m in Sources */,
-				141AC8D71E137088008D67F6 /* MPUIControlBinding.m in Sources */,
+				141AC8D71E137088008D67F6 /* MPUIViewBinding.m in Sources */,
 				141AC8981E137088008D67F6 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
 				141AC8E31E137088008D67F6 /* NSInvocation+MPHelpers.m in Sources */,
 				141AC8971E137088008D67F6 /* MPDesignerEventBindingRequestMesssage.m in Sources */,

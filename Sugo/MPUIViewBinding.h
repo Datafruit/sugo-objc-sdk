@@ -1,5 +1,5 @@
 //
-//  MPUIControlBinding.h
+//  MPUIViewBinding.h
 //  HelloSugo
 //
 //  Created by Amanda Canyon on 8/4/14.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MPEventBinding.h"
 
-@interface MPUIControlBinding : MPEventBinding
+@interface MPUIViewBinding : MPEventBinding
 
 @property (nonatomic, readonly) UIControlEvents controlEvent;
 @property (nonatomic, readonly) UIControlEvents verifyEvent;
@@ -20,6 +20,11 @@
                          onPath:(NSString *)path
                withControlEvent:(UIControlEvents)controlEvent
                  andVerifyEvent:(UIControlEvents)verifyEvent
+                     attributes:(Attributes *)attributes;
+
+- (instancetype)initWithEventID:(NSString *)eventID
+                      eventName:(NSString *)eventName
+                         onPath:(NSString *)path
                      attributes:(Attributes *)attributes;
 
 @end
