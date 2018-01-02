@@ -14,4 +14,9 @@ Pod::Spec.new do |s|
   s.frameworks            = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'WebKit'
   s.libraries             = 'icucore'
   s.module_name           = 'Sugo'
+
+  spec.subspec 'Weex' do |weex|
+    weex.source_files   = 'Sugo/Weex/*.{m,h}'
+    weex.dependency 'WeexSDK'
+  end
 end
