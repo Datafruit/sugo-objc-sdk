@@ -1,6 +1,7 @@
 
 Pod::Spec.new do |spec|
   spec.name                  = 'sugo-objc-sdk'
+  spec.module_name           = 'Sugo'
   spec.version               = '2.19.1'
   spec.license               = 'Apache License, Version 2.0'
   spec.summary               = 'Official Sugo SDK for iOS (Objective-C)'
@@ -8,10 +9,9 @@ Pod::Spec.new do |spec|
   spec.author                = { 'sugo.io' => 'developer@sugo.io' }
   spec.source                = { :git => 'https://github.com/Datafruit/sugo-objc-sdk.git', :tag => spec.version }
   spec.ios.deployment_target = '8.0'
-  spec.module_name           = 'Sugo'
-  spec.default_subspec       = 'Core'
+  spec.default_subspec       = 'core'
 
-  spec.subspec 'Core' do |core|
+  spec.subspec 'core' do |core|
     core.source_files           = 'Sugo/*.{m,h}'
     core.resources              = 'Sugo/*.js', 'Sugo/Sugo*.plist'
     core.private_header_files   = 'Sugo/SugoPrivate.h', 'Sugo/SugoPeoplePrivate.h', 'Sugo/MPNetworkPrivate.h', 'Sugo/MPLogger.h'
@@ -19,7 +19,7 @@ Pod::Spec.new do |spec|
     core.frameworks             = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'WebKit'
   end
 
-  spec.subspec 'Weex' do |weex|
+  spec.subspec 'weex' do |weex|
     weex.source_files   = 'Sugo/Weex/*.{m,h}'
     weex.dependency 'WeexSDK'
   end
