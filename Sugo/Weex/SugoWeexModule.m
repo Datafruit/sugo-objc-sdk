@@ -50,12 +50,12 @@ WX_EXPORT_METHOD(@selector(clearSuperProperties))
 
 WX_EXPORT_METHOD(@selector(login:dimension:))
 - (void)login:(nullable NSString *)userIdKey dimension:(nullable NSString *)userIdValue {
-//    [[Sugo sharedInstance] trackFirstLoginWith:userIdKey dimension:userIdValue];
+   [[Sugo sharedInstance] trackFirstLoginWith:userIdKey dimension:userIdValue];
 }
 
 WX_EXPORT_METHOD(@selector(logout))
 - (void)logout {
-//    [[Sugo sharedInstance] untrackFirstLogin];
+   [[Sugo sharedInstance] untrackFirstLogin];
 }
 
 @end
