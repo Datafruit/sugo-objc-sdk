@@ -149,18 +149,8 @@
                     if ([Sugo sharedInstance].heatMap.mode) {
                         [[Sugo sharedInstance].heatMap wipeObjectOfPath:self.path.string];
                     }
-                    if ([view isKindOfClass:[UIControl class]]) {
-                        [self stopOnView:view];
-                        [self.appliedTo removeObject:view];
-                    } else if (((UIView *)view).isUserInteractionEnabled && [((UIView *)view).gestureRecognizers count] > 0) {
-                        for (UIGestureRecognizer *gestureRecognizer in ((UIView *)view).gestureRecognizers) {
-                            if (![gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || !gestureRecognizer.enabled) {
-                                continue;
-                            }
-                            [gestureRecognizer removeTarget:view action:@selector(handleGesture:)];
-                            break;
-                        }
-                    }
+                    [self stopOnView:view];
+                    [self.appliedTo removeObject:view];
                 }
             } else {
                 // select targets based off path
@@ -185,16 +175,16 @@
                         [(UIControl *)view addTarget:self
                                               action:@selector(execute:forEvent:)
                                     forControlEvents:self.controlEvent];
-                        [self.appliedTo addObject:view];
                     } else if (view.isUserInteractionEnabled && [view.gestureRecognizers count] > 0) {
                         for (UIGestureRecognizer *gestureRecognizer in view.gestureRecognizers) {
                             if (![gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || !gestureRecognizer.enabled) {
                                 continue;
                             }
-                            [gestureRecognizer addTarget:view action:@selector(handleGesture:)];
+                            [gestureRecognizer addTarget:self action:@selector(handleGesture:)];
                             break;
                         }
                     }
+                    [self.appliedTo addObject:view];
                 }
                 if ([Sugo sharedInstance].heatMap.mode) {
                     [[Sugo sharedInstance].heatMap renderObjectOfPath:self.path.string fromRoot:root];
@@ -276,6 +266,14 @@
         [(UIControl *)view removeTarget:self
                                  action:@selector(execute:forEvent:)
                        forControlEvents:self.controlEvent];
+    } else if (((UIView *)view).isUserInteractionEnabled && [((UIView *)view).gestureRecognizers count] > 0) {
+        for (UIGestureRecognizer *gestureRecognizer in ((UIView *)view).gestureRecognizers) {
+            if (![gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || !gestureRecognizer.enabled) {
+                continue;
+            }
+            [gestureRecognizer removeTarget:self action:@selector(handleGesture:)];
+            break;
+        }
     }
 }
 
