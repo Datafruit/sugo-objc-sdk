@@ -21,6 +21,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'weex' do |weex|
     weex.source_files   = 'Sugo/Weex/*.{m,h}'
+    weex.dependency 'sugo-objc-sdk'
     weex.dependency 'WeexSDK'
   end
 end
