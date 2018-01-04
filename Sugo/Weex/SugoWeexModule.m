@@ -48,8 +48,8 @@ WX_EXPORT_METHOD_SYNC(@selector(clearSuperProperties))
     [[Sugo sharedInstance] clearSuperProperties];
 }
 
-WX_EXPORT_METHOD_SYNC(@selector(login:dimension:))
-- (void)login:(nullable NSString *)userIdKey dimension:(nullable NSString *)userIdValue {
+WX_EXPORT_METHOD_SYNC(@selector(login:userIdValue:))
+- (void)login:(nullable NSString *)userIdKey userIdValue:(nullable NSString *)userIdValue {
    [[Sugo sharedInstance] trackFirstLoginWith:userIdValue dimension:userIdKey];
 }
 
