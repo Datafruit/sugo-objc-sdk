@@ -30,6 +30,23 @@
     return self;
 }
 
+- (UIImage *)screenshotImageForKeyWindow
+{
+    UIImage *image = nil;
+    
+    UIWindow *window = _application.keyWindow;
+    if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
+        UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 1);
+        if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
+            MPLogError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+        }
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    
+    return image;
+}
+
 - (UIImage *)screenshotImageForWindowAtIndex:(NSUInteger)index
 {
     UIImage *image = nil;
@@ -45,6 +62,16 @@
     }
 
     return image;
+}
+
+- (NSDictionary *)objectHierarchyForKeyWindow
+{
+    UIWindow *window = _application.keyWindow;
+    if (window) {
+        return [_serializer serializedObjectsWithRootObject:window];
+    }
+    
+    return @{};
 }
 
 - (UIWindow *)windowAtIndex:(NSUInteger)index
