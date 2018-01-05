@@ -177,6 +177,7 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 #### 2.4.1 原生控件
 
 **对于所有`UIView`，都有一个`NSString`类型的`sugoViewId`属性，可以用于唯一指定容易混淆的可视化埋点视图，推荐初始化时设置使用**
+
 可以通过如下方式设置：
 
 ```
@@ -349,7 +350,7 @@ Sugo *sugo = [Sugo sharedInstance];
 [[Sugo sharedInstance] clearSuperProperties];
 ```
 
-#### 3.2.4 跟踪用户首次登录
+#### 3.2.3.5 跟踪用户首次登录
 
 当需要跟踪用户首次登录用户账户时，可调用
 
@@ -361,7 +362,7 @@ Sugo *sugo = [Sugo sharedInstance];
 [[Sugo sharedInstance] trackFirstLoginWith:@"user_id" dimension: @"user_id_dimension"]; 
 ```
 
-#### 3.2.5 WebView埋点
+#### 3.2.4 WebView埋点
 
 当需要在WebView(UIWebView或WKWebView)中进行代码埋点时，在页面加载完毕后，可调用以下API(是`3.2.1`与`3.2.2`同名方法在JavaScript中的接口，实现机制相同)进行JavaScript内容的代码埋点
 
@@ -370,7 +371,7 @@ sugo.track(event_id, event_name, props);	// 准备把自定义事件发送到服
 sugo.timeEvent(event_name);					// 在开始统计时长的时候调用
 ```
 
-#### 3.2.6 Weex埋点
+#### 3.2.5 Weex埋点
 
 当需要在Weex(Vue)中进行代码埋点时，可调用以下API(是`3.2.1`与`3.2.2`同名方法在Weex中的接口，实现机制相同)进行JavaScript的代码埋点
 
