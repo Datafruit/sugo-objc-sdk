@@ -106,9 +106,10 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 	NSString *projectID = @"Add_Your_Project_ID_Here";
 	NSString *appToken = @"Add_Your_App_Token_Here";
 	[Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
-	[[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
-	[[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的时间间隔，单位是秒，如若不设置，默认时间是60秒
-	[[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+	[[Sugo sharedInstance] setEnableLogging:YES];	// 如果需要查看SDK的Log，请设置为true
+	[[Sugo sharedInstance] setFlushInterval:5]; 	// 被绑定的事件数据往服务端上传的时间间隔，单位是秒，如若不设置，默认时间是60秒
+	[[Sugo sharedInstance] setCacheInterval:60]; 	// 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+    // [[Sugo sharedInstance] registerModule];		// 需要支持Weex可视化埋点时调用
 }
 ```
 
