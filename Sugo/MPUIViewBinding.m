@@ -56,12 +56,12 @@
         return nil;
     }
     
-    UIControlEvents verifyEvent = [object[@"verify_event"] unsignedIntegerValue];
-    
     NSDictionary *attributesPaths = [NSDictionary dictionaryWithDictionary:object[@"attributes"]];
     Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
 
-    if (([object[@"control_event"] unsignedIntegerValue] & UIControlEventAllEvents)) {
+    if (!([object[@"control_event"] isKindOfClass:[NSNull class]])
+        && ([object[@"control_event"] unsignedIntegerValue] & UIControlEventAllEvents)) {
+        UIControlEvents verifyEvent = [object[@"verify_event"] unsignedIntegerValue];
         return [[MPUIViewBinding alloc] initWithEventID:eventID
                                               eventName:eventName
                                                  onPath:path
