@@ -255,7 +255,10 @@
             NSArray *children = [self getChildrenOfObject:view ofType:class];
             if (_index && _index.unsignedIntegerValue < children.count) {
                 // Indexing can only be used for subviews of UIView
-                if ([view isKindOfClass:[UIView class]]) {
+                if (([view isKindOfClass:[UIView class]])
+                    || ([view isKindOfClass:[UIViewController class]]
+                        && ![view isKindOfClass:[UINavigationController class]]
+                        && ![view isKindOfClass:[UITabBarController class]])) {
                     children = @[children[_index.unsignedIntegerValue]];
                 } else {
                     children = @[];
