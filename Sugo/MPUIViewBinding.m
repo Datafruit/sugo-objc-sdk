@@ -95,16 +95,7 @@
     if (self = [super initWithEventID:eventID eventName:eventName onPath:path withAttributes:attributes]) {
         [self setSwizzleClass:[UIView class]];
         _controlEvent = controlEvent;
-
-        if (verifyEvent == 0) {
-            if (controlEvent & UIControlEventAllTouchEvents) {
-                verifyEvent = UIControlEventTouchDown;
-            } else if (controlEvent & UIControlEventAllEditingEvents) {
-                verifyEvent = UIControlEventEditingDidBegin;
-            }
-        }
-        _verifyEvent = verifyEvent;
-
+        _verifyEvent = _controlEvent;
         [self resetAppliedTo];
     }
     return self;
