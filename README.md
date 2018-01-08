@@ -216,15 +216,6 @@ objc_setAssociatedObject(self, @selector(sugoViewId), @"CustomNSStringValue", OB
 * `- (void)webViewDidStartLoad:(UIWebView *)webView;`
 * `- (void)webViewDidFinishLoad:(UIWebView *)webView;`
 
-其中，`- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType`内需指定返回值（若有类似功能的实现，请确保SDK的返回值优先级最低，在此方法最后调用即可），例子如下：
-
-```
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    return [[Sugo sharedInstance] webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
-}
-```
-
 #### 2.4.3 WKWebView
 
 所有`WKWebView`类及其子类下的网页元素，皆可被埋点绑定事件。
