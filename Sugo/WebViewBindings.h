@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 @property (atomic, strong) NSString* uiVcPath;
 @property (atomic, strong) NSString* uiDidMoveToWindowBlockName;
 @property BOOL uiWebViewSwizzleRunning;
+@property (atomic, strong) NSString* uiWebViewShouldStartLoadBlockName;
 @property (atomic, strong) NSString* uiWebViewDidStartLoadBlockName;
 @property (atomic, strong) NSString* uiWebViewDidFinishLoadBlockName;
 @property BOOL uiWebViewJavaScriptInjected;
@@ -49,6 +50,5 @@ typedef NS_ENUM(NSInteger, WebViewBindingsMode)
 
 - (void)fillBindings;
 - (void)switchHeatMapMode:(BOOL)mode withData:(NSData *)data;
-- (BOOL)npiWithWebView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 
 @end

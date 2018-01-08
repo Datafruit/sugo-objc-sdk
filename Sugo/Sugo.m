@@ -549,12 +549,6 @@ static NSString *defaultProjectToken;
         [self archive];
     });
 }
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    return [[WebViewBindings globalBindings] npiWithWebView:webView
-                                 shouldStartLoadWithRequest:request
-                                             navigationType:navigationType];
-}
     
 - (void)trackFirstLoginWith:(nullable NSString *)identifer dimension:(nullable NSString *)dimension {
     
