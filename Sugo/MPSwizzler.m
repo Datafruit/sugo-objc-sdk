@@ -12,7 +12,7 @@
 #import "MPSwizzler.h"
 
 #define MIN_ARGS 2
-#define MAX_ARGS 4
+#define MAX_ARGS 5
 
 @interface MPSwizzle : NSObject
 
@@ -98,6 +98,22 @@ static void mp_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2)
     }
 }
 
+static BOOL mp_swizzledMethod_4_should_startoad(id self, SEL _cmd, UIWebView *webView, NSURLRequest *request, UIWebViewNavigationType navigationType)
+{
+    Method aMethod = class_getInstanceMethod([self class], _cmd);
+    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:(__bridge id)aMethod];
+    BOOL returnValue = YES;
+    if (swizzle) {
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while ((block = [blocks nextObject])) {
+            block(self, _cmd, webView, request);
+        }
+        returnValue = ((BOOL(*)(id, SEL, id, id, int))swizzle.originalMethod)(self, _cmd, webView, request, navigationType);
+    }
+    return returnValue;
+}
+
 static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMethod_2, mp_swizzledMethod_3, mp_swizzledMethod_4};
 
 @implementation MPSwizzler
@@ -161,6 +177,8 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
             IMP swizzledMethod;
             if (aSelector == @selector(viewDidAppear:) || aSelector == @selector(viewDidDisappear:)) {
                 swizzledMethod = (IMP)mp_swizzledMethod_3_BOOL;
+            } else if (aSelector == @selector(webView:shouldStartLoadWithRequest:navigationType:)) {
+                swizzledMethod = (IMP)mp_swizzledMethod_4_should_startoad;
             } else {
                 swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
             }

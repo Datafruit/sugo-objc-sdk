@@ -35,7 +35,7 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
-    return [[Sugo sharedInstance] webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+    return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView

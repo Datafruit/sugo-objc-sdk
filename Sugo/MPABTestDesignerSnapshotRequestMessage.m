@@ -64,14 +64,14 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         __block NSDictionary *serializedObjects = nil;
 
         dispatch_sync(dispatch_get_main_queue(), ^{
-            screenshot = [serializer screenshotImageForWindowAtIndex:0];
+            screenshot = [serializer screenshotImageForKeyWindow];
         });
         snapshotMessage.screenshot = screenshot;
 
         if ([imageHash isEqualToString:snapshotMessage.imageHash]) {
             if ([WebViewInfoStorage.globalStorage hasNewFrame]) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    serializedObjects = [serializer objectHierarchyForWindowAtIndex:0];
+                    serializedObjects = [serializer objectHierarchyForKeyWindow];
                 });
                 [connection setSessionObject:serializedObjects forKey:@"snapshot_hierarchy"];
                 if ([WebViewInfoStorage.globalStorage hasNewFrame]) {
@@ -82,7 +82,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
             }
         } else {
             dispatch_sync(dispatch_get_main_queue(), ^{
-                serializedObjects = [serializer objectHierarchyForWindowAtIndex:0];
+                serializedObjects = [serializer objectHierarchyForKeyWindow];
             });
             [connection setSessionObject:serializedObjects forKey:@"snapshot_hierarchy"];
         }

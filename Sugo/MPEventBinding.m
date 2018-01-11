@@ -8,7 +8,7 @@
 
 #import "Sugo.h"
 #import "MPEventBinding.h"
-#import "MPUIControlBinding.h"
+#import "MPUIViewBinding.h"
 #import "MPUITextViewBinding.h"
 #import "MPUITableViewBinding.h"
 #import "MPUICollectionViewBinding.h"
@@ -36,12 +36,12 @@
 + (Class)subclassFromString:(NSString *)bindingType
 {
     NSDictionary *classTypeMap = @{
-                                   [MPUIControlBinding typeName]: [MPUIControlBinding class],
+                                   [MPUIViewBinding typeName]: [MPUIViewBinding class],
                                    [MPUITextViewBinding typeName]: [MPUITextViewBinding class],
                                    [MPUITableViewBinding typeName]: [MPUITableViewBinding class],
                                    [MPUICollectionViewBinding typeName]: [MPUICollectionViewBinding class]
                                    };
-    return [classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
+    return [classTypeMap valueForKey:bindingType] ?: [MPUIViewBinding class];
 }
 
 + (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties

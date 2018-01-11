@@ -18,6 +18,45 @@
 
 - (void)startUIWebViewBindings:(UIWebView *)webView
 {
+    void (^uiWebViewShouldStartLoadBlock)(id, SEL, id, id) = ^(id view, SEL command, id wv, id r) {
+        
+        if (!([wv isKindOfClass:[UIWebView class]] && [r isKindOfClass:[NSURLRequest class]])) {
+            return;
+        }
+        UIWebView *webView = (UIWebView *)wv;
+        NSURLRequest *request = (NSURLRequest *)r;
+        
+        BOOL shouldStartLoad = YES;
+        NSURL *url = request.URL;
+        MPLogDebug(@"%@: request = %@", NSStringFromSelector(_cmd), url.absoluteString);
+        if ([url.scheme isEqualToString:@"sugo.npi"]) {
+            NSString *npi = url.host;
+            NSString *uuid = [url.query componentsSeparatedByString:@"="].lastObject;
+            NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"sugo.dataOf('%@');", uuid]];
+            NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                                  options:NSJSONReadingMutableContainers
+                                                                    error:nil];
+            WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+            if ([npi isEqualToString:@"track"]) {
+                storage.eventID = (NSString *)event[@"eventID"];
+                storage.eventName = (NSString *)event[@"eventName"];
+                storage.properties = (NSString *)event[@"properties"];
+                [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
+                MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
+            } else if ([npi isEqualToString:@"time"]) {
+                NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
+                if (eventName) {
+                    [[Sugo sharedInstance] timeEvent:eventName];
+                }
+            }
+            shouldStartLoad = NO;
+        }
+        if (shouldStartLoad && webView.window != nil) {
+            [self trackStayEventOfWebView:webView];
+        }
+    };
+    
     void (^uiWebViewDidStartLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
         if (self.uiWebViewJavaScriptInjected) {
             self.uiWebViewJavaScriptInjected = NO;
@@ -41,6 +80,10 @@
     UIWebView *uiWebView = (UIWebView *)webView;
     if (!self.uiWebViewSwizzleRunning) {
         if (uiWebView.delegate) {
+            [MPSwizzler swizzleSelector:NSSelectorFromString(@"webView:shouldStartLoadWithRequest:navigationType:")
+                                onClass:[uiWebView.delegate class]
+                              withBlock:uiWebViewShouldStartLoadBlock
+                                  named:self.uiWebViewShouldStartLoadBlockName];
             [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
                                 onClass:[uiWebView.delegate class]
                               withBlock:uiWebViewDidStartLoadBlock
@@ -114,40 +157,6 @@
                  eventName:storage.eventName
                 properties:storage.properties];
     }
-}
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    BOOL shouldStartLoad = YES;
-    NSURL *url = request.URL;
-    MPLogDebug(@"%@: request = %@", NSStringFromSelector(_cmd), url.absoluteString);
-    if ([url.scheme isEqualToString:@"sugo.npi"]) {
-        NSString *npi = url.host;
-        NSString *uuid = [url.query componentsSeparatedByString:@"="].lastObject;
-        NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"sugo.dataOf('%@');", uuid]];
-        NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
-                                                              options:NSJSONReadingMutableContainers
-                                                                error:nil];
-        WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-        if ([npi isEqualToString:@"track"]) {
-            storage.eventID = (NSString *)event[@"eventID"];
-            storage.eventName = (NSString *)event[@"eventName"];
-            storage.properties = (NSString *)event[@"properties"];
-            [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
-            MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
-        } else if ([npi isEqualToString:@"time"]) {
-            NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
-            if (eventName) {
-                [[Sugo sharedInstance] timeEvent:eventName];
-            }
-        }
-        shouldStartLoad = NO;
-    }
-    if (shouldStartLoad && webView.window != nil) {
-        [self trackStayEventOfWebView:webView];
-    }
-    return shouldStartLoad;
 }
 
 - (NSString *)jsUIWebView

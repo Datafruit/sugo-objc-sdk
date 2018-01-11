@@ -255,7 +255,10 @@
             NSArray *children = [self getChildrenOfObject:view ofType:class];
             if (_index && _index.unsignedIntegerValue < children.count) {
                 // Indexing can only be used for subviews of UIView
-                if ([view isKindOfClass:[UIView class]]) {
+                if (([view isKindOfClass:[UIView class]])
+                    || ([view isKindOfClass:[UIViewController class]]
+                        && ![view isKindOfClass:[UINavigationController class]]
+                        && ![view isKindOfClass:[UITabBarController class]])) {
                     children = @[children[_index.unsignedIntegerValue]];
                 } else {
                     children = @[];
@@ -375,7 +378,12 @@
                 if (navigationController.navigationController) {
                     [result addObject:navigationController.navigationController];
                 }
-                [result addObject:[UIViewController sugoCurrentUIViewController]];
+                if (navigationController.viewControllers
+                    && navigationController.viewControllers.count > 0) {
+                    for (UIViewController *vc in navigationController.viewControllers) {
+                        [result addObject:vc];
+                    }
+                }
             }
         } else if ([viewController isKindOfClass:[UITabBarController class]]) {
             if (viewController == [UIViewController sugoCurrentUITabBarController]) {
@@ -386,7 +394,12 @@
                 if (tabBarController.tabBarController) {
                     [result addObject:tabBarController.tabBarController];
                 }
-                [result addObject:[UIViewController sugoCurrentUIViewController]];
+                if (tabBarController.viewControllers
+                    && tabBarController.viewControllers.count > 0) {
+                    for (UIViewController *vc in tabBarController.viewControllers) {
+                        [result addObject:vc];
+                    }
+                }
             }
         } else {
             UIViewController *parentViewController = [viewController parentViewController];
@@ -423,7 +436,7 @@
         // apply the index filter.
         NSArray *subviews = [[(UIView *)obj subviews] copy];
         for (NSObject *child in subviews) {
-            if (!class || [child isKindOfClass:class]) {
+            if (!class || [child isMemberOfClass:class]) {
                 [children addObject:child];
             }
         }

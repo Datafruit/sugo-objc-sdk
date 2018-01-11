@@ -60,6 +60,7 @@ static WebViewBindings *globalBindings = nil;
     
     _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
     _uiWebViewJavaScriptInjected = NO;
+    _uiWebViewShouldStartLoadBlockName = [[NSUUID UUID] UUIDString];
     _uiWebViewDidStartLoadBlockName = [[NSUUID UUID] UUIDString];
     _uiWebViewDidFinishLoadBlockName = [[NSUUID UUID] UUIDString];
     
@@ -152,11 +153,6 @@ static WebViewBindings *globalBindings = nil;
     } @catch (NSException *exception) {
         MPLogError(@"exception: %@, decoding heat map data: %@", exception, data);
     }
-}
-
-- (BOOL)npiWithWebView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    return [self webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
 }
 
 @end

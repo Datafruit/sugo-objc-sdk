@@ -10,8 +10,10 @@
 
 - (instancetype)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider;
 
+- (UIImage *)screenshotImageForKeyWindow;
 - (UIImage *)screenshotImageForWindowAtIndex:(NSUInteger)index;
 
+- (NSDictionary *)objectHierarchyForKeyWindow;
 - (NSDictionary *)objectHierarchyForWindowAtIndex:(NSUInteger)index;
 
 @end

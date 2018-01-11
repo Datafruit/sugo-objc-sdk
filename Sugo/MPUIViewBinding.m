@@ -1,5 +1,5 @@
 //
-//  MPUIControlBinding.m
+//  MPUIViewBinding.m
 //  HelloSugo
 //
 //  Created by Amanda Canyon on 8/4/14.
@@ -7,13 +7,13 @@
 //
 
 #import "MPSwizzler.h"
-#import "MPUIControlBinding.h"
+#import "MPUIViewBinding.h"
 #import "Attributes.h"
 #import "SugoPrivate.h"
 #import "UIViewController+SugoHelpers.h"
 #import "MPLogger.h"
 
-@interface MPUIControlBinding()
+@interface MPUIViewBinding()
 
 /*
  This table contains all the UIControls we are currently bound to
@@ -29,11 +29,11 @@
 
 @end
 
-@implementation MPUIControlBinding
+@implementation MPUIViewBinding
 
 + (NSString *)typeName
 {
-    return @"ui_control";
+    return @"ui_view";
 }
 
 + (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
@@ -55,23 +55,26 @@
         MPLogDebug(@"binding requires an event name");
         return nil;
     }
-
-    if (!([object[@"control_event"] unsignedIntegerValue] & UIControlEventAllEvents)) {
-        MPLogDebug(@"must supply a valid UIControlEvents value for control_event");
-        return nil;
-    }
-
-    UIControlEvents verifyEvent = [object[@"verify_event"] unsignedIntegerValue];
     
     NSDictionary *attributesPaths = [NSDictionary dictionaryWithDictionary:object[@"attributes"]];
     Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
+
+    if (!([object[@"control_event"] isKindOfClass:[NSNull class]])
+        && ([object[@"control_event"] unsignedIntegerValue] & UIControlEventAllEvents)) {
+        UIControlEvents verifyEvent = [object[@"verify_event"] unsignedIntegerValue];
+        return [[MPUIViewBinding alloc] initWithEventID:eventID
+                                              eventName:eventName
+                                                 onPath:path
+                                       withControlEvent:[object[@"control_event"] unsignedIntegerValue]
+                                         andVerifyEvent:verifyEvent
+                                             attributes:attributes];
+    }
     
-    return [[MPUIControlBinding alloc] initWithEventID:eventID
-                                             eventName:eventName
-                                                onPath:path
-                                      withControlEvent:[object[@"control_event"] unsignedIntegerValue]
-                                        andVerifyEvent:verifyEvent
-                                            attributes:attributes];
+    return [[MPUIViewBinding alloc] initWithEventID:eventID
+                                          eventName:eventName
+                                             onPath:path
+                                         attributes:attributes];
+    
 }
 
 #pragma clang diagnostic push
@@ -90,19 +93,21 @@
                      attributes:(Attributes *)attributes
 {
     if (self = [super initWithEventID:eventID eventName:eventName onPath:path withAttributes:attributes]) {
-        [self setSwizzleClass:[UIControl class]];
+        [self setSwizzleClass:[UIView class]];
         _controlEvent = controlEvent;
-
-        if (verifyEvent == 0) {
-            if (controlEvent & UIControlEventAllTouchEvents) {
-                verifyEvent = UIControlEventTouchDown;
-            } else if (controlEvent & UIControlEventAllEditingEvents) {
-                verifyEvent = UIControlEventEditingDidBegin;
-            }
-        }
-        _verifyEvent = verifyEvent;
-
+        _verifyEvent = _controlEvent;
         [self resetAppliedTo];
+    }
+    return self;
+}
+
+- (instancetype)initWithEventID:(NSString *)eventID
+                      eventName:(NSString *)eventName
+                         onPath:(NSString *)path
+                     attributes:(Attributes *)attributes
+{
+    if (self = [super initWithEventID:eventID eventName:eventName onPath:path withAttributes:attributes]) {
+        [self setSwizzleClass:[UIView class]];
     }
     return self;
 }
@@ -137,7 +142,6 @@
                     }
                     [self stopOnView:view];
                     [self.appliedTo removeObject:view];
-                    
                 }
             } else {
                 // select targets based off path
@@ -151,19 +155,27 @@
                     objects = [self.path selectFromRoot:root];
                 }
 
-                for (UIControl *control in objects) {
-                    if ([control isKindOfClass:[UIControl class]]) {
+                for (UIView *view in objects) {
+                    if ([view isKindOfClass:[UIControl class]]) {
                         if (self.verifyEvent != 0 && self.verifyEvent != self.controlEvent) {
-                            [control addTarget:self
-                                        action:@selector(preVerify:forEvent:)
-                              forControlEvents:self.verifyEvent];
+                            [(UIControl *)view addTarget:self
+                                                  action:@selector(preVerify:forEvent:)
+                                        forControlEvents:self.verifyEvent];
                         }
 
-                        [control addTarget:self
-                                    action:@selector(execute:forEvent:)
-                          forControlEvents:self.controlEvent];
-                        [self.appliedTo addObject:control];
+                        [(UIControl *)view addTarget:self
+                                              action:@selector(execute:forEvent:)
+                                    forControlEvents:self.controlEvent];
+                    } else if (view.isUserInteractionEnabled && [view.gestureRecognizers count] > 0) {
+                        for (UIGestureRecognizer *gestureRecognizer in view.gestureRecognizers) {
+                            if (![gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || !gestureRecognizer.enabled) {
+                                continue;
+                            }
+                            [gestureRecognizer addTarget:self action:@selector(handleGesture:)];
+                            break;
+                        }
                     }
+                    [self.appliedTo addObject:view];
                 }
                 if ([Sugo sharedInstance].heatMap.mode) {
                     [[Sugo sharedInstance].heatMap renderObjectOfPath:self.path.string fromRoot:root];
@@ -185,6 +197,32 @@
     }
 }
 
+- (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
+    
+    NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+    if (self.attributes) {
+        [p addEntriesFromDictionary:[self.attributes parse]];
+    }
+    if ([Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]
+        && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
+        NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+        p[keys[@"EventType"]] = values[@"click"];
+        p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+        if ([SugoPageInfos global].infos.count > 0) {
+            for (NSDictionary *info in [SugoPageInfos global].infos) {
+                if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                    p[keys[@"PageName"]] = info[@"page_name"];
+                    if (info[@"page_category"]) {
+                        p[keys[@"PageCategory"]] = info[@"page_category"];
+                    }
+                }
+            }
+        }
+    }
+    [[self class] track:[self eventID] eventName:[self eventName] properties:p];
+}
+
 - (void)stop
 {
     if (self.running) {
@@ -197,9 +235,9 @@
                               named:self.name];
 
         // remove target-action pairs
-        for (UIControl *control in self.appliedTo.allObjects) {
-            if (control && [control isKindOfClass:[UIControl class]]) {
-                [self stopOnView:control];
+        for (UIView *view in self.appliedTo.allObjects) {
+            if (view && [view isKindOfClass:[UIControl class]]) {
+                [self stopOnView:view];
             }
         }
         [self resetAppliedTo];
@@ -207,16 +245,27 @@
     }
 }
 
-- (void)stopOnView:(UIControl *)view
+- (void)stopOnView:(UIView *)view
 {
-    if (self.verifyEvent != 0 && self.verifyEvent != self.controlEvent) {
-        [view removeTarget:self
-                    action:@selector(preVerify:forEvent:)
-          forControlEvents:self.verifyEvent];
+    if (view && [view isKindOfClass:[UIControl class]]) {
+    
+        if (self.verifyEvent != 0 && self.verifyEvent != self.controlEvent) {
+            [(UIControl *)view removeTarget:self
+                                     action:@selector(preVerify:forEvent:)
+                           forControlEvents:self.verifyEvent];
+        }
+        [(UIControl *)view removeTarget:self
+                                 action:@selector(execute:forEvent:)
+                       forControlEvents:self.controlEvent];
+    } else if (((UIView *)view).isUserInteractionEnabled && [((UIView *)view).gestureRecognizers count] > 0) {
+        for (UIGestureRecognizer *gestureRecognizer in ((UIView *)view).gestureRecognizers) {
+            if (![gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || !gestureRecognizer.enabled) {
+                continue;
+            }
+            [gestureRecognizer removeTarget:self action:@selector(handleGesture:)];
+            break;
+        }
     }
-    [view removeTarget:self
-                action:@selector(execute:forEvent:)
-      forControlEvents:self.controlEvent];
 }
 
 #pragma mark -- To execute for Target-Action event firing
@@ -295,10 +344,10 @@
 - (BOOL)isEqual:(id)other {
     if (other == self) {
         return YES;
-    } else if (![other isKindOfClass:[MPUIControlBinding class]]) {
+    } else if (![other isKindOfClass:[MPUIViewBinding class]]) {
         return NO;
     } else {
-        return [super isEqual:other] && self.controlEvent == ((MPUIControlBinding *)other).controlEvent && self.verifyEvent == ((MPUIControlBinding *)other).verifyEvent;
+        return [super isEqual:other] && self.controlEvent == ((MPUIViewBinding *)other).controlEvent && self.verifyEvent == ((MPUIViewBinding *)other).verifyEvent;
     }
 }
 

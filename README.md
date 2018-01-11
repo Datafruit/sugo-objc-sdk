@@ -32,6 +32,13 @@
 pod 'sugo-objc-sdk'
 ```
 
+若需要支持**Weex**的可视化埋点功能，请**替代**使用
+
+```
+pod 'sugo-objc-sdk/weex'
+```
+
+
 #### 1.1.2 执行集成命令
 
 关闭Xcode，并在`Podfile`目录下执行以下命令：
@@ -82,6 +89,14 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 @import Sugo;
 ```
 
+若使用支持**Weex**可视化埋点功能的SDK时，出现问题，可替代使用：
+
+```
+#import "Sugo.h"
+#import "Sugo+Weex.h"
+```
+
+
 #### 2.2.2 添加SDK对象初始化代码
 
 把以下代码复制到`AppDelegate.m`中，并填入已获得的项目ID与Token：
@@ -91,9 +106,10 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 	NSString *projectID = @"Add_Your_Project_ID_Here";
 	NSString *appToken = @"Add_Your_App_Token_Here";
 	[Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
-	[[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
-	[[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的时间间隔，单位是秒，如若不设置，默认时间是60秒
-	[[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+	[[Sugo sharedInstance] setEnableLogging:YES];	// 如果需要查看SDK的Log，请设置为true
+	[[Sugo sharedInstance] setFlushInterval:5]; 	// 被绑定的事件数据往服务端上传的时间间隔，单位是秒，如若不设置，默认时间是60秒
+	[[Sugo sharedInstance] setCacheInterval:60]; 	// 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+    // [[Sugo sharedInstance] registerModule];		// 需要支持Weex可视化埋点时调用
 }
 ```
 
@@ -160,11 +176,21 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 #### 2.4.1 原生控件
 
-**对于所有`UIView`，都有一个`String?`类型的`sugoViewId`属性，可以用于唯一指定容易混淆的可视化埋点视图，推荐初始化时设置使用**
+**对于所有`UIView`，都有一个`NSString`类型的`sugoViewId`属性，可以用于唯一指定容易混淆的可视化埋点视图，推荐初始化时设置使用**
 
-##### UIControl
+可以通过如下方式设置：
 
-所有`UIControl`类及其子类，皆可被埋点绑定事件。
+```
+// #import <objc/runtime.h>
+objc_setAssociatedObject(self, @selector(sugoViewId), @"CustomNSStringValue", OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+```
+
+##### UIView
+
+满足以下条件的`UIView`及其子类可以被可视化埋点绑定事件：
+
+* `userInteractionEnabled`属性为`YES`，且是`UIControl`或其子类
+* `userInteractionEnabled`属性为`YES`，且`gestureRecognizers`数组属性中包含`UITapGestureRecognizer`或其子类的手势实例，且其`enabled`属性为`YES`
 
 ##### UITableView
 
@@ -189,15 +215,6 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 * `- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType`
 * `- (void)webViewDidStartLoad:(UIWebView *)webView;`
 * `- (void)webViewDidFinishLoad:(UIWebView *)webView;`
-
-其中，`- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType`内需指定返回值（若有类似功能的实现，请确保SDK的返回值优先级最低，在此方法最后调用即可），例子如下：
-
-```
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    return [[Sugo sharedInstance] webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
-}
-```
 
 #### 2.4.3 WKWebView
 
@@ -324,16 +341,7 @@ Sugo *sugo = [Sugo sharedInstance];
 [[Sugo sharedInstance] clearSuperProperties];
 ```
 
-#### 3.2.4 WebView埋点
-
-当需要在WebView(UIWebView或WKWebView)中进行代码埋点时，在页面加载完毕后，可调用以下API(是`3.2.1`与`3.2.2`同名方法在JavaScript中的接口，实现机制相同)进行JavaScript内容的代码埋点
-
-```
-sugo.timeEvent(event_name);	// 在开始统计时长的时候调用
-sugo.track(event_id, event_name, props);	// 准备把自定义事件发送到服务器时
-```
-
-#### 3.2.5 跟踪用户首次登录
+#### 3.2.3.5 跟踪用户首次登录
 
 当需要跟踪用户首次登录用户账户时，可调用
 
@@ -343,6 +351,25 @@ sugo.track(event_id, event_name, props);	// 准备把自定义事件发送到服
 
 ```
 [[Sugo sharedInstance] trackFirstLoginWith:@"user_id" dimension: @"user_id_dimension"]; 
+```
+
+#### 3.2.4 WebView埋点
+
+当需要在WebView(UIWebView或WKWebView)中进行代码埋点时，在页面加载完毕后，可调用以下API(是`3.2.1`与`3.2.2`同名方法在JavaScript中的接口，实现机制相同)进行JavaScript内容的代码埋点
+
+```
+sugo.track(event_id, event_name, props);	// 准备把自定义事件发送到服务器时
+sugo.timeEvent(event_name);					// 在开始统计时长的时候调用
+```
+
+#### 3.2.5 Weex埋点
+
+当需要在Weex(Vue)中进行代码埋点时，可调用以下API(是`3.2.1`与`3.2.2`同名方法在Weex中的接口，实现机制相同)进行JavaScript的代码埋点
+
+```
+let sugo = weex.requireModule('sugo');
+sugo.track(event_name, props);				// 准备把自定义事件发送到服务器时
+sugo.timeEvent(event_name);					// 在开始统计时长的时候调用
 ```
 
 ## 4. 反馈
