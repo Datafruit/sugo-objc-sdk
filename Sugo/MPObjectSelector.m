@@ -255,10 +255,7 @@
             NSArray *children = [self getChildrenOfObject:view ofType:class];
             if (_index && _index.unsignedIntegerValue < children.count) {
                 // Indexing can only be used for subviews of UIView
-                if (([view isKindOfClass:[UIView class]])
-                    || ([view isKindOfClass:[UIViewController class]]
-                        && ![view isKindOfClass:[UINavigationController class]]
-                        && ![view isKindOfClass:[UITabBarController class]])) {
+                if ([view isKindOfClass:[UIView class]]) {
                     children = @[children[_index.unsignedIntegerValue]];
                 } else {
                     children = @[];
@@ -367,51 +364,46 @@
             [result addObject:nextResponder];
         }
     } else if ([obj isKindOfClass:[UIViewController class]]) {
+        
         UIViewController *viewController = (UIViewController *)obj;
         
         if ([viewController isKindOfClass:[UINavigationController class]]) {
-            if (viewController == [UIViewController sugoCurrentUINavigationController]) {
-                UINavigationController *navigationController = [UIViewController sugoCurrentUINavigationController];
-                if (navigationController.tabBarController) {
-                    [result addObject:navigationController.tabBarController];
+            UINavigationController *nvc = (UINavigationController *)viewController;
+            if (nvc.viewControllers && nvc.viewControllers.count > 0) {
+                for (UIViewController *vc in nvc.viewControllers) {
+                    [result addObject:vc];
                 }
-                if (navigationController.navigationController) {
-                    [result addObject:navigationController.navigationController];
-                }
-                if (navigationController.viewControllers
-                    && navigationController.viewControllers.count > 0) {
-                    for (UIViewController *vc in navigationController.viewControllers) {
-                        [result addObject:vc];
-                    }
-                }
-            }
-        } else if ([viewController isKindOfClass:[UITabBarController class]]) {
-            if (viewController == [UIViewController sugoCurrentUITabBarController]) {
-                UITabBarController *tabBarController = [UIViewController sugoCurrentUITabBarController];
-                if (tabBarController.navigationController) {
-                    [result addObject:tabBarController.navigationController];
-                }
-                if (tabBarController.tabBarController) {
-                    [result addObject:tabBarController.tabBarController];
-                }
-                if (tabBarController.viewControllers
-                    && tabBarController.viewControllers.count > 0) {
-                    for (UIViewController *vc in tabBarController.viewControllers) {
-                        [result addObject:vc];
-                    }
-                }
-            }
-        } else {
-            UIViewController *parentViewController = [viewController parentViewController];
-            if (parentViewController) {
-                [result addObject:parentViewController];
-            }
-            UIViewController *presentingViewController = [viewController presentingViewController];
-            if (presentingViewController) {
-                [result addObject:presentingViewController];
             }
         }
+        if ([viewController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tbc = (UITabBarController *)viewController;
+            if (tbc.viewControllers && tbc.viewControllers.count > 0) {
+                for (UIViewController *vc in tbc.viewControllers) {
+                    [result addObject:vc];
+                }
+            }
+        }
+        
+        if (viewController.navigationController) {
+            [result addObject:viewController.navigationController];
+        }
+        
+        if (viewController.tabBarController) {
+            [result addObject:viewController.tabBarController];
+        }
+        
+        UIViewController *parentViewController = [viewController parentViewController];
+        if (parentViewController) {
+            [result addObject:parentViewController];
+        }
+        
+        UIViewController *presentingViewController = [viewController presentingViewController];
+        if (presentingViewController) {
+            [result addObject:presentingViewController];
+        }
+        
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        
         if (keyWindow.rootViewController == obj) {
             //TODO is there a better way to get the actual window that has this VC
             [result addObject:keyWindow];
@@ -448,20 +440,23 @@
             UINavigationController *navigationController = (UINavigationController *)viewController;
             UIViewController *visibleViewController = navigationController.visibleViewController;
             UIViewController *topViewController = navigationController.topViewController;
-            UIViewController *childViewController = navigationController.childViewControllers.lastObject;
+            UIViewController *viewController = navigationController.viewControllers.lastObject;
             if (visibleViewController) {
                 [children addObject:visibleViewController];
             } else if (topViewController) {
                 [children addObject:topViewController];
-            } else if (childViewController) {
-                [children addObject:childViewController];
+            } else if (viewController) {
+                [children addObject:viewController];
             }
         } else if ([viewController isKindOfClass:[UITabBarController class]]) {
             // UITabBarController
             UITabBarController *tabBarController = (UITabBarController *)viewController;
             UIViewController *selectedViewController = tabBarController.selectedViewController;
+            UIViewController *iewController = tabBarController.viewControllers.lastObject;
             if (selectedViewController) {
                 [children addObject:selectedViewController];
+            } else if (viewController) {
+                [children addObject:viewController];
             }
         } else {
             // UIViewController
@@ -480,11 +475,11 @@
             if (tabBarController && (!class || [tabBarController isKindOfClass:class])) {
                 [children addObject:tabBarController];
             }
-            // UIViewController
-            UIViewController *presentedViewController = viewController.presentedViewController;
-            if (presentedViewController && (!class || [presentedViewController isKindOfClass:class])) {
-                [children addObject:presentedViewController];
-            }
+        }
+        // UIViewController
+        UIViewController *presentedViewController = viewController.presentedViewController;
+        if (presentedViewController && (!class || [presentedViewController isKindOfClass:class])) {
+            [children addObject:presentedViewController];
         }
         // UIView
         if (!class || (viewController.isViewLoaded && [viewController.view isKindOfClass:class])) {
