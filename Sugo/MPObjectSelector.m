@@ -257,8 +257,6 @@
                 // Indexing can only be used for subviews of UIView
                 if ([view isKindOfClass:[UIView class]]) {
                     children = @[children[_index.unsignedIntegerValue]];
-                } else {
-                    children = @[];
                 }
             }
             [result addObjectsFromArray:children];
