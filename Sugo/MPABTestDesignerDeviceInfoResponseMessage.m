@@ -106,6 +106,16 @@
     [self setPayloadObject:secretKey forKey:@"secret_key"];
 }
 
+- (NSString *)trackingVersion
+{
+    return [self payloadObjectForKey:@"tracking_version"];
+}
+
+- (void)setTrackingVersion:(NSString *)trackingVersion
+{
+    [self setPayloadObject:trackingVersion forKey:@"tracking_version"];
+}
+
 - (NSArray *)tweaks
 {
     return [self payloadObjectForKey:@"tweaks"];

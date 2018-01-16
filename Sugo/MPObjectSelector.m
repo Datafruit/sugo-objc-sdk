@@ -450,7 +450,7 @@
             // UITabBarController
             UITabBarController *tabBarController = (UITabBarController *)viewController;
             UIViewController *selectedViewController = tabBarController.selectedViewController;
-            UIViewController *iewController = tabBarController.viewControllers.lastObject;
+            UIViewController *viewController = tabBarController.viewControllers.lastObject;
             if (selectedViewController) {
                 [children addObject:selectedViewController];
             } else if (viewController) {
