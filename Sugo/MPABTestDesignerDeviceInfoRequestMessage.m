@@ -37,6 +37,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
             deviceInfoResponseMessage.mainBundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
             deviceInfoResponseMessage.availableFontFamilies = [self availableFontFamilies];
             deviceInfoResponseMessage.secretKey = [Sugo sharedInstance].urlCodelessSecretKey;
+            deviceInfoResponseMessage.trackingVersion = @"1";
         });
 
         [conn sendMessage:deviceInfoResponseMessage];

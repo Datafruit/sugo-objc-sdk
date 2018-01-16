@@ -18,5 +18,6 @@
 @property (nonatomic, copy) NSArray *availableFontFamilies;
 @property (nonatomic, copy) NSString *mainBundleIdentifier;
 @property (nonatomic, copy) NSString *secretKey;
+@property (nonatomic, copy) NSString *trackingVersion;
 
 @end
