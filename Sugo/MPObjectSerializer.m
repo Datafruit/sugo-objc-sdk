@@ -351,11 +351,13 @@
         && event[@"path"]
         && event[@"clientWidth"]
         && event[@"clientHeight"]
+        && event[@"viewportContent"]
         && event[@"nodes"]) {
         [storage setHTMLInfoWithTitle:(NSString *)event[@"title"]
                                  path:(NSString *)event[@"path"]
                                 width:(NSString *)event[@"clientWidth"]
                                height:(NSString *)event[@"clientHeight"]
+                      viewportContent:(NSString *)event[@"viewportContent"]
                                 nodes:(NSString *)event[@"nodes"]];
     }
     eventString = nil;

@@ -16,6 +16,7 @@
 @property NSString *path;
 @property NSString *width;
 @property NSString *height;
+@property NSString *viewportContent;
 @property NSString *nodes;
     
 @end
@@ -56,6 +57,7 @@ static WebViewInfoStorage *singleton = nil;
     _path = @"";
     _width = @"";
     _height = @"";
+    _viewportContent = @"";
     _nodes = @"";
     return self;
 }
@@ -93,18 +95,20 @@ static WebViewInfoStorage *singleton = nil;
                  @"url": _path,
                  @"clientWidth": _width,
                  @"clientHeight": _height,
+                 @"viewportContent": _viewportContent,
                  @"nodes": _nodes
                  };
     }
 }
 
-- (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height nodes:(NSString *)nodes
+- (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes
 {
      @synchronized(self) {
          _title = title;
          _path = path;
          _width = width;
          _height = height;
+         _viewportContent = viewportContent;
          _nodes = nodes;
          _newFrame = true;
      }

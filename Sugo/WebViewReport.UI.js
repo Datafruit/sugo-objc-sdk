@@ -36,6 +36,7 @@
         var parent_path = '';
         sugo.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
         sugo.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
+        sugo.viewportContent = (document.getElementsByTagName('meta')['viewport'].content || '');
         sugo.handleNodeChild(childrens, jsonArray, parent_path);
 
         var eventUUID = sugo.generateUUID();
@@ -44,6 +45,7 @@
             'path': sugo.relative_path,
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,
+            'viewportContent': sugo.viewportContent,
             'nodes': JSON.stringify(jsonArray)
         };
         return JSON.stringify(event)

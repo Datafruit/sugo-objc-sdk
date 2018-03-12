@@ -92,11 +92,12 @@
             NSDictionary *body = (NSDictionary *)message.body;
             WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
             
-            if (body[@"title"] && body[@"path"] && body[@"clientWidth"] && body[@"clientHeight"] && body[@"nodes"]) {
+            if (body[@"title"] && body[@"path"] && body[@"clientWidth"] && body[@"clientHeight"] && body[@"viewportContent"] && body[@"nodes"]) {
                 [storage setHTMLInfoWithTitle:(NSString *)body[@"title"]
                                          path:(NSString *)body[@"path"]
                                         width:(NSString *)body[@"clientWidth"]
                                        height:(NSString *)body[@"clientHeight"]
+                              viewportContent:(NSString *)body[@"viewportContent"]
                                         nodes:(NSString *)body[@"nodes"]];
             }
         }
