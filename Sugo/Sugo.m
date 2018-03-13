@@ -445,7 +445,7 @@ static NSString *defaultProjectToken;
     if (event) {
         [self.eventsQueue addObject:event];
     }
-    if (self.eventsQueue.count > 5000) {
+    if (self.eventsQueue.count > 200) {
         [self.eventsQueue removeObjectAtIndex:0];
     }
     
