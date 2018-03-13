@@ -4,7 +4,6 @@ podfile: SugoDemo/Podfile
 branches:
   only:
   - master
-  - release-infinitus
 env:
   global:
     - WORKSPACE=SugoDemo.xcworkspace

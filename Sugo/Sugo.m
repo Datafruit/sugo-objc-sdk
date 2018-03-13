@@ -124,6 +124,7 @@ static NSString *defaultProjectToken;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
+        _eventQueueSize = 500;
         _cacheInterval = cacheInterval;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
@@ -448,7 +449,7 @@ static NSString *defaultProjectToken;
     if (event) {
         [self.eventsQueue addObject:event];
     }
-    if (self.eventsQueue.count > 500) {
+    if (self.eventsQueue.count > self.eventQueueSize) {
         [self.eventsQueue removeObjectAtIndex:0];
     }
     
@@ -711,6 +712,17 @@ static NSString *defaultProjectToken;
             [[WebViewBindings globalBindings] fillBindings];
         });
     }];
+}
+
+- (NSUInteger)eventQueueSize {
+    return _eventQueueSize;
+}
+
+- (void)setEventQueueSize:(NSUInteger)size
+{
+    @synchronized (self) {
+        _eventQueueSize = size;
+    }
 }
 
 - (NSUInteger)flushInterval {

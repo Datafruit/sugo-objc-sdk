@@ -74,6 +74,7 @@
     [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
     [[Sugo sharedInstance] setEnableLogging:YES];
     [[Sugo sharedInstance] setFlushInterval:5]; // default to 60
+    [[Sugo sharedInstance] setEventQueueSize:200]; // default to 500
     [[Sugo sharedInstance] setCacheInterval:60];// default to 3600
 }
 
