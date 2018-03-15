@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author                = { 'sugo.io' => 'developer@sugo.io' }
   s.source                = { :git => 'https://github.com/Datafruit/sugo-objc-sdk.git', :tag => s.version }
   s.ios.deployment_target = '8.0'
-  s.ios.source_files      = 'Sugo/*.{m,h,xcdatamodeld}'
+  s.ios.source_files      = 'Sugo/*.{m,h}', 'Sugo/*.xcdatamodeld'
   s.ios.resources         = 'Sugo/*.js', 'Sugo/Sugo*.plist'
   s.private_header_files  = 'Sugo/SugoPrivate.h', 'Sugo/SugoPeoplePrivate.h', 'Sugo/MPNetworkPrivate.h', 'Sugo/MPLogger.h'
   s.frameworks            = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'WebKit', 'CoreData'
