@@ -176,6 +176,10 @@
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
 		A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */; };
 		A74C45451FDE702900D91B0F /* MPUICollectionViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */; };
+		A74FBAD6205A5BD800063451 /* SugoEvents+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */; };
+		A74FBAD7205A5BD800063451 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBAD3205A5BD800063451 /* SugoEvents+CoreDataClass.h */; };
+		A74FBAD8205A5BD800063451 /* SugoEvents+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBAD4205A5BD800063451 /* SugoEvents+CoreDataClass.m */; };
+		A74FBAD9205A5BD800063451 /* SugoEvents+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */; };
 		A7664C2F2058B95500F9E201 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7664C2E2058B95500F9E201 /* CoreData.framework */; };
 		A7664C3A2058C15900F9E201 /* Sugo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */; };
 		A7BF45B71FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */; };
@@ -353,6 +357,10 @@
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
 		A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUICollectionViewBinding.h; sourceTree = "<group>"; };
 		A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUICollectionViewBinding.m; sourceTree = "<group>"; };
+		A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataProperties.h"; sourceTree = "<group>"; };
+		A74FBAD3205A5BD800063451 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
+		A74FBAD4205A5BD800063451 /* SugoEvents+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataClass.m"; sourceTree = "<group>"; };
+		A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataProperties.m"; sourceTree = "<group>"; };
 		A7664C2E2058B95500F9E201 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A7664C392058C15900F9E201 /* Sugo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sugo.xcdatamodel; sourceTree = "<group>"; };
 		A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+UIDebuggingInformationOverlayInjector.m"; sourceTree = "<group>"; };
@@ -523,6 +531,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7FE1E137088008D67F6 /* MPFoundation.h */,
+				A74FBADA205A5BDD00063451 /* SugoEvents */,
 				14C607D91EB1C89E00990411 /* HeatMap */,
 				141AC9501E13C86A008D67F6 /* Logger */,
 				141AC94F1E13C81F008D67F6 /* Helpers */,
@@ -778,6 +787,17 @@
 			name = WebViewAPI;
 			sourceTree = "<group>";
 		};
+		A74FBADA205A5BDD00063451 /* SugoEvents */ = {
+			isa = PBXGroup;
+			children = (
+				A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */,
+				A74FBAD3205A5BD800063451 /* SugoEvents+CoreDataClass.h */,
+				A74FBAD4205A5BD800063451 /* SugoEvents+CoreDataClass.m */,
+				A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */,
+			);
+			name = SugoEvents;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -812,6 +832,7 @@
 				141AC8D31E137088008D67F6 /* MPTypeDescription.h in Headers */,
 				141AC8F01E137088008D67F6 /* UIView+MPHelpers.h in Headers */,
 				141AC8F81E137088008D67F6 /* WebViewBindings+UIWebView.h in Headers */,
+				A74FBAD7205A5BD800063451 /* SugoEvents+CoreDataClass.h in Headers */,
 				141AC8E21E137088008D67F6 /* NSInvocation+MPHelpers.h in Headers */,
 				141AC87C1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */,
 				141AC8E01E137088008D67F6 /* MPWebSocket.h in Headers */,
@@ -843,6 +864,7 @@
 				14149DEE1E1A6D9D0006DF6A /* WebViewBindings+WebView.h in Headers */,
 				141AC8CA1E137088008D67F6 /* MPSwizzler.h in Headers */,
 				141AC8AE1E137088008D67F6 /* MPObjectIdentityProvider.h in Headers */,
+				A74FBAD6205A5BD800063451 /* SugoEvents+CoreDataProperties.h in Headers */,
 				141AC8801E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h in Headers */,
 				141AC8FC1E137088008D67F6 /* WebViewInfoStorage.h in Headers */,
 				A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */,
@@ -948,6 +970,7 @@
 				141AC8C91E137088008D67F6 /* MPSwizzle.m in Sources */,
 				141AC8EB1E137088008D67F6 /* UIColor+MPColor.m in Sources */,
 				141AC8931E137088008D67F6 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
+				A74FBAD9205A5BD800063451 /* SugoEvents+CoreDataProperties.m in Sources */,
 				141AC8921E137088008D67F6 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				141AC89C1E137088008D67F6 /* MPEnumDescription.m in Sources */,
 				141AC8A21E137088008D67F6 /* MPNetwork.m in Sources */,
@@ -976,6 +999,7 @@
 				141AC8811E137088008D67F6 /* MPABTestDesignerDisconnectMessage.m in Sources */,
 				141AC88D1E137088008D67F6 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				141AC8B81E137088008D67F6 /* MPPassThroughValueTransformer.m in Sources */,
+				A74FBAD8205A5BD800063451 /* SugoEvents+CoreDataClass.m in Sources */,
 				141AC8D41E137088008D67F6 /* MPTypeDescription.m in Sources */,
 				141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */,
 				141AC8BC1E137088008D67F6 /* MPResources.m in Sources */,
