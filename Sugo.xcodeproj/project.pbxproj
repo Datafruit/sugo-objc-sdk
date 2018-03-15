@@ -172,6 +172,10 @@
 		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
 		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
+		A74FBADF205A7A1D00063451 /* SugoEvents+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBADB205A7A1D00063451 /* SugoEvents+CoreDataProperties.h */; };
+		A74FBAE0205A7A1D00063451 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBADC205A7A1D00063451 /* SugoEvents+CoreDataClass.h */; };
+		A74FBAE1205A7A1D00063451 /* SugoEvents+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBADD205A7A1D00063451 /* SugoEvents+CoreDataClass.m */; };
+		A74FBAE2205A7A1D00063451 /* SugoEvents+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBADE205A7A1D00063451 /* SugoEvents+CoreDataProperties.m */; };
 		A7664C3C205A29D300F9E201 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7664C3B205A29D300F9E201 /* CoreData.framework */; };
 		A7664C3F205A29FC00F9E201 /* Sugo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7664C3D205A29FC00F9E201 /* Sugo.xcdatamodeld */; };
 /* End PBXBuildFile section */
@@ -344,6 +348,10 @@
 		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
 		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
+		A74FBADB205A7A1D00063451 /* SugoEvents+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataProperties.h"; sourceTree = "<group>"; };
+		A74FBADC205A7A1D00063451 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
+		A74FBADD205A7A1D00063451 /* SugoEvents+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataClass.m"; sourceTree = "<group>"; };
+		A74FBADE205A7A1D00063451 /* SugoEvents+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataProperties.m"; sourceTree = "<group>"; };
 		A7664C3B205A29D300F9E201 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A7664C3E205A29FC00F9E201 /* Sugo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sugo.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -402,6 +410,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7851E1364D7008D67F6 /* Sugo.h */,
+				A7664C3D205A29FC00F9E201 /* Sugo.xcdatamodeld */,
 				14015FC01E2DBDD2003DB275 /* SugoURLs.plist */,
 				145CAAC61E57EEA400E53E8C /* SugoCustomDimensions.plist */,
 				145CAAC81E57F1EA00E53E8C /* SugoResourcesPathReplacements.plist */,
@@ -417,7 +426,6 @@
 			children = (
 				141AC7CB1E137088008D67F6 /* SugoPrivate.h */,
 				141AC7C31E137088008D67F6 /* Sugo.m */,
-				A7664C3D205A29FC00F9E201 /* Sugo.xcdatamodeld */,
 				141AC7C81E137088008D67F6 /* SugoPeople.h */,
 				141AC7CA1E137088008D67F6 /* SugoPeoplePrivate.h */,
 				141AC7C91E137088008D67F6 /* SugoPeople.m */,
@@ -509,6 +517,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7FE1E137088008D67F6 /* MPFoundation.h */,
+				A74FBAE3205A7A2100063451 /* SugoEvents */,
 				14C607D91EB1C89E00990411 /* HeatMap */,
 				141AC9501E13C86A008D67F6 /* Logger */,
 				141AC94F1E13C81F008D67F6 /* Helpers */,
@@ -763,6 +772,17 @@
 			name = WebViewAPI;
 			sourceTree = "<group>";
 		};
+		A74FBAE3205A7A2100063451 /* SugoEvents */ = {
+			isa = PBXGroup;
+			children = (
+				A74FBADB205A7A1D00063451 /* SugoEvents+CoreDataProperties.h */,
+				A74FBADC205A7A1D00063451 /* SugoEvents+CoreDataClass.h */,
+				A74FBADD205A7A1D00063451 /* SugoEvents+CoreDataClass.m */,
+				A74FBADE205A7A1D00063451 /* SugoEvents+CoreDataProperties.m */,
+			);
+			name = SugoEvents;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -773,6 +793,7 @@
 				141AC7871E1364D7008D67F6 /* Sugo.h in Headers */,
 				141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */,
 				141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */,
+				A74FBAE0205A7A1D00063451 /* SugoEvents+CoreDataClass.h in Headers */,
 				141AC8D61E137088008D67F6 /* MPUIControlBinding.h in Headers */,
 				141AC8961E137088008D67F6 /* MPDesignerEventBindingMessage.h in Headers */,
 				141AC8851E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
@@ -804,6 +825,7 @@
 				141AC8681E137088008D67F6 /* SugoExceptionHandler.h in Headers */,
 				141AC8F41E137088008D67F6 /* WebViewBindings.h in Headers */,
 				141AC8DD1E137088008D67F6 /* MPValueTransformers.h in Headers */,
+				A74FBADF205A7A1D00063451 /* SugoEvents+CoreDataProperties.h in Headers */,
 				141AC8E41E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h in Headers */,
 				141AC8BB1E137088008D67F6 /* MPResources.h in Headers */,
 				14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */,
@@ -959,6 +981,7 @@
 				141AC8811E137088008D67F6 /* MPABTestDesignerDisconnectMessage.m in Sources */,
 				141AC88D1E137088008D67F6 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				141AC8B81E137088008D67F6 /* MPPassThroughValueTransformer.m in Sources */,
+				A74FBAE1205A7A1D00063451 /* SugoEvents+CoreDataClass.m in Sources */,
 				141AC8D41E137088008D67F6 /* MPTypeDescription.m in Sources */,
 				141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */,
 				141AC8BC1E137088008D67F6 /* MPResources.m in Sources */,
@@ -984,6 +1007,7 @@
 				14656FED1E2379BF006B7107 /* Attributes.m in Sources */,
 				141AC8B11E137088008D67F6 /* MPObjectSelector.m in Sources */,
 				14C607D81EB1C88E00990411 /* HeatMap.m in Sources */,
+				A74FBAE2205A7A1D00063451 /* SugoEvents+CoreDataProperties.m in Sources */,
 				141AC8791E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				141AC8731E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				141AC8F51E137088008D67F6 /* WebViewBindings.m in Sources */,
