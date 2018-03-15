@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'core' do |core|
     core.source_files           = 'Sugo/*.{m,h}'
-    core.resources              = 'Sugo/*.js', 'Sugo/Sugo*.plist'
+    core.resources              = 'Sugo/*.js', 'Sugo/Sugo*.plist', 'Sugo/*.xcdatamodeld'
     core.private_header_files   = 'Sugo/SugoPrivate.h', 'Sugo/SugoPeoplePrivate.h', 'Sugo/MPNetworkPrivate.h', 'Sugo/MPLogger.h'
     core.libraries              = 'icucore'
     core.frameworks             = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'WebKit', 'CoreData'
