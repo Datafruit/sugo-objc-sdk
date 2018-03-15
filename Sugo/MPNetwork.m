@@ -55,48 +55,49 @@ static const NSUInteger kBatchSize = 50;
     }
     
     while (queue.count > 0) {
-        NSUInteger batchSize = MIN(queue.count, kBatchSize);
-        NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
-        
-        NSString *requestData = [MPNetwork encodeArrayForBatch: batch];//[MPNetwork encodeArrayForAPI:batch];
-        NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
-        MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
-        NSURLRequest *request = [self buildPostRequestForURL:url
-                                                 andEndpoint:endpoint
-                                              withQueryItems:queryItems
-                                                     andBody:postBody];
-        [self updateNetworkActivityIndicator:YES];
-        
-        __block BOOL didFail = NO;
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                  NSURLResponse *urlResponse,
-                                                                  NSError *error) {
-            [self updateNetworkActivityIndicator:NO];
+        @autoreleasepool {
+            NSUInteger batchSize = MIN(queue.count, kBatchSize);
+            NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
             
-            BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
-            if (error || !success) {
-                MPLogError(@"%@ network failure: %@", self, error);
-                didFail = YES;
-            } else {
-                NSString *response = [[NSString alloc] initWithData:responseData
-                                                           encoding:NSUTF8StringEncoding];
-                if ([response intValue] == 0) {
-                    MPLogDebug(@"%@ %lu response value %d", self, endpoint, [response intValue]);
+            NSString *requestData = [MPNetwork encodeArrayForBatch: batch];//[MPNetwork encodeArrayForAPI:batch];
+            NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
+            MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
+            NSURLRequest *request = [self buildPostRequestForURL:url
+                                                     andEndpoint:endpoint
+                                                  withQueryItems:queryItems
+                                                         andBody:postBody];
+            [self updateNetworkActivityIndicator:YES];
+            
+            __block BOOL didFail = NO;
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSession *session = [NSURLSession sharedSession];
+            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                      NSURLResponse *urlResponse,
+                                                                      NSError *error) {
+                [self updateNetworkActivityIndicator:NO];
+                
+                BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
+                if (error || !success) {
+                    MPLogError(@"%@ network failure: %@", self, error);
+                    didFail = YES;
+                } else {
+                    NSString *response = [[NSString alloc] initWithData:responseData
+                                                               encoding:NSUTF8StringEncoding];
+                    if ([response intValue] == 0) {
+                        MPLogDebug(@"%@ %lu response value %d", self, endpoint, [response intValue]);
+                    }
                 }
-            }
+                
+                dispatch_semaphore_signal(semaphore);
+            }] resume];
             
-            dispatch_semaphore_signal(semaphore);
-        }] resume];
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-        if (didFail) {
-            break;
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            
+            if (didFail) {
+                break;
+            }
+            [queue removeObjectsInArray:batch];
         }
-        
-        [queue removeObjectsInArray:batch];
     }
 }
 

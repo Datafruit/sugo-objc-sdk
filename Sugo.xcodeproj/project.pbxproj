@@ -172,6 +172,8 @@
 		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
 		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
+		A7664C3C205A29D300F9E201 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7664C3B205A29D300F9E201 /* CoreData.framework */; };
+		A7664C3F205A29FC00F9E201 /* Sugo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7664C3D205A29FC00F9E201 /* Sugo.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -342,6 +344,8 @@
 		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
 		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
+		A7664C3B205A29D300F9E201 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A7664C3E205A29FC00F9E201 /* Sugo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sugo.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,6 +353,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7664C3C205A29D300F9E201 /* CoreData.framework in Frameworks */,
 				14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */,
 				14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */,
 				14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */,
@@ -412,6 +417,7 @@
 			children = (
 				141AC7CB1E137088008D67F6 /* SugoPrivate.h */,
 				141AC7C31E137088008D67F6 /* Sugo.m */,
+				A7664C3D205A29FC00F9E201 /* Sugo.xcdatamodeld */,
 				141AC7C81E137088008D67F6 /* SugoPeople.h */,
 				141AC7CA1E137088008D67F6 /* SugoPeoplePrivate.h */,
 				141AC7C91E137088008D67F6 /* SugoPeople.m */,
@@ -710,6 +716,7 @@
 		148D65781E13D611002B2BB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7664C3B205A29D300F9E201 /* CoreData.framework */,
 				14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */,
 				14BA1A4D1E13D675002F0C4B /* WebKit.framework */,
 				14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */,
@@ -923,6 +930,7 @@
 				141AC8C91E137088008D67F6 /* MPSwizzle.m in Sources */,
 				141AC8EB1E137088008D67F6 /* UIColor+MPColor.m in Sources */,
 				141AC8931E137088008D67F6 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
+				A7664C3F205A29FC00F9E201 /* Sugo.xcdatamodeld in Sources */,
 				141AC8921E137088008D67F6 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				141AC89C1E137088008D67F6 /* MPEnumDescription.m in Sources */,
 				141AC8A21E137088008D67F6 /* MPNetwork.m in Sources */,
@@ -1145,6 +1153,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A7664C3D205A29FC00F9E201 /* Sugo.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A7664C3E205A29FC00F9E201 /* Sugo.xcdatamodel */,
+			);
+			currentVersion = A7664C3E205A29FC00F9E201 /* Sugo.xcdatamodel */;
+			path = Sugo.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 141AC7791E1364D7008D67F6 /* Project object */;
 }

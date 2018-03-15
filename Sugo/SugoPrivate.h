@@ -24,6 +24,8 @@
 #import "AutomaticEventsConstants.h"
 #endif
 #endif
+#import <CoreData/CoreData.h>
+#import "SugoEvents+CoreDataClass.h"
 
 #if !SUGO_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 #import "MPResources.h"
@@ -42,7 +44,6 @@
 @interface Sugo ()
 {
     NSUInteger _flushInterval;
-    NSUInteger _eventQueueSize;
     BOOL _enableVisualABTestAndCodeless;
     double _cacheInterval;
 }
@@ -81,6 +82,7 @@
 @property (nonatomic, strong) NSTimer *cacheTimer;
 @property (nonatomic, strong) NSTimer *flushTimer;
 @property (nonatomic, strong) NSMutableArray *eventsQueue;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (atomic, strong) NSMutableDictionary *sugoConfiguration;

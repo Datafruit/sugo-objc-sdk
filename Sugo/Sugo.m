@@ -93,6 +93,25 @@ static NSString *defaultProjectToken;
 {
     if (self = [super init]) {
         self.eventsQueue = [NSMutableArray array];
+        
+        NSURL *modelURL = [[NSBundle bundleForClass: [self class]] URLForResource: @"Sugo" withExtension: @"momd"];
+        if (modelURL != nil) {
+            NSManagedObjectModel *mom  = [[NSManagedObjectModel alloc] initWithContentsOfURL: modelURL];
+            NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: mom];
+            NSString *dbPath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+                                stringByAppendingPathComponent: @"SugoEvents.sqlite"];
+            NSLog(@"Events.sqlite path: %@", dbPath);
+            NSURL *url = [NSURL fileURLWithPath: dbPath];
+            NSError *error = nil;
+            [psc addPersistentStoreWithType: NSSQLiteStoreType configuration:nil URL: url options: nil error: &error];
+            if (error != nil) {
+                NSLog(@"Failed to add persistent store. Error %@", error);
+            } else {
+                self.managedObjectContext  = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
+                self.managedObjectContext.persistentStoreCoordinator = psc;
+            }
+        }
+        
         self.timedEvents = [NSMutableDictionary dictionary];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
@@ -121,7 +140,6 @@ static NSString *defaultProjectToken;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
-        _eventQueueSize = 500;
         _cacheInterval = cacheInterval;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
@@ -443,18 +461,24 @@ static NSString *defaultProjectToken;
     }
     
     MPLogDebug(@"%@ queueing event: %@", self, event);
-    if (event) {
-        [self.eventsQueue addObject:event];
-    }
-    if (self.eventsQueue.count > self.eventQueueSize) {
-        [self.eventsQueue removeObjectAtIndex:0];
-    }
     
-    if (self.abtestDesignerConnection.connected) {
-        [self flushQueueViaWebSocket];
+    if (event) {
+        if (self.abtestDesignerConnection.connected) {
+            [self flushViaWebSocketEvent:event];
+        } else {
+            SugoEvents *sugoEvents = [NSEntityDescription insertNewObjectForEntityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
+            sugoEvents.token = self.apiToken;
+            sugoEvents.event = [NSKeyedArchiver archivedDataWithRootObject:event];
+            __weak Sugo *weakSelf = self;
+            [self.managedObjectContext performBlockAndWait:^{
+                __strong Sugo *strongSelf = weakSelf;
+                if (![strongSelf.managedObjectContext save:nil]) {
+                    MPLogError(@"%@ unable to save event data", self);
+                }
+                [strongSelf.managedObjectContext reset];
+            }];
+        }
     }
-    // Always archive
-    [self archiveEvents];
 }
 
 - (void)registerSuperProperties:(NSDictionary *)properties
@@ -611,17 +635,6 @@ static NSString *defaultProjectToken;
     }];
 }
 
-- (NSUInteger)eventQueueSize {
-    return _eventQueueSize;
-}
-
-- (void)setEventQueueSize:(NSUInteger)size
-{
-    @synchronized (self) {
-        _eventQueueSize = size;
-    }
-}
-
 - (NSUInteger)flushInterval {
     return _flushInterval;
 }
@@ -661,8 +674,7 @@ static NSString *defaultProjectToken;
     });
 }
 
-- (void)flush
-{
+- (void)flush {
     [self flushWithCompletion:nil];
 }
 
@@ -676,9 +688,26 @@ static NSString *defaultProjectToken;
                 return;
             }
         }
-        [self.network flushEventQueue:self.eventsQueue];
         
-        [self archive];
+        NSArray *eventResult = [self fetchEventResultOfLimit: 50];
+        while (eventResult.count > 0) {
+            NSMutableArray *queue = [NSMutableArray array];
+            if (eventResult != nil) {
+                for (SugoEvents *event in eventResult) {
+                    [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:event.event]];
+                }
+            }
+            [self.network flushEventQueue:queue];
+            
+            if (eventResult != nil && queue.count == 0) {
+                [self deleteEventResult:eventResult];
+                [self.managedObjectContext reset];
+                eventResult = [self fetchEventResultOfLimit: 50];
+            } else {
+                [self.managedObjectContext reset];
+                break;
+            }
+        }
         
         if (handler) {
             dispatch_async(dispatch_get_main_queue(), handler);
@@ -686,14 +715,13 @@ static NSString *defaultProjectToken;
     });
 }
 
-- (void)flushQueueViaWebSocket
+- (void)flushViaWebSocketEvent:(NSDictionary *)event
 {
-    if (self.eventsQueue.count > 0) {
-        NSDictionary *events = [NSDictionary dictionaryWithObject:self.eventsQueue
-                                                           forKey:@"events"];
-        [self.abtestDesignerConnection sendMessage:[MPDesignerTrackMessage messageWithPayload:events]];
-        [self.eventsQueue removeAllObjects];
-    }
+    NSMutableArray *eq = [NSMutableArray array];
+    [eq addObject:event];
+    NSDictionary *events = [NSDictionary dictionaryWithObject:eq
+                                                       forKey:@"events"];
+    [self.abtestDesignerConnection sendMessage:[MPDesignerTrackMessage messageWithPayload:events]];
 }
 
 #pragma mark - Persistence
@@ -731,7 +759,6 @@ static NSString *defaultProjectToken;
 
 - (void)archive
 {
-    [self archiveEvents];
     [self archiveProperties];
     [self archiveEventBindings];
 }
@@ -796,9 +823,34 @@ static NSString *defaultProjectToken;
     return success;
 }
 
+- (NSArray *)fetchEventResultOfLimit:(NSUInteger)limit {
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *sugoEventsEntity = [NSEntityDescription entityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:sugoEventsEntity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(token = %@)", self.apiToken];
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setFetchLimit: limit];
+
+    NSArray *eventResult = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil].copy;
+    return eventResult;
+}
+
+- (void)deleteEventResult:(NSArray *)eventResult {
+    
+    for (SugoEvents *event in eventResult) {
+        [self.managedObjectContext deleteObject:event];
+    }
+    __weak Sugo *weakSelf = self;
+    [self.managedObjectContext performBlockAndWait:^{
+        __strong Sugo *strongSelf = weakSelf;
+        [strongSelf.managedObjectContext save:nil];
+    }];
+}
+
 - (void)unarchive
 {
-    [self unarchiveEvents];
+//    [self unarchiveEvents];
     [self unarchiveProperties];
     [self unarchiveEventBindings];
 }
@@ -1029,7 +1081,7 @@ static NSString *defaultProjectToken;
 
 + (NSString *)libVersion
 {
-    return [[NSBundle bundleForClass:[Sugo class]] infoDictionary][@"CFBundleShortVersionString"];
+    return [[NSBundle bundleForClass:[self class]] infoDictionary][@"CFBundleShortVersionString"];
 }
 
 - (NSDictionary *)obtainPriorityProperties

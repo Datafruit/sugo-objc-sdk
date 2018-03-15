@@ -155,17 +155,6 @@ extern BOOL SugoCanTrackWebPage;
  @property
  
  @abstract
- Flush timer's interval.
- 
- @discussion
- Setting a flush interval of 0 will turn off the flush timer.
- */
-@property (atomic) NSUInteger eventQueueSize;
-
-/*!
- @property
- 
- @abstract
  Cache interval.
  
  @discussion
