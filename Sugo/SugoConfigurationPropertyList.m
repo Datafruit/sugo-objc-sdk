@@ -14,7 +14,7 @@
 + (NSDictionary *)loadWithName:(NSString *)name
 {
     NSMutableDictionary *configuration = [[NSMutableDictionary alloc] init];
-    NSBundle *bundle = [NSBundle bundleForClass:[Sugo class]];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *path = [bundle pathForResource:name ofType:@"plist"];
     if (path) {
         configuration = [NSMutableDictionary dictionaryWithContentsOfFile:path];

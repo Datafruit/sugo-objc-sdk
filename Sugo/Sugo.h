@@ -151,18 +151,6 @@ extern BOOL SugoCanTrackWebPage;
  @property
  
  @abstract
- Flush timer's interval.
- Event queue's size
- 
- @discussion
- Default to 500.
- */
-@property (atomic) NSUInteger eventQueueSize;
-
-/*!
- @property
- 
- @abstract
  Cache interval.
  
  @discussion

@@ -176,6 +176,8 @@
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
 		A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */; };
 		A74C45451FDE702900D91B0F /* MPUICollectionViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */; };
+		A7664C2F2058B95500F9E201 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7664C2E2058B95500F9E201 /* CoreData.framework */; };
+		A7664C3A2058C15900F9E201 /* Sugo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */; };
 		A7BF45B71FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */; };
 /* End PBXBuildFile section */
 
@@ -351,6 +353,8 @@
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
 		A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUICollectionViewBinding.h; sourceTree = "<group>"; };
 		A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUICollectionViewBinding.m; sourceTree = "<group>"; };
+		A7664C2E2058B95500F9E201 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A7664C392058C15900F9E201 /* Sugo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sugo.xcdatamodel; sourceTree = "<group>"; };
 		A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+UIDebuggingInformationOverlayInjector.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -359,6 +363,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7664C2F2058B95500F9E201 /* CoreData.framework in Frameworks */,
 				14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */,
 				14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */,
 				14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */,
@@ -412,6 +417,7 @@
 				145CAAC81E57F1EA00E53E8C /* SugoResourcesPathReplacements.plist */,
 				14A806D61E5B14B300D4148F /* SugoPageEventsViewControllerFilterList.plist */,
 				141AC7861E1364D7008D67F6 /* Info.plist */,
+				A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */,
 				144D2E4E1E20C5AD00387FD2 /* JavaScript */,
 			);
 			name = Resources;
@@ -725,6 +731,7 @@
 		148D65781E13D611002B2BB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7664C2E2058B95500F9E201 /* CoreData.framework */,
 				14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */,
 				14BA1A4D1E13D675002F0C4B /* WebKit.framework */,
 				14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */,
@@ -934,6 +941,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				141AC87B1E137088008D67F6 /* MPABTestDesignerConnection.m in Sources */,
+				A7664C3A2058C15900F9E201 /* Sugo.xcdatamodeld in Sources */,
 				141AC8FD1E137088008D67F6 /* WebViewInfoStorage.m in Sources */,
 				141AC8CB1E137088008D67F6 /* MPSwizzler.m in Sources */,
 				141AC8D81E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
@@ -1179,6 +1187,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A7664C392058C15900F9E201 /* Sugo.xcdatamodel */,
+			);
+			currentVersion = A7664C392058C15900F9E201 /* Sugo.xcdatamodel */;
+			path = Sugo.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 141AC7791E1364D7008D67F6 /* Project object */;
 }

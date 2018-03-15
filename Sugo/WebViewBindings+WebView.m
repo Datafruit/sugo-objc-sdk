@@ -108,7 +108,7 @@
 - (NSString *)jsSourceOfFileName:(NSString *)fileName
 {
     NSMutableString *source = [[NSMutableString alloc] init];
-    NSBundle *bundle = [NSBundle bundleForClass:[Sugo class]];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *sourcePath = [bundle pathForResource:fileName ofType:@"js"];
     if (sourcePath) {
         source = [NSMutableString stringWithContentsOfFile:sourcePath
