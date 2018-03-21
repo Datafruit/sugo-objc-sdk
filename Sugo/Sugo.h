@@ -21,6 +21,7 @@ FOUNDATION_EXPORT const unsigned char SugoVersionString[];
 #import <UIKit/UIKit.h>
 
 #import "SugoPeople.h"
+#import "SugoHelper.h"
 
 #define SUGO_NO_EXCEPTION_HANDLING (defined(SUGO_APP_EXTENSION))
 #define SUGO_FLUSH_IMMEDIATELY (defined(SUGO_APP_EXTENSION))

@@ -172,6 +172,7 @@
 		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
 		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
+		A70E0306206246BE00BADCEC /* SugoHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A70E0304206246BE00BADCEC /* SugoHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A74FBADF205A7A1D00063451 /* SugoEvents+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBADB205A7A1D00063451 /* SugoEvents+CoreDataProperties.h */; };
 		A74FBAE0205A7A1D00063451 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBADC205A7A1D00063451 /* SugoEvents+CoreDataClass.h */; };
 		A74FBAE1205A7A1D00063451 /* SugoEvents+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBADD205A7A1D00063451 /* SugoEvents+CoreDataClass.m */; };
@@ -348,6 +349,7 @@
 		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
 		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
+		A70E0304206246BE00BADCEC /* SugoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoHelper.h; sourceTree = "<group>"; };
 		A74FBADB205A7A1D00063451 /* SugoEvents+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataProperties.h"; sourceTree = "<group>"; };
 		A74FBADC205A7A1D00063451 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
 		A74FBADD205A7A1D00063451 /* SugoEvents+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataClass.m"; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 		141AC7BD1E137019008D67F6 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A70E0304206246BE00BADCEC /* SugoHelper.h */,
 				141AC7CB1E137088008D67F6 /* SugoPrivate.h */,
 				141AC7C31E137088008D67F6 /* Sugo.m */,
 				141AC7C81E137088008D67F6 /* SugoPeople.h */,
@@ -792,6 +795,7 @@
 			files = (
 				141AC7871E1364D7008D67F6 /* Sugo.h in Headers */,
 				141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */,
+				A70E0306206246BE00BADCEC /* SugoHelper.h in Headers */,
 				141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */,
 				A74FBAE0205A7A1D00063451 /* SugoEvents+CoreDataClass.h in Headers */,
 				141AC8D61E137088008D67F6 /* MPUIControlBinding.h in Headers */,
@@ -886,7 +890,7 @@
 		141AC7791E1364D7008D67F6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = sugo;
 				TargetAttributes = {
 					141AC7811E1364D7008D67F6 = {
@@ -1034,7 +1038,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1042,7 +1048,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1085,7 +1095,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1093,7 +1105,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
