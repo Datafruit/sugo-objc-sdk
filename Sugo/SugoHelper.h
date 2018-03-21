@@ -42,6 +42,7 @@
 + (void)unregisterSuperProperty:(NSString *)propertyName;
 + (NSDictionary *)currentSuperProperties;
 + (void)clearSuperProperties;
++ (void)flush;
 
 // MARK: Deprecated
 + (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;

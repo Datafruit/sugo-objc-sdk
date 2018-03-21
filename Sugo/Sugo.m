@@ -149,7 +149,7 @@ BOOL SugoCanTrackWebPage = true;
     [[Sugo sharedInstance] clearTimedEvents];
 }
 
-- (void)flush {
++ (void)flush {
     
     if (![SugoHelper hasSugoInitialized]) {
         return;
