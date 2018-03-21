@@ -53,33 +53,33 @@
  
     switch (indexPath.item) {
         case 0:
-            [[Sugo sharedInstance] trackEvent:@"Track Event!"];
+            [SugoHelper trackEvent:@"Track Event!"];
             [descStr appendString:@"Event: \"Track Event!\""];
             break;
         case 1:
             p[@"Cool Property"] = @"Property Value";
-            [[Sugo sharedInstance] trackEvent:@"Track Event With Properties!"
+            [SugoHelper trackEvent:@"Track Event With Properties!"
                                    properties:p];
             [descStr appendString:@"Event: \"Track Event With Properties!\"\nProperties: "];
             [descStr appendString:[p description]];
             break;
         case 2:
-            [[Sugo sharedInstance] timeEvent:@"Timed Event"];
+            [SugoHelper timeEvent:@"Timed Event"];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[Sugo sharedInstance] trackEvent:@"Timed Event"];
+                [SugoHelper trackEvent:@"Timed Event"];
             });
             [descStr appendString:@"Timed Event: \"Timed Event\""];
             break;
         case 3:
-            [[Sugo sharedInstance] clearTimedEvents];
+            [SugoHelper clearTimedEvents];
             [descStr appendString:@"Timed Events Cleared"];
             break;
         case 4:
             [descStr appendString:@"Super Properties:\n"];
-            [descStr appendString:[[[Sugo sharedInstance] currentSuperProperties] description]];
+            [descStr appendString:[[SugoHelper currentSuperProperties] description]];
             break;
         case 5:
-            [[Sugo sharedInstance] clearSuperProperties];
+            [SugoHelper clearSuperProperties];
             [descStr appendString:@"Cleared Super Properties"];
             break;
         case 6:
@@ -90,25 +90,25 @@
             p[@"Super Property 5"] = @[@3, @"a", [NSDate date]];
             p[@"Super Property 6"] = [[NSURL alloc] initWithString:@"https://sugo.io"];
             p[@"Super Property 7"] = [NSNull null];
-            [[Sugo sharedInstance] registerSuperProperties:p];
+            [SugoHelper registerSuperProperties:p];
             [descStr appendString:@"Properties: "];
             [descStr appendString:[p description]];
             break;
         case 7:
             p[@"Super Property 1"] = @2.3;
-            [[Sugo sharedInstance] registerSuperPropertiesOnce:p];
+            [SugoHelper registerSuperPropertiesOnce:p];
             [descStr appendString:@"Properties: "];
             [descStr appendString:[p description]];
             break;
         case 8:
             p[@"Super Properrty 1"] = @1.2;
-            [[Sugo sharedInstance] registerSuperPropertiesOnce:p defaultValue:@2.3];
+            [SugoHelper registerSuperPropertiesOnce:p defaultValue:@2.3];
             [descStr appendString:@"Properties: "];
             [descStr appendString:[p description]];
             [descStr appendString:@" with Default Value: 2.3"];
             break;
         case 9:
-            [[Sugo sharedInstance] unregisterSuperProperty:@"Super Property 2"];
+            [SugoHelper unregisterSuperProperty:@"Super Property 2"];
             [descStr appendString:@"Properties: "];
             [descStr appendString:@"Super Property 2"];
             break;

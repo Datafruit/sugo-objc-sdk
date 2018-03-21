@@ -174,6 +174,7 @@
 		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
 		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
 		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
+		A70E030D206257A200BADCEC /* SugoHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = A70E030C206257A200BADCEC /* SugoHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */; };
 		A74C45451FDE702900D91B0F /* MPUICollectionViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */; };
 		A74FBAD6205A5BD800063451 /* SugoEvents+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */; };
@@ -355,6 +356,7 @@
 		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
 		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
 		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
+		A70E030C206257A200BADCEC /* SugoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoHelper.h; sourceTree = "<group>"; };
 		A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUICollectionViewBinding.h; sourceTree = "<group>"; };
 		A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUICollectionViewBinding.m; sourceTree = "<group>"; };
 		A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -435,6 +437,7 @@
 			isa = PBXGroup;
 			children = (
 				141AC7CB1E137088008D67F6 /* SugoPrivate.h */,
+				A70E030C206257A200BADCEC /* SugoHelper.h */,
 				141AC7C31E137088008D67F6 /* Sugo.m */,
 				141AC7C81E137088008D67F6 /* SugoPeople.h */,
 				141AC7CA1E137088008D67F6 /* SugoPeoplePrivate.h */,
@@ -807,6 +810,7 @@
 			files = (
 				141AC7871E1364D7008D67F6 /* Sugo.h in Headers */,
 				141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */,
+				A70E030D206257A200BADCEC /* SugoHelper.h in Headers */,
 				141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */,
 				141AC8D61E137088008D67F6 /* MPUIViewBinding.h in Headers */,
 				141AC8961E137088008D67F6 /* MPDesignerEventBindingMessage.h in Headers */,
