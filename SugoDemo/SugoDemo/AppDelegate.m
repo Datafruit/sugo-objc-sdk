@@ -52,7 +52,7 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
     
-    return [[Sugo sharedInstance] handleURL:url];
+    return [SugoHelper handleURL:url];
 }
 
 //- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
@@ -66,15 +66,20 @@
 - (void)initSugo {
     NSString *projectID = @"Add_Your_Project_ID_Here";
     NSString *appToken = @"Add_Your_App_Token_Here";
-//    SugoBindingsURL = @"";
-//    SugoCollectionURL = @"";
-//    SugoCodelessURL = @"";
-    NSDictionary *priorityProperties = @{};
-    [Sugo registerPriorityProperties:priorityProperties];
-    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
-    [[Sugo sharedInstance] setEnableLogging:YES];
-    [[Sugo sharedInstance] setFlushInterval:5]; // default to 60
-    [[Sugo sharedInstance] setCacheInterval:60];// default to 3600
+    SugoBindingsURL = @""; // 设置获取绑定事件配置的URL，端口默认为8000
+    SugoCollectionURL = @""; // 设置传输绑定事件的网管URL，端口默认为80
+    SugoCodelessURL = @""; // 设置连接可视化埋点的URL，端口默认为8887
+    [SugoHelper initializeEnable:YES
+                       projectID:projectID
+                           token:appToken
+                      bindingURL:SugoBindingsURL
+                   collectionURL:SugoCollectionURL
+                     codelessURL:SugoCodelessURL];
+    if ([SugoHelper hasSugoInitialized]) {
+        [SugoHelper setEnableLogging:YES];
+        [SugoHelper setFlushInterval:5]; // default to 60
+        [SugoHelper setCacheInterval:60];// default to 3600
+    }
 }
 
 @end

@@ -24,6 +24,188 @@ NSString *SugoCodelessURL;
 BOOL SugoCanTrackNativePage = true;
 BOOL SugoCanTrackWebPage = true;
 
+@implementation SugoHelper
+
+// MARK: Init
++ (void)initializeEnable:(BOOL)enable
+               projectID:(NSString *)projectID
+                   token:(NSString *)token
+              bindingURL:(NSString *)binding
+           collectionURL:(NSString *)collection
+             codelessURL:(NSString *)codeless {
+    if (!enable) {
+        return;
+    }
+    SugoBindingsURL = binding;
+    SugoCollectionURL = collection;
+    SugoCodelessURL = codeless;
+    [Sugo sharedInstanceWithID:projectID token:token launchOptions:nil];
+}
+
++ (BOOL)hasSugoInitialized {
+    if ([Sugo sharedInstance]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
++ (BOOL)handleURL:(NSURL *)url {
+    
+    if ([SugoHelper hasSugoInitialized]) {
+        return [[Sugo sharedInstance] handleURL:url];
+    }
+    return NO;
+}
+
++ (void)requestForHeatMapViaURL:(NSURL *)url {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] requestForHeatMapViaURL:url];
+}
+
++ (void)connectToCodelessViaURL:(NSURL *)url {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] connectToCodelessViaURL:url];
+}
+
++ (void)setEnableLogging:(BOOL)enableLogging {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] setEnableLogging:enableLogging];
+}
+
++ (void)setFlushInterval:(NSUInteger)interval {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] setFlushInterval:interval];
+}
+
++ (void)setCacheInterval:(double)interval {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] setCacheInterval:interval];
+}
+
+// MARK: Track
++ (void)trackEvent:(NSString *)event {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] trackEvent:event];
+}
+
++ (void)trackEvent:(NSString *)event properties:(NSDictionary *)properties {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] trackEvent:event properties:properties];
+}
+
++ (void)trackEventID:(NSString *)eventID eventName:(NSString *)eventName {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] trackEventID:eventID eventName:eventName];
+}
+
++ (void)trackEventID:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] trackEventID:eventID eventName:eventName properties:properties];
+}
+
++ (void)timeEvent:(NSString *)event {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] timeEvent:event];
+}
+
++ (void)clearTimedEvents {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] clearTimedEvents];
+}
+
+- (void)flush {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] flush];
+}
+
+// MARK: Super Properties
++ (void)registerSuperProperties:(NSDictionary *)properties {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] registerSuperProperties:properties];
+}
+
++ (void)registerSuperPropertiesOnce:(NSDictionary *)properties {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] registerSuperPropertiesOnce:properties];
+}
+
++ (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] registerSuperPropertiesOnce:properties defaultValue:defaultValue];
+}
+
++ (void)unregisterSuperProperty:(NSString *)propertyName {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] unregisterSuperProperty:propertyName];
+}
+
++ (NSDictionary *)currentSuperProperties {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return @{};
+    }
+    return [[Sugo sharedInstance] currentSuperProperties];
+}
+
++ (void)clearSuperProperties {
+    
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] clearSuperProperties];
+}
+
+@end
+
 @implementation Sugo
 
 static NSMutableDictionary *instances;

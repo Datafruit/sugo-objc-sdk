@@ -21,6 +21,7 @@ FOUNDATION_EXPORT const unsigned char SugoVersionString[];
 #import <UIKit/UIKit.h>
 
 #import "SugoPeople.h"
+#import "SugoHelper.h"
 
 
 @class    SugoPeople;
