@@ -34,6 +34,9 @@
 + (void)trackEventID:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties;
 + (void)timeEvent:(NSString *)event;
 + (void)clearTimedEvents;
++ (void)flush;
++ (void)trackFirstLoginWith:(nullable NSString *)identifer dimension:(nullable NSString *)dimension;
++ (void)untrackFirstLogin;
 
 // MARK: Super Properties
 + (void)registerSuperProperties:(NSDictionary *)properties;

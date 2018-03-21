@@ -147,12 +147,26 @@ BOOL SugoCanTrackWebPage = true;
     [[Sugo sharedInstance] clearTimedEvents];
 }
 
-- (void)flush {
++ (void)flush {
     
     if (![SugoHelper hasSugoInitialized]) {
         return;
     }
     [[Sugo sharedInstance] flush];
+}
+
++ (void)trackFirstLoginWith:(nullable NSString *)identifer dimension:(nullable NSString *)dimension {
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] trackFirstLoginWith:identifer dimension:dimension];
+}
+
++ (void)untrackFirstLogin {
+    if (![SugoHelper hasSugoInitialized]) {
+        return;
+    }
+    [[Sugo sharedInstance] untrackFirstLogin];
 }
 
 // MARK: Super Properties
