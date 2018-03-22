@@ -622,6 +622,9 @@ static NSString *defaultProjectToken;
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    if (!self.enable) {
+        return YES;
+    }
     return [[WebViewBindings globalBindings] npiWithWebView:webView
                                  shouldStartLoadWithRequest:request
                                              navigationType:navigationType];
