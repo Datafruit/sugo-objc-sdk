@@ -337,6 +337,25 @@ extern BOOL SugoCanTrackWebPage;
  @method
  
  @abstract
+ Initializes a singleton instance of the API, uses it to track launchOptions information,
+ and then returns it.
+ 
+ @discussion
+ This is the preferred method for creating a sharedInstance with a sugo
+ like above. With the launchOptions parameter, Sugo can track referral
+ information created by push notifications.
+ 
+ @param enable          whether enable SDK
+ @param projectID       your project id
+ @param apiToken        your project token
+ @param launchOptions   your application delegate's launchOptions
+ 
+ */
++ (Sugo *)sharedInstance:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
+/*!
+ @method
+ 
+ @abstract
  Returns a previously instantiated singleton instance of the API.
  
  @discussion
@@ -362,6 +381,24 @@ extern BOOL SugoCanTrackWebPage;
  @param cacheInterval   interval to cache event data
  */
 - (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
+
+/*!
+ @method
+ 
+ @abstract
+ Initializes an instance of the API with the given project token.
+ 
+ @discussion
+ Creates and initializes a new API object. See also initializer.
+ 
+ @param enable          whether enable SDK
+ @param projectID       your project ID
+ @param apiToken        your project token
+ @param launchOptions   optional app delegate launchOptions
+ @param flushInterval   interval to run background flushing
+ @param cacheInterval   interval to cache event data
+ */
+- (instancetype)init:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
 
 /*!
  @method

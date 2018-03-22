@@ -38,7 +38,11 @@ static NSString *defaultProjectToken;
     [userDefaults synchronize];
 }
 
-+ (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
++ (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions {
+    return [Sugo sharedInstance:YES projectID:projectID token:apiToken launchOptions:launchOptions];
+}
+
++ (Sugo *)sharedInstance:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions
 {
     if (instances[projectID] && instances[apiToken]) {
         return instances[apiToken];
@@ -47,7 +51,12 @@ static NSString *defaultProjectToken;
     const NSUInteger flushInterval = 60;
     const double cacheInterval = 3600;
 
-    Sugo *instance = [[self alloc] initWithID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
+    Sugo *instance = [[self alloc] init:enable
+                              projectID:projectID
+                                  token:apiToken
+                          launchOptions:launchOptions
+                       andFlushInterval:flushInterval
+                       andCacheInterval:cacheInterval];
     
     [instance trackIntegration];
 
@@ -125,6 +134,11 @@ static NSString *defaultProjectToken;
 
 - (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval andCacheInterval:(double)cacheInterval
 {
+    return [[Sugo alloc] init:YES projectID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
+}
+
+- (instancetype)init:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval
+{
     if (apiToken.length == 0) {
         if (apiToken == nil) {
             apiToken = @"";
@@ -136,6 +150,7 @@ static NSString *defaultProjectToken;
         // Install uncaught exception handlers first
         [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
 #endif
+        self.enable = enable;
         self.projectID = projectID;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
@@ -324,6 +339,9 @@ static NSString *defaultProjectToken;
 
 - (void)identify:(NSString *)distinctId
 {
+    if (!self.enable) {
+        return;
+    }
     if (distinctId.length == 0) {
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
@@ -340,6 +358,9 @@ static NSString *defaultProjectToken;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
 {
+    if (!self.enable) {
+        return;
+    }
     if (alias.length == 0) {
         MPLogError(@"%@ create alias called with empty alias: %@", self, alias);
         return;
@@ -379,6 +400,9 @@ static NSString *defaultProjectToken;
 
 - (void)rawTrack:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
 {
+    if (!self.enable) {
+        return;
+    }
     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
     if (!keys) {
         return;
@@ -483,6 +507,9 @@ static NSString *defaultProjectToken;
 
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
+    if (!self.enable) {
+        return;
+    }
     properties = [properties copy];
     [Sugo assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
@@ -500,6 +527,9 @@ static NSString *defaultProjectToken;
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue
 {
+    if (!self.enable) {
+        return;
+    }
     properties = [properties copy];
     [Sugo assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
@@ -517,6 +547,9 @@ static NSString *defaultProjectToken;
 
 - (void)unregisterSuperProperty:(NSString *)propertyName
 {
+    if (!self.enable) {
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         tmp[propertyName] = nil;
@@ -527,6 +560,9 @@ static NSString *defaultProjectToken;
 
 - (void)clearSuperProperties
 {
+    if (!self.enable) {
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
         self.superProperties = @{};
         [self archiveProperties];
@@ -535,11 +571,17 @@ static NSString *defaultProjectToken;
 
 - (NSDictionary *)currentSuperProperties
 {
+    if (!self.enable) {
+        return @{};
+    }
     return [self.superProperties copy];
 }
 
 - (void)timeEvent:(NSString *)event
 {
+    if (!self.enable) {
+        return;
+    }
     NSNumber *startTime = @([[NSDate date] timeIntervalSince1970]);
     
     if (event.length == 0) {
@@ -552,13 +594,20 @@ static NSString *defaultProjectToken;
 }
 
 - (void)clearTimedEvents
-{   dispatch_async(self.serialQueue, ^{
+{
+    if (!self.enable) {
+        return;
+    }
+    dispatch_async(self.serialQueue, ^{
         self.timedEvents = [NSMutableDictionary dictionary];
     });
 }
 
 - (void)reset
 {
+    if (!self.enable) {
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
         self.deviceId = [self defaultDeviceId];
         self.distinctId = [self defaultDistinctId];
@@ -680,6 +729,9 @@ static NSString *defaultProjectToken;
 
 - (void)flushWithCompletion:(void (^)())handler
 {
+    if (!self.enable) {
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
         __strong id<SugoDelegate> strongDelegate = self.delegate;
         if (strongDelegate && [strongDelegate respondsToSelector:@selector(sugoWillFlush:)]) {
@@ -759,6 +811,9 @@ static NSString *defaultProjectToken;
 
 - (void)archive
 {
+    if (!self.enable) {
+        return;
+    }
     [self archiveProperties];
     [self archiveEventBindings];
 }
@@ -1795,6 +1850,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (BOOL)handleURL:(NSURL *)url
 {
+    if (!self.enable) {
+        return false;
+        
+    }
+    
     NSLog(@"url: %@", url.absoluteString);
     NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
     NSMutableDictionary *querys = [NSMutableDictionary dictionary];
@@ -1831,6 +1891,9 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)connectToCodelessViaURL:(NSURL *)url
 {
+    if (!self.enable) {
+        return;
+    }
     NSLog(@"url: %@", url.absoluteString);
     NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
     NSMutableDictionary *querys = [NSMutableDictionary dictionary];
@@ -1858,6 +1921,9 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)requestForHeatMapViaURL:(NSURL *)url
 {
+    if (!self.enable) {
+        return;
+    }
     NSLog(@"url: %@", url.absoluteString);
     NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
     NSMutableDictionary *querys = [NSMutableDictionary dictionary];
