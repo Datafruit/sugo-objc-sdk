@@ -63,6 +63,7 @@
 @property (atomic, copy) NSString *distinctId;
 @property (atomic, strong) NSString *sessionId;
 
+@property (nonatomic) BOOL enable;
 @property (nonatomic, copy) NSString *apiToken;
 @property (atomic, strong) NSString *urlCodelessSecretKey;
 @property (atomic, strong) NSString *urlHeatMapSecretKey;
