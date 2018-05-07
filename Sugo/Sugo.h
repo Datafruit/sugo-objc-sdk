@@ -351,7 +351,7 @@ extern BOOL SugoCanTrackWebPage;
  @param launchOptions   your application delegate's launchOptions
  
  */
-+ (Sugo *)sharedInstance:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
++ (Sugo *)sharedInstanceWithEnable:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 /*!
  @method
  
@@ -398,7 +398,7 @@ extern BOOL SugoCanTrackWebPage;
  @param flushInterval   interval to run background flushing
  @param cacheInterval   interval to cache event data
  */
-- (instancetype)init:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
+- (instancetype)initWithEnable:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
 
 /*!
  @method
