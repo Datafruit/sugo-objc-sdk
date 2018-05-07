@@ -37,10 +37,10 @@ static NSString *defaultProjectToken;
 }
 
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions {
-    return [Sugo sharedInstance:YES projectID:projectID token:apiToken launchOptions:launchOptions];
+    return [Sugo sharedInstanceWithEnable:YES projectID:projectID token:apiToken launchOptions:launchOptions];
 }
 
-+ (Sugo *)sharedInstance:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions
++ (Sugo *)sharedInstanceWithEnable:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions
 {
     if (instances[projectID] && instances[apiToken]) {
         return instances[apiToken];
@@ -49,12 +49,12 @@ static NSString *defaultProjectToken;
     const NSUInteger flushInterval = 60;
     const double cacheInterval = 3600;
 
-    Sugo *instance = [[self alloc] init:enable
-                              projectID:projectID
-                                  token:apiToken
-                          launchOptions:launchOptions
-                       andFlushInterval:flushInterval
-                       andCacheInterval:cacheInterval];
+    Sugo *instance = [[self alloc] initWithEnable:enable
+                                        projectID:projectID
+                                            token:apiToken
+                                    launchOptions:launchOptions
+                                 andFlushInterval:flushInterval
+                                 andCacheInterval:cacheInterval];
     
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
     if (values) {
@@ -131,10 +131,10 @@ static NSString *defaultProjectToken;
 
 - (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval andCacheInterval:(double)cacheInterval
 {
-    return [[Sugo alloc] init:YES projectID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
+    return [[Sugo alloc] initWithEnable:YES projectID:projectID token:apiToken launchOptions:launchOptions andFlushInterval:flushInterval andCacheInterval:cacheInterval];
 }
 
-- (instancetype)init:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval
+- (instancetype)initWithEnable:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval
 {
     if (apiToken.length == 0) {
         if (apiToken == nil) {
