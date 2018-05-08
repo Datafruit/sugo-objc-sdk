@@ -28,16 +28,23 @@
         window.webkit.messageHandlers.SugoWKWebViewBindingsTime.postMessage(time);
     };
 
-    sugo.trackStayEvent = function() {
-        sugo.enter_time = new Date().getTime();
-        if (!window.sugo) {
-            window.addEventListener('unload', function() {
-                var duration = (new Date().getTime() - sugo.enter_time) / 1000;
-                var tmp_props = JSON.parse(JSON.stringify(sugo.view_props));
-                tmp_props.duration = duration;
-                sugo.track('停留', tmp_props);
-            })
+    sugo.trackBrowseEvent = function() {
+        if (sugo.can_track_web_page) {
+            sugo.track('浏览', sugo.view_props);
+            sugo.enter_time = new Date().getTime();
+            if (!window.sugo) {
+                window.addEventListener('unload', function() {
+                                        sugo.trackStayEvent();
+                                        });
+            }
         }
+    };
+
+    sugo.trackStayEvent = function() {
+        var duration = (new Date().getTime() - sugo.enter_time) / 1000;
+        var tmp_props = JSON.parse(JSON.stringify(sugo.view_props));
+        tmp_props.duration = duration;
+        sugo.track('停留', tmp_props);
     };
 
     var sugoio = {
