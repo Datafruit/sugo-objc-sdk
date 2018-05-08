@@ -38,6 +38,7 @@
 #import "MPEventBinding.h"
 #import "MPSwizzler.h"
 #import "MPWebSocket.h"
+#import "WebViewBindings+UIWebView.h"
 #endif
 
 
