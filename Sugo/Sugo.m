@@ -1538,6 +1538,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ did enter background", self);
     // Page Stay
+    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+    if (values) {
+        [self trackEvent:values[@"BackgroundEnter"]];
+        [self timeEvent:values[@"BackgroundStay"]];
+    }
     UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
     WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
     if (uiwv || wkwv) {
@@ -1547,30 +1552,24 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         if (wkwv && wkwv.window == UIApplication.sharedApplication.keyWindow) {
             [wkwv evaluateJavaScript:@"sugo.trackStayEvent();" completionHandler:nil];
         }
-    } else {
-        NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-        if (values) {
-            [self trackEvent:values[@"BackgroundEnter"]];
-            [self timeEvent:values[@"BackgroundStay"]];
-            
-            UIViewController *vc = [UIViewController sugoCurrentUIViewController];
-            NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-            if (vc) {
-                NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-                if (keys) {
-                    p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
-                    if ([SugoPageInfos global].infos.count > 0) {
-                        for (NSDictionary *info in [SugoPageInfos global].infos) {
-                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                                p[keys[@"PageName"]] = info[@"page_name"];
-                                if (info[@"page_category"]) {
-                                    p[keys[@"PageCategory"]] = info[@"page_category"];
-                                }
+    } else if (values) {
+        UIViewController *vc = [UIViewController sugoCurrentUIViewController];
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+        if (vc) {
+            NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+            if (keys) {
+                p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+                if ([SugoPageInfos global].infos.count > 0) {
+                    for (NSDictionary *info in [SugoPageInfos global].infos) {
+                        if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                            p[keys[@"PageName"]] = info[@"page_name"];
+                            if (info[@"page_category"]) {
+                                p[keys[@"PageCategory"]] = info[@"page_category"];
                             }
                         }
                     }
-                    [self trackEvent:values[@"PageStay"] properties:p];
                 }
+                [self trackEvent:values[@"PageStay"] properties:p];
             }
         }
     }
@@ -1606,6 +1605,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ will enter foreground", self);
     
+    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+    if (values) {
+        [self trackEvent:values[@"BackgroundStay"]];
+        [self trackEvent:values[@"BackgroundExit"]];
+    }
     UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
     WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
     if (uiwv || wkwv) {
@@ -1617,32 +1621,26 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             && wkwv.window == UIApplication.sharedApplication.keyWindow) {
             [wkwv evaluateJavaScript:@"sugo.trackBrowseEvent();" completionHandler:nil];
         }
-    } else {
-        NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-        if (values) {
-            [self trackEvent:values[@"BackgroundStay"]];
-            [self trackEvent:values[@"BackgroundExit"]];
-            
-            UIViewController *vc = [UIViewController sugoCurrentUIViewController];
-            if (vc) {
-                NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-                NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-                NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-                if (keys && values) {
-                    p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
-                    if ([SugoPageInfos global].infos.count > 0) {
-                        for (NSDictionary *info in [SugoPageInfos global].infos) {
-                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                                p[keys[@"PageName"]] = info[@"page_name"];
-                                if (info[@"page_category"]) {
-                                    p[keys[@"PageCategory"]] = info[@"page_category"];
-                                }
+    } else if (values) {
+        UIViewController *vc = [UIViewController sugoCurrentUIViewController];
+        if (vc) {
+            NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+            NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+            NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+            if (keys && values) {
+                p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+                if ([SugoPageInfos global].infos.count > 0) {
+                    for (NSDictionary *info in [SugoPageInfos global].infos) {
+                        if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                            p[keys[@"PageName"]] = info[@"page_name"];
+                            if (info[@"page_category"]) {
+                                p[keys[@"PageCategory"]] = info[@"page_category"];
                             }
                         }
                     }
-                    [self trackEvent:values[@"PageEnter"] properties:p];
-                    [self timeEvent:values[@"PageStay"]];
                 }
+                [self trackEvent:values[@"PageEnter"] properties:p];
+                [self timeEvent:values[@"PageStay"]];
             }
         }
     }
