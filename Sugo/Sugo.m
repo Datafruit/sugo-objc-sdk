@@ -1633,11 +1633,14 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSMutableDictionary *cacheObject = [[NSMutableDictionary alloc] init];
+        NSString *cacheAppVersion = nil;
+        NSString *currentAppVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
         NSNumber *cacheVersion = @(-1);
+        NSMutableDictionary *cacheObject = [[NSMutableDictionary alloc] init];
         
         if (useCache && [userDefaults dataForKey:@"SugoEventBindings"]) {
             
+            cacheAppVersion = [userDefaults stringForKey:@"SugoEventBindingsAppVersion"];
             NSError *cacheError = nil;
             NSData *cacheData = [userDefaults dataForKey:@"SugoEventBindings"];
             MPLogDebug(@"Decide cacheData\n%@", [[NSString alloc] initWithData:cacheData
@@ -1646,7 +1649,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 cacheObject = [NSJSONSerialization JSONObjectWithData:cacheData
                                                               options:(NSJSONReadingOptions)0
                                                                 error:&cacheError];
-                if (cacheObject[@"event_bindings_version"]) {
+                if (cacheObject[@"event_bindings_version"] && cacheAppVersion == currentAppVersion) {
                     cacheVersion = cacheObject[@"event_bindings_version"];
                 }
             } @catch (NSException *exception) {
@@ -1724,7 +1727,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             }
         } else {
             NSNumber *responseVersion = responseObject[@"event_bindings_version"];
-            if (cacheVersion != responseVersion) {
+            if ((cacheVersion != responseVersion) || (cacheAppVersion != currentAppVersion)) {
+                [userDefaults setObject:currentAppVersion forKey:@"SugoEventBindingsAppVersion"];
                 [userDefaults setObject:resultData forKey:@"SugoEventBindings"];
                 [userDefaults synchronize];
                 [self handleDecideObject:responseObject];
