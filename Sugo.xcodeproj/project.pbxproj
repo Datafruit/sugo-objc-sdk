@@ -182,7 +182,6 @@
 		A74FBAD9205A5BD800063451 /* SugoEvents+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */; };
 		A7664C2F2058B95500F9E201 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7664C2E2058B95500F9E201 /* CoreData.framework */; };
 		A7664C3A2058C15900F9E201 /* Sugo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */; };
-		A7BF45B71FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -363,7 +362,6 @@
 		A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataProperties.m"; sourceTree = "<group>"; };
 		A7664C2E2058B95500F9E201 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A7664C392058C15900F9E201 /* Sugo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sugo.xcdatamodel; sourceTree = "<group>"; };
-		A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+UIDebuggingInformationOverlayInjector.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -687,7 +685,6 @@
 			isa = PBXGroup;
 			children = (
 				141AC7FF1E137088008D67F6 /* MPLogger.h */,
-				A7BF45B61FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m */,
 				141AC94C1E13C6A6008D67F6 /* Description */,
 				141AC9491E13C4DE008D67F6 /* Exception */,
 			);
@@ -1022,7 +1019,6 @@
 				141AC88C1E137088008D67F6 /* MPApplicationStateSerializer.m in Sources */,
 				141AC8651E137088008D67F6 /* Sugo.m in Sources */,
 				141AC8D91E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
-				A7BF45B71FE114E200DADAA5 /* NSObject+UIDebuggingInformationOverlayInjector.m in Sources */,
 				141AC8911E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
 				141AC8ED1E137088008D67F6 /* UIImage+MPAverageColor.m in Sources */,
 				14656FED1E2379BF006B7107 /* Attributes.m in Sources */,
