@@ -99,6 +99,10 @@
         } else if ([message.name  isEqual: @"SugoWKWebViewReporter"]) {
             NSDictionary *body = (NSDictionary *)message.body;
             WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+            if (body[@"title"])
+            {
+                storage.title = (NSString *)body[@"title"];
+            }
             if (body[@"path"])
             {
                 storage.path = (NSString *)body[@"path"];

@@ -13,6 +13,7 @@
 @property NSString *eventID;
 @property NSString *eventName;
 @property NSString *properties;
+@property NSString *title;
 @property NSString *path;
 @property NSString *width;
 @property NSString *height;
