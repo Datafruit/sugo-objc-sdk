@@ -35,10 +35,6 @@ RCT_EXPORT_METHOD(unregisterSuperProperty:(NSString *)superPropertyName) {
     [[Sugo sharedInstance] unregisterSuperProperty:superPropertyName];
 }
 
-RCT_EXPORT_METHOD(getSuperProperties:(RCTResponseSenderBlock)callback) {
-    callback(@[[[Sugo sharedInstance] currentSuperProperties]]);
-}
-
 RCT_EXPORT_METHOD(clearSuperProperties) {
     [[Sugo sharedInstance] clearSuperProperties];
 }
