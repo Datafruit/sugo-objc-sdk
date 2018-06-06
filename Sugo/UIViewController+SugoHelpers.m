@@ -62,6 +62,10 @@
         
     } else {
         
+        if (viewController.childViewControllers.count > 0) {
+            return [UIViewController searchViewControllerFrom:viewController.childViewControllers.lastObject];
+        }
+        
         // Unknown view controller type, return last child view controller
         return viewController;
     }

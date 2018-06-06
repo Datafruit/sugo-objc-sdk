@@ -90,4 +90,6 @@ sugo.bindEvent = function() {
     sugo.delegate('click');
     sugo.delegate('focus');
     sugo.delegate('change');
+    sugo.delegate('touchstart');
+    sugo.delegate('touchend');
 };
