@@ -169,7 +169,7 @@
                     [self jsUIWebViewBindings],
                     [self jsUIWebViewReport],
                     [self jsUIHeatMap],
-                    [self jsUIWebViewExcute],
+                    [self jsUIWebViewExecute],
                     [self jsUIWebViewSugoEnd]];
     MPLogDebug(@"UIWebView JavaScript:\n%@", js);
     return js;
@@ -285,9 +285,9 @@
     return [self jsSourceOfFileName:@"WebViewHeatmap"];
 }
 
-- (NSString *)jsUIWebViewExcute
+- (NSString *)jsUIWebViewExecute
 {
-    return [self jsSourceOfFileName:@"WebViewExcute.Sugo.UI"];
+    return [self jsSourceOfFileName:@"WebViewExecute.Sugo.UI"];
 }
 
 - (NSString *)jsUIWebViewSugoEnd

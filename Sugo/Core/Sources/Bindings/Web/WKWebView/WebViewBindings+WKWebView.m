@@ -116,7 +116,7 @@
                     [self jsWKWebViewBindings],
                     [self jsWKWebViewReport],
                     [self jsWKHeatMap],
-                    [self jsWKWebViewExcute],
+                    [self jsWKWebViewExecute],
                     [self jsWKWebViewSugoEnd]];
     MPLogDebug(@"WKWebView JavaScript:\n%@", js);
     return [[WKUserScript alloc] initWithSource:js
@@ -235,9 +235,9 @@
     return [self jsSourceOfFileName:@"WebViewHeatmap"];
 }
 
-- (NSString *)jsWKWebViewExcute
+- (NSString *)jsWKWebViewExecute
 {
-    return [self jsSourceOfFileName:@"WebViewExcute.Sugo.WK"];
+    return [self jsSourceOfFileName:@"WebViewExecute.Sugo.WK"];
 }
 
 - (NSString *)jsWKWebViewSugoEnd
