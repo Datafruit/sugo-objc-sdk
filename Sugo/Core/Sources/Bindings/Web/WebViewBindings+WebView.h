@@ -10,7 +10,7 @@
 
 @interface WebViewBindings (WebView)
 
-- (void)excute;
+- (void)execute;
 - (void)stop;
 - (NSString *)jsSourceOfFileName:(NSString *)fileName;
 

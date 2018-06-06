@@ -341,7 +341,7 @@
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView
 {
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"]];
+    NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"]];
     NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
                                                           options:NSJSONReadingMutableContainers
@@ -370,7 +370,7 @@
 {
     
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExcute.Report"] completionHandler:nil];
+    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:nil];
 
     return [[WebViewInfoStorage globalStorage] getHTMLInfo];
 }
