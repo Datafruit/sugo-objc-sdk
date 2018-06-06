@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>Bindings</key>
-	<string>http://tsa.sugo.io</string>
+	<string>http://58.63.110.97:2270</string>
 	<key>Collection</key>
-	<string>http://collect.sugo.io</string>
+	<string>http://58.63.110.97:2271</string>
 	<key>Codeless</key>
 	<string>ws://58.63.110.97:2227</string>
 </dict>
