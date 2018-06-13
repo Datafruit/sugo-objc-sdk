@@ -7,152 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		14015FC11E2DBDD2003DB275 /* SugoURLs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14015FC01E2DBDD2003DB275 /* SugoURLs.plist */; };
-		14149DDF1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */; };
-		14149DEE1E1A6D9D0006DF6A /* WebViewBindings+WebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */; };
-		14149DEF1E1A6D9D0006DF6A /* WebViewBindings+WebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */; };
-		141AC7871E1364D7008D67F6 /* Sugo.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7851E1364D7008D67F6 /* Sugo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C11E137088008D67F6 /* AutomaticEventsConstants.h */; };
-		141AC8651E137088008D67F6 /* Sugo.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C31E137088008D67F6 /* Sugo.m */; };
-		141AC8661E137088008D67F6 /* Sugo+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C41E137088008D67F6 /* Sugo+AutomaticEvents.h */; };
-		141AC8671E137088008D67F6 /* Sugo+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C51E137088008D67F6 /* Sugo+AutomaticEvents.m */; };
-		141AC8681E137088008D67F6 /* SugoExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C61E137088008D67F6 /* SugoExceptionHandler.h */; };
-		141AC8691E137088008D67F6 /* SugoExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C71E137088008D67F6 /* SugoExceptionHandler.m */; };
-		141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7C81E137088008D67F6 /* SugoPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		141AC86B1E137088008D67F6 /* SugoPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7C91E137088008D67F6 /* SugoPeople.m */; };
-		141AC86C1E137088008D67F6 /* SugoPeoplePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7CA1E137088008D67F6 /* SugoPeoplePrivate.h */; };
-		141AC86D1E137088008D67F6 /* SugoPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7CB1E137088008D67F6 /* SugoPrivate.h */; };
-		141AC8701E137088008D67F6 /* MPAbstractABTestDesignerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7CF1E137088008D67F6 /* MPAbstractABTestDesignerMessage.h */; };
-		141AC8711E137088008D67F6 /* MPAbstractABTestDesignerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7D01E137088008D67F6 /* MPAbstractABTestDesignerMessage.m */; };
-		141AC8721E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7D11E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h */; };
-		141AC8731E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7D21E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m */; };
-		141AC8741E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7D31E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.h */; };
-		141AC8751E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7D41E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.m */; };
-		141AC8761E137088008D67F6 /* MPABTestDesignerClearRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7D51E137088008D67F6 /* MPABTestDesignerClearRequestMessage.h */; };
-		141AC8771E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7D61E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m */; };
-		141AC8781E137088008D67F6 /* MPABTestDesignerClearResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7D71E137088008D67F6 /* MPABTestDesignerClearResponseMessage.h */; };
-		141AC8791E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7D81E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m */; };
-		141AC87A1E137088008D67F6 /* MPABTestDesignerConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7D91E137088008D67F6 /* MPABTestDesignerConnection.h */; };
-		141AC87B1E137088008D67F6 /* MPABTestDesignerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7DA1E137088008D67F6 /* MPABTestDesignerConnection.m */; };
-		141AC87C1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7DB1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.h */; };
-		141AC87D1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7DC1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m */; };
-		141AC87E1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7DD1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.h */; };
-		141AC87F1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7DE1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.m */; };
-		141AC8801E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7DF1E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h */; };
-		141AC8811E137088008D67F6 /* MPABTestDesignerDisconnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7E01E137088008D67F6 /* MPABTestDesignerDisconnectMessage.m */; };
-		141AC8821E137088008D67F6 /* MPABTestDesignerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7E11E137088008D67F6 /* MPABTestDesignerMessage.h */; };
-		141AC8831E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7E21E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.h */; };
-		141AC8841E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7E31E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.m */; };
-		141AC8851E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7E41E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h */; };
-		141AC8861E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7E51E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m */; };
-		141AC88B1E137088008D67F6 /* MPApplicationStateSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7EA1E137088008D67F6 /* MPApplicationStateSerializer.h */; };
-		141AC88C1E137088008D67F6 /* MPApplicationStateSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7EB1E137088008D67F6 /* MPApplicationStateSerializer.m */; };
-		141AC88D1E137088008D67F6 /* MPBOOLToNSNumberValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7EC1E137088008D67F6 /* MPBOOLToNSNumberValueTransformer.m */; };
-		141AC88E1E137088008D67F6 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7ED1E137088008D67F6 /* MPCATransform3DToNSDictionaryValueTransformer.m */; };
-		141AC88F1E137088008D67F6 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7EE1E137088008D67F6 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */; };
-		141AC8901E137088008D67F6 /* MPCGColorRefToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7EF1E137088008D67F6 /* MPCGColorRefToNSStringValueTransformer.m */; };
-		141AC8911E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7F01E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m */; };
-		141AC8921E137088008D67F6 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7F11E137088008D67F6 /* MPCGRectToNSDictionaryValueTransformer.m */; };
-		141AC8931E137088008D67F6 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7F21E137088008D67F6 /* MPCGSizeToNSDictionaryValueTransformer.m */; };
-		141AC8941E137088008D67F6 /* MPClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7F31E137088008D67F6 /* MPClassDescription.h */; };
-		141AC8951E137088008D67F6 /* MPClassDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7F41E137088008D67F6 /* MPClassDescription.m */; };
-		141AC8961E137088008D67F6 /* MPDesignerEventBindingMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7F51E137088008D67F6 /* MPDesignerEventBindingMessage.h */; };
-		141AC8971E137088008D67F6 /* MPDesignerEventBindingRequestMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7F61E137088008D67F6 /* MPDesignerEventBindingRequestMesssage.m */; };
-		141AC8981E137088008D67F6 /* MPDesignerEventBindingResponseMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7F71E137088008D67F6 /* MPDesignerEventBindingResponseMesssage.m */; };
-		141AC8991E137088008D67F6 /* MPDesignerSessionCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7F81E137088008D67F6 /* MPDesignerSessionCollection.h */; };
-		141AC89A1E137088008D67F6 /* MPDesignerTrackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7F91E137088008D67F6 /* MPDesignerTrackMessage.m */; };
-		141AC89B1E137088008D67F6 /* MPEnumDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7FA1E137088008D67F6 /* MPEnumDescription.h */; };
-		141AC89C1E137088008D67F6 /* MPEnumDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7FB1E137088008D67F6 /* MPEnumDescription.m */; };
-		141AC89D1E137088008D67F6 /* MPEventBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7FC1E137088008D67F6 /* MPEventBinding.h */; };
-		141AC89E1E137088008D67F6 /* MPEventBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC7FD1E137088008D67F6 /* MPEventBinding.m */; };
-		141AC89F1E137088008D67F6 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7FE1E137088008D67F6 /* MPFoundation.h */; };
-		141AC8A01E137088008D67F6 /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC7FF1E137088008D67F6 /* MPLogger.h */; };
-		141AC8A11E137088008D67F6 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8001E137088008D67F6 /* MPNetwork.h */; };
-		141AC8A21E137088008D67F6 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8011E137088008D67F6 /* MPNetwork.m */; };
-		141AC8A31E137088008D67F6 /* MPNetworkPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8021E137088008D67F6 /* MPNetworkPrivate.h */; };
-		141AC8AB1E137088008D67F6 /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC80A1E137088008D67F6 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */; };
-		141AC8AC1E137088008D67F6 /* MPNSNumberToCGFloatValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC80B1E137088008D67F6 /* MPNSNumberToCGFloatValueTransformer.m */; };
-		141AC8AD1E137088008D67F6 /* MPObjectIdentifierProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC80C1E137088008D67F6 /* MPObjectIdentifierProvider.h */; };
-		141AC8AE1E137088008D67F6 /* MPObjectIdentityProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC80D1E137088008D67F6 /* MPObjectIdentityProvider.h */; };
-		141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC80E1E137088008D67F6 /* MPObjectIdentityProvider.m */; };
-		141AC8B01E137088008D67F6 /* MPObjectSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC80F1E137088008D67F6 /* MPObjectSelector.h */; };
-		141AC8B11E137088008D67F6 /* MPObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8101E137088008D67F6 /* MPObjectSelector.m */; };
-		141AC8B21E137088008D67F6 /* MPObjectSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8111E137088008D67F6 /* MPObjectSerializer.h */; };
-		141AC8B31E137088008D67F6 /* MPObjectSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8121E137088008D67F6 /* MPObjectSerializer.m */; };
-		141AC8B41E137088008D67F6 /* MPObjectSerializerConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8131E137088008D67F6 /* MPObjectSerializerConfig.h */; };
-		141AC8B51E137088008D67F6 /* MPObjectSerializerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8141E137088008D67F6 /* MPObjectSerializerConfig.m */; };
-		141AC8B61E137088008D67F6 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8151E137088008D67F6 /* MPObjectSerializerContext.h */; };
-		141AC8B71E137088008D67F6 /* MPObjectSerializerContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8161E137088008D67F6 /* MPObjectSerializerContext.m */; };
-		141AC8B81E137088008D67F6 /* MPPassThroughValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8171E137088008D67F6 /* MPPassThroughValueTransformer.m */; };
-		141AC8B91E137088008D67F6 /* MPPropertyDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8181E137088008D67F6 /* MPPropertyDescription.h */; };
-		141AC8BA1E137088008D67F6 /* MPPropertyDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8191E137088008D67F6 /* MPPropertyDescription.m */; };
-		141AC8BB1E137088008D67F6 /* MPResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC81A1E137088008D67F6 /* MPResources.h */; };
-		141AC8BC1E137088008D67F6 /* MPResources.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC81B1E137088008D67F6 /* MPResources.m */; };
-		141AC8BD1E137088008D67F6 /* MPSequenceGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC81C1E137088008D67F6 /* MPSequenceGenerator.h */; };
-		141AC8BE1E137088008D67F6 /* MPSequenceGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC81D1E137088008D67F6 /* MPSequenceGenerator.m */; };
-		141AC8C81E137088008D67F6 /* MPSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8271E137088008D67F6 /* MPSwizzle.h */; };
-		141AC8C91E137088008D67F6 /* MPSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8281E137088008D67F6 /* MPSwizzle.m */; };
-		141AC8CA1E137088008D67F6 /* MPSwizzler.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8291E137088008D67F6 /* MPSwizzler.h */; };
-		141AC8CB1E137088008D67F6 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC82A1E137088008D67F6 /* MPSwizzler.m */; };
-		141AC8D31E137088008D67F6 /* MPTypeDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8321E137088008D67F6 /* MPTypeDescription.h */; };
-		141AC8D41E137088008D67F6 /* MPTypeDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8331E137088008D67F6 /* MPTypeDescription.m */; };
-		141AC8D51E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8341E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m */; };
-		141AC8D61E137088008D67F6 /* MPUIViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8351E137088008D67F6 /* MPUIViewBinding.h */; };
-		141AC8D71E137088008D67F6 /* MPUIViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8361E137088008D67F6 /* MPUIViewBinding.m */; };
-		141AC8D81E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8371E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */; };
-		141AC8D91E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8381E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m */; };
-		141AC8DA1E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8391E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m */; };
-		141AC8DB1E137088008D67F6 /* MPUITableViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC83A1E137088008D67F6 /* MPUITableViewBinding.h */; };
-		141AC8DC1E137088008D67F6 /* MPUITableViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC83B1E137088008D67F6 /* MPUITableViewBinding.m */; };
-		141AC8DD1E137088008D67F6 /* MPValueTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC83C1E137088008D67F6 /* MPValueTransformers.h */; };
-		141AC8E01E137088008D67F6 /* MPWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC83F1E137088008D67F6 /* MPWebSocket.h */; };
-		141AC8E11E137088008D67F6 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8401E137088008D67F6 /* MPWebSocket.m */; };
-		141AC8E21E137088008D67F6 /* NSInvocation+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8411E137088008D67F6 /* NSInvocation+MPHelpers.h */; };
-		141AC8E31E137088008D67F6 /* NSInvocation+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8421E137088008D67F6 /* NSInvocation+MPHelpers.m */; };
-		141AC8E41E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8431E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h */; };
-		141AC8E51E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8441E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.m */; };
-		141AC8E81E137088008D67F6 /* UIApplication+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8481E137088008D67F6 /* UIApplication+AutomaticEvents.h */; };
-		141AC8E91E137088008D67F6 /* UIApplication+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8491E137088008D67F6 /* UIApplication+AutomaticEvents.m */; };
-		141AC8EA1E137088008D67F6 /* UIColor+MPColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC84A1E137088008D67F6 /* UIColor+MPColor.h */; };
-		141AC8EB1E137088008D67F6 /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC84B1E137088008D67F6 /* UIColor+MPColor.m */; };
-		141AC8EC1E137088008D67F6 /* UIImage+MPAverageColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC84C1E137088008D67F6 /* UIImage+MPAverageColor.h */; };
-		141AC8ED1E137088008D67F6 /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC84D1E137088008D67F6 /* UIImage+MPAverageColor.m */; };
-		141AC8EE1E137088008D67F6 /* UIImage+MPImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC84E1E137088008D67F6 /* UIImage+MPImageEffects.h */; };
-		141AC8EF1E137088008D67F6 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC84F1E137088008D67F6 /* UIImage+MPImageEffects.m */; };
-		141AC8F01E137088008D67F6 /* UIView+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8501E137088008D67F6 /* UIView+MPHelpers.h */; };
-		141AC8F11E137088008D67F6 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8511E137088008D67F6 /* UIView+MPHelpers.m */; };
-		141AC8F21E137088008D67F6 /* UIViewController+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8521E137088008D67F6 /* UIViewController+AutomaticEvents.h */; };
-		141AC8F31E137088008D67F6 /* UIViewController+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8531E137088008D67F6 /* UIViewController+AutomaticEvents.m */; };
-		141AC8F41E137088008D67F6 /* WebViewBindings.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8551E137088008D67F6 /* WebViewBindings.h */; };
-		141AC8F51E137088008D67F6 /* WebViewBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC8561E137088008D67F6 /* WebViewBindings.m */; };
-		141AC8F81E137088008D67F6 /* WebViewBindings+UIWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC8591E137088008D67F6 /* WebViewBindings+UIWebView.h */; };
-		141AC8F91E137088008D67F6 /* WebViewBindings+UIWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85A1E137088008D67F6 /* WebViewBindings+UIWebView.m */; };
-		141AC8FA1E137088008D67F6 /* WebViewBindings+WKWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC85B1E137088008D67F6 /* WebViewBindings+WKWebView.h */; };
-		141AC8FB1E137088008D67F6 /* WebViewBindings+WKWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85C1E137088008D67F6 /* WebViewBindings+WKWebView.m */; };
-		141AC8FC1E137088008D67F6 /* WebViewInfoStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 141AC85D1E137088008D67F6 /* WebViewInfoStorage.h */; };
-		141AC8FD1E137088008D67F6 /* WebViewInfoStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */; };
-		141DFD221E442A0400714BA7 /* SugoPageInfos.h in Headers */ = {isa = PBXBuildFile; fileRef = 141DFD201E442A0400714BA7 /* SugoPageInfos.h */; };
-		141DFD231E442A0400714BA7 /* SugoPageInfos.m in Sources */ = {isa = PBXBuildFile; fileRef = 141DFD211E442A0400714BA7 /* SugoPageInfos.m */; };
-		144496971E8522010076BC50 /* MPUITextViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 144496951E8522010076BC50 /* MPUITextViewBinding.h */; };
-		144496981E8522010076BC50 /* MPUITextViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 144496961E8522010076BC50 /* MPUITextViewBinding.m */; };
-		144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */; };
-		144D2E461E20C5A800387FD2 /* WebViewAPI.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3D1E20C5A800387FD2 /* WebViewAPI.UI.js */; };
-		144D2E471E20C5A800387FD2 /* SugoioKit.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E3E1E20C5A800387FD2 /* SugoioKit.js */; };
-		144D2E491E20C5A800387FD2 /* WebViewBindings.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */; };
-		144D2E4B1E20C5A800387FD2 /* WebViewExcute.Report.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E421E20C5A800387FD2 /* WebViewExcute.Report.js */; };
-		144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */; };
-		144D2E4D1E20C5A800387FD2 /* WebViewAPI.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 144D2E441E20C5A800387FD2 /* WebViewAPI.WK.js */; };
-		145CAAC41E57EB9E00E53E8C /* SugoConfigurationPropertyList.h in Headers */ = {isa = PBXBuildFile; fileRef = 145CAAC21E57EB9E00E53E8C /* SugoConfigurationPropertyList.h */; };
-		145CAAC51E57EB9E00E53E8C /* SugoConfigurationPropertyList.m in Sources */ = {isa = PBXBuildFile; fileRef = 145CAAC31E57EB9E00E53E8C /* SugoConfigurationPropertyList.m */; };
-		145CAAC71E57EEA400E53E8C /* SugoCustomDimensions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 145CAAC61E57EEA400E53E8C /* SugoCustomDimensions.plist */; };
-		145CAAC91E57F1EA00E53E8C /* SugoResourcesPathReplacements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 145CAAC81E57F1EA00E53E8C /* SugoResourcesPathReplacements.plist */; };
-		145CAACB1E58497C00E53E8C /* SugoEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 145CAACA1E58497C00E53E8C /* SugoEnd.js */; };
-		145CAACD1E584BF700E53E8C /* WebViewVariables.js in Resources */ = {isa = PBXBuildFile; fileRef = 145CAACC1E584BF700E53E8C /* WebViewVariables.js */; };
-		145CAAD11E584E5200E53E8C /* WebViewExcute.Sugo.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 145CAAD01E584E5200E53E8C /* WebViewExcute.Sugo.WK.js */; };
-		14656FEC1E2379BF006B7107 /* Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 14656FEA1E2379BF006B7107 /* Attributes.h */; };
-		14656FED1E2379BF006B7107 /* Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 14656FEB1E2379BF006B7107 /* Attributes.m */; };
 		148D657A1E13D611002B2BB7 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D65791E13D611002B2BB7 /* libicucore.tbd */; };
-		14A806D71E5B14B300D4148F /* SugoPageEventsViewControllerFilterList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14A806D61E5B14B300D4148F /* SugoPageEventsViewControllerFilterList.plist */; };
 		14BA1A3C1E13D630002F0C4B /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A3B1E13D630002F0C4B /* Accelerate.framework */; };
 		14BA1A3E1E13D637002F0C4B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A3D1E13D637002F0C4B /* UIKit.framework */; };
 		14BA1A401E13D63E002F0C4B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A3F1E13D63E002F0C4B /* Foundation.framework */; };
@@ -164,175 +19,177 @@
 		14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */; };
 		14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4D1E13D675002F0C4B /* WebKit.framework */; };
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
-		14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */; };
-		14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */; };
-		14C607D71EB1C88E00990411 /* HeatMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C607D51EB1C88E00990411 /* HeatMap.h */; };
-		14C607D81EB1C88E00990411 /* HeatMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C607D61EB1C88E00990411 /* HeatMap.m */; };
-		14C7BE6A1E4D6DB4000BD790 /* SugoBegin.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE691E4D6DB4000BD790 /* SugoBegin.js */; };
-		14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = 14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */; };
-		14CA172A1ED5659800CA96F1 /* WebViewExcute.Sugo.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = 14CA17291ED5659800CA96F1 /* WebViewExcute.Sugo.UI.js */; };
-		14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = 14D6FEE81EB885850009A39F /* WebViewHeatmap.js */; };
-		14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 14F173471EB4297000BCD9B6 /* HeatMapLayer.h */; };
-		14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F173481EB4297000BCD9B6 /* HeatMapLayer.m */; };
-		A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */; };
-		A74C45451FDE702900D91B0F /* MPUICollectionViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */; };
-		A74FBAD6205A5BD800063451 /* SugoEvents+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */; };
-		A74FBAD7205A5BD800063451 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A74FBAD3205A5BD800063451 /* SugoEvents+CoreDataClass.h */; };
-		A74FBAD8205A5BD800063451 /* SugoEvents+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBAD4205A5BD800063451 /* SugoEvents+CoreDataClass.m */; };
-		A74FBAD9205A5BD800063451 /* SugoEvents+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */; };
+		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
+		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
+		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		A700F94E20C7BD24008C0069 /* MPPropertyDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A720C7BD24008C0069 /* MPPropertyDescription.h */; };
+		A700F94F20C7BD24008C0069 /* WebViewReport.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8A820C7BD24008C0069 /* WebViewReport.WK.js */; };
+		A700F95020C7BD24008C0069 /* WebViewBindings.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A920C7BD24008C0069 /* WebViewBindings.h */; };
+		A700F95120C7BD24008C0069 /* MPUICollectionViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8AA20C7BD24008C0069 /* MPUICollectionViewBinding.m */; };
+		A700F95220C7BD24008C0069 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8AB20C7BD24008C0069 /* MPUIFontToNSDictionaryValueTransformer.m */; };
+		A700F95320C7BD24008C0069 /* MPClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8AC20C7BD24008C0069 /* MPClassDescription.h */; };
+		A700F95420C7BD24008C0069 /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8AD20C7BD24008C0069 /* MPLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		A700F95520C7BD24008C0069 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8AE20C7BD24008C0069 /* MPUIImageToNSDictionaryValueTransformer.m */; };
+		A700F95620C7BD24008C0069 /* WebViewInfoStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8AF20C7BD24008C0069 /* WebViewInfoStorage.h */; };
+		A700F95720C7BD24008C0069 /* MPUIViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8B020C7BD24008C0069 /* MPUIViewBinding.m */; };
+		A700F95820C7BD24008C0069 /* SugoConfigurationPropertyList.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8B120C7BD24008C0069 /* SugoConfigurationPropertyList.m */; };
+		A700F95920C7BD24008C0069 /* MPApplicationStateSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8B220C7BD24008C0069 /* MPApplicationStateSerializer.h */; };
+		A700F95A20C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8B320C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.m */; };
+		A700F95B20C7BD24008C0069 /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8B420C7BD24008C0069 /* UIColor+MPColor.m */; };
+		A700F95C20C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8B520C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.m */; };
+		A700F95D20C7BD24008C0069 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8B620C7BD24008C0069 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */; };
+		A700F95E20C7BD24008C0069 /* SugoPageEventsViewControllerFilterList.plist in Resources */ = {isa = PBXBuildFile; fileRef = A700F8B720C7BD24008C0069 /* SugoPageEventsViewControllerFilterList.plist */; };
+		A700F95F20C7BD24008C0069 /* SugoCustomDimensions.plist in Resources */ = {isa = PBXBuildFile; fileRef = A700F8B820C7BD24008C0069 /* SugoCustomDimensions.plist */; };
+		A700F96020C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8B920C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.m */; };
+		A700F96120C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8BA20C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.h */; };
+		A700F96220C7BD24008C0069 /* MPEnumDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8BB20C7BD24008C0069 /* MPEnumDescription.m */; };
+		A700F96320C7BD24008C0069 /* WebViewAPI.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8BC20C7BD24008C0069 /* WebViewAPI.UI.js */; };
+		A700F96420C7BD24008C0069 /* SugoPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8BD20C7BD24008C0069 /* SugoPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		A700F96520C7BD24008C0069 /* WebViewExecute.Sugo.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8BE20C7BD24008C0069 /* WebViewExecute.Sugo.UI.js */; };
+		A700F96620C7BD24008C0069 /* HeatMap.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8BF20C7BD24008C0069 /* HeatMap.h */; };
+		A700F96720C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8C020C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.m */; };
+		A700F96820C7BD24008C0069 /* MPObjectSerializerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8C120C7BD24008C0069 /* MPObjectSerializerConfig.m */; };
+		A700F96920C7BD24008C0069 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8C220C7BD24008C0069 /* MPCGRectToNSDictionaryValueTransformer.m */; };
+		A700F96A20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8C320C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h */; };
+		A700F96B20C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8C420C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.h */; };
+		A700F96C20C7BD24008C0069 /* UIApplication+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8C520C7BD24008C0069 /* UIApplication+AutomaticEvents.m */; };
+		A700F96D20C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8C620C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.h */; };
+		A700F96E20C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8C720C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m */; };
+		A700F96F20C7BD24008C0069 /* MPNSNumberToCGFloatValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8C820C7BD24008C0069 /* MPNSNumberToCGFloatValueTransformer.m */; };
+		A700F97020C7BD24008C0069 /* SugoExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8C920C7BD24008C0069 /* SugoExceptionHandler.m */; };
+		A700F97120C7BD24008C0069 /* MPUITableViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8CA20C7BD24008C0069 /* MPUITableViewBinding.m */; };
+		A700F97220C7BD24008C0069 /* Sugo+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8CB20C7BD24008C0069 /* Sugo+AutomaticEvents.m */; };
+		A700F97320C7BD24008C0069 /* UIImage+MPImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8CC20C7BD24008C0069 /* UIImage+MPImageEffects.h */; };
+		A700F97420C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8CD20C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.m */; };
+		A700F97520C7BD24008C0069 /* WebViewBindings+UIWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8CE20C7BD24008C0069 /* WebViewBindings+UIWebView.h */; };
+		A700F97620C7BD24008C0069 /* UIImage+MPAverageColor.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8CF20C7BD24008C0069 /* UIImage+MPAverageColor.h */; };
+		A700F97720C7BD24008C0069 /* SugoEvents+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8D020C7BD24008C0069 /* SugoEvents+CoreDataProperties.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		A700F97820C7BD24008C0069 /* WebViewBindings.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8D120C7BD24008C0069 /* WebViewBindings.UI.js */; };
+		A700F97920C7BD24008C0069 /* MPDesignerEventBindingResponseMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8D220C7BD24008C0069 /* MPDesignerEventBindingResponseMesssage.m */; };
+		A700F97A20C7BD24008C0069 /* MPDesignerSessionCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8D320C7BD24008C0069 /* MPDesignerSessionCollection.h */; };
+		A700F97B20C7BD24008C0069 /* SugoioKit.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8D420C7BD24008C0069 /* SugoioKit.js */; };
+		A700F97C20C7BD24008C0069 /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8D520C7BD24008C0069 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */; };
+		A700F97D20C7BD24008C0069 /* MPABTestDesignerTweakRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8D620C7BD24008C0069 /* MPABTestDesignerTweakRequestMessage.h */; };
+		A700F97E20C7BD24008C0069 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8D720C7BD24008C0069 /* MPNetwork.h */; };
+		A700F97F20C7BD24008C0069 /* UIViewController+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8D820C7BD24008C0069 /* UIViewController+AutomaticEvents.m */; };
+		A700F98020C7BD24008C0069 /* UIViewController+SugoHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8D920C7BD24008C0069 /* UIViewController+SugoHelpers.m */; };
+		A700F98120C7BD24008C0069 /* AutomaticEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8DA20C7BD24008C0069 /* AutomaticEventsConstants.h */; };
+		A700F98220C7BD24008C0069 /* NSInvocation+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8DB20C7BD24008C0069 /* NSInvocation+MPHelpers.m */; };
+		A700F98320C7BD24008C0069 /* SugoPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8DC20C7BD24008C0069 /* SugoPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A700F98420C7BD24008C0069 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8DD20C7BD24008C0069 /* UIView+MPHelpers.m */; };
+		A700F98520C7BD24008C0069 /* MPUITextViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8DE20C7BD24008C0069 /* MPUITextViewBinding.m */; };
+		A700F98620C7BD24008C0069 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8DF20C7BD24008C0069 /* MPCGSizeToNSDictionaryValueTransformer.m */; };
+		A700F98720C7BD24008C0069 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8E020C7BD24008C0069 /* MPFoundation.h */; };
+		A700F98820C7BD24008C0069 /* SugoPageInfos.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8E120C7BD24008C0069 /* SugoPageInfos.m */; };
+		A700F98920C7BD24008C0069 /* MPABTestDesignerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8E220C7BD24008C0069 /* MPABTestDesignerConnection.m */; };
+		A700F98A20C7BD24008C0069 /* Sugo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A700F8E320C7BD24008C0069 /* Sugo.xcdatamodeld */; };
+		A700F98B20C7BD24008C0069 /* MPSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8E520C7BD24008C0069 /* MPSwizzle.m */; };
+		A700F98C20C7BD24008C0069 /* MPObjectIdentifierProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8E620C7BD24008C0069 /* MPObjectIdentifierProvider.h */; };
+		A700F98D20C7BD24008C0069 /* HeatMapLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8E720C7BD24008C0069 /* HeatMapLayer.h */; };
+		A700F98E20C7BD24008C0069 /* MPObjectIdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8E820C7BD24008C0069 /* MPObjectIdentityProvider.m */; };
+		A700F98F20C7BD24008C0069 /* MPWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8E920C7BD24008C0069 /* MPWebSocket.h */; };
+		A700F99020C7BD24008C0069 /* Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8EA20C7BD24008C0069 /* Attributes.h */; };
+		A700F99120C7BD24008C0069 /* WebViewVariables.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8EB20C7BD24008C0069 /* WebViewVariables.js */; };
+		A700F99220C7BD24008C0069 /* WebViewBindings+WebView.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8EC20C7BD24008C0069 /* WebViewBindings+WebView.m */; };
+		A700F99320C7BD24008C0069 /* MPSwizzler.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8ED20C7BD24008C0069 /* MPSwizzler.h */; };
+		A700F99420C7BD24008C0069 /* MPObjectSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8EE20C7BD24008C0069 /* MPObjectSelector.h */; };
+		A700F99520C7BD24008C0069 /* Sugo.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8EF20C7BD24008C0069 /* Sugo.m */; };
+		A700F99620C7BD24008C0069 /* MPObjectSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F020C7BD24008C0069 /* MPObjectSerializer.h */; };
+		A700F99720C7BD24008C0069 /* MPEventBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F120C7BD24008C0069 /* MPEventBinding.h */; };
+		A700F99820C7BD24008C0069 /* MPResources.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F220C7BD24008C0069 /* MPResources.h */; };
+		A700F99920C7BD24008C0069 /* MPSequenceGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8F320C7BD24008C0069 /* MPSequenceGenerator.m */; };
+		A700F99A20C7BD24008C0069 /* WebViewBindings+WKWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F420C7BD24008C0069 /* WebViewBindings+WKWebView.h */; };
+		A700F99B20C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F520C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.h */; };
+		A700F99C20C7BD24008C0069 /* MPTypeDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8F620C7BD24008C0069 /* MPTypeDescription.m */; };
+		A700F99D20C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F720C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.h */; };
+		A700F99E20C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F820C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.h */; };
+		A700F99F20C7BD24008C0069 /* UIColor+MPColor.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8F920C7BD24008C0069 /* UIColor+MPColor.h */; };
+		A700F9A020C7BD24008C0069 /* WebViewExecute.Report.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8FA20C7BD24008C0069 /* WebViewExecute.Report.js */; };
+		A700F9A120C7BD24008C0069 /* MPApplicationStateSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8FB20C7BD24008C0069 /* MPApplicationStateSerializer.m */; };
+		A700F9A220C7BD24008C0069 /* SugoConfigurationPropertyList.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8FC20C7BD24008C0069 /* SugoConfigurationPropertyList.h */; };
+		A700F9A320C7BD24008C0069 /* WebViewBindings.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F8FD20C7BD24008C0069 /* WebViewBindings.WK.js */; };
+		A700F9A420C7BD24008C0069 /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8FE20C7BD24008C0069 /* MPUILayoutSupportToNSStringValueTransformer.m */; };
+		A700F9A520C7BD24008C0069 /* MPPassThroughValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F8FF20C7BD24008C0069 /* MPPassThroughValueTransformer.m */; };
+		A700F9A620C7BD24008C0069 /* WebViewInfoStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90020C7BD24008C0069 /* WebViewInfoStorage.m */; };
+		A700F9A720C7BD24008C0069 /* MPUIViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F90120C7BD24008C0069 /* MPUIViewBinding.h */; };
+		A700F9A820C7BD24008C0069 /* MPClassDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90220C7BD24008C0069 /* MPClassDescription.m */; };
+		A700F9A920C7BD24008C0069 /* MPUICollectionViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F90320C7BD24008C0069 /* MPUICollectionViewBinding.h */; };
+		A700F9AA20C7BD24008C0069 /* MPPropertyDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90420C7BD24008C0069 /* MPPropertyDescription.m */; };
+		A700F9AB20C7BD24008C0069 /* WebViewBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90520C7BD24008C0069 /* WebViewBindings.m */; };
+		A700F9AC20C7BD24008C0069 /* SugoBegin.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F90620C7BD24008C0069 /* SugoBegin.js */; };
+		A700F9AD20C7BD24008C0069 /* SugoEvents+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90720C7BD24008C0069 /* SugoEvents+CoreDataClass.m */; };
+		A700F9AE20C7BD24008C0069 /* MPObjectSerializerContext.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90820C7BD24008C0069 /* MPObjectSerializerContext.m */; };
+		A700F9AF20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90920C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.m */; };
+		A700F9B020C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F90A20C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.h */; };
+		A700F9B120C7BD24008C0069 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F90B20C7BD24008C0069 /* UIImage+MPImageEffects.m */; };
+		A700F9B220C7BD24008C0069 /* Sugo+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F90C20C7BD24008C0069 /* Sugo+AutomaticEvents.h */; };
+		A700F9B320C7BD24008C0069 /* MPNetworkPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F90D20C7BD24008C0069 /* MPNetworkPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		A700F9B420C7BD24008C0069 /* SugoResourcesPathReplacements.plist in Resources */ = {isa = PBXBuildFile; fileRef = A700F90E20C7BD24008C0069 /* SugoResourcesPathReplacements.plist */; };
+		A700F9B520C7BD24008C0069 /* SugoExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F90F20C7BD24008C0069 /* SugoExceptionHandler.h */; };
+		A700F9B620C7BD24008C0069 /* MPUITableViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91020C7BD24008C0069 /* MPUITableViewBinding.h */; };
+		A700F9B720C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91120C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.m */; };
+		A700F9B820C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91220C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.h */; };
+		A700F9B920C7BD24008C0069 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91320C7BD24008C0069 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */; };
+		A700F9BA20C7BD24008C0069 /* UIApplication+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91420C7BD24008C0069 /* UIApplication+AutomaticEvents.h */; };
+		A700F9BB20C7BD24008C0069 /* MPObjectSerializerConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91520C7BD24008C0069 /* MPObjectSerializerConfig.h */; };
+		A700F9BC20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91620C7BD24008C0069 /* MPAbstractABTestDesignerMessage.m */; };
+		A700F9BD20C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91720C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.m */; };
+		A700F9BE20C7BD24008C0069 /* HeatMap.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91820C7BD24008C0069 /* HeatMap.m */; };
+		A700F9BF20C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91920C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.h */; };
+		A700F9C020C7BD24008C0069 /* MPEnumDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91A20C7BD24008C0069 /* MPEnumDescription.h */; };
+		A700F9C120C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91B20C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.h */; };
+		A700F9C220C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91C20C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.m */; };
+		A700F9C320C7BD24008C0069 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91D20C7BD24008C0069 /* MPUIColorToNSStringValueTransformer.m */; };
+		A700F9C420C7BD24008C0069 /* MPDesignerTrackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F91E20C7BD24008C0069 /* MPDesignerTrackMessage.m */; };
+		A700F9C520C7BD24008C0069 /* SugoPeoplePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F91F20C7BD24008C0069 /* SugoPeoplePrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		A700F9C620C7BD24008C0069 /* MPABTestDesignerConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92020C7BD24008C0069 /* MPABTestDesignerConnection.h */; };
+		A700F9C720C7BD24008C0069 /* SugoPageInfos.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92120C7BD24008C0069 /* SugoPageInfos.h */; };
+		A700F9C820C7BD24008C0069 /* UIView+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92220C7BD24008C0069 /* UIView+MPHelpers.h */; };
+		A700F9C920C7BD24008C0069 /* MPUITextViewBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92320C7BD24008C0069 /* MPUITextViewBinding.h */; };
+		A700F9CA20C7BD24008C0069 /* SugoURLs.plist in Resources */ = {isa = PBXBuildFile; fileRef = A700F92420C7BD24008C0069 /* SugoURLs.plist */; };
+		A700F9CB20C7BD24008C0069 /* UIViewController+SugoHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92520C7BD24008C0069 /* UIViewController+SugoHelpers.h */; };
+		A700F9CC20C7BD24008C0069 /* NSInvocation+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92620C7BD24008C0069 /* NSInvocation+MPHelpers.h */; };
+		A700F9CD20C7BD24008C0069 /* SugoPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F92720C7BD24008C0069 /* SugoPeople.m */; };
+		A700F9CE20C7BD24008C0069 /* MPABTestDesignerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92820C7BD24008C0069 /* MPABTestDesignerMessage.h */; };
+		A700F9CF20C7BD24008C0069 /* WebViewReport.UI.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F92920C7BD24008C0069 /* WebViewReport.UI.js */; };
+		A700F9D020C7BD24008C0069 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F92A20C7BD24008C0069 /* MPCGPointToNSDictionaryValueTransformer.m */; };
+		A700F9D120C7BD24008C0069 /* UIViewController+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F92B20C7BD24008C0069 /* UIViewController+AutomaticEvents.h */; };
+		A700F9D220C7BD24008C0069 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F92C20C7BD24008C0069 /* MPNetwork.m */; };
+		A700F9D320C7BD24008C0069 /* WebViewHeatmap.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F92D20C7BD24008C0069 /* WebViewHeatmap.js */; };
+		A700F9D420C7BD24008C0069 /* MPBOOLToNSNumberValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F92E20C7BD24008C0069 /* MPBOOLToNSNumberValueTransformer.m */; };
+		A700F9D520C7BD24008C0069 /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F92F20C7BD24008C0069 /* UIImage+MPAverageColor.m */; };
+		A700F9D620C7BD24008C0069 /* SugoEvents+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93020C7BD24008C0069 /* SugoEvents+CoreDataProperties.m */; };
+		A700F9D720C7BD24008C0069 /* WebViewBindings+UIWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93120C7BD24008C0069 /* WebViewBindings+UIWebView.m */; };
+		A700F9D820C7BD24008C0069 /* MPTypeDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F93220C7BD24008C0069 /* MPTypeDescription.h */; };
+		A700F9D920C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93320C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m */; };
+		A700F9DA20C7BD24008C0069 /* SugoEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F93420C7BD24008C0069 /* SugoEnd.js */; };
+		A700F9DB20C7BD24008C0069 /* WebViewBindings+WKWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93520C7BD24008C0069 /* WebViewBindings+WKWebView.m */; };
+		A700F9DC20C7BD24008C0069 /* WebViewExecute.Sugo.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F93620C7BD24008C0069 /* WebViewExecute.Sugo.WK.js */; };
+		A700F9DD20C7BD24008C0069 /* WebViewAPI.WK.js in Resources */ = {isa = PBXBuildFile; fileRef = A700F93720C7BD24008C0069 /* WebViewAPI.WK.js */; };
+		A700F9DE20C7BD24008C0069 /* MPSequenceGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F93820C7BD24008C0069 /* MPSequenceGenerator.h */; };
+		A700F9DF20C7BD24008C0069 /* MPDesignerEventBindingRequestMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93920C7BD24008C0069 /* MPDesignerEventBindingRequestMesssage.m */; };
+		A700F9E020C7BD24008C0069 /* MPEventBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93A20C7BD24008C0069 /* MPEventBinding.m */; };
+		A700F9E120C7BD24008C0069 /* MPObjectSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93B20C7BD24008C0069 /* MPObjectSerializer.m */; };
+		A700F9E220C7BD24008C0069 /* MPResources.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F93C20C7BD24008C0069 /* MPResources.m */; };
+		A700F9E320C7BD24008C0069 /* MPValueTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F93D20C7BD24008C0069 /* MPValueTransformers.h */; };
+		A700F9E520C7BD24008C0069 /* Sugo.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F93F20C7BD24008C0069 /* Sugo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A700F9E620C7BD24008C0069 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94020C7BD24008C0069 /* MPSwizzler.m */; };
+		A700F9E720C7BD24008C0069 /* MPDesignerEventBindingMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F94120C7BD24008C0069 /* MPDesignerEventBindingMessage.h */; };
+		A700F9E820C7BD24008C0069 /* MPObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94220C7BD24008C0069 /* MPObjectSelector.m */; };
+		A700F9E920C7BD24008C0069 /* WebViewBindings+WebView.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F94320C7BD24008C0069 /* WebViewBindings+WebView.h */; };
+		A700F9EA20C7BD24008C0069 /* Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94420C7BD24008C0069 /* Attributes.m */; };
+		A700F9EB20C7BD24008C0069 /* MPCGColorRefToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94520C7BD24008C0069 /* MPCGColorRefToNSStringValueTransformer.m */; };
+		A700F9EC20C7BD24008C0069 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94620C7BD24008C0069 /* MPWebSocket.m */; };
+		A700F9ED20C7BD24008C0069 /* MPObjectIdentityProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F94720C7BD24008C0069 /* MPObjectIdentityProvider.h */; };
+		A700F9EE20C7BD24008C0069 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94820C7BD24008C0069 /* HeatMapLayer.m */; };
+		A700F9EF20C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94920C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m */; };
+		A700F9F020C7BD24008C0069 /* MPSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F94A20C7BD24008C0069 /* MPSwizzle.h */; };
 		A7664C2F2058B95500F9E201 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7664C2E2058B95500F9E201 /* CoreData.framework */; };
-		A7664C3A2058C15900F9E201 /* Sugo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		14015FC01E2DBDD2003DB275 /* SugoURLs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoURLs.plist; sourceTree = "<group>"; };
-		14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUILayoutSupportToNSStringValueTransformer.m; sourceTree = "<group>"; };
-		14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+WebView.h"; sourceTree = "<group>"; };
-		14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+WebView.m"; sourceTree = "<group>"; };
 		141AC7821E1364D7008D67F6 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		141AC7851E1364D7008D67F6 /* Sugo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sugo.h; sourceTree = "<group>"; };
-		141AC7861E1364D7008D67F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		141AC7C11E137088008D67F6 /* AutomaticEventsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutomaticEventsConstants.h; sourceTree = "<group>"; };
-		141AC7C31E137088008D67F6 /* Sugo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sugo.m; sourceTree = "<group>"; };
-		141AC7C41E137088008D67F6 /* Sugo+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Sugo+AutomaticEvents.h"; sourceTree = "<group>"; };
-		141AC7C51E137088008D67F6 /* Sugo+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Sugo+AutomaticEvents.m"; sourceTree = "<group>"; };
-		141AC7C61E137088008D67F6 /* SugoExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoExceptionHandler.h; sourceTree = "<group>"; };
-		141AC7C71E137088008D67F6 /* SugoExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoExceptionHandler.m; sourceTree = "<group>"; };
-		141AC7C81E137088008D67F6 /* SugoPeople.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPeople.h; sourceTree = "<group>"; };
-		141AC7C91E137088008D67F6 /* SugoPeople.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoPeople.m; sourceTree = "<group>"; };
-		141AC7CA1E137088008D67F6 /* SugoPeoplePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPeoplePrivate.h; sourceTree = "<group>"; };
-		141AC7CB1E137088008D67F6 /* SugoPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPrivate.h; sourceTree = "<group>"; };
-		141AC7CF1E137088008D67F6 /* MPAbstractABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAbstractABTestDesignerMessage.h; sourceTree = "<group>"; };
-		141AC7D01E137088008D67F6 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
-		141AC7D11E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeRequestMessage.h; sourceTree = "<group>"; };
-		141AC7D21E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangeRequestMessage.m; sourceTree = "<group>"; };
-		141AC7D31E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
-		141AC7D41E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangeResponseMessage.m; sourceTree = "<group>"; };
-		141AC7D51E137088008D67F6 /* MPABTestDesignerClearRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerClearRequestMessage.h; sourceTree = "<group>"; };
-		141AC7D61E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerClearRequestMessage.m; sourceTree = "<group>"; };
-		141AC7D71E137088008D67F6 /* MPABTestDesignerClearResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerClearResponseMessage.h; sourceTree = "<group>"; };
-		141AC7D81E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerClearResponseMessage.m; sourceTree = "<group>"; };
-		141AC7D91E137088008D67F6 /* MPABTestDesignerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerConnection.h; sourceTree = "<group>"; };
-		141AC7DA1E137088008D67F6 /* MPABTestDesignerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerConnection.m; sourceTree = "<group>"; };
-		141AC7DB1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoRequestMessage.h; sourceTree = "<group>"; };
-		141AC7DC1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoRequestMessage.m; sourceTree = "<group>"; };
-		141AC7DD1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoResponseMessage.h; sourceTree = "<group>"; };
-		141AC7DE1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoResponseMessage.m; sourceTree = "<group>"; };
-		141AC7DF1E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDisconnectMessage.h; sourceTree = "<group>"; };
-		141AC7E01E137088008D67F6 /* MPABTestDesignerDisconnectMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDisconnectMessage.m; sourceTree = "<group>"; };
-		141AC7E11E137088008D67F6 /* MPABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerMessage.h; sourceTree = "<group>"; };
-		141AC7E21E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotRequestMessage.h; sourceTree = "<group>"; };
-		141AC7E31E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotRequestMessage.m; sourceTree = "<group>"; };
-		141AC7E41E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotResponseMessage.h; sourceTree = "<group>"; };
-		141AC7E51E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotResponseMessage.m; sourceTree = "<group>"; };
-		141AC7EA1E137088008D67F6 /* MPApplicationStateSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPApplicationStateSerializer.h; sourceTree = "<group>"; };
-		141AC7EB1E137088008D67F6 /* MPApplicationStateSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPApplicationStateSerializer.m; sourceTree = "<group>"; };
-		141AC7EC1E137088008D67F6 /* MPBOOLToNSNumberValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPBOOLToNSNumberValueTransformer.m; sourceTree = "<group>"; };
-		141AC7ED1E137088008D67F6 /* MPCATransform3DToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCATransform3DToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC7EE1E137088008D67F6 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGAffineTransformToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC7EF1E137088008D67F6 /* MPCGColorRefToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGColorRefToNSStringValueTransformer.m; sourceTree = "<group>"; };
-		141AC7F01E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGPointToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC7F11E137088008D67F6 /* MPCGRectToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGRectToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC7F21E137088008D67F6 /* MPCGSizeToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGSizeToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC7F31E137088008D67F6 /* MPClassDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPClassDescription.h; sourceTree = "<group>"; };
-		141AC7F41E137088008D67F6 /* MPClassDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPClassDescription.m; sourceTree = "<group>"; };
-		141AC7F51E137088008D67F6 /* MPDesignerEventBindingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerEventBindingMessage.h; sourceTree = "<group>"; };
-		141AC7F61E137088008D67F6 /* MPDesignerEventBindingRequestMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMesssage.m; sourceTree = "<group>"; };
-		141AC7F71E137088008D67F6 /* MPDesignerEventBindingResponseMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMesssage.m; sourceTree = "<group>"; };
-		141AC7F81E137088008D67F6 /* MPDesignerSessionCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerSessionCollection.h; sourceTree = "<group>"; };
-		141AC7F91E137088008D67F6 /* MPDesignerTrackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerTrackMessage.m; sourceTree = "<group>"; };
-		141AC7FA1E137088008D67F6 /* MPEnumDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEnumDescription.h; sourceTree = "<group>"; };
-		141AC7FB1E137088008D67F6 /* MPEnumDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEnumDescription.m; sourceTree = "<group>"; };
-		141AC7FC1E137088008D67F6 /* MPEventBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEventBinding.h; sourceTree = "<group>"; };
-		141AC7FD1E137088008D67F6 /* MPEventBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEventBinding.m; sourceTree = "<group>"; };
-		141AC7FE1E137088008D67F6 /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFoundation.h; sourceTree = "<group>"; };
-		141AC7FF1E137088008D67F6 /* MPLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogger.h; sourceTree = "<group>"; };
-		141AC8001E137088008D67F6 /* MPNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetwork.h; sourceTree = "<group>"; };
-		141AC8011E137088008D67F6 /* MPNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetwork.m; sourceTree = "<group>"; };
-		141AC8021E137088008D67F6 /* MPNetworkPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetworkPrivate.h; sourceTree = "<group>"; };
-		141AC80A1E137088008D67F6 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSAttributedStringToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC80B1E137088008D67F6 /* MPNSNumberToCGFloatValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSNumberToCGFloatValueTransformer.m; sourceTree = "<group>"; };
-		141AC80C1E137088008D67F6 /* MPObjectIdentifierProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectIdentifierProvider.h; sourceTree = "<group>"; };
-		141AC80D1E137088008D67F6 /* MPObjectIdentityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectIdentityProvider.h; sourceTree = "<group>"; };
-		141AC80E1E137088008D67F6 /* MPObjectIdentityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectIdentityProvider.m; sourceTree = "<group>"; };
-		141AC80F1E137088008D67F6 /* MPObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSelector.h; sourceTree = "<group>"; };
-		141AC8101E137088008D67F6 /* MPObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSelector.m; sourceTree = "<group>"; };
-		141AC8111E137088008D67F6 /* MPObjectSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializer.h; sourceTree = "<group>"; };
-		141AC8121E137088008D67F6 /* MPObjectSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializer.m; sourceTree = "<group>"; };
-		141AC8131E137088008D67F6 /* MPObjectSerializerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerConfig.h; sourceTree = "<group>"; };
-		141AC8141E137088008D67F6 /* MPObjectSerializerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerConfig.m; sourceTree = "<group>"; };
-		141AC8151E137088008D67F6 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
-		141AC8161E137088008D67F6 /* MPObjectSerializerContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerContext.m; sourceTree = "<group>"; };
-		141AC8171E137088008D67F6 /* MPPassThroughValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPassThroughValueTransformer.m; sourceTree = "<group>"; };
-		141AC8181E137088008D67F6 /* MPPropertyDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPropertyDescription.h; sourceTree = "<group>"; };
-		141AC8191E137088008D67F6 /* MPPropertyDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPropertyDescription.m; sourceTree = "<group>"; };
-		141AC81A1E137088008D67F6 /* MPResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPResources.h; sourceTree = "<group>"; };
-		141AC81B1E137088008D67F6 /* MPResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPResources.m; sourceTree = "<group>"; };
-		141AC81C1E137088008D67F6 /* MPSequenceGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSequenceGenerator.h; sourceTree = "<group>"; };
-		141AC81D1E137088008D67F6 /* MPSequenceGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSequenceGenerator.m; sourceTree = "<group>"; };
-		141AC8271E137088008D67F6 /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
-		141AC8281E137088008D67F6 /* MPSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzle.m; sourceTree = "<group>"; };
-		141AC8291E137088008D67F6 /* MPSwizzler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzler.h; sourceTree = "<group>"; };
-		141AC82A1E137088008D67F6 /* MPSwizzler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzler.m; sourceTree = "<group>"; };
-		141AC8321E137088008D67F6 /* MPTypeDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypeDescription.h; sourceTree = "<group>"; };
-		141AC8331E137088008D67F6 /* MPTypeDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypeDescription.m; sourceTree = "<group>"; };
-		141AC8341E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIColorToNSStringValueTransformer.m; sourceTree = "<group>"; };
-		141AC8351E137088008D67F6 /* MPUIViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIViewBinding.h; sourceTree = "<group>"; };
-		141AC8361E137088008D67F6 /* MPUIViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIViewBinding.m; sourceTree = "<group>"; };
-		141AC8371E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIEdgeInsetsToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC8381E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIFontToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC8391E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIImageToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		141AC83A1E137088008D67F6 /* MPUITableViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITableViewBinding.h; sourceTree = "<group>"; };
-		141AC83B1E137088008D67F6 /* MPUITableViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITableViewBinding.m; sourceTree = "<group>"; };
-		141AC83C1E137088008D67F6 /* MPValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPValueTransformers.h; sourceTree = "<group>"; };
-		141AC83F1E137088008D67F6 /* MPWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebSocket.h; sourceTree = "<group>"; };
-		141AC8401E137088008D67F6 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
-		141AC8411E137088008D67F6 /* NSInvocation+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+MPHelpers.h"; sourceTree = "<group>"; };
-		141AC8421E137088008D67F6 /* NSInvocation+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+MPHelpers.m"; sourceTree = "<group>"; };
-		141AC8431E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+AutomaticEvents.h"; sourceTree = "<group>"; };
-		141AC8441E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+AutomaticEvents.m"; sourceTree = "<group>"; };
-		141AC8481E137088008D67F6 /* UIApplication+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AutomaticEvents.h"; sourceTree = "<group>"; };
-		141AC8491E137088008D67F6 /* UIApplication+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AutomaticEvents.m"; sourceTree = "<group>"; };
-		141AC84A1E137088008D67F6 /* UIColor+MPColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MPColor.h"; sourceTree = "<group>"; };
-		141AC84B1E137088008D67F6 /* UIColor+MPColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MPColor.m"; sourceTree = "<group>"; };
-		141AC84C1E137088008D67F6 /* UIImage+MPAverageColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MPAverageColor.h"; sourceTree = "<group>"; };
-		141AC84D1E137088008D67F6 /* UIImage+MPAverageColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPAverageColor.m"; sourceTree = "<group>"; };
-		141AC84E1E137088008D67F6 /* UIImage+MPImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MPImageEffects.h"; sourceTree = "<group>"; };
-		141AC84F1E137088008D67F6 /* UIImage+MPImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPImageEffects.m"; sourceTree = "<group>"; };
-		141AC8501E137088008D67F6 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
-		141AC8511E137088008D67F6 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
-		141AC8521E137088008D67F6 /* UIViewController+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutomaticEvents.h"; sourceTree = "<group>"; };
-		141AC8531E137088008D67F6 /* UIViewController+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutomaticEvents.m"; sourceTree = "<group>"; };
-		141AC8551E137088008D67F6 /* WebViewBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewBindings.h; sourceTree = "<group>"; };
-		141AC8561E137088008D67F6 /* WebViewBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewBindings.m; sourceTree = "<group>"; };
-		141AC8591E137088008D67F6 /* WebViewBindings+UIWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+UIWebView.h"; sourceTree = "<group>"; };
-		141AC85A1E137088008D67F6 /* WebViewBindings+UIWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+UIWebView.m"; sourceTree = "<group>"; };
-		141AC85B1E137088008D67F6 /* WebViewBindings+WKWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+WKWebView.h"; sourceTree = "<group>"; };
-		141AC85C1E137088008D67F6 /* WebViewBindings+WKWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+WKWebView.m"; sourceTree = "<group>"; };
-		141AC85D1E137088008D67F6 /* WebViewInfoStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewInfoStorage.h; sourceTree = "<group>"; };
-		141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewInfoStorage.m; sourceTree = "<group>"; };
-		141DFD201E442A0400714BA7 /* SugoPageInfos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPageInfos.h; sourceTree = "<group>"; };
-		141DFD211E442A0400714BA7 /* SugoPageInfos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoPageInfos.m; sourceTree = "<group>"; };
-		144496951E8522010076BC50 /* MPUITextViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITextViewBinding.h; sourceTree = "<group>"; };
-		144496961E8522010076BC50 /* MPUITextViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITextViewBinding.m; sourceTree = "<group>"; };
-		144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.UI.js; sourceTree = "<group>"; };
-		144D2E3D1E20C5A800387FD2 /* WebViewAPI.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewAPI.UI.js; sourceTree = "<group>"; };
-		144D2E3E1E20C5A800387FD2 /* SugoioKit.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoioKit.js; sourceTree = "<group>"; };
-		144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.UI.js; sourceTree = "<group>"; };
-		144D2E421E20C5A800387FD2 /* WebViewExcute.Report.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewExcute.Report.js; sourceTree = "<group>"; };
-		144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.WK.js; sourceTree = "<group>"; };
-		144D2E441E20C5A800387FD2 /* WebViewAPI.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewAPI.WK.js; sourceTree = "<group>"; };
-		145CAAC21E57EB9E00E53E8C /* SugoConfigurationPropertyList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoConfigurationPropertyList.h; sourceTree = "<group>"; };
-		145CAAC31E57EB9E00E53E8C /* SugoConfigurationPropertyList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoConfigurationPropertyList.m; sourceTree = "<group>"; };
-		145CAAC61E57EEA400E53E8C /* SugoCustomDimensions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoCustomDimensions.plist; sourceTree = "<group>"; };
-		145CAAC81E57F1EA00E53E8C /* SugoResourcesPathReplacements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoResourcesPathReplacements.plist; sourceTree = "<group>"; };
-		145CAACA1E58497C00E53E8C /* SugoEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoEnd.js; sourceTree = "<group>"; };
-		145CAACC1E584BF700E53E8C /* WebViewVariables.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewVariables.js; sourceTree = "<group>"; };
-		145CAAD01E584E5200E53E8C /* WebViewExcute.Sugo.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewExcute.Sugo.WK.js; sourceTree = "<group>"; };
-		14656FEA1E2379BF006B7107 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
-		14656FEB1E2379BF006B7107 /* Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attributes.m; sourceTree = "<group>"; };
 		148D65791E13D611002B2BB7 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
-		14A806D61E5B14B300D4148F /* SugoPageEventsViewControllerFilterList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoPageEventsViewControllerFilterList.plist; sourceTree = "<group>"; };
 		14BA1A3B1E13D630002F0C4B /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		14BA1A3D1E13D637002F0C4B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		14BA1A3F1E13D63E002F0C4B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -344,24 +201,173 @@
 		14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14BA1A4D1E13D675002F0C4B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SugoHelpers.h"; sourceTree = "<group>"; };
-		14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SugoHelpers.m"; sourceTree = "<group>"; };
-		14C607D51EB1C88E00990411 /* HeatMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMap.h; sourceTree = "<group>"; };
-		14C607D61EB1C88E00990411 /* HeatMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMap.m; sourceTree = "<group>"; };
-		14C7BE691E4D6DB4000BD790 /* SugoBegin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoBegin.js; sourceTree = "<group>"; };
-		14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.WK.js; sourceTree = "<group>"; };
-		14CA17291ED5659800CA96F1 /* WebViewExcute.Sugo.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewExcute.Sugo.UI.js; sourceTree = "<group>"; };
-		14D6FEE81EB885850009A39F /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
-		14F173471EB4297000BCD9B6 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
-		14F173481EB4297000BCD9B6 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
-		A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUICollectionViewBinding.h; sourceTree = "<group>"; };
-		A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUICollectionViewBinding.m; sourceTree = "<group>"; };
-		A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataProperties.h"; sourceTree = "<group>"; };
-		A74FBAD3205A5BD800063451 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
-		A74FBAD4205A5BD800063451 /* SugoEvents+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataClass.m"; sourceTree = "<group>"; };
-		A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataProperties.m"; sourceTree = "<group>"; };
+		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
+		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
+		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
+		A700F8A720C7BD24008C0069 /* MPPropertyDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPropertyDescription.h; sourceTree = "<group>"; };
+		A700F8A820C7BD24008C0069 /* WebViewReport.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.WK.js; sourceTree = "<group>"; };
+		A700F8A920C7BD24008C0069 /* WebViewBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewBindings.h; sourceTree = "<group>"; };
+		A700F8AA20C7BD24008C0069 /* MPUICollectionViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUICollectionViewBinding.m; sourceTree = "<group>"; };
+		A700F8AB20C7BD24008C0069 /* MPUIFontToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIFontToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F8AC20C7BD24008C0069 /* MPClassDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPClassDescription.h; sourceTree = "<group>"; };
+		A700F8AD20C7BD24008C0069 /* MPLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogger.h; sourceTree = "<group>"; };
+		A700F8AE20C7BD24008C0069 /* MPUIImageToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIImageToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F8AF20C7BD24008C0069 /* WebViewInfoStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewInfoStorage.h; sourceTree = "<group>"; };
+		A700F8B020C7BD24008C0069 /* MPUIViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIViewBinding.m; sourceTree = "<group>"; };
+		A700F8B120C7BD24008C0069 /* SugoConfigurationPropertyList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoConfigurationPropertyList.m; sourceTree = "<group>"; };
+		A700F8B220C7BD24008C0069 /* MPApplicationStateSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPApplicationStateSerializer.h; sourceTree = "<group>"; };
+		A700F8B320C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+AutomaticEvents.m"; sourceTree = "<group>"; };
+		A700F8B420C7BD24008C0069 /* UIColor+MPColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MPColor.m"; sourceTree = "<group>"; };
+		A700F8B520C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerClearResponseMessage.m; sourceTree = "<group>"; };
+		A700F8B620C7BD24008C0069 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGAffineTransformToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F8B720C7BD24008C0069 /* SugoPageEventsViewControllerFilterList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoPageEventsViewControllerFilterList.plist; sourceTree = "<group>"; };
+		A700F8B820C7BD24008C0069 /* SugoCustomDimensions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoCustomDimensions.plist; sourceTree = "<group>"; };
+		A700F8B920C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDisconnectMessage.m; sourceTree = "<group>"; };
+		A700F8BA20C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotRequestMessage.h; sourceTree = "<group>"; };
+		A700F8BB20C7BD24008C0069 /* MPEnumDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEnumDescription.m; sourceTree = "<group>"; };
+		A700F8BC20C7BD24008C0069 /* WebViewAPI.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewAPI.UI.js; sourceTree = "<group>"; };
+		A700F8BD20C7BD24008C0069 /* SugoPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPrivate.h; sourceTree = "<group>"; };
+		A700F8BE20C7BD24008C0069 /* WebViewExecute.Sugo.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewExecute.Sugo.UI.js; sourceTree = "<group>"; };
+		A700F8BF20C7BD24008C0069 /* HeatMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMap.h; sourceTree = "<group>"; };
+		A700F8C020C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotResponseMessage.m; sourceTree = "<group>"; };
+		A700F8C120C7BD24008C0069 /* MPObjectSerializerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerConfig.m; sourceTree = "<group>"; };
+		A700F8C220C7BD24008C0069 /* MPCGRectToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGRectToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F8C320C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAbstractABTestDesignerMessage.h; sourceTree = "<group>"; };
+		A700F8C420C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoRequestMessage.h; sourceTree = "<group>"; };
+		A700F8C520C7BD24008C0069 /* UIApplication+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AutomaticEvents.m"; sourceTree = "<group>"; };
+		A700F8C620C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerClearRequestMessage.h; sourceTree = "<group>"; };
+		A700F8C720C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangeRequestMessage.m; sourceTree = "<group>"; };
+		A700F8C820C7BD24008C0069 /* MPNSNumberToCGFloatValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSNumberToCGFloatValueTransformer.m; sourceTree = "<group>"; };
+		A700F8C920C7BD24008C0069 /* SugoExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoExceptionHandler.m; sourceTree = "<group>"; };
+		A700F8CA20C7BD24008C0069 /* MPUITableViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITableViewBinding.m; sourceTree = "<group>"; };
+		A700F8CB20C7BD24008C0069 /* Sugo+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Sugo+AutomaticEvents.m"; sourceTree = "<group>"; };
+		A700F8CC20C7BD24008C0069 /* UIImage+MPImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MPImageEffects.h"; sourceTree = "<group>"; };
+		A700F8CD20C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerTweakResponseMessage.m; sourceTree = "<group>"; };
+		A700F8CE20C7BD24008C0069 /* WebViewBindings+UIWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+UIWebView.h"; sourceTree = "<group>"; };
+		A700F8CF20C7BD24008C0069 /* UIImage+MPAverageColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MPAverageColor.h"; sourceTree = "<group>"; };
+		A700F8D020C7BD24008C0069 /* SugoEvents+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataProperties.h"; sourceTree = "<group>"; };
+		A700F8D120C7BD24008C0069 /* WebViewBindings.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.UI.js; sourceTree = "<group>"; };
+		A700F8D220C7BD24008C0069 /* MPDesignerEventBindingResponseMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMesssage.m; sourceTree = "<group>"; };
+		A700F8D320C7BD24008C0069 /* MPDesignerSessionCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerSessionCollection.h; sourceTree = "<group>"; };
+		A700F8D420C7BD24008C0069 /* SugoioKit.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoioKit.js; sourceTree = "<group>"; };
+		A700F8D520C7BD24008C0069 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSAttributedStringToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F8D620C7BD24008C0069 /* MPABTestDesignerTweakRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerTweakRequestMessage.h; sourceTree = "<group>"; };
+		A700F8D720C7BD24008C0069 /* MPNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetwork.h; sourceTree = "<group>"; };
+		A700F8D820C7BD24008C0069 /* UIViewController+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutomaticEvents.m"; sourceTree = "<group>"; };
+		A700F8D920C7BD24008C0069 /* UIViewController+SugoHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SugoHelpers.m"; sourceTree = "<group>"; };
+		A700F8DA20C7BD24008C0069 /* AutomaticEventsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutomaticEventsConstants.h; sourceTree = "<group>"; };
+		A700F8DB20C7BD24008C0069 /* NSInvocation+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+MPHelpers.m"; sourceTree = "<group>"; };
+		A700F8DC20C7BD24008C0069 /* SugoPeople.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPeople.h; sourceTree = "<group>"; };
+		A700F8DD20C7BD24008C0069 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
+		A700F8DE20C7BD24008C0069 /* MPUITextViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITextViewBinding.m; sourceTree = "<group>"; };
+		A700F8DF20C7BD24008C0069 /* MPCGSizeToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGSizeToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F8E020C7BD24008C0069 /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFoundation.h; sourceTree = "<group>"; };
+		A700F8E120C7BD24008C0069 /* SugoPageInfos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoPageInfos.m; sourceTree = "<group>"; };
+		A700F8E220C7BD24008C0069 /* MPABTestDesignerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerConnection.m; sourceTree = "<group>"; };
+		A700F8E420C7BD24008C0069 /* Sugo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sugo.xcdatamodel; sourceTree = "<group>"; };
+		A700F8E520C7BD24008C0069 /* MPSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzle.m; sourceTree = "<group>"; };
+		A700F8E620C7BD24008C0069 /* MPObjectIdentifierProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectIdentifierProvider.h; sourceTree = "<group>"; };
+		A700F8E720C7BD24008C0069 /* HeatMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapLayer.h; sourceTree = "<group>"; };
+		A700F8E820C7BD24008C0069 /* MPObjectIdentityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectIdentityProvider.m; sourceTree = "<group>"; };
+		A700F8E920C7BD24008C0069 /* MPWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebSocket.h; sourceTree = "<group>"; };
+		A700F8EA20C7BD24008C0069 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
+		A700F8EB20C7BD24008C0069 /* WebViewVariables.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewVariables.js; sourceTree = "<group>"; };
+		A700F8EC20C7BD24008C0069 /* WebViewBindings+WebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+WebView.m"; sourceTree = "<group>"; };
+		A700F8ED20C7BD24008C0069 /* MPSwizzler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzler.h; sourceTree = "<group>"; };
+		A700F8EE20C7BD24008C0069 /* MPObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSelector.h; sourceTree = "<group>"; };
+		A700F8EF20C7BD24008C0069 /* Sugo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sugo.m; sourceTree = "<group>"; };
+		A700F8F020C7BD24008C0069 /* MPObjectSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializer.h; sourceTree = "<group>"; };
+		A700F8F120C7BD24008C0069 /* MPEventBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEventBinding.h; sourceTree = "<group>"; };
+		A700F8F220C7BD24008C0069 /* MPResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPResources.h; sourceTree = "<group>"; };
+		A700F8F320C7BD24008C0069 /* MPSequenceGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSequenceGenerator.m; sourceTree = "<group>"; };
+		A700F8F420C7BD24008C0069 /* WebViewBindings+WKWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+WKWebView.h"; sourceTree = "<group>"; };
+		A700F8F520C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoResponseMessage.h; sourceTree = "<group>"; };
+		A700F8F620C7BD24008C0069 /* MPTypeDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypeDescription.m; sourceTree = "<group>"; };
+		A700F8F720C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerClearResponseMessage.h; sourceTree = "<group>"; };
+		A700F8F820C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+AutomaticEvents.h"; sourceTree = "<group>"; };
+		A700F8F920C7BD24008C0069 /* UIColor+MPColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MPColor.h"; sourceTree = "<group>"; };
+		A700F8FA20C7BD24008C0069 /* WebViewExecute.Report.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewExecute.Report.js; sourceTree = "<group>"; };
+		A700F8FB20C7BD24008C0069 /* MPApplicationStateSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPApplicationStateSerializer.m; sourceTree = "<group>"; };
+		A700F8FC20C7BD24008C0069 /* SugoConfigurationPropertyList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoConfigurationPropertyList.h; sourceTree = "<group>"; };
+		A700F8FD20C7BD24008C0069 /* WebViewBindings.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewBindings.WK.js; sourceTree = "<group>"; };
+		A700F8FE20C7BD24008C0069 /* MPUILayoutSupportToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUILayoutSupportToNSStringValueTransformer.m; sourceTree = "<group>"; };
+		A700F8FF20C7BD24008C0069 /* MPPassThroughValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPassThroughValueTransformer.m; sourceTree = "<group>"; };
+		A700F90020C7BD24008C0069 /* WebViewInfoStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewInfoStorage.m; sourceTree = "<group>"; };
+		A700F90120C7BD24008C0069 /* MPUIViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIViewBinding.h; sourceTree = "<group>"; };
+		A700F90220C7BD24008C0069 /* MPClassDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPClassDescription.m; sourceTree = "<group>"; };
+		A700F90320C7BD24008C0069 /* MPUICollectionViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUICollectionViewBinding.h; sourceTree = "<group>"; };
+		A700F90420C7BD24008C0069 /* MPPropertyDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPropertyDescription.m; sourceTree = "<group>"; };
+		A700F90520C7BD24008C0069 /* WebViewBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewBindings.m; sourceTree = "<group>"; };
+		A700F90620C7BD24008C0069 /* SugoBegin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoBegin.js; sourceTree = "<group>"; };
+		A700F90720C7BD24008C0069 /* SugoEvents+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataClass.m"; sourceTree = "<group>"; };
+		A700F90820C7BD24008C0069 /* MPObjectSerializerContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerContext.m; sourceTree = "<group>"; };
+		A700F90920C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangeResponseMessage.m; sourceTree = "<group>"; };
+		A700F90A20C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerTweakResponseMessage.h; sourceTree = "<group>"; };
+		A700F90B20C7BD24008C0069 /* UIImage+MPImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPImageEffects.m"; sourceTree = "<group>"; };
+		A700F90C20C7BD24008C0069 /* Sugo+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Sugo+AutomaticEvents.h"; sourceTree = "<group>"; };
+		A700F90D20C7BD24008C0069 /* MPNetworkPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetworkPrivate.h; sourceTree = "<group>"; };
+		A700F90E20C7BD24008C0069 /* SugoResourcesPathReplacements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoResourcesPathReplacements.plist; sourceTree = "<group>"; };
+		A700F90F20C7BD24008C0069 /* SugoExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoExceptionHandler.h; sourceTree = "<group>"; };
+		A700F91020C7BD24008C0069 /* MPUITableViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITableViewBinding.h; sourceTree = "<group>"; };
+		A700F91120C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerClearRequestMessage.m; sourceTree = "<group>"; };
+		A700F91220C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeRequestMessage.h; sourceTree = "<group>"; };
+		A700F91320C7BD24008C0069 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIEdgeInsetsToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F91420C7BD24008C0069 /* UIApplication+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AutomaticEvents.h"; sourceTree = "<group>"; };
+		A700F91520C7BD24008C0069 /* MPObjectSerializerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerConfig.h; sourceTree = "<group>"; };
+		A700F91620C7BD24008C0069 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
+		A700F91720C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoRequestMessage.m; sourceTree = "<group>"; };
+		A700F91820C7BD24008C0069 /* HeatMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMap.m; sourceTree = "<group>"; };
+		A700F91920C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotResponseMessage.h; sourceTree = "<group>"; };
+		A700F91A20C7BD24008C0069 /* MPEnumDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEnumDescription.h; sourceTree = "<group>"; };
+		A700F91B20C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDisconnectMessage.h; sourceTree = "<group>"; };
+		A700F91C20C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotRequestMessage.m; sourceTree = "<group>"; };
+		A700F91D20C7BD24008C0069 /* MPUIColorToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIColorToNSStringValueTransformer.m; sourceTree = "<group>"; };
+		A700F91E20C7BD24008C0069 /* MPDesignerTrackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerTrackMessage.m; sourceTree = "<group>"; };
+		A700F91F20C7BD24008C0069 /* SugoPeoplePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPeoplePrivate.h; sourceTree = "<group>"; };
+		A700F92020C7BD24008C0069 /* MPABTestDesignerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerConnection.h; sourceTree = "<group>"; };
+		A700F92120C7BD24008C0069 /* SugoPageInfos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SugoPageInfos.h; sourceTree = "<group>"; };
+		A700F92220C7BD24008C0069 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
+		A700F92320C7BD24008C0069 /* MPUITextViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITextViewBinding.h; sourceTree = "<group>"; };
+		A700F92420C7BD24008C0069 /* SugoURLs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SugoURLs.plist; sourceTree = "<group>"; };
+		A700F92520C7BD24008C0069 /* UIViewController+SugoHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SugoHelpers.h"; sourceTree = "<group>"; };
+		A700F92620C7BD24008C0069 /* NSInvocation+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+MPHelpers.h"; sourceTree = "<group>"; };
+		A700F92720C7BD24008C0069 /* SugoPeople.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SugoPeople.m; sourceTree = "<group>"; };
+		A700F92820C7BD24008C0069 /* MPABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerMessage.h; sourceTree = "<group>"; };
+		A700F92920C7BD24008C0069 /* WebViewReport.UI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewReport.UI.js; sourceTree = "<group>"; };
+		A700F92A20C7BD24008C0069 /* MPCGPointToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGPointToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F92B20C7BD24008C0069 /* UIViewController+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutomaticEvents.h"; sourceTree = "<group>"; };
+		A700F92C20C7BD24008C0069 /* MPNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetwork.m; sourceTree = "<group>"; };
+		A700F92D20C7BD24008C0069 /* WebViewHeatmap.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewHeatmap.js; sourceTree = "<group>"; };
+		A700F92E20C7BD24008C0069 /* MPBOOLToNSNumberValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPBOOLToNSNumberValueTransformer.m; sourceTree = "<group>"; };
+		A700F92F20C7BD24008C0069 /* UIImage+MPAverageColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPAverageColor.m"; sourceTree = "<group>"; };
+		A700F93020C7BD24008C0069 /* SugoEvents+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SugoEvents+CoreDataProperties.m"; sourceTree = "<group>"; };
+		A700F93120C7BD24008C0069 /* WebViewBindings+UIWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+UIWebView.m"; sourceTree = "<group>"; };
+		A700F93220C7BD24008C0069 /* MPTypeDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypeDescription.h; sourceTree = "<group>"; };
+		A700F93320C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoResponseMessage.m; sourceTree = "<group>"; };
+		A700F93420C7BD24008C0069 /* SugoEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SugoEnd.js; sourceTree = "<group>"; };
+		A700F93520C7BD24008C0069 /* WebViewBindings+WKWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WebViewBindings+WKWebView.m"; sourceTree = "<group>"; };
+		A700F93620C7BD24008C0069 /* WebViewExecute.Sugo.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewExecute.Sugo.WK.js; sourceTree = "<group>"; };
+		A700F93720C7BD24008C0069 /* WebViewAPI.WK.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebViewAPI.WK.js; sourceTree = "<group>"; };
+		A700F93820C7BD24008C0069 /* MPSequenceGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSequenceGenerator.h; sourceTree = "<group>"; };
+		A700F93920C7BD24008C0069 /* MPDesignerEventBindingRequestMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMesssage.m; sourceTree = "<group>"; };
+		A700F93A20C7BD24008C0069 /* MPEventBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEventBinding.m; sourceTree = "<group>"; };
+		A700F93B20C7BD24008C0069 /* MPObjectSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializer.m; sourceTree = "<group>"; };
+		A700F93C20C7BD24008C0069 /* MPResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPResources.m; sourceTree = "<group>"; };
+		A700F93D20C7BD24008C0069 /* MPValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPValueTransformers.h; sourceTree = "<group>"; };
+		A700F93E20C7BD24008C0069 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A700F93F20C7BD24008C0069 /* Sugo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sugo.h; sourceTree = "<group>"; };
+		A700F94020C7BD24008C0069 /* MPSwizzler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzler.m; sourceTree = "<group>"; };
+		A700F94120C7BD24008C0069 /* MPDesignerEventBindingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerEventBindingMessage.h; sourceTree = "<group>"; };
+		A700F94220C7BD24008C0069 /* MPObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSelector.m; sourceTree = "<group>"; };
+		A700F94320C7BD24008C0069 /* WebViewBindings+WebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebViewBindings+WebView.h"; sourceTree = "<group>"; };
+		A700F94420C7BD24008C0069 /* Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attributes.m; sourceTree = "<group>"; };
+		A700F94520C7BD24008C0069 /* MPCGColorRefToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGColorRefToNSStringValueTransformer.m; sourceTree = "<group>"; };
+		A700F94620C7BD24008C0069 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
+		A700F94720C7BD24008C0069 /* MPObjectIdentityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectIdentityProvider.h; sourceTree = "<group>"; };
+		A700F94820C7BD24008C0069 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
+		A700F94920C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCATransform3DToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
+		A700F94A20C7BD24008C0069 /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
 		A7664C2E2058B95500F9E201 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		A7664C392058C15900F9E201 /* Sugo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sugo.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -408,330 +414,9 @@
 		141AC7841E1364D7008D67F6 /* Sugo */ = {
 			isa = PBXGroup;
 			children = (
-				141AC7BD1E137019008D67F6 /* Source */,
-				141AC7BC1E137008008D67F6 /* Resources */,
+				A700F8A320C7BD24008C0069 /* Core */,
 			);
 			path = Sugo;
-			sourceTree = "<group>";
-		};
-		141AC7BC1E137008008D67F6 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7851E1364D7008D67F6 /* Sugo.h */,
-				14015FC01E2DBDD2003DB275 /* SugoURLs.plist */,
-				145CAAC61E57EEA400E53E8C /* SugoCustomDimensions.plist */,
-				145CAAC81E57F1EA00E53E8C /* SugoResourcesPathReplacements.plist */,
-				14A806D61E5B14B300D4148F /* SugoPageEventsViewControllerFilterList.plist */,
-				141AC7861E1364D7008D67F6 /* Info.plist */,
-				A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */,
-				144D2E4E1E20C5AD00387FD2 /* JavaScript */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		141AC7BD1E137019008D67F6 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7CB1E137088008D67F6 /* SugoPrivate.h */,
-				141AC7C31E137088008D67F6 /* Sugo.m */,
-				141AC7C81E137088008D67F6 /* SugoPeople.h */,
-				141AC7CA1E137088008D67F6 /* SugoPeoplePrivate.h */,
-				141AC7C91E137088008D67F6 /* SugoPeople.m */,
-				141AC81A1E137088008D67F6 /* MPResources.h */,
-				141AC81B1E137088008D67F6 /* MPResources.m */,
-				141AC9481E13C446008D67F6 /* Track */,
-				141AC9471E13C432008D67F6 /* Utilities */,
-			);
-			name = Source;
-			sourceTree = "<group>";
-		};
-		141AC9001E137161008D67F6 /* WebViewBindings */ = {
-			isa = PBXGroup;
-			children = (
-				141AC8551E137088008D67F6 /* WebViewBindings.h */,
-				141AC8561E137088008D67F6 /* WebViewBindings.m */,
-				14149DEC1E1A6D9D0006DF6A /* WebViewBindings+WebView.h */,
-				14149DED1E1A6D9D0006DF6A /* WebViewBindings+WebView.m */,
-				141AC8591E137088008D67F6 /* WebViewBindings+UIWebView.h */,
-				141AC85A1E137088008D67F6 /* WebViewBindings+UIWebView.m */,
-				141AC85B1E137088008D67F6 /* WebViewBindings+WKWebView.h */,
-				141AC85C1E137088008D67F6 /* WebViewBindings+WKWebView.m */,
-				141AC85D1E137088008D67F6 /* WebViewInfoStorage.h */,
-				141AC85E1E137088008D67F6 /* WebViewInfoStorage.m */,
-			);
-			name = WebViewBindings;
-			sourceTree = "<group>";
-		};
-		141AC9431E13C06C008D67F6 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				141AC8001E137088008D67F6 /* MPNetwork.h */,
-				141AC8021E137088008D67F6 /* MPNetworkPrivate.h */,
-				141AC8011E137088008D67F6 /* MPNetwork.m */,
-				141AC83F1E137088008D67F6 /* MPWebSocket.h */,
-				141AC8401E137088008D67F6 /* MPWebSocket.m */,
-				141AC7D91E137088008D67F6 /* MPABTestDesignerConnection.h */,
-				141AC7DA1E137088008D67F6 /* MPABTestDesignerConnection.m */,
-			);
-			name = Network;
-			sourceTree = "<group>";
-		};
-		141AC9441E13C138008D67F6 /* CommonBindings */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7FC1E137088008D67F6 /* MPEventBinding.h */,
-				141AC7FD1E137088008D67F6 /* MPEventBinding.m */,
-				141AC8351E137088008D67F6 /* MPUIViewBinding.h */,
-				141AC8361E137088008D67F6 /* MPUIViewBinding.m */,
-				141AC83A1E137088008D67F6 /* MPUITableViewBinding.h */,
-				141AC83B1E137088008D67F6 /* MPUITableViewBinding.m */,
-				A74C45421FDE702900D91B0F /* MPUICollectionViewBinding.h */,
-				A74C45431FDE702900D91B0F /* MPUICollectionViewBinding.m */,
-				144496951E8522010076BC50 /* MPUITextViewBinding.h */,
-				144496961E8522010076BC50 /* MPUITextViewBinding.m */,
-			);
-			name = CommonBindings;
-			sourceTree = "<group>";
-		};
-		141AC9451E13C16C008D67F6 /* Bindings */ = {
-			isa = PBXGroup;
-			children = (
-				141AC9441E13C138008D67F6 /* CommonBindings */,
-				141AC9001E137161008D67F6 /* WebViewBindings */,
-			);
-			name = Bindings;
-			sourceTree = "<group>";
-		};
-		141AC9461E13C3FC008D67F6 /* Serialization */ = {
-			isa = PBXGroup;
-			children = (
-				141AC81C1E137088008D67F6 /* MPSequenceGenerator.h */,
-				141AC81D1E137088008D67F6 /* MPSequenceGenerator.m */,
-				141AC7EA1E137088008D67F6 /* MPApplicationStateSerializer.h */,
-				141AC7EB1E137088008D67F6 /* MPApplicationStateSerializer.m */,
-				141AC80C1E137088008D67F6 /* MPObjectIdentifierProvider.h */,
-				141AC80D1E137088008D67F6 /* MPObjectIdentityProvider.h */,
-				141AC80E1E137088008D67F6 /* MPObjectIdentityProvider.m */,
-				141AC80F1E137088008D67F6 /* MPObjectSelector.h */,
-				141AC8101E137088008D67F6 /* MPObjectSelector.m */,
-				141AC8111E137088008D67F6 /* MPObjectSerializer.h */,
-				141AC8121E137088008D67F6 /* MPObjectSerializer.m */,
-				141AC8131E137088008D67F6 /* MPObjectSerializerConfig.h */,
-				141AC8141E137088008D67F6 /* MPObjectSerializerConfig.m */,
-				141AC8151E137088008D67F6 /* MPObjectSerializerContext.h */,
-				141AC8161E137088008D67F6 /* MPObjectSerializerContext.m */,
-				14656FEE1E2379CA006B7107 /* Injection */,
-			);
-			name = Serialization;
-			sourceTree = "<group>";
-		};
-		141AC9471E13C432008D67F6 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7FE1E137088008D67F6 /* MPFoundation.h */,
-				A74FBADA205A5BDD00063451 /* SugoEvents */,
-				14C607D91EB1C89E00990411 /* HeatMap */,
-				141AC9501E13C86A008D67F6 /* Logger */,
-				141AC94F1E13C81F008D67F6 /* Helpers */,
-				141AC94D1E13C6FE008D67F6 /* Transformer */,
-				141AC94E1E13C741008D67F6 /* AutomaticEvents */,
-				141AC94A1E13C540008D67F6 /* Swizzle */,
-				141AC9431E13C06C008D67F6 /* Network */,
-				141AC9461E13C3FC008D67F6 /* Serialization */,
-			);
-			name = Utilities;
-			sourceTree = "<group>";
-		};
-		141AC9481E13C446008D67F6 /* Track */ = {
-			isa = PBXGroup;
-			children = (
-				141DFD201E442A0400714BA7 /* SugoPageInfos.h */,
-				141DFD211E442A0400714BA7 /* SugoPageInfos.m */,
-				141AC94B1E13C5EE008D67F6 /* Messages */,
-				141AC9451E13C16C008D67F6 /* Bindings */,
-			);
-			name = Track;
-			sourceTree = "<group>";
-		};
-		141AC9491E13C4DE008D67F6 /* Exception */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7C61E137088008D67F6 /* SugoExceptionHandler.h */,
-				141AC7C71E137088008D67F6 /* SugoExceptionHandler.m */,
-			);
-			name = Exception;
-			sourceTree = "<group>";
-		};
-		141AC94A1E13C540008D67F6 /* Swizzle */ = {
-			isa = PBXGroup;
-			children = (
-				141AC8271E137088008D67F6 /* MPSwizzle.h */,
-				141AC8281E137088008D67F6 /* MPSwizzle.m */,
-				141AC8291E137088008D67F6 /* MPSwizzler.h */,
-				141AC82A1E137088008D67F6 /* MPSwizzler.m */,
-			);
-			name = Swizzle;
-			sourceTree = "<group>";
-		};
-		141AC94B1E13C5EE008D67F6 /* Messages */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7E11E137088008D67F6 /* MPABTestDesignerMessage.h */,
-				141AC7F81E137088008D67F6 /* MPDesignerSessionCollection.h */,
-				141AC7F51E137088008D67F6 /* MPDesignerEventBindingMessage.h */,
-				141AC7F91E137088008D67F6 /* MPDesignerTrackMessage.m */,
-				141AC7DF1E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h */,
-				141AC7E01E137088008D67F6 /* MPABTestDesignerDisconnectMessage.m */,
-				141AC7CF1E137088008D67F6 /* MPAbstractABTestDesignerMessage.h */,
-				141AC7D01E137088008D67F6 /* MPAbstractABTestDesignerMessage.m */,
-				141AC7D11E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h */,
-				141AC7D21E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m */,
-				141AC7D31E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.h */,
-				141AC7D41E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.m */,
-				141AC7D51E137088008D67F6 /* MPABTestDesignerClearRequestMessage.h */,
-				141AC7D61E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m */,
-				141AC7D71E137088008D67F6 /* MPABTestDesignerClearResponseMessage.h */,
-				141AC7D81E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m */,
-				141AC7DB1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.h */,
-				141AC7DC1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m */,
-				141AC7DD1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.h */,
-				141AC7DE1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.m */,
-				141AC7E21E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.h */,
-				141AC7E31E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.m */,
-				141AC7E41E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h */,
-				141AC7E51E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m */,
-				141AC7F61E137088008D67F6 /* MPDesignerEventBindingRequestMesssage.m */,
-				141AC7F71E137088008D67F6 /* MPDesignerEventBindingResponseMesssage.m */,
-			);
-			name = Messages;
-			sourceTree = "<group>";
-		};
-		141AC94C1E13C6A6008D67F6 /* Description */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7F31E137088008D67F6 /* MPClassDescription.h */,
-				141AC7F41E137088008D67F6 /* MPClassDescription.m */,
-				141AC7FA1E137088008D67F6 /* MPEnumDescription.h */,
-				141AC7FB1E137088008D67F6 /* MPEnumDescription.m */,
-				141AC8181E137088008D67F6 /* MPPropertyDescription.h */,
-				141AC8191E137088008D67F6 /* MPPropertyDescription.m */,
-				141AC8321E137088008D67F6 /* MPTypeDescription.h */,
-				141AC8331E137088008D67F6 /* MPTypeDescription.m */,
-			);
-			name = Description;
-			sourceTree = "<group>";
-		};
-		141AC94D1E13C6FE008D67F6 /* Transformer */ = {
-			isa = PBXGroup;
-			children = (
-				141AC83C1E137088008D67F6 /* MPValueTransformers.h */,
-				141AC7EC1E137088008D67F6 /* MPBOOLToNSNumberValueTransformer.m */,
-				141AC7ED1E137088008D67F6 /* MPCATransform3DToNSDictionaryValueTransformer.m */,
-				141AC7EE1E137088008D67F6 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */,
-				141AC7EF1E137088008D67F6 /* MPCGColorRefToNSStringValueTransformer.m */,
-				141AC7F01E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m */,
-				141AC7F11E137088008D67F6 /* MPCGRectToNSDictionaryValueTransformer.m */,
-				141AC7F21E137088008D67F6 /* MPCGSizeToNSDictionaryValueTransformer.m */,
-				141AC80A1E137088008D67F6 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */,
-				141AC80B1E137088008D67F6 /* MPNSNumberToCGFloatValueTransformer.m */,
-				141AC8171E137088008D67F6 /* MPPassThroughValueTransformer.m */,
-				141AC8341E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m */,
-				141AC8371E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */,
-				141AC8381E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m */,
-				141AC8391E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m */,
-				14149DDD1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m */,
-			);
-			name = Transformer;
-			sourceTree = "<group>";
-		};
-		141AC94E1E13C741008D67F6 /* AutomaticEvents */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7C11E137088008D67F6 /* AutomaticEventsConstants.h */,
-				141AC7C41E137088008D67F6 /* Sugo+AutomaticEvents.h */,
-				141AC7C51E137088008D67F6 /* Sugo+AutomaticEvents.m */,
-				141AC8521E137088008D67F6 /* UIViewController+AutomaticEvents.h */,
-				141AC8531E137088008D67F6 /* UIViewController+AutomaticEvents.m */,
-				141AC8431E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h */,
-				141AC8441E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.m */,
-				141AC8481E137088008D67F6 /* UIApplication+AutomaticEvents.h */,
-				141AC8491E137088008D67F6 /* UIApplication+AutomaticEvents.m */,
-			);
-			name = AutomaticEvents;
-			sourceTree = "<group>";
-		};
-		141AC94F1E13C81F008D67F6 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				145CAAC21E57EB9E00E53E8C /* SugoConfigurationPropertyList.h */,
-				145CAAC31E57EB9E00E53E8C /* SugoConfigurationPropertyList.m */,
-				141AC84A1E137088008D67F6 /* UIColor+MPColor.h */,
-				141AC84B1E137088008D67F6 /* UIColor+MPColor.m */,
-				141AC84C1E137088008D67F6 /* UIImage+MPAverageColor.h */,
-				141AC84D1E137088008D67F6 /* UIImage+MPAverageColor.m */,
-				141AC84E1E137088008D67F6 /* UIImage+MPImageEffects.h */,
-				141AC84F1E137088008D67F6 /* UIImage+MPImageEffects.m */,
-				141AC8411E137088008D67F6 /* NSInvocation+MPHelpers.h */,
-				141AC8421E137088008D67F6 /* NSInvocation+MPHelpers.m */,
-				141AC8501E137088008D67F6 /* UIView+MPHelpers.h */,
-				141AC8511E137088008D67F6 /* UIView+MPHelpers.m */,
-				14C4CC781E32EC6C005ADF42 /* UIViewController+SugoHelpers.h */,
-				14C4CC791E32EC6C005ADF42 /* UIViewController+SugoHelpers.m */,
-			);
-			name = Helpers;
-			sourceTree = "<group>";
-		};
-		141AC9501E13C86A008D67F6 /* Logger */ = {
-			isa = PBXGroup;
-			children = (
-				141AC7FF1E137088008D67F6 /* MPLogger.h */,
-				141AC94C1E13C6A6008D67F6 /* Description */,
-				141AC9491E13C4DE008D67F6 /* Exception */,
-			);
-			name = Logger;
-			sourceTree = "<group>";
-		};
-		144D2E4E1E20C5AD00387FD2 /* JavaScript */ = {
-			isa = PBXGroup;
-			children = (
-				144D2E3E1E20C5A800387FD2 /* SugoioKit.js */,
-				14C7BE691E4D6DB4000BD790 /* SugoBegin.js */,
-				145CAACA1E58497C00E53E8C /* SugoEnd.js */,
-				145CAACC1E584BF700E53E8C /* WebViewVariables.js */,
-				14D6FEE81EB885850009A39F /* WebViewHeatmap.js */,
-				14DEB5241E32F7B0009F0F80 /* WebViewAPI */,
-				144D2E501E20C5E000387FD2 /* WebViewBindings */,
-				144D2E4F1E20C5CE00387FD2 /* WebViewReport */,
-				14A806DA1E5BD64000D4148F /* WebViewExcute */,
-			);
-			name = JavaScript;
-			sourceTree = "<group>";
-		};
-		144D2E4F1E20C5CE00387FD2 /* WebViewReport */ = {
-			isa = PBXGroup;
-			children = (
-				144D2E3C1E20C5A800387FD2 /* WebViewReport.UI.js */,
-				144D2E431E20C5A800387FD2 /* WebViewReport.WK.js */,
-			);
-			name = WebViewReport;
-			sourceTree = "<group>";
-		};
-		144D2E501E20C5E000387FD2 /* WebViewBindings */ = {
-			isa = PBXGroup;
-			children = (
-				144D2E401E20C5A800387FD2 /* WebViewBindings.UI.js */,
-				14C7BE6B1E4D96C9000BD790 /* WebViewBindings.WK.js */,
-			);
-			name = WebViewBindings;
-			sourceTree = "<group>";
-		};
-		14656FEE1E2379CA006B7107 /* Injection */ = {
-			isa = PBXGroup;
-			children = (
-				14656FEA1E2379BF006B7107 /* Attributes.h */,
-				14656FEB1E2379BF006B7107 /* Attributes.m */,
-			);
-			name = Injection;
 			sourceTree = "<group>";
 		};
 		148D65781E13D611002B2BB7 /* Frameworks */ = {
@@ -754,45 +439,441 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		14A806DA1E5BD64000D4148F /* WebViewExcute */ = {
+		A700F8A320C7BD24008C0069 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				14CA17291ED5659800CA96F1 /* WebViewExcute.Sugo.UI.js */,
-				145CAAD01E584E5200E53E8C /* WebViewExcute.Sugo.WK.js */,
-				144D2E421E20C5A800387FD2 /* WebViewExcute.Report.js */,
+				A700F9F420C7BDF6008C0069 /* Sources */,
+				A700F9F320C7BDBE008C0069 /* Resources */,
 			);
-			name = WebViewExcute;
+			path = Core;
 			sourceTree = "<group>";
 		};
-		14C607D91EB1C89E00990411 /* HeatMap */ = {
+		A700F9F120C7BD38008C0069 /* Javascript */ = {
 			isa = PBXGroup;
 			children = (
-				14C607D51EB1C88E00990411 /* HeatMap.h */,
-				14C607D61EB1C88E00990411 /* HeatMap.m */,
-				14F173471EB4297000BCD9B6 /* HeatMapLayer.h */,
-				14F173481EB4297000BCD9B6 /* HeatMapLayer.m */,
+				A700F9F620C7C1D3008C0069 /* API */,
+				A700F9F820C7C1F8008C0069 /* Bindings */,
+				A700F9F520C7C16B008C0069 /* Executor */,
+				A700F9F720C7C1E1008C0069 /* Report */,
 			);
-			name = HeatMap;
+			path = Javascript;
 			sourceTree = "<group>";
 		};
-		14DEB5241E32F7B0009F0F80 /* WebViewAPI */ = {
+		A700F9F220C7BD9A008C0069 /* PropertyList */ = {
 			isa = PBXGroup;
 			children = (
-				144D2E3D1E20C5A800387FD2 /* WebViewAPI.UI.js */,
-				144D2E441E20C5A800387FD2 /* WebViewAPI.WK.js */,
+				A700F93E20C7BD24008C0069 /* Info.plist */,
+				A700F92420C7BD24008C0069 /* SugoURLs.plist */,
+				A700F8B820C7BD24008C0069 /* SugoCustomDimensions.plist */,
+				A700F8B720C7BD24008C0069 /* SugoPageEventsViewControllerFilterList.plist */,
+				A700F90E20C7BD24008C0069 /* SugoResourcesPathReplacements.plist */,
 			);
-			name = WebViewAPI;
+			path = PropertyList;
 			sourceTree = "<group>";
 		};
-		A74FBADA205A5BDD00063451 /* SugoEvents */ = {
+		A700F9F320C7BDBE008C0069 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A74FBAD2205A5BD800063451 /* SugoEvents+CoreDataProperties.h */,
-				A74FBAD3205A5BD800063451 /* SugoEvents+CoreDataClass.h */,
-				A74FBAD4205A5BD800063451 /* SugoEvents+CoreDataClass.m */,
-				A74FBAD5205A5BD800063451 /* SugoEvents+CoreDataProperties.m */,
+				A700F8E320C7BD24008C0069 /* Sugo.xcdatamodeld */,
+				A700F9F220C7BD9A008C0069 /* PropertyList */,
+				A700F9F120C7BD38008C0069 /* Javascript */,
 			);
-			name = SugoEvents;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A700F9F420C7BDF6008C0069 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A700F93F20C7BD24008C0069 /* Sugo.h */,
+				A700F8AD20C7BD24008C0069 /* MPLogger.h */,
+				A700FA0A20C7CC6B008C0069 /* Track */,
+				A700F9FB20C7C458008C0069 /* Bindings */,
+				A700F9F920C7C3B7008C0069 /* Serialization */,
+				A700FA0420C7C610008C0069 /* Message */,
+				A700F9FA20C7C3E3008C0069 /* Swizzle */,
+				A700FA0620C7C6AC008C0069 /* ValueTransformers */,
+				A700FA0520C7C66E008C0069 /* HeatMap */,
+				A700FA0720C7C724008C0069 /* Network */,
+				A700FA1120C7CF9C008C0069 /* Categories */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		A700F9F520C7C16B008C0069 /* Executor */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8BE20C7BD24008C0069 /* WebViewExecute.Sugo.UI.js */,
+				A700F93620C7BD24008C0069 /* WebViewExecute.Sugo.WK.js */,
+				A700F8FA20C7BD24008C0069 /* WebViewExecute.Report.js */,
+			);
+			path = Executor;
+			sourceTree = "<group>";
+		};
+		A700F9F620C7C1D3008C0069 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				A700F90620C7BD24008C0069 /* SugoBegin.js */,
+				A700F93420C7BD24008C0069 /* SugoEnd.js */,
+				A700F8EB20C7BD24008C0069 /* WebViewVariables.js */,
+				A700F8BC20C7BD24008C0069 /* WebViewAPI.UI.js */,
+				A700F93720C7BD24008C0069 /* WebViewAPI.WK.js */,
+				A700F8D420C7BD24008C0069 /* SugoioKit.js */,
+				A700F92D20C7BD24008C0069 /* WebViewHeatmap.js */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		A700F9F720C7C1E1008C0069 /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8A820C7BD24008C0069 /* WebViewReport.WK.js */,
+				A700F92920C7BD24008C0069 /* WebViewReport.UI.js */,
+			);
+			path = Report;
+			sourceTree = "<group>";
+		};
+		A700F9F820C7C1F8008C0069 /* Bindings */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8D120C7BD24008C0069 /* WebViewBindings.UI.js */,
+				A700F8FD20C7BD24008C0069 /* WebViewBindings.WK.js */,
+			);
+			path = Bindings;
+			sourceTree = "<group>";
+		};
+		A700F9F920C7C3B7008C0069 /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8B220C7BD24008C0069 /* MPApplicationStateSerializer.h */,
+				A700F8FB20C7BD24008C0069 /* MPApplicationStateSerializer.m */,
+				A700F8F320C7BD24008C0069 /* MPSequenceGenerator.m */,
+				A700F93820C7BD24008C0069 /* MPSequenceGenerator.h */,
+				A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */,
+				A700F8C120C7BD24008C0069 /* MPObjectSerializerConfig.m */,
+				A700F8E620C7BD24008C0069 /* MPObjectIdentifierProvider.h */,
+				A700F8E820C7BD24008C0069 /* MPObjectIdentityProvider.m */,
+				A700F8EE20C7BD24008C0069 /* MPObjectSelector.h */,
+				A700F8F020C7BD24008C0069 /* MPObjectSerializer.h */,
+				A700F90820C7BD24008C0069 /* MPObjectSerializerContext.m */,
+				A700F91520C7BD24008C0069 /* MPObjectSerializerConfig.h */,
+				A700F93B20C7BD24008C0069 /* MPObjectSerializer.m */,
+				A700F94220C7BD24008C0069 /* MPObjectSelector.m */,
+				A700F94720C7BD24008C0069 /* MPObjectIdentityProvider.h */,
+				A700FA0920C7CBB0008C0069 /* Description */,
+			);
+			path = Serialization;
+			sourceTree = "<group>";
+		};
+		A700F9FA20C7C3E3008C0069 /* Swizzle */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8E520C7BD24008C0069 /* MPSwizzle.m */,
+				A700F8ED20C7BD24008C0069 /* MPSwizzler.h */,
+				A700F94020C7BD24008C0069 /* MPSwizzler.m */,
+				A700F94A20C7BD24008C0069 /* MPSwizzle.h */,
+			);
+			path = Swizzle;
+			sourceTree = "<group>";
+		};
+		A700F9FB20C7C458008C0069 /* Bindings */ = {
+			isa = PBXGroup;
+			children = (
+				A700F92520C7BD24008C0069 /* UIViewController+SugoHelpers.h */,
+				A700F8D920C7BD24008C0069 /* UIViewController+SugoHelpers.m */,
+				A700FA0820C7C7D4008C0069 /* Attributes */,
+				A700F9FC20C7C4AF008C0069 /* Native */,
+				A700F9FD20C7C4C8008C0069 /* Web */,
+			);
+			path = Bindings;
+			sourceTree = "<group>";
+		};
+		A700F9FC20C7C4AF008C0069 /* Native */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8F120C7BD24008C0069 /* MPEventBinding.h */,
+				A700F93A20C7BD24008C0069 /* MPEventBinding.m */,
+				A700FA0020C7C524008C0069 /* UIView */,
+				A700FA0120C7C533008C0069 /* UITextView */,
+				A700F9FF20C7C50D008C0069 /* UITableView */,
+				A700F9FE20C7C4F3008C0069 /* UICollectionView */,
+			);
+			path = Native;
+			sourceTree = "<group>";
+		};
+		A700F9FD20C7C4C8008C0069 /* Web */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8AF20C7BD24008C0069 /* WebViewInfoStorage.h */,
+				A700F90020C7BD24008C0069 /* WebViewInfoStorage.m */,
+				A700F8A920C7BD24008C0069 /* WebViewBindings.h */,
+				A700F90520C7BD24008C0069 /* WebViewBindings.m */,
+				A700F94320C7BD24008C0069 /* WebViewBindings+WebView.h */,
+				A700F8EC20C7BD24008C0069 /* WebViewBindings+WebView.m */,
+				A700FA0220C7C5BE008C0069 /* UIWebView */,
+				A700FA0320C7C5C9008C0069 /* WKWebView */,
+			);
+			path = Web;
+			sourceTree = "<group>";
+		};
+		A700F9FE20C7C4F3008C0069 /* UICollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8AA20C7BD24008C0069 /* MPUICollectionViewBinding.m */,
+				A700F90320C7BD24008C0069 /* MPUICollectionViewBinding.h */,
+			);
+			path = UICollectionView;
+			sourceTree = "<group>";
+		};
+		A700F9FF20C7C50D008C0069 /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8CA20C7BD24008C0069 /* MPUITableViewBinding.m */,
+				A700F91020C7BD24008C0069 /* MPUITableViewBinding.h */,
+			);
+			path = UITableView;
+			sourceTree = "<group>";
+		};
+		A700FA0020C7C524008C0069 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8B020C7BD24008C0069 /* MPUIViewBinding.m */,
+				A700F90120C7BD24008C0069 /* MPUIViewBinding.h */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
+		A700FA0120C7C533008C0069 /* UITextView */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8DE20C7BD24008C0069 /* MPUITextViewBinding.m */,
+				A700F92320C7BD24008C0069 /* MPUITextViewBinding.h */,
+			);
+			path = UITextView;
+			sourceTree = "<group>";
+		};
+		A700FA0220C7C5BE008C0069 /* UIWebView */ = {
+			isa = PBXGroup;
+			children = (
+				A700F93120C7BD24008C0069 /* WebViewBindings+UIWebView.m */,
+				A700F8CE20C7BD24008C0069 /* WebViewBindings+UIWebView.h */,
+			);
+			path = UIWebView;
+			sourceTree = "<group>";
+		};
+		A700FA0320C7C5C9008C0069 /* WKWebView */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8F420C7BD24008C0069 /* WebViewBindings+WKWebView.h */,
+				A700F93520C7BD24008C0069 /* WebViewBindings+WKWebView.m */,
+			);
+			path = WKWebView;
+			sourceTree = "<group>";
+		};
+		A700FA0420C7C610008C0069 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				A700F93920C7BD24008C0069 /* MPDesignerEventBindingRequestMesssage.m */,
+				A700F8D220C7BD24008C0069 /* MPDesignerEventBindingResponseMesssage.m */,
+				A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */,
+				A700F8B520C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.m */,
+				A700F8B920C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.m */,
+				A700F8BA20C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.h */,
+				A700F8C020C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.m */,
+				A700F8C320C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h */,
+				A700F8C420C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.h */,
+				A700F8C620C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.h */,
+				A700F8C720C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m */,
+				A700F8CD20C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.m */,
+				A700F8D620C7BD24008C0069 /* MPABTestDesignerTweakRequestMessage.h */,
+				A700F8F520C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.h */,
+				A700F8F720C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.h */,
+				A700F90920C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.m */,
+				A700F90A20C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.h */,
+				A700F91120C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.m */,
+				A700F91220C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.h */,
+				A700F91620C7BD24008C0069 /* MPAbstractABTestDesignerMessage.m */,
+				A700F91720C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.m */,
+				A700F91920C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.h */,
+				A700F91B20C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.h */,
+				A700F91C20C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.m */,
+				A700F91E20C7BD24008C0069 /* MPDesignerTrackMessage.m */,
+				A700F92820C7BD24008C0069 /* MPABTestDesignerMessage.h */,
+				A700F93320C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m */,
+				A700F94120C7BD24008C0069 /* MPDesignerEventBindingMessage.h */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		A700FA0520C7C66E008C0069 /* HeatMap */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8BF20C7BD24008C0069 /* HeatMap.h */,
+				A700F8E720C7BD24008C0069 /* HeatMapLayer.h */,
+				A700F91820C7BD24008C0069 /* HeatMap.m */,
+				A700F94820C7BD24008C0069 /* HeatMapLayer.m */,
+			);
+			path = HeatMap;
+			sourceTree = "<group>";
+		};
+		A700FA0620C7C6AC008C0069 /* ValueTransformers */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8AB20C7BD24008C0069 /* MPUIFontToNSDictionaryValueTransformer.m */,
+				A700F8AE20C7BD24008C0069 /* MPUIImageToNSDictionaryValueTransformer.m */,
+				A700F8B620C7BD24008C0069 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */,
+				A700F8C220C7BD24008C0069 /* MPCGRectToNSDictionaryValueTransformer.m */,
+				A700F8C820C7BD24008C0069 /* MPNSNumberToCGFloatValueTransformer.m */,
+				A700F8D520C7BD24008C0069 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */,
+				A700F8DF20C7BD24008C0069 /* MPCGSizeToNSDictionaryValueTransformer.m */,
+				A700F8FE20C7BD24008C0069 /* MPUILayoutSupportToNSStringValueTransformer.m */,
+				A700F8FF20C7BD24008C0069 /* MPPassThroughValueTransformer.m */,
+				A700F91320C7BD24008C0069 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */,
+				A700F91D20C7BD24008C0069 /* MPUIColorToNSStringValueTransformer.m */,
+				A700F92A20C7BD24008C0069 /* MPCGPointToNSDictionaryValueTransformer.m */,
+				A700F92E20C7BD24008C0069 /* MPBOOLToNSNumberValueTransformer.m */,
+				A700F93D20C7BD24008C0069 /* MPValueTransformers.h */,
+				A700F94520C7BD24008C0069 /* MPCGColorRefToNSStringValueTransformer.m */,
+				A700F94920C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m */,
+			);
+			path = ValueTransformers;
+			sourceTree = "<group>";
+		};
+		A700FA0720C7C724008C0069 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8D320C7BD24008C0069 /* MPDesignerSessionCollection.h */,
+				A700F92020C7BD24008C0069 /* MPABTestDesignerConnection.h */,
+				A700F8E220C7BD24008C0069 /* MPABTestDesignerConnection.m */,
+				A700F8D720C7BD24008C0069 /* MPNetwork.h */,
+				A700F90D20C7BD24008C0069 /* MPNetworkPrivate.h */,
+				A700F92C20C7BD24008C0069 /* MPNetwork.m */,
+				A700F8E920C7BD24008C0069 /* MPWebSocket.h */,
+				A700F94620C7BD24008C0069 /* MPWebSocket.m */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		A700FA0820C7C7D4008C0069 /* Attributes */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8EA20C7BD24008C0069 /* Attributes.h */,
+				A700F94420C7BD24008C0069 /* Attributes.m */,
+			);
+			path = Attributes;
+			sourceTree = "<group>";
+		};
+		A700FA0920C7CBB0008C0069 /* Description */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8A720C7BD24008C0069 /* MPPropertyDescription.h */,
+				A700F8AC20C7BD24008C0069 /* MPClassDescription.h */,
+				A700F8BB20C7BD24008C0069 /* MPEnumDescription.m */,
+				A700F8F620C7BD24008C0069 /* MPTypeDescription.m */,
+				A700F90220C7BD24008C0069 /* MPClassDescription.m */,
+				A700F90420C7BD24008C0069 /* MPPropertyDescription.m */,
+				A700F91A20C7BD24008C0069 /* MPEnumDescription.h */,
+				A700F93220C7BD24008C0069 /* MPTypeDescription.h */,
+			);
+			path = Description;
+			sourceTree = "<group>";
+		};
+		A700FA0A20C7CC6B008C0069 /* Track */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8BD20C7BD24008C0069 /* SugoPrivate.h */,
+				A700F8EF20C7BD24008C0069 /* Sugo.m */,
+				A700FA0C20C7CD00008C0069 /* PageInfo */,
+				A700FA0D20C7CD09008C0069 /* People */,
+				A700FA0B20C7CCD6008C0069 /* CoreData */,
+				A700FA0E20C7CD8D008C0069 /* ConfigurationPropertyList */,
+				A700FA0F20C7CD9E008C0069 /* ExceptionHandler */,
+				A700FA1020C7CDAB008C0069 /* AutomaticEvents */,
+			);
+			path = Track;
+			sourceTree = "<group>";
+		};
+		A700FA0B20C7CCD6008C0069 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */,
+				A700F90720C7BD24008C0069 /* SugoEvents+CoreDataClass.m */,
+				A700F8D020C7BD24008C0069 /* SugoEvents+CoreDataProperties.h */,
+				A700F93020C7BD24008C0069 /* SugoEvents+CoreDataProperties.m */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		A700FA0C20C7CD00008C0069 /* PageInfo */ = {
+			isa = PBXGroup;
+			children = (
+				A700F92120C7BD24008C0069 /* SugoPageInfos.h */,
+				A700F8E120C7BD24008C0069 /* SugoPageInfos.m */,
+			);
+			path = PageInfo;
+			sourceTree = "<group>";
+		};
+		A700FA0D20C7CD09008C0069 /* People */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8DC20C7BD24008C0069 /* SugoPeople.h */,
+				A700F91F20C7BD24008C0069 /* SugoPeoplePrivate.h */,
+				A700F92720C7BD24008C0069 /* SugoPeople.m */,
+			);
+			path = People;
+			sourceTree = "<group>";
+		};
+		A700FA0E20C7CD8D008C0069 /* ConfigurationPropertyList */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8FC20C7BD24008C0069 /* SugoConfigurationPropertyList.h */,
+				A700F8B120C7BD24008C0069 /* SugoConfigurationPropertyList.m */,
+			);
+			path = ConfigurationPropertyList;
+			sourceTree = "<group>";
+		};
+		A700FA0F20C7CD9E008C0069 /* ExceptionHandler */ = {
+			isa = PBXGroup;
+			children = (
+				A700F90F20C7BD24008C0069 /* SugoExceptionHandler.h */,
+				A700F8C920C7BD24008C0069 /* SugoExceptionHandler.m */,
+			);
+			path = ExceptionHandler;
+			sourceTree = "<group>";
+		};
+		A700FA1020C7CDAB008C0069 /* AutomaticEvents */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8E020C7BD24008C0069 /* MPFoundation.h */,
+				A700F8DA20C7BD24008C0069 /* AutomaticEventsConstants.h */,
+				A700F90C20C7BD24008C0069 /* Sugo+AutomaticEvents.h */,
+				A700F8CB20C7BD24008C0069 /* Sugo+AutomaticEvents.m */,
+				A700F8F820C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.h */,
+				A700F8B320C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.m */,
+				A700F91420C7BD24008C0069 /* UIApplication+AutomaticEvents.h */,
+				A700F8C520C7BD24008C0069 /* UIApplication+AutomaticEvents.m */,
+				A700F92B20C7BD24008C0069 /* UIViewController+AutomaticEvents.h */,
+				A700F8D820C7BD24008C0069 /* UIViewController+AutomaticEvents.m */,
+				A700F8F220C7BD24008C0069 /* MPResources.h */,
+				A700F93C20C7BD24008C0069 /* MPResources.m */,
+			);
+			path = AutomaticEvents;
+			sourceTree = "<group>";
+		};
+		A700FA1120C7CF9C008C0069 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				A700F8B420C7BD24008C0069 /* UIColor+MPColor.m */,
+				A700F8CC20C7BD24008C0069 /* UIImage+MPImageEffects.h */,
+				A700F8CF20C7BD24008C0069 /* UIImage+MPAverageColor.h */,
+				A700F8DB20C7BD24008C0069 /* NSInvocation+MPHelpers.m */,
+				A700F8DD20C7BD24008C0069 /* UIView+MPHelpers.m */,
+				A700F8F920C7BD24008C0069 /* UIColor+MPColor.h */,
+				A700F90B20C7BD24008C0069 /* UIImage+MPImageEffects.m */,
+				A700F92220C7BD24008C0069 /* UIView+MPHelpers.h */,
+				A700F92620C7BD24008C0069 /* NSInvocation+MPHelpers.h */,
+				A700F92F20C7BD24008C0069 /* UIImage+MPAverageColor.m */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -802,74 +883,76 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				141AC7871E1364D7008D67F6 /* Sugo.h in Headers */,
-				141AC8631E137088008D67F6 /* AutomaticEventsConstants.h in Headers */,
-				141AC86A1E137088008D67F6 /* SugoPeople.h in Headers */,
-				141AC8D61E137088008D67F6 /* MPUIViewBinding.h in Headers */,
-				141AC8961E137088008D67F6 /* MPDesignerEventBindingMessage.h in Headers */,
-				141AC8851E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
-				141AC8B01E137088008D67F6 /* MPObjectSelector.h in Headers */,
-				141AC8B61E137088008D67F6 /* MPObjectSerializerContext.h in Headers */,
-				141AC8B41E137088008D67F6 /* MPObjectSerializerConfig.h in Headers */,
-				141AC89B1E137088008D67F6 /* MPEnumDescription.h in Headers */,
-				141AC8991E137088008D67F6 /* MPDesignerSessionCollection.h in Headers */,
-				141AC8B21E137088008D67F6 /* MPObjectSerializer.h in Headers */,
-				141AC87A1E137088008D67F6 /* MPABTestDesignerConnection.h in Headers */,
-				14656FEC1E2379BF006B7107 /* Attributes.h in Headers */,
-				141AC8F21E137088008D67F6 /* UIViewController+AutomaticEvents.h in Headers */,
-				141AC8E81E137088008D67F6 /* UIApplication+AutomaticEvents.h in Headers */,
-				14C607D71EB1C88E00990411 /* HeatMap.h in Headers */,
-				141AC87E1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */,
-				141AC8821E137088008D67F6 /* MPABTestDesignerMessage.h in Headers */,
-				141AC8FA1E137088008D67F6 /* WebViewBindings+WKWebView.h in Headers */,
-				141AC8BD1E137088008D67F6 /* MPSequenceGenerator.h in Headers */,
-				141AC8EE1E137088008D67F6 /* UIImage+MPImageEffects.h in Headers */,
-				141AC8B91E137088008D67F6 /* MPPropertyDescription.h in Headers */,
-				141AC89F1E137088008D67F6 /* MPFoundation.h in Headers */,
-				141AC8D31E137088008D67F6 /* MPTypeDescription.h in Headers */,
-				141AC8F01E137088008D67F6 /* UIView+MPHelpers.h in Headers */,
-				141AC8F81E137088008D67F6 /* WebViewBindings+UIWebView.h in Headers */,
-				A74FBAD7205A5BD800063451 /* SugoEvents+CoreDataClass.h in Headers */,
-				141AC8E21E137088008D67F6 /* NSInvocation+MPHelpers.h in Headers */,
-				141AC87C1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */,
-				141AC8E01E137088008D67F6 /* MPWebSocket.h in Headers */,
-				141AC86C1E137088008D67F6 /* SugoPeoplePrivate.h in Headers */,
-				141AC8681E137088008D67F6 /* SugoExceptionHandler.h in Headers */,
-				141AC8F41E137088008D67F6 /* WebViewBindings.h in Headers */,
-				141AC8DD1E137088008D67F6 /* MPValueTransformers.h in Headers */,
-				144496971E8522010076BC50 /* MPUITextViewBinding.h in Headers */,
-				141AC8E41E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.h in Headers */,
-				141AC8BB1E137088008D67F6 /* MPResources.h in Headers */,
-				14F173491EB4297000BCD9B6 /* HeatMapLayer.h in Headers */,
-				141AC8721E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
-				141AC89D1E137088008D67F6 /* MPEventBinding.h in Headers */,
-				14C4CC7A1E32EC6C005ADF42 /* UIViewController+SugoHelpers.h in Headers */,
-				141AC8741E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.h in Headers */,
-				141AC8C81E137088008D67F6 /* MPSwizzle.h in Headers */,
-				141AC8DB1E137088008D67F6 /* MPUITableViewBinding.h in Headers */,
-				141AC8781E137088008D67F6 /* MPABTestDesignerClearResponseMessage.h in Headers */,
-				141AC8A11E137088008D67F6 /* MPNetwork.h in Headers */,
-				141AC8831E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */,
-				141AC8A31E137088008D67F6 /* MPNetworkPrivate.h in Headers */,
-				141AC8EA1E137088008D67F6 /* UIColor+MPColor.h in Headers */,
-				141AC88B1E137088008D67F6 /* MPApplicationStateSerializer.h in Headers */,
-				141AC8661E137088008D67F6 /* Sugo+AutomaticEvents.h in Headers */,
-				141DFD221E442A0400714BA7 /* SugoPageInfos.h in Headers */,
-				145CAAC41E57EB9E00E53E8C /* SugoConfigurationPropertyList.h in Headers */,
-				141AC8EC1E137088008D67F6 /* UIImage+MPAverageColor.h in Headers */,
-				141AC8941E137088008D67F6 /* MPClassDescription.h in Headers */,
-				14149DEE1E1A6D9D0006DF6A /* WebViewBindings+WebView.h in Headers */,
-				141AC8CA1E137088008D67F6 /* MPSwizzler.h in Headers */,
-				141AC8AE1E137088008D67F6 /* MPObjectIdentityProvider.h in Headers */,
-				A74FBAD6205A5BD800063451 /* SugoEvents+CoreDataProperties.h in Headers */,
-				141AC8801E137088008D67F6 /* MPABTestDesignerDisconnectMessage.h in Headers */,
-				141AC8FC1E137088008D67F6 /* WebViewInfoStorage.h in Headers */,
-				A74C45441FDE702900D91B0F /* MPUICollectionViewBinding.h in Headers */,
-				141AC8AD1E137088008D67F6 /* MPObjectIdentifierProvider.h in Headers */,
-				141AC8701E137088008D67F6 /* MPAbstractABTestDesignerMessage.h in Headers */,
-				141AC8A01E137088008D67F6 /* MPLogger.h in Headers */,
-				141AC86D1E137088008D67F6 /* SugoPrivate.h in Headers */,
-				141AC8761E137088008D67F6 /* MPABTestDesignerClearRequestMessage.h in Headers */,
+				A700F9E520C7BD24008C0069 /* Sugo.h in Headers */,
+				A700F98320C7BD24008C0069 /* SugoPeople.h in Headers */,
+				A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */,
+				A700F97720C7BD24008C0069 /* SugoEvents+CoreDataProperties.h in Headers */,
+				A700F95420C7BD24008C0069 /* MPLogger.h in Headers */,
+				A700F9C520C7BD24008C0069 /* SugoPeoplePrivate.h in Headers */,
+				A700F96420C7BD24008C0069 /* SugoPrivate.h in Headers */,
+				A700F9B320C7BD24008C0069 /* MPNetworkPrivate.h in Headers */,
+				A700F98C20C7BD24008C0069 /* MPObjectIdentifierProvider.h in Headers */,
+				A700F97E20C7BD24008C0069 /* MPNetwork.h in Headers */,
+				A700F99D20C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.h in Headers */,
+				A700F96A20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h in Headers */,
+				A700F95920C7BD24008C0069 /* MPApplicationStateSerializer.h in Headers */,
+				A700F9D120C7BD24008C0069 /* UIViewController+AutomaticEvents.h in Headers */,
+				A700F95320C7BD24008C0069 /* MPClassDescription.h in Headers */,
+				A700F96620C7BD24008C0069 /* HeatMap.h in Headers */,
+				A700F9B020C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.h in Headers */,
+				A700F99E20C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.h in Headers */,
+				A700F9BF20C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
+				A700F9CB20C7BD24008C0069 /* UIViewController+SugoHelpers.h in Headers */,
+				A700F9ED20C7BD24008C0069 /* MPObjectIdentityProvider.h in Headers */,
+				A700F96B20C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */,
+				A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */,
+				A700F9CE20C7BD24008C0069 /* MPABTestDesignerMessage.h in Headers */,
+				A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */,
+				A700F96120C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */,
+				A700F9B620C7BD24008C0069 /* MPUITableViewBinding.h in Headers */,
+				A700F99020C7BD24008C0069 /* Attributes.h in Headers */,
+				A700F9C920C7BD24008C0069 /* MPUITextViewBinding.h in Headers */,
+				A700F96D20C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.h in Headers */,
+				A700F9B820C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
+				A700F97D20C7BD24008C0069 /* MPABTestDesignerTweakRequestMessage.h in Headers */,
+				A700F97320C7BD24008C0069 /* UIImage+MPImageEffects.h in Headers */,
+				A700F95620C7BD24008C0069 /* WebViewInfoStorage.h in Headers */,
+				A700F9A920C7BD24008C0069 /* MPUICollectionViewBinding.h in Headers */,
+				A700F9C120C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.h in Headers */,
+				A700F9BB20C7BD24008C0069 /* MPObjectSerializerConfig.h in Headers */,
+				A700F9E920C7BD24008C0069 /* WebViewBindings+WebView.h in Headers */,
+				A700F98F20C7BD24008C0069 /* MPWebSocket.h in Headers */,
+				A700F9E320C7BD24008C0069 /* MPValueTransformers.h in Headers */,
+				A700F97520C7BD24008C0069 /* WebViewBindings+UIWebView.h in Headers */,
+				A700F9E720C7BD24008C0069 /* MPDesignerEventBindingMessage.h in Headers */,
+				A700F9C020C7BD24008C0069 /* MPEnumDescription.h in Headers */,
+				A700F99F20C7BD24008C0069 /* UIColor+MPColor.h in Headers */,
+				A700F9B520C7BD24008C0069 /* SugoExceptionHandler.h in Headers */,
+				A700F94E20C7BD24008C0069 /* MPPropertyDescription.h in Headers */,
+				A700F99B20C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */,
+				A700F9DE20C7BD24008C0069 /* MPSequenceGenerator.h in Headers */,
+				A700F97A20C7BD24008C0069 /* MPDesignerSessionCollection.h in Headers */,
+				A700F9D820C7BD24008C0069 /* MPTypeDescription.h in Headers */,
+				A700F9A720C7BD24008C0069 /* MPUIViewBinding.h in Headers */,
+				A700F9CC20C7BD24008C0069 /* NSInvocation+MPHelpers.h in Headers */,
+				A700F9F020C7BD24008C0069 /* MPSwizzle.h in Headers */,
+				A700F99A20C7BD24008C0069 /* WebViewBindings+WKWebView.h in Headers */,
+				A700F9C720C7BD24008C0069 /* SugoPageInfos.h in Headers */,
+				A700F98720C7BD24008C0069 /* MPFoundation.h in Headers */,
+				A700F99620C7BD24008C0069 /* MPObjectSerializer.h in Headers */,
+				A700F99720C7BD24008C0069 /* MPEventBinding.h in Headers */,
+				A700F95020C7BD24008C0069 /* WebViewBindings.h in Headers */,
+				A700F9C620C7BD24008C0069 /* MPABTestDesignerConnection.h in Headers */,
+				A700F99420C7BD24008C0069 /* MPObjectSelector.h in Headers */,
+				A700F9B220C7BD24008C0069 /* Sugo+AutomaticEvents.h in Headers */,
+				A700F98120C7BD24008C0069 /* AutomaticEventsConstants.h in Headers */,
+				A700F9BA20C7BD24008C0069 /* UIApplication+AutomaticEvents.h in Headers */,
+				A700F99320C7BD24008C0069 /* MPSwizzler.h in Headers */,
+				A700F9A220C7BD24008C0069 /* SugoConfigurationPropertyList.h in Headers */,
+				A700F98D20C7BD24008C0069 /* HeatMapLayer.h in Headers */,
+				A700F9C820C7BD24008C0069 /* UIView+MPHelpers.h in Headers */,
+				A700F97620C7BD24008C0069 /* UIImage+MPAverageColor.h in Headers */,
+				A700F99820C7BD24008C0069 /* MPResources.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,7 +983,7 @@
 		141AC7791E1364D7008D67F6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = sugo;
 				TargetAttributes = {
 					141AC7811E1364D7008D67F6 = {
@@ -931,24 +1014,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				145CAAC91E57F1EA00E53E8C /* SugoResourcesPathReplacements.plist in Resources */,
-				144D2E461E20C5A800387FD2 /* WebViewAPI.UI.js in Resources */,
-				145CAAD11E584E5200E53E8C /* WebViewExcute.Sugo.WK.js in Resources */,
-				14015FC11E2DBDD2003DB275 /* SugoURLs.plist in Resources */,
-				14D6FEE91EB885850009A39F /* WebViewHeatmap.js in Resources */,
-				144D2E451E20C5A800387FD2 /* WebViewReport.UI.js in Resources */,
-				14C7BE6C1E4D96C9000BD790 /* WebViewBindings.WK.js in Resources */,
-				145CAACD1E584BF700E53E8C /* WebViewVariables.js in Resources */,
-				14A806D71E5B14B300D4148F /* SugoPageEventsViewControllerFilterList.plist in Resources */,
-				144D2E491E20C5A800387FD2 /* WebViewBindings.UI.js in Resources */,
-				14C7BE6A1E4D6DB4000BD790 /* SugoBegin.js in Resources */,
-				144D2E4C1E20C5A800387FD2 /* WebViewReport.WK.js in Resources */,
-				14CA172A1ED5659800CA96F1 /* WebViewExcute.Sugo.UI.js in Resources */,
-				144D2E471E20C5A800387FD2 /* SugoioKit.js in Resources */,
-				145CAAC71E57EEA400E53E8C /* SugoCustomDimensions.plist in Resources */,
-				144D2E4B1E20C5A800387FD2 /* WebViewExcute.Report.js in Resources */,
-				145CAACB1E58497C00E53E8C /* SugoEnd.js in Resources */,
-				144D2E4D1E20C5A800387FD2 /* WebViewAPI.WK.js in Resources */,
+				A700F99120C7BD24008C0069 /* WebViewVariables.js in Resources */,
+				A700F9CF20C7BD24008C0069 /* WebViewReport.UI.js in Resources */,
+				A700F96520C7BD24008C0069 /* WebViewExecute.Sugo.UI.js in Resources */,
+				A700F9B420C7BD24008C0069 /* SugoResourcesPathReplacements.plist in Resources */,
+				A700F97820C7BD24008C0069 /* WebViewBindings.UI.js in Resources */,
+				A700F9D320C7BD24008C0069 /* WebViewHeatmap.js in Resources */,
+				A700F95F20C7BD24008C0069 /* SugoCustomDimensions.plist in Resources */,
+				A700F94F20C7BD24008C0069 /* WebViewReport.WK.js in Resources */,
+				A700F96320C7BD24008C0069 /* WebViewAPI.UI.js in Resources */,
+				A700F9AC20C7BD24008C0069 /* SugoBegin.js in Resources */,
+				A700F9DA20C7BD24008C0069 /* SugoEnd.js in Resources */,
+				A700F97B20C7BD24008C0069 /* SugoioKit.js in Resources */,
+				A700F9DD20C7BD24008C0069 /* WebViewAPI.WK.js in Resources */,
+				A700F9A020C7BD24008C0069 /* WebViewExecute.Report.js in Resources */,
+				A700F9DC20C7BD24008C0069 /* WebViewExecute.Sugo.WK.js in Resources */,
+				A700F9CA20C7BD24008C0069 /* SugoURLs.plist in Resources */,
+				A700F95E20C7BD24008C0069 /* SugoPageEventsViewControllerFilterList.plist in Resources */,
+				A700F9A320C7BD24008C0069 /* WebViewBindings.WK.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,82 +1042,83 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				141AC87B1E137088008D67F6 /* MPABTestDesignerConnection.m in Sources */,
-				A7664C3A2058C15900F9E201 /* Sugo.xcdatamodeld in Sources */,
-				141AC8FD1E137088008D67F6 /* WebViewInfoStorage.m in Sources */,
-				141AC8CB1E137088008D67F6 /* MPSwizzler.m in Sources */,
-				141AC8D81E137088008D67F6 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
-				141AC8C91E137088008D67F6 /* MPSwizzle.m in Sources */,
-				141AC8EB1E137088008D67F6 /* UIColor+MPColor.m in Sources */,
-				141AC8931E137088008D67F6 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
-				A74FBAD9205A5BD800063451 /* SugoEvents+CoreDataProperties.m in Sources */,
-				141AC8921E137088008D67F6 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
-				141AC89C1E137088008D67F6 /* MPEnumDescription.m in Sources */,
-				141AC8A21E137088008D67F6 /* MPNetwork.m in Sources */,
-				141AC88F1E137088008D67F6 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
-				141AC8E11E137088008D67F6 /* MPWebSocket.m in Sources */,
-				141AC8841E137088008D67F6 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
-				141AC8AC1E137088008D67F6 /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
-				141AC8951E137088008D67F6 /* MPClassDescription.m in Sources */,
-				141AC8EF1E137088008D67F6 /* UIImage+MPImageEffects.m in Sources */,
-				141AC8751E137088008D67F6 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
-				141AC87F1E137088008D67F6 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
-				141AC8711E137088008D67F6 /* MPAbstractABTestDesignerMessage.m in Sources */,
-				141AC8F11E137088008D67F6 /* UIView+MPHelpers.m in Sources */,
-				141AC8B71E137088008D67F6 /* MPObjectSerializerContext.m in Sources */,
-				141AC8AB1E137088008D67F6 /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */,
-				141AC8B31E137088008D67F6 /* MPObjectSerializer.m in Sources */,
-				141AC88E1E137088008D67F6 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
-				141AC8BA1E137088008D67F6 /* MPPropertyDescription.m in Sources */,
-				141DFD231E442A0400714BA7 /* SugoPageInfos.m in Sources */,
-				141AC8FB1E137088008D67F6 /* WebViewBindings+WKWebView.m in Sources */,
-				141AC8F31E137088008D67F6 /* UIViewController+AutomaticEvents.m in Sources */,
-				141AC8B51E137088008D67F6 /* MPObjectSerializerConfig.m in Sources */,
-				141AC8F91E137088008D67F6 /* WebViewBindings+UIWebView.m in Sources */,
-				141AC8691E137088008D67F6 /* SugoExceptionHandler.m in Sources */,
-				141AC8901E137088008D67F6 /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
-				141AC8811E137088008D67F6 /* MPABTestDesignerDisconnectMessage.m in Sources */,
-				141AC88D1E137088008D67F6 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
-				141AC8B81E137088008D67F6 /* MPPassThroughValueTransformer.m in Sources */,
-				A74FBAD8205A5BD800063451 /* SugoEvents+CoreDataClass.m in Sources */,
-				141AC8D41E137088008D67F6 /* MPTypeDescription.m in Sources */,
-				141AC8AF1E137088008D67F6 /* MPObjectIdentityProvider.m in Sources */,
-				141AC8BC1E137088008D67F6 /* MPResources.m in Sources */,
-				14C4CC7B1E32EC6C005ADF42 /* UIViewController+SugoHelpers.m in Sources */,
-				14F1734A1EB4297000BCD9B6 /* HeatMapLayer.m in Sources */,
-				144496981E8522010076BC50 /* MPUITextViewBinding.m in Sources */,
-				141AC8861E137088008D67F6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
-				A74C45451FDE702900D91B0F /* MPUICollectionViewBinding.m in Sources */,
-				141AC8771E137088008D67F6 /* MPABTestDesignerClearRequestMessage.m in Sources */,
-				141AC87D1E137088008D67F6 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
-				141AC8671E137088008D67F6 /* Sugo+AutomaticEvents.m in Sources */,
-				141AC89E1E137088008D67F6 /* MPEventBinding.m in Sources */,
-				14149DEF1E1A6D9D0006DF6A /* WebViewBindings+WebView.m in Sources */,
-				141AC8DC1E137088008D67F6 /* MPUITableViewBinding.m in Sources */,
-				141AC8D71E137088008D67F6 /* MPUIViewBinding.m in Sources */,
-				141AC8981E137088008D67F6 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
-				141AC8E31E137088008D67F6 /* NSInvocation+MPHelpers.m in Sources */,
-				141AC8971E137088008D67F6 /* MPDesignerEventBindingRequestMesssage.m in Sources */,
-				145CAAC51E57EB9E00E53E8C /* SugoConfigurationPropertyList.m in Sources */,
-				141AC88C1E137088008D67F6 /* MPApplicationStateSerializer.m in Sources */,
-				141AC8651E137088008D67F6 /* Sugo.m in Sources */,
-				141AC8D91E137088008D67F6 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
-				141AC8911E137088008D67F6 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
-				141AC8ED1E137088008D67F6 /* UIImage+MPAverageColor.m in Sources */,
-				14656FED1E2379BF006B7107 /* Attributes.m in Sources */,
-				141AC8B11E137088008D67F6 /* MPObjectSelector.m in Sources */,
-				14C607D81EB1C88E00990411 /* HeatMap.m in Sources */,
-				141AC8791E137088008D67F6 /* MPABTestDesignerClearResponseMessage.m in Sources */,
-				141AC8731E137088008D67F6 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
-				141AC8F51E137088008D67F6 /* WebViewBindings.m in Sources */,
-				141AC89A1E137088008D67F6 /* MPDesignerTrackMessage.m in Sources */,
-				141AC8DA1E137088008D67F6 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
-				141AC86B1E137088008D67F6 /* SugoPeople.m in Sources */,
-				141AC8E51E137088008D67F6 /* NSNotificationCenter+AutomaticEvents.m in Sources */,
-				14149DDF1E19F6C20006DF6A /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */,
-				141AC8BE1E137088008D67F6 /* MPSequenceGenerator.m in Sources */,
-				141AC8D51E137088008D67F6 /* MPUIColorToNSStringValueTransformer.m in Sources */,
-				141AC8E91E137088008D67F6 /* UIApplication+AutomaticEvents.m in Sources */,
+				A700F95B20C7BD24008C0069 /* UIColor+MPColor.m in Sources */,
+				A700F9D220C7BD24008C0069 /* MPNetwork.m in Sources */,
+				A700F9D920C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
+				A700F97920C7BD24008C0069 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
+				A700F9EA20C7BD24008C0069 /* Attributes.m in Sources */,
+				A700F9E220C7BD24008C0069 /* MPResources.m in Sources */,
+				A700F9EF20C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
+				A700F9CD20C7BD24008C0069 /* SugoPeople.m in Sources */,
+				A700F9D020C7BD24008C0069 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
+				A700F9EC20C7BD24008C0069 /* MPWebSocket.m in Sources */,
+				A700F96720C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
+				A700F9A620C7BD24008C0069 /* WebViewInfoStorage.m in Sources */,
+				A700F95520C7BD24008C0069 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
+				A700F9A820C7BD24008C0069 /* MPClassDescription.m in Sources */,
+				A700F95820C7BD24008C0069 /* SugoConfigurationPropertyList.m in Sources */,
+				A700F97120C7BD24008C0069 /* MPUITableViewBinding.m in Sources */,
+				A700F95720C7BD24008C0069 /* MPUIViewBinding.m in Sources */,
+				A700F98A20C7BD24008C0069 /* Sugo.xcdatamodeld in Sources */,
+				A700F98420C7BD24008C0069 /* UIView+MPHelpers.m in Sources */,
+				A700F95120C7BD24008C0069 /* MPUICollectionViewBinding.m in Sources */,
+				A700F9D620C7BD24008C0069 /* SugoEvents+CoreDataProperties.m in Sources */,
+				A700F9E020C7BD24008C0069 /* MPEventBinding.m in Sources */,
+				A700F97C20C7BD24008C0069 /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */,
+				A700F9C320C7BD24008C0069 /* MPUIColorToNSStringValueTransformer.m in Sources */,
+				A700F9B120C7BD24008C0069 /* UIImage+MPImageEffects.m in Sources */,
+				A700F9BD20C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
+				A700F9AF20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
+				A700F9A120C7BD24008C0069 /* MPApplicationStateSerializer.m in Sources */,
+				A700F96E20C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
+				A700F96920C7BD24008C0069 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
+				A700F99C20C7BD24008C0069 /* MPTypeDescription.m in Sources */,
+				A700F9D520C7BD24008C0069 /* UIImage+MPAverageColor.m in Sources */,
+				A700F9AE20C7BD24008C0069 /* MPObjectSerializerContext.m in Sources */,
+				A700F9A520C7BD24008C0069 /* MPPassThroughValueTransformer.m in Sources */,
+				A700F98220C7BD24008C0069 /* NSInvocation+MPHelpers.m in Sources */,
+				A700F97420C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.m in Sources */,
+				A700F95D20C7BD24008C0069 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
+				A700F9DF20C7BD24008C0069 /* MPDesignerEventBindingRequestMesssage.m in Sources */,
+				A700F9D720C7BD24008C0069 /* WebViewBindings+UIWebView.m in Sources */,
+				A700F9B720C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.m in Sources */,
+				A700F9E620C7BD24008C0069 /* MPSwizzler.m in Sources */,
+				A700F98E20C7BD24008C0069 /* MPObjectIdentityProvider.m in Sources */,
+				A700F97220C7BD24008C0069 /* Sugo+AutomaticEvents.m in Sources */,
+				A700F98920C7BD24008C0069 /* MPABTestDesignerConnection.m in Sources */,
+				A700F9AA20C7BD24008C0069 /* MPPropertyDescription.m in Sources */,
+				A700F96020C7BD24008C0069 /* MPABTestDesignerDisconnectMessage.m in Sources */,
+				A700F97020C7BD24008C0069 /* SugoExceptionHandler.m in Sources */,
+				A700F9D420C7BD24008C0069 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
+				A700F9C420C7BD24008C0069 /* MPDesignerTrackMessage.m in Sources */,
+				A700F98820C7BD24008C0069 /* SugoPageInfos.m in Sources */,
+				A700F98520C7BD24008C0069 /* MPUITextViewBinding.m in Sources */,
+				A700F9EB20C7BD24008C0069 /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
+				A700F9A420C7BD24008C0069 /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */,
+				A700F98B20C7BD24008C0069 /* MPSwizzle.m in Sources */,
+				A700F9E820C7BD24008C0069 /* MPObjectSelector.m in Sources */,
+				A700F9EE20C7BD24008C0069 /* HeatMapLayer.m in Sources */,
+				A700F9B920C7BD24008C0069 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
+				A700F96220C7BD24008C0069 /* MPEnumDescription.m in Sources */,
+				A700F96C20C7BD24008C0069 /* UIApplication+AutomaticEvents.m in Sources */,
+				A700F95C20C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.m in Sources */,
+				A700F9C220C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
+				A700F99520C7BD24008C0069 /* Sugo.m in Sources */,
+				A700F95220C7BD24008C0069 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
+				A700F9BE20C7BD24008C0069 /* HeatMap.m in Sources */,
+				A700F98620C7BD24008C0069 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
+				A700F9E120C7BD24008C0069 /* MPObjectSerializer.m in Sources */,
+				A700F9DB20C7BD24008C0069 /* WebViewBindings+WKWebView.m in Sources */,
+				A700F9BC20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.m in Sources */,
+				A700F96F20C7BD24008C0069 /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
+				A700F99220C7BD24008C0069 /* WebViewBindings+WebView.m in Sources */,
+				A700F97F20C7BD24008C0069 /* UIViewController+AutomaticEvents.m in Sources */,
+				A700F9AD20C7BD24008C0069 /* SugoEvents+CoreDataClass.m in Sources */,
+				A700F98020C7BD24008C0069 /* UIViewController+SugoHelpers.m in Sources */,
+				A700F95A20C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.m in Sources */,
+				A700F96820C7BD24008C0069 /* MPObjectSerializerConfig.m in Sources */,
+				A700F99920C7BD24008C0069 /* MPSequenceGenerator.m in Sources */,
+				A700F9AB20C7BD24008C0069 /* WebViewBindings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1054,6 +1138,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1061,6 +1146,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1111,6 +1197,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1118,6 +1205,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1158,7 +1246,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Sugo/Info.plist;
+				INFOPLIST_FILE = Sugo/Core/Resources/PropertyList/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.Sugo;
@@ -1176,7 +1264,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Sugo/Info.plist;
+				INFOPLIST_FILE = Sugo/Core/Resources/PropertyList/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.Sugo;
@@ -1209,12 +1297,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		A7664C382058C15900F9E201 /* Sugo.xcdatamodeld */ = {
+		A700F8E320C7BD24008C0069 /* Sugo.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A7664C392058C15900F9E201 /* Sugo.xcdatamodel */,
+				A700F8E420C7BD24008C0069 /* Sugo.xcdatamodel */,
 			);
-			currentVersion = A7664C392058C15900F9E201 /* Sugo.xcdatamodel */;
+			currentVersion = A700F8E420C7BD24008C0069 /* Sugo.xcdatamodel */;
 			path = Sugo.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

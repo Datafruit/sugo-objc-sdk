@@ -2,7 +2,7 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'sugo-objc-sdk'
   spec.module_name           = 'Sugo'
-  spec.version               = '3.1.1'
+  spec.version               = '3.2.0'
   spec.license               = 'Apache License, Version 2.0'
   spec.summary               = 'Official Sugo SDK for iOS (Objective-C)'
   spec.homepage              = 'https://github.com/Datafruit/sugo-objc-sdk'
@@ -12,9 +12,9 @@ Pod::Spec.new do |spec|
   spec.default_subspec       = 'core'
 
   spec.subspec 'core' do |core|
-    core.source_files           = 'Sugo/*.{m,h}'
-    core.resources              = 'Sugo/*.js', 'Sugo/Sugo*.plist', 'Sugo/*.xcdatamodeld'
-    core.private_header_files   = 'Sugo/SugoPrivate.h', 'Sugo/SugoPeoplePrivate.h', 'Sugo/MPNetworkPrivate.h', 'Sugo/MPLogger.h', 'SugoEvents+CoreDataProperties.h', 'SugoEvents+CoreDataClass.h'
+    core.source_files           = 'Sugo/Core/Sources/**/*.{m,h}'
+    core.resources              = 'Sugo/Core/Resources/**/*.js', 'Sugo/Core/Resources/**/Sugo*.plist', 'Sugo/Core/Resources/**/*.xcdatamodeld'
+    core.private_header_files   = 'Sugo/Core/Sources/Track/SugoPrivate.h', 'Sugo/Core/Sources/Track/People/SugoPeoplePrivate.h', 'Sugo/Core/Sources/Network/MPNetworkPrivate.h', 'Sugo/Core/Sources/MPLogger.h', 'Sugo/Core/Sources/Track/CoreData/SugoEvents+CoreDataProperties.h', 'Sugo/Core/Sources/Track/CoreData/SugoEvents+CoreDataClass.h'
     core.libraries              = 'icucore'
     core.frameworks             = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'WebKit', 'CoreData'
   end

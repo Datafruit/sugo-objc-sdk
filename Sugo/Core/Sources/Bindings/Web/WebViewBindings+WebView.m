@@ -20,7 +20,7 @@
 
 @implementation WebViewBindings (WebView)
 
-- (void)excute
+- (void)execute
 {
     if (!self.viewSwizzleRunning) {
         
@@ -131,7 +131,7 @@
         }
         if (!self.isWebViewNeedReload && self.isWebViewNeedInject) {
             [self stop];
-            [self excute];
+            [self execute];
             if (self.isWebViewNeedInject) {
                 self.isWebViewNeedInject = NO;
             }
