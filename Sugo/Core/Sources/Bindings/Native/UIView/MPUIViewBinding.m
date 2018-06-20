@@ -174,6 +174,9 @@
                             [gestureRecognizer addTarget:self action:@selector(handleGesture:)];
                             break;
                         }
+                    } else if (view.isUserInteractionEnabled && [NSStringFromClass([view class]) hasPrefix:@"RCT"]) {
+                        UIGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+                        [view addGestureRecognizer:gestureRecognizer];
                     }
                     [self.appliedTo addObject:view];
                 }

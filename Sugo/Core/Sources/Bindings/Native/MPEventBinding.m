@@ -41,7 +41,7 @@
                                    [MPUITableViewBinding typeName]: [MPUITableViewBinding class],
                                    [MPUICollectionViewBinding typeName]: [MPUICollectionViewBinding class]
                                    };
-    return [classTypeMap valueForKey:bindingType] ?: [MPUIViewBinding class];
+    return classTypeMap[bindingType] ?: [MPUIViewBinding class];
 }
 
 + (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
