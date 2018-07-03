@@ -110,13 +110,17 @@
             if (collectionView && [self.path isLeafSelected:collectionView fromRoot:root]) {
                 
                 UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-                NSString *contentInfo = [self contentInfoOfView:cell.contentView];
+                NSMutableString *contentInfo = [[self contentInfoOfView:cell.contentView] mutableCopy];
+                NSString *eventLabel = [NSString string];
+                if (contentInfo.length > 0) {
+                    eventLabel = [contentInfo substringToIndex:(contentInfo.length - 1)];
+                }
                 
                 NSMutableDictionary *p = [[NSMutableDictionary alloc]
                                           initWithDictionary:@{
                                                                @"cell_index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
                                                                @"cell_section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
-                                                               @"cell_content_info": contentInfo
+                                                               @"event_label": eventLabel
                                                                }];
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
@@ -169,26 +173,31 @@
 {
     NSMutableString *infos = [NSMutableString string];
     for (UIView *subview in view.subviews) {
+        NSString *label;
         if ([subview isKindOfClass:[UISearchBar class]] && ((UISearchBar *)subview).text) {
-            [infos appendString:((UISearchBar *)subview).text];
+            label = ((UISearchBar *)subview).text;
         } else if ([subview isKindOfClass:[UIButton class]] && ((UIButton *)subview).titleLabel.text) {
-            [infos appendString:((UIButton *)subview).titleLabel.text];
+            label = ((UIButton *)subview).titleLabel.text;
         } else if ([subview isKindOfClass:[UIDatePicker class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UIDatePicker *)subview).date]];
+            label = [NSString stringWithFormat:@"%@", ((UIDatePicker *)subview).date];
         } else if ([subview isKindOfClass:[UISegmentedControl class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)subview).selectedSegmentIndex]];
+            label = [NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)subview).selectedSegmentIndex];
         } else if ([subview isKindOfClass:[UISlider class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%f", ((UISlider *)subview).value]];
+            label = [NSString stringWithFormat:@"%f", ((UISlider *)subview).value];
         } else if ([subview isKindOfClass:[UISwitch class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%i", ((UISwitch *)subview).isOn]];
+            label = [NSString stringWithFormat:@"%i", ((UISwitch *)subview).isOn];
         } else if ([subview isKindOfClass:[UITextField class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextField *)subview).text]];
+            label = [NSString stringWithFormat:@"%@", ((UITextField *)subview).text];
         } else if ([subview isKindOfClass:[UITextView class]]) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UITextView *)subview).text]];
+            label = [NSString stringWithFormat:@"%@", ((UITextView *)subview).text];
         } else if ([subview isKindOfClass:[UILabel class]] && ((UILabel *)subview).text) {
-            [infos appendString:[NSString stringWithFormat:@"%@", ((UILabel *)subview).text]];
+            label = [NSString stringWithFormat:@"%@", ((UILabel *)subview).text];
         }
-        [infos appendString:[NSString stringWithFormat:@",%@", [self contentInfoOfView:subview]]];
+        if (label && label.length > 0) {
+            [infos appendString:label];
+            [infos appendString:@","];
+        }
+        [infos appendString:[self contentInfoOfView:subview]];
     }
     return infos;
 }
