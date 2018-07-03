@@ -110,19 +110,13 @@
                 UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
                 NSString *textLabel = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
                 NSString *detailTextLabel = (cell && cell.detailTextLabel && cell.detailTextLabel.text) ? cell.detailTextLabel.text : @"";
-                NSMutableString *contentInfo = [[self contentInfoOfView:cell.contentView] mutableCopy];
-                NSString *eventLabel = [NSString string];
-                if (contentInfo.length > 0) {
-                    eventLabel = [contentInfo substringToIndex:(contentInfo.length - 1)];
-                }
                 
                 NSMutableDictionary *p = [[NSMutableDictionary alloc]
                                           initWithDictionary:@{
                                                                @"cell_index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
                                                                @"cell_section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
                                                                @"cell_label": textLabel,
-                                                               @"cell_detail_label": detailTextLabel,
-                                                               @"event_label": eventLabel
+                                                               @"cell_detail_label": detailTextLabel
                                                                }];
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
@@ -131,6 +125,12 @@
                     && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
                     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
                     NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+                    NSMutableString *contentInfo = [[self contentInfoOfView:cell.contentView] mutableCopy];
+                    NSString *eventLabel = [NSString string];
+                    if (contentInfo.length > 0) {
+                        eventLabel = [contentInfo substringToIndex:(contentInfo.length - 1)];
+                    }
+                    p[keys[@"EventLabel"]] = eventLabel;
                     p[keys[@"EventType"]] = values[@"click"];
                     p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
                     if ([SugoPageInfos global].infos.count > 0) {

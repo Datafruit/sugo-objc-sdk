@@ -200,6 +200,40 @@
     }
 }
 
+
+- (NSString *)contentInfoOfView:(UIView *)view
+{
+    NSMutableString *infos = [NSMutableString string];
+    for (UIView *subview in view.subviews) {
+        NSString *label;
+        if ([subview isKindOfClass:[UISearchBar class]] && ((UISearchBar *)subview).text) {
+            label = ((UISearchBar *)subview).text;
+        } else if ([subview isKindOfClass:[UIButton class]] && ((UIButton *)subview).titleLabel.text) {
+            label = ((UIButton *)subview).titleLabel.text;
+        } else if ([subview isKindOfClass:[UIDatePicker class]]) {
+            label = [NSString stringWithFormat:@"%@", ((UIDatePicker *)subview).date];
+        } else if ([subview isKindOfClass:[UISegmentedControl class]]) {
+            label = [NSString stringWithFormat:@"%ld", (long)((UISegmentedControl *)subview).selectedSegmentIndex];
+        } else if ([subview isKindOfClass:[UISlider class]]) {
+            label = [NSString stringWithFormat:@"%f", ((UISlider *)subview).value];
+        } else if ([subview isKindOfClass:[UISwitch class]]) {
+            label = [NSString stringWithFormat:@"%i", ((UISwitch *)subview).isOn];
+        } else if ([subview isKindOfClass:[UITextField class]]) {
+            label = [NSString stringWithFormat:@"%@", ((UITextField *)subview).text];
+        } else if ([subview isKindOfClass:[UITextView class]]) {
+            label = [NSString stringWithFormat:@"%@", ((UITextView *)subview).text];
+        } else if ([subview isKindOfClass:[UILabel class]] && ((UILabel *)subview).text) {
+            label = [NSString stringWithFormat:@"%@", ((UILabel *)subview).text];
+        }
+        if (label && label.length > 0) {
+            [infos appendString:label];
+            [infos appendString:@","];
+        }
+        [infos appendString:[self contentInfoOfView:subview]];
+    }
+    return infos;
+}
+
 - (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
     
     BOOL shouldTrack;
@@ -214,6 +248,12 @@
             && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
             NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
             NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+            NSMutableString *contentInfo = [[self contentInfoOfView:view] mutableCopy];
+            NSString *eventLabel = [NSString string];
+            if (contentInfo.length > 0) {
+                eventLabel = [contentInfo substringToIndex:(contentInfo.length - 1)];
+            }
+            p[keys[@"EventLabel"]] = eventLabel;
             p[keys[@"EventType"]] = values[@"click"];
             p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
             if ([SugoPageInfos global].infos.count > 0) {
@@ -310,6 +350,12 @@
             && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
             NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
             NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+            NSMutableString *contentInfo = [[self contentInfoOfView:sender] mutableCopy];
+            NSString *eventLabel = [NSString string];
+            if (contentInfo.length > 0) {
+                eventLabel = [contentInfo substringToIndex:(contentInfo.length - 1)];
+            }
+            p[keys[@"EventLabel"]] = eventLabel;
             if (self.controlEvent == UIControlEventEditingDidBegin) {
                 p[keys[@"EventType"]] = values[@"focus"];
             } else {

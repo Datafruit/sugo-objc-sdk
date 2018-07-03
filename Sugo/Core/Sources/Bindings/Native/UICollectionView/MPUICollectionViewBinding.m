@@ -110,17 +110,10 @@
             if (collectionView && [self.path isLeafSelected:collectionView fromRoot:root]) {
                 
                 UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-                NSMutableString *contentInfo = [[self contentInfoOfView:cell.contentView] mutableCopy];
-                NSString *eventLabel = [NSString string];
-                if (contentInfo.length > 0) {
-                    eventLabel = [contentInfo substringToIndex:(contentInfo.length - 1)];
-                }
-                
                 NSMutableDictionary *p = [[NSMutableDictionary alloc]
                                           initWithDictionary:@{
                                                                @"cell_index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
-                                                               @"cell_section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
-                                                               @"event_label": eventLabel
+                                                               @"cell_section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section]
                                                                }];
                 if (self.attributes) {
                     [p addEntriesFromDictionary:[self.attributes parse]];
@@ -129,6 +122,12 @@
                     && [Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]) {
                     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
                     NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+                    NSMutableString *contentInfo = [[self contentInfoOfView:cell.contentView] mutableCopy];
+                    NSString *eventLabel = [NSString string];
+                    if (contentInfo.length > 0) {
+                        eventLabel = [contentInfo substringToIndex:(contentInfo.length - 1)];
+                    }
+                    p[keys[@"EventLabel"]] = eventLabel;
                     p[keys[@"EventType"]] = values[@"click"];
                     p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
                     if ([SugoPageInfos global].infos.count > 0) {
