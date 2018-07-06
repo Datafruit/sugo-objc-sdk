@@ -12,10 +12,12 @@
 #define MAPTABLE_ID(x) (__bridge id)((void *)x)
 
 typedef void (^swizzleBlock)();
+typedef BOOL (^swizzleBoolBlock)();
 
 @interface MPSwizzler : NSObject
 
 + (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBlock)block named:(NSString *)aName;
++ (void)swizzleBoolSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBoolBlock)block named:(NSString *)aName;
 + (void)unswizzleSelector:(SEL)aSelector onClass:(Class)aClass named:(NSString *)aName;
 + (void)printSwizzles;
 
