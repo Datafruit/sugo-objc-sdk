@@ -25,6 +25,9 @@
         }
         UIWebView *webView = (UIWebView *)wv;
         NSURLRequest *request = (NSURLRequest *)r;
+        if ([request.URL.host isEqualToString:@"mclient.alipay.com"]) {
+            return;
+        }
         
         BOOL shouldStartLoad = YES;
         NSURL *url = request.URL;
@@ -67,7 +70,8 @@
     void (^uiWebViewDidFinishLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
         UIWebView *uiWebView = (UIWebView *)webView;
         if (uiWebView.request.URL.absoluteString.length <= 0
-            || uiWebView.isLoading) {
+            || uiWebView.isLoading
+            || [uiWebView.request.URL.host isEqualToString:@"mclient.alipay.com"]) {
             return;
         }
         if (!self.uiWebViewJavaScriptInjected) {
