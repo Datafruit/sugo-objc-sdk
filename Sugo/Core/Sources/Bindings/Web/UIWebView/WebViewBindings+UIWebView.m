@@ -18,18 +18,14 @@
 
 - (void)startUIWebViewBindings:(UIWebView *)webView
 {
-    void (^uiWebViewShouldStartLoadBlock)(id, SEL, id, id) = ^(id view, SEL command, id wv, id r) {
+    BOOL (^uiWebViewShouldStartLoadBlock)(id, SEL, id, id, id) = ^(id view, SEL command, id wv, id r, id ssl) {
         
+        BOOL shouldStartLoad = [((NSNumber *)ssl) boolValue];
         if (!([wv isKindOfClass:[UIWebView class]] && [r isKindOfClass:[NSURLRequest class]])) {
-            return;
+            return shouldStartLoad;
         }
         UIWebView *webView = (UIWebView *)wv;
         NSURLRequest *request = (NSURLRequest *)r;
-        if ([request.URL.host isEqualToString:@"mclient.alipay.com"]) {
-            return;
-        }
-        
-        BOOL shouldStartLoad = YES;
         NSURL *url = request.URL;
         MPLogDebug(@"%@: request = %@", NSStringFromSelector(_cmd), url.absoluteString);
         if ([url.scheme isEqualToString:@"sugo.npi"]) {
@@ -58,6 +54,7 @@
         if (shouldStartLoad && webView.window != nil) {
             [self trackStayEventOfWebView:webView];
         }
+        return shouldStartLoad;
     };
     
     void (^uiWebViewDidStartLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
@@ -70,8 +67,7 @@
     void (^uiWebViewDidFinishLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
         UIWebView *uiWebView = (UIWebView *)webView;
         if (uiWebView.request.URL.absoluteString.length <= 0
-            || uiWebView.isLoading
-            || [uiWebView.request.URL.host isEqualToString:@"mclient.alipay.com"]) {
+            || uiWebView.isLoading) {
             return;
         }
         if (!self.uiWebViewJavaScriptInjected) {
@@ -84,10 +80,10 @@
     UIWebView *uiWebView = (UIWebView *)webView;
     if (!self.uiWebViewSwizzleRunning) {
         if (uiWebView.delegate) {
-            [MPSwizzler swizzleSelector:NSSelectorFromString(@"webView:shouldStartLoadWithRequest:navigationType:")
-                                onClass:[uiWebView.delegate class]
-                              withBlock:uiWebViewShouldStartLoadBlock
-                                  named:self.uiWebViewShouldStartLoadBlockName];
+            [MPSwizzler swizzleBoolSelector:NSSelectorFromString(@"webView:shouldStartLoadWithRequest:navigationType:")
+                                    onClass:[uiWebView.delegate class]
+                                  withBlock:uiWebViewShouldStartLoadBlock
+                                      named:self.uiWebViewShouldStartLoadBlockName];
             [MPSwizzler swizzleSelector:NSSelectorFromString(@"webViewDidStartLoad:")
                                 onClass:[uiWebView.delegate class]
                               withBlock:uiWebViewDidStartLoadBlock

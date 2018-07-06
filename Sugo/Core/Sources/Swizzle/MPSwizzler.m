@@ -29,6 +29,12 @@
      originalMethod:(IMP)aMethod
         withNumArgs:(uint)numArgs;
 
+- (instancetype)initWithBoolBlock:(swizzleBoolBlock)aBlock
+                            named:(NSString *)aName
+                         forClass:(Class)aClass
+                         selector:(SEL)aSelector
+                   originalMethod:(IMP)aMethod
+                      withNumArgs:(uint)numArgs;
 @end
 
 static NSMapTable *swizzles;
@@ -103,13 +109,13 @@ static BOOL mp_swizzledMethod_4_should_startoad(id self, SEL _cmd, UIWebView *we
     Method aMethod = class_getInstanceMethod([self class], _cmd);
     MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:(__bridge id)aMethod];
     BOOL returnValue = YES;
+    returnValue = ((BOOL(*)(id, SEL, id, id, int))swizzle.originalMethod)(self, _cmd, webView, request, navigationType);
     if (swizzle) {
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
-        swizzleBlock block;
+        swizzleBoolBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd, webView, request);
+            returnValue = block(self, _cmd, webView, request, [NSNumber numberWithBool:returnValue]);
         }
-        returnValue = ((BOOL(*)(id, SEL, id, id, int))swizzle.originalMethod)(self, _cmd, webView, request, navigationType);
     }
     return returnValue;
 }
@@ -177,8 +183,6 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
             IMP swizzledMethod;
             if (aSelector == @selector(viewDidAppear:) || aSelector == @selector(viewDidDisappear:)) {
                 swizzledMethod = (IMP)mp_swizzledMethod_3_BOOL;
-            } else if (aSelector == @selector(webView:shouldStartLoadWithRequest:navigationType:)) {
-                swizzledMethod = (IMP)mp_swizzledMethod_4_should_startoad;
             } else {
                 swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
             }
@@ -234,6 +238,75 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
     }
 }
 
++ (void)swizzleBoolSelector:(SEL)aSelector
+                    onClass:(Class)aClass
+                  withBlock:(swizzleBoolBlock)aBlock
+                      named:(NSString *)aName
+{
+    Method aMethod = class_getInstanceMethod(aClass, aSelector);
+    if (aMethod) {
+        uint numArgs = method_getNumberOfArguments(aMethod);
+        if (numArgs >= MIN_ARGS && numArgs <= MAX_ARGS) {
+            
+            BOOL isLocal = [self isLocallyDefinedMethod:aMethod onClass:aClass];
+            IMP swizzledMethod;
+            if (aSelector == @selector(webView:shouldStartLoadWithRequest:navigationType:)) {
+                swizzledMethod = (IMP)mp_swizzledMethod_4_should_startoad;
+            } else {
+                swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
+            }
+            MPSwizzle *swizzle = [self swizzleForMethod:aMethod];
+            
+            if (isLocal) {
+                if (!swizzle) {
+                    IMP originalMethod = method_getImplementation(aMethod);
+                    
+                    // Replace the local implementation of this method with the swizzled one
+                    method_setImplementation(aMethod, swizzledMethod);
+                    
+                    // Create and add the swizzle
+                    swizzle = [[MPSwizzle alloc] initWithBoolBlock:aBlock
+                                                             named:aName
+                                                          forClass:aClass
+                                                          selector:aSelector
+                                                    originalMethod:originalMethod
+                                                       withNumArgs:numArgs];
+                    [self setSwizzle:swizzle forMethod:aMethod];
+                    
+                } else {
+                    [swizzle.blocks setObject:aBlock forKey:aName];
+                }
+            } else {
+                IMP originalMethod = swizzle ? swizzle.originalMethod : method_getImplementation(aMethod);
+                
+                // Add the swizzle as a new local method on the class.
+                if (!class_addMethod(aClass, aSelector, swizzledMethod, method_getTypeEncoding(aMethod))) {
+                    NSAssert(NO, @"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                    return;
+                }
+                // Now re-get the Method, it should be the one we just added.
+                Method newMethod = class_getInstanceMethod(aClass, aSelector);
+                if (aMethod == newMethod) {
+                    NSAssert(NO, @"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                    return;
+                }
+                
+                MPSwizzle *newSwizzle = [[MPSwizzle alloc] initWithBoolBlock:aBlock
+                                                                       named:aName
+                                                                    forClass:aClass
+                                                                    selector:aSelector
+                                                              originalMethod:originalMethod
+                                                                 withNumArgs:numArgs];
+                [self setSwizzle:newSwizzle forMethod:newMethod];
+            }
+        } else {
+            NSAssert(NO, @"SwizzlerAssert: Cannot swizzle method with %d args", numArgs);
+        }
+    } else {
+        NSAssert(NO, @"SwizzlerAssert: Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass));
+    }
+}
+
 + (void)unswizzleSelector:(SEL)aSelector onClass:(Class)aClass
 {
     Method aMethod = class_getInstanceMethod(aClass, aSelector);
@@ -272,17 +345,35 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 {
     if ((self = [super init])) {
         self.blocks = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality)
-                                            valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
+                                            valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality |
+                                                          NSPointerFunctionsObjectPersonality)];
     }
     return self;
 }
 
 - (instancetype)initWithBlock:(swizzleBlock)aBlock
-              named:(NSString *)aName
-           forClass:(Class)aClass
-           selector:(SEL)aSelector
-     originalMethod:(IMP)aMethod
-        withNumArgs:(uint)numArgs
+                        named:(NSString *)aName
+                     forClass:(Class)aClass
+                     selector:(SEL)aSelector
+               originalMethod:(IMP)aMethod
+                  withNumArgs:(uint)numArgs
+{
+    if ((self = [self init])) {
+        self.class = aClass;
+        self.selector = aSelector;
+        self.numArgs = numArgs;
+        self.originalMethod = aMethod;
+        [self.blocks setObject:aBlock forKey:aName];
+    }
+    return self;
+}
+
+- (instancetype)initWithBoolBlock:(swizzleBoolBlock)aBlock
+                            named:(NSString *)aName
+                         forClass:(Class)aClass
+                         selector:(SEL)aSelector
+                   originalMethod:(IMP)aMethod
+                      withNumArgs:(uint)numArgs
 {
     if ((self = [self init])) {
         self.class = aClass;
