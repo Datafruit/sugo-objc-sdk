@@ -19,7 +19,6 @@
     if (path) {
         configuration = [NSMutableDictionary dictionaryWithContentsOfFile:path];
     }
-    NSLog(@"%@ Property List: %@", name, configuration);
     return [NSDictionary dictionaryWithDictionary:configuration];
 }
 

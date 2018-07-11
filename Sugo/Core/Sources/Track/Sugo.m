@@ -1792,7 +1792,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
-                MPLogDebug(@"Decide responseData\n%@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                MPLogDebug(@"Decide dimensions responseData\n%@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                 
                 // Handle network response
                 @try {
@@ -1813,7 +1813,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     self.decideDimensionsResponseCached = YES;
                     
                 } @catch (NSException *exception) {
-                    MPLogError(@"exception: %@, responseData: %@, object: %@",
+                    MPLogError(@"exception: %@, dimensions responseData: %@, object: %@",
                                exception,
                                responseData,
                                responseObject);
@@ -1861,28 +1861,28 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         NSString *cacheAppVersion = nil;
         NSString *currentAppVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
         NSNumber *cacheVersion = @(-1);
-        NSMutableDictionary *cacheObject = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *cachedObject = [[NSMutableDictionary alloc] init];
         
         if (useCache && [userDefaults dataForKey:@"SugoEventBindings"]) {
             
             cacheAppVersion = [userDefaults stringForKey:@"SugoEventBindingsAppVersion"];
             NSError *cacheError = nil;
-            NSData *cacheData = [userDefaults dataForKey:@"SugoEventBindings"];
-            MPLogDebug(@"Decide cacheData\n%@", [[NSString alloc] initWithData:cacheData
+            NSData *cachedData = [userDefaults dataForKey:@"SugoEventBindings"];
+            MPLogDebug(@"Decide bindings cached Data\n%@", [[NSString alloc] initWithData:cachedData
                                                                       encoding:NSUTF8StringEncoding]);
             @try {
-                cacheObject = [NSJSONSerialization JSONObjectWithData:cacheData
+                cachedObject = [NSJSONSerialization JSONObjectWithData:cachedData
                                                          options:(NSJSONReadingOptions)0
                                                            error:&cacheError];
-                if (cacheObject[@"event_bindings_version"] && cacheAppVersion == currentAppVersion) {
-                    cacheVersion = cacheObject[@"event_bindings_version"];
+                if (cachedObject[@"event_bindings_version"] && cacheAppVersion == currentAppVersion) {
+                    cacheVersion = cachedObject[@"event_bindings_version"];
                 }
             } @catch (NSException *exception) {
                 self.decideBindingsResponseCached = NO;
-                MPLogError(@"exception: %@, cacheData: %@, object: %@",
+                MPLogError(@"exception: %@, bindings cacheData: %@, object: %@",
                            exception,
-                           cacheData,
-                           cacheObject);
+                           cachedData,
+                           cachedObject);
             }
         }
         
@@ -1910,7 +1910,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
-                MPLogDebug(@"Decide responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                MPLogDebug(@"Decide bindings responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                 
                 // Handle network response
                 @try {
@@ -1922,7 +1922,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                         return;
                     }
                     if (responseObject[@"error"]) {
-                        MPLogError(@"%@ decide check api error: %@", self, responseObject[@"error"]);
+                        MPLogError(@"%@ decide bindings check api error: %@", self, responseObject[@"error"]);
                         hadError = YES;
                         dispatch_semaphore_signal(semaphore);
                         return;
@@ -1931,7 +1931,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     self.decideBindingsResponseCached = YES;
                     
                 } @catch (NSException *exception) {
-                    MPLogError(@"exception: %@, responseData: %@, object: %@",
+                    MPLogError(@"exception: %@, bindings responseData: %@, object: %@",
                                exception,
                                responseData,
                                responseObject);
@@ -1958,10 +1958,10 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 [userDefaults synchronize];
                 [self handleDecideBindingsObject:responseObject];
             } else {
-                [self handleDecideBindingsObject:cacheObject];
+                [self handleDecideBindingsObject:cachedObject];
             }
             
-            MPLogInfo(@"%@ decide check found %lu tracking events, and %lu h5 tracking events",
+            MPLogInfo(@"%@ decide bindings check found %lu tracking events, and %lu h5 tracking events",
                       self,
                       (unsigned long)self.eventBindings.count,
                       [[WebViewBindings globalBindings].designerBindings count]);
