@@ -689,7 +689,9 @@ extern BOOL SugoCanTrackWebPage;
 - (void)trackFirstLoginWith:(nullable NSString *)identifer dimension:(nullable NSString *)dimension;
 
 - (void)untrackFirstLogin;
-    
+
+- (void)updateSessionId:(NSString *)sessionId;
+
 /*!
  @method
  

@@ -739,6 +739,10 @@ static NSString *defaultProjectToken;
     
 }
 
+- (void)updateSessionId:(NSString *)sessionId {
+    _sessionId = sessionId.copy;
+}
+
 #pragma mark - Network control
 - (void)setServerURL:(NSString *)serverURL
 {
