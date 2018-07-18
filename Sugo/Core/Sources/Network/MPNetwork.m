@@ -185,7 +185,8 @@ static const NSUInteger kBatchSize = 50;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
-                            @(MPNetworkEndpointDecide): @"/api/sdk/decide",
+                            @(MPNetworkEndpointDecideDimension): @"/api/sdk/decide-dimesion",
+                            @(MPNetworkEndpointDecideEvent): @"/api/sdk/decide-event",
                             @(MPNetworkEndpointHeat): @"/api/sdk/heat",
                             @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time"};
     });

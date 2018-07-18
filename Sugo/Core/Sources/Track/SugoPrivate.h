@@ -79,7 +79,8 @@
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (atomic, strong) NSMutableDictionary *sugoConfiguration;
 
-@property (nonatomic) BOOL decideResponseCached;
+@property (nonatomic) BOOL decideDimensionsResponseCached;
+@property (nonatomic) BOOL decideBindingsResponseCached;
 
 @property (nonatomic, strong) NSSet *eventBindings;
 
@@ -96,8 +97,11 @@
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion;
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
+- (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion;
+- (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion useCache:(BOOL)useCache;
+
+- (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion;
+- (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache;
 
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion;
 - (void)requestForFirstLoginWithIdentifer:(NSString *)identifer completion:(void (^)(NSData *firstLoginData))completion;

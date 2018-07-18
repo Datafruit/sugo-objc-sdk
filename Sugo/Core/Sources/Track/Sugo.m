@@ -62,7 +62,8 @@ static NSString *defaultProjectToken;
         [instance trackEvent:values[@"AppEnter"]];
         [instance timeEvent:values[@"AppStay"]];
         
-        [instance checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
+        [instance checkForDecideDimensionsResponseWithCompletion:nil];
+        [instance checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
             dispatch_sync(dispatch_get_main_queue(), ^{
                 for (MPEventBinding *binding in eventBindings) {
                     [binding execute];
@@ -188,7 +189,8 @@ static NSString *defaultProjectToken;
                                       andEventCollectionURL:[NSURL URLWithString:self.eventCollectionURL]];
         self.people = [[SugoPeople alloc] initWithSugo:self];
 
-        self.decideResponseCached = NO;
+        self.decideDimensionsResponseCached = NO;
+        self.decideBindingsResponseCached = NO;
         
         [self setUpListeners];
         [self unarchive];
@@ -618,7 +620,8 @@ static NSString *defaultProjectToken;
         self.people.distinctId = nil;
         self.eventsQueue = [NSMutableArray array];;
         self.timedEvents = [NSMutableDictionary dictionary];
-        self.decideResponseCached = NO;
+        self.decideDimensionsResponseCached = NO;
+        self.decideBindingsResponseCached = NO;
         self.eventBindings = [NSSet set];
         [self archive];
     });
@@ -781,8 +784,9 @@ static NSString *defaultProjectToken;
 
 - (void)cache
 {
-    self.decideResponseCached = NO;
-    [self checkForDecideResponseWithCompletion:^(NSSet *eventBindings) {
+    self.decideDimensionsResponseCached = NO;
+    self.decideBindingsResponseCached = NO;
+    [self checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             for (MPEventBinding *binding in eventBindings) {
                 [binding execute];
@@ -1726,12 +1730,126 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     return YES;
 }
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion
-{
-    [self checkForDecideResponseWithCompletion:completion useCache:YES];
+- (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion {
+    
+    [self checkForDecideDimensionsResponseWithCompletion:completion useCache:YES];
 }
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache
+- (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion useCache:(BOOL)useCache {
+    
+    dispatch_async(self.serialQueue, ^{
+        
+        __block BOOL hadError = NO;
+        __block NSData *resultData = [NSData data];
+        __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSNumber *cachedVersion = @(-1);
+        NSMutableDictionary *cachedObject = [[NSMutableDictionary alloc] init];
+        
+        if (useCache && [userDefaults dataForKey:@"SugoEventDimensions"]) {
+            
+            NSError *cacheError = nil;
+            NSData *cachedData = [userDefaults dataForKey:@"SugoEventDimensions"];
+            MPLogDebug(@"Decide dimensions cached Data\n%@", [[NSString alloc] initWithData:cachedData
+                                                                      encoding:NSUTF8StringEncoding]);
+            @try {
+                cachedObject = [NSJSONSerialization JSONObjectWithData:cachedData
+                                                              options:(NSJSONReadingOptions)0
+                                                                error:&cacheError];
+                cachedVersion = cachedObject[@"dimension_version"];
+            } @catch (NSException *exception) {
+                self.decideDimensionsResponseCached = NO;
+                MPLogError(@"exception: %@, cachedData: %@, object: %@, version: %@",
+                           exception,
+                           cachedData,
+                           cachedObject,
+                           cachedVersion);
+            }
+        }
+        
+        if (!useCache || !self.decideDimensionsResponseCached) {
+            // Build a proper URL from our parameters
+            NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
+                                                            withDistinctID:self.people.distinctId ?: self.distinctId
+                                                              andProjectID:self.projectID
+                                                                  andToken:self.apiToken
+                                                    andEventBindingVersion:cachedVersion];
+            // Build a network request from the URL
+            NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
+                                                            andEndpoint:MPNetworkEndpointDecideDimension
+                                                         withQueryItems:queryItems];
+            
+            // Send the network request
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSession *session = [NSURLSession sharedSession];
+            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                      NSURLResponse *urlResponse,
+                                                                      NSError *error) {
+                if (error) {
+                    MPLogError(@"%@ decide check dimensions http error: %@", self, error);
+                    hadError = YES;
+                    dispatch_semaphore_signal(semaphore);
+                    return;
+                }
+                MPLogDebug(@"Decide dimensions responseData\n%@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                
+                // Handle network response
+                @try {
+                    responseObject = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
+                    if (error) {
+                        MPLogError(@"%@ decide check dimensions json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    if (responseObject[@"error"]) {
+                        MPLogError(@"%@ decide check dimensions api error: %@", self, responseObject[@"error"]);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    resultData = responseData;
+                    self.decideDimensionsResponseCached = YES;
+                    
+                } @catch (NSException *exception) {
+                    MPLogError(@"exception: %@, dimensions responseData: %@, object: %@",
+                               exception,
+                               responseData,
+                               responseObject);
+                }
+                
+                dispatch_semaphore_signal(semaphore);
+            }] resume];
+            
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            
+        } else {
+            MPLogInfo(@"%@ decide cache found, skipping network request", self);
+        }
+        
+        if (!hadError) {
+            NSNumber *responseVersion = responseObject[@"dimension_version"];
+            if ((cachedVersion != responseVersion)) {
+                [userDefaults setObject:resultData forKey:@"SugoEventDimensions"];
+                [userDefaults synchronize];
+                [self handleDecideDimensionsObject:responseObject];
+            } else {
+                [self handleDecideDimensionsObject:cachedObject];
+            }
+        }
+        if (completion) {
+            completion();
+        }
+    });
+}
+
+- (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion
+{
+    [self checkForDecideBindingsResponseWithCompletion:completion useCache:YES];
+}
+
+- (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache
 {
     dispatch_async(self.serialQueue, ^{
         
@@ -1743,32 +1861,32 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         NSString *cacheAppVersion = nil;
         NSString *currentAppVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
         NSNumber *cacheVersion = @(-1);
-        NSMutableDictionary *cacheObject = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *cachedObject = [[NSMutableDictionary alloc] init];
         
         if (useCache && [userDefaults dataForKey:@"SugoEventBindings"]) {
             
             cacheAppVersion = [userDefaults stringForKey:@"SugoEventBindingsAppVersion"];
             NSError *cacheError = nil;
-            NSData *cacheData = [userDefaults dataForKey:@"SugoEventBindings"];
-            MPLogDebug(@"Decide cacheData\n%@", [[NSString alloc] initWithData:cacheData
+            NSData *cachedData = [userDefaults dataForKey:@"SugoEventBindings"];
+            MPLogDebug(@"Decide bindings cached Data\n%@", [[NSString alloc] initWithData:cachedData
                                                                       encoding:NSUTF8StringEncoding]);
             @try {
-                cacheObject = [NSJSONSerialization JSONObjectWithData:cacheData
+                cachedObject = [NSJSONSerialization JSONObjectWithData:cachedData
                                                          options:(NSJSONReadingOptions)0
                                                            error:&cacheError];
-                if (cacheObject[@"event_bindings_version"] && cacheAppVersion == currentAppVersion) {
-                    cacheVersion = cacheObject[@"event_bindings_version"];
+                if (cachedObject[@"event_bindings_version"] && cacheAppVersion == currentAppVersion) {
+                    cacheVersion = cachedObject[@"event_bindings_version"];
                 }
             } @catch (NSException *exception) {
-                self.decideResponseCached = NO;
-                MPLogError(@"exception: %@, cacheData: %@, object: %@",
+                self.decideBindingsResponseCached = NO;
+                MPLogError(@"exception: %@, bindings cacheData: %@, object: %@",
                            exception,
-                           cacheData,
-                           cacheObject);
+                           cachedData,
+                           cachedObject);
             }
         }
         
-        if (!useCache || !self.decideResponseCached) {
+        if (!useCache || !self.decideBindingsResponseCached) {
             // Build a proper URL from our parameters
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
                                                             withDistinctID:self.people.distinctId ?: self.distinctId
@@ -1777,7 +1895,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                                                     andEventBindingVersion:cacheVersion];
             // Build a network request from the URL
             NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
-                                                            andEndpoint:MPNetworkEndpointDecide
+                                                            andEndpoint:MPNetworkEndpointDecideEvent
                                                          withQueryItems:queryItems];
             
             // Send the network request
@@ -1792,7 +1910,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
-                MPLogDebug(@"Decide responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                MPLogDebug(@"Decide bindings responseData\n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
                 
                 // Handle network response
                 @try {
@@ -1804,16 +1922,16 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                         return;
                     }
                     if (responseObject[@"error"]) {
-                        MPLogError(@"%@ decide check api error: %@", self, responseObject[@"error"]);
+                        MPLogError(@"%@ decide bindings check api error: %@", self, responseObject[@"error"]);
                         hadError = YES;
                         dispatch_semaphore_signal(semaphore);
                         return;
                     }
                     resultData = responseData;
-                    self.decideResponseCached = YES;
+                    self.decideBindingsResponseCached = YES;
                     
                 } @catch (NSException *exception) {
-                    MPLogError(@"exception: %@, responseData: %@, object: %@",
+                    MPLogError(@"exception: %@, bindings responseData: %@, object: %@",
                                exception,
                                responseData,
                                responseObject);
@@ -1838,12 +1956,12 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 [userDefaults setObject:currentAppVersion forKey:@"SugoEventBindingsAppVersion"];
                 [userDefaults setObject:resultData forKey:@"SugoEventBindings"];
                 [userDefaults synchronize];
-                [self handleDecideObject:responseObject];
+                [self handleDecideBindingsObject:responseObject];
             } else {
-                [self handleDecideObject:cacheObject];
+                [self handleDecideBindingsObject:cachedObject];
             }
             
-            MPLogInfo(@"%@ decide check found %lu tracking events, and %lu h5 tracking events",
+            MPLogInfo(@"%@ decide bindings check found %lu tracking events, and %lu h5 tracking events",
                       self,
                       (unsigned long)self.eventBindings.count,
                       [[WebViewBindings globalBindings].designerBindings count]);
@@ -1907,7 +2025,23 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     });
 }
 
-- (void)handleDecideObject:(NSDictionary *)object
+- (void)handleDecideDimensionsObject:(NSDictionary *)object
+{
+    id dimensions = object[@"dimensions"];
+    if (dimensions
+        && [dimensions isKindOfClass:[NSArray class]]
+        && ((NSArray *)dimensions).count > 0) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:dimensions
+                                                  forKey:@"SugoDimensions"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        MPLogInfo(@"%@ decide check dimensions found %lu dimensions",
+                  self,
+                  ((NSArray *)dimensions).count);
+    }
+}
+
+- (void)handleDecideBindingsObject:(NSDictionary *)object
 {
     id commonEventBindings = object[@"event_bindings"];
     NSMutableSet *parsedEventBindings = [NSMutableSet set];
