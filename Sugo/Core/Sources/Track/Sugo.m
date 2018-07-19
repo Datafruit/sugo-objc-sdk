@@ -743,6 +743,10 @@ static NSString *defaultProjectToken;
     _sessionId = sessionId.copy;
 }
 
+- (void)setPageInfos:(NSArray *)pageInfos {
+    [SugoPageInfos global].infos = [pageInfos copy];
+}
+
 #pragma mark - Network control
 - (void)setServerURL:(NSString *)serverURL
 {
