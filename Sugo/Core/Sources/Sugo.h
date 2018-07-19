@@ -692,7 +692,7 @@ extern BOOL SugoCanTrackWebPage;
 
 - (void)updateSessionId:(NSString *)sessionId;
 
-- (void)setPageInfos:(NSArray *)pageInfos;
+- (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos;
 
 /*!
  @method

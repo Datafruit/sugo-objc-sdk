@@ -743,7 +743,7 @@ static NSString *defaultProjectToken;
     _sessionId = sessionId.copy;
 }
 
-- (void)setPageInfos:(NSArray *)pageInfos {
+- (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos {
     [SugoPageInfos global].infos = [pageInfos copy];
 }
 
