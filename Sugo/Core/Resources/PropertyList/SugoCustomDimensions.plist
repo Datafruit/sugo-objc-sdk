@@ -48,10 +48,8 @@
 		<string>device_brand</string>
 		<key>Carrier</key>
 		<string>carrier</string>
-		<key>ScreenWidth</key>
-		<string>screen_width</string>
-		<key>ScreenHeight</key>
-		<string>screen_height</string>
+		<key>ScreenPixel</key>
+		<string>screen_pixel</string>
 		<key>PagePath</key>
 		<string>path_name</string>
 		<key>PageName</key>

@@ -743,6 +743,10 @@ static NSString *defaultProjectToken;
     _sessionId = sessionId.copy;
 }
 
+- (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos {
+    [SugoPageInfos global].infos = [pageInfos copy];
+}
+
 #pragma mark - Network control
 - (void)setServerURL:(NSString *)serverURL
 {
@@ -1291,8 +1295,7 @@ static NSString *defaultProjectToken;
              keys[@"DeviceModel"]:   deviceModel,
              keys[@"SystemName"]:    [device systemName],
              keys[@"SystemVersion"]: [device systemVersion],
-             keys[@"ScreenWidth"]:   [NSNumber numberWithInt:((int)size.width)],
-             keys[@"ScreenHeight"]:  [NSNumber numberWithInt:((int)size.height)],
+             keys[@"ScreenPixel"]: [NSString stringWithFormat:@"%@*%@", [NSNumber numberWithFloat:size.width], [NSNumber numberWithFloat:size.height]]
              };
 }
 
