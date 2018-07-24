@@ -39,6 +39,7 @@
 @interface Sugo ()
 {
     NSUInteger _flushInterval;
+    NSUInteger _flushLimit;
     BOOL _enableVisualABTestAndCodeless;
     double _cacheInterval;
 }

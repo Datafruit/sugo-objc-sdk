@@ -159,6 +159,7 @@ static NSString *defaultProjectToken;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
+        _flushLimit = 50;
         _cacheInterval = cacheInterval;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
@@ -506,6 +507,9 @@ static NSString *defaultProjectToken;
                 }
                 [strongSelf.managedObjectContext reset];
             }];
+            if ([self countForSugoEvents] >= self.flushLimit) {
+                [self flush];
+            }
         }
     }
 }
@@ -844,6 +848,18 @@ static NSString *defaultProjectToken;
     });
 }
 
+- (NSUInteger)flushLimit {
+    return _flushLimit;
+}
+
+- (void)setFlushLimit:(NSUInteger)limit
+{
+    @synchronized (self) {
+        _flushLimit = limit;
+    }
+    [self flush];
+}
+
 - (void)flush {
     [self flushWithCompletion:nil];
 }
@@ -1010,6 +1026,17 @@ static NSString *defaultProjectToken;
 
     NSArray *eventResult = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil].copy;
     return eventResult;
+}
+
+- (NSUInteger)countForSugoEvents {
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *sugoEventsEntity = [NSEntityDescription entityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:sugoEventsEntity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(token = %@)", self.apiToken];
+    [fetchRequest setPredicate:predicate];
+    NSUInteger eventCount = [self.managedObjectContext countForFetchRequest:fetchRequest error:nil];
+    return eventCount;
 }
 
 - (void)deleteEventResult:(NSArray *)eventResult {
