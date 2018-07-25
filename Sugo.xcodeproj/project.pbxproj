@@ -184,6 +184,7 @@
 		A700F9EE20C7BD24008C0069 /* HeatMapLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94820C7BD24008C0069 /* HeatMapLayer.m */; };
 		A700F9EF20C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A700F94920C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m */; };
 		A700F9F020C7BD24008C0069 /* MPSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F94A20C7BD24008C0069 /* MPSwizzle.h */; };
+		A72109142107232E00CBE6AA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72109132107232E00CBE6AA /* CoreLocation.framework */; };
 		A7664C2F2058B95500F9E201 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7664C2E2058B95500F9E201 /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
@@ -367,6 +368,7 @@
 		A700F94820C7BD24008C0069 /* HeatMapLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapLayer.m; sourceTree = "<group>"; };
 		A700F94920C7BD24008C0069 /* MPCATransform3DToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCATransform3DToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		A700F94A20C7BD24008C0069 /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
+		A72109132107232E00CBE6AA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		A7664C2E2058B95500F9E201 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -375,6 +377,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A72109142107232E00CBE6AA /* CoreLocation.framework in Frameworks */,
 				A7664C2F2058B95500F9E201 /* CoreData.framework in Frameworks */,
 				14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */,
 				14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */,
@@ -422,6 +425,7 @@
 		148D65781E13D611002B2BB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A72109132107232E00CBE6AA /* CoreLocation.framework */,
 				A7664C2E2058B95500F9E201 /* CoreData.framework */,
 				14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */,
 				14BA1A4D1E13D675002F0C4B /* WebKit.framework */,

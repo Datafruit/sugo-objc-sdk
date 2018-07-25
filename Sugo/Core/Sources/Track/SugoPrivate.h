@@ -35,14 +35,18 @@
 #import "MPWebSocket.h"
 #import "WebViewBindings+UIWebView.h"
 
+#import <CoreLocation/CoreLocation.h>
 
-@interface Sugo ()
+
+@interface Sugo () <CLLocationManagerDelegate>
 {
     NSUInteger _flushInterval;
     NSUInteger _flushLimit;
     BOOL _enableVisualABTestAndCodeless;
     double _cacheInterval;
 }
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;

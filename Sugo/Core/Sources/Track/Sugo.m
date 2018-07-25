@@ -1414,6 +1414,12 @@ static NSString *defaultProjectToken;
             }
         }
     }
+    
+    // location
+    _locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.pausesLocationUpdatesAutomatically = YES;
 
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
@@ -1560,10 +1566,58 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     }
 }
 
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    
+    CLLocationCoordinate2D l = locations.lastObject.coordinate;
+    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+    if (properties) {
+        properties[@"latitude"] = [NSNumber numberWithDouble:l.latitude];
+        properties[@"longitude"] = [NSNumber numberWithDouble:l.longitude];
+        self.automaticProperties = [properties copy];
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    
+    MPLogInfo(@"Failed to locate device: %@", error);
+    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+    if (properties) {
+        properties[@"latitude"] = @0;
+        properties[@"longitude"] = @0;
+        self.automaticProperties = [properties copy];
+    }
+}
+
+-(void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
+    
+    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+    if (properties) {
+        properties[@"latitude"] = @0;
+        properties[@"longitude"] = @0;
+        self.automaticProperties = [properties copy];
+    }
+}
+
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
+    
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self.locationManager startUpdatingLocation];
+            break;
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+            break;
+        case kCLAuthorizationStatusNotDetermined:
+            [self.locationManager requestAlwaysAuthorization];
+            [self.locationManager requestWhenInUseAuthorization];
+        default:
+            break;
+    }
+    
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1575,6 +1629,19 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
+    
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self.locationManager stopUpdatingLocation];
+            break;
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusNotDetermined:
+        default:
+            break;
+    }
+    
     // Page Stay
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {
