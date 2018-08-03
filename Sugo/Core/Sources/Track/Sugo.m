@@ -883,7 +883,10 @@ static NSString *defaultProjectToken;
             NSMutableArray *queue = [NSMutableArray array];
             if (eventResult != nil) {
                 for (SugoEvents *event in eventResult) {
-                    [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:event.event]];
+                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
+                    if (object) {
+                        [queue addObject:object];
+                    }
                 }
             }
             [self.network flushEventQueue:queue];
