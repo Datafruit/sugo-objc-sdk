@@ -15,6 +15,7 @@ sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
         var htmlNode = {};
         htmlNode.innerText = children.innerText;
         htmlNode.path = path;
+        htmlNode.classList = children.classList.value;
 
         var rect = children.getBoundingClientRect();
         if (sugo.isElementInViewport(rect) == true) {
