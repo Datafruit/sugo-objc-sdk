@@ -521,10 +521,12 @@ static NSString *defaultProjectToken;
     }
     properties = [properties copy];
     [Sugo assertPropertyTypes:properties];
-    dispatch_async(self.serialQueue, ^{
-        NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        [tmp addEntriesFromDictionary:properties];
+    NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
+    [tmp addEntriesFromDictionary:properties];
+    @synchronized (self) {
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
+    }
+    dispatch_async(self.serialQueue, ^{
         [self archiveProperties];
     });
 }
