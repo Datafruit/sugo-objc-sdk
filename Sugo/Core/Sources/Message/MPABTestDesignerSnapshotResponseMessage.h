@@ -10,7 +10,7 @@
 
 @property (nonatomic, strong) UIImage *screenshot;
 @property (nonatomic, copy) NSDictionary *serializedObjects;
-@property (nonatomic, copy) NSData *compressedSerializedObjects;
+@property (nonatomic, copy) NSString *compressedSerializedObjects;
 @property (nonatomic, strong, readonly) NSString *imageHash;
 
 @end

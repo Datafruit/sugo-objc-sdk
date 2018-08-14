@@ -46,12 +46,12 @@
     return [self payloadObjectForKey:@"serialized_objects"];
 }
 
-- (void)setCompressedSerializedObjects:(NSData *)serializedObjects
+- (void)setCompressedSerializedObjects:(NSString *)serializedObjects
 {
     [self setPayloadObject:serializedObjects forKey:@"compressed_serialized_objects"];
 }
 
-- (NSData *)compressedSerializedObjects
+- (NSString *)compressedSerializedObjects
 {
     return [self payloadObjectForKey:@"compressed_serialized_objects"];
 }

@@ -90,13 +90,13 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         }
 
         if ([shouldCompressed boolValue]) {
-            snapshotMessage.compressedSerializedObjects = [MPABTestDesignerSnapshotRequestMessage gzipDeflate:[NSJSONSerialization dataWithJSONObject:serializedObjects
+            snapshotMessage.compressedSerializedObjects = [[MPABTestDesignerSnapshotRequestMessage gzipDeflate:[NSJSONSerialization dataWithJSONObject:serializedObjects
                                                                                                                                               options:NSJSONWritingPrettyPrinted
-                                                                                                                                                error:nil]];
+                                                                                                                                                error:nil]] base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
         } else {
             snapshotMessage.serializedObjects = serializedObjects;
         }
-        if (snapshotMessage.serializedObjects.count > 0) {
+        if (snapshotMessage.serializedObjects.count > 0 || snapshotMessage.compressedSerializedObjects.length > 0) {
             [conn sendMessage:snapshotMessage];
         } else {
             MPLogDebug(@"snapshotMessage.serializedObjects is Empty");
