@@ -46,6 +46,16 @@
     return [self payloadObjectForKey:@"serialized_objects"];
 }
 
+- (void)setCompressedSerializedObjects:(NSString *)serializedObjects
+{
+    [self setPayloadObject:serializedObjects forKey:@"compressed_serialized_objects"];
+}
+
+- (NSString *)compressedSerializedObjects
+{
+    return [self payloadObjectForKey:@"compressed_serialized_objects"];
+}
+
 - (NSString *)getImageHash:(NSData *)imageData
 {
     unsigned char result[CC_MD5_DIGEST_LENGTH];
