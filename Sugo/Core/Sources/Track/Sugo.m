@@ -160,6 +160,7 @@ static NSString *defaultProjectToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
         _flushLimit = 50;
+        _flushMaxEvents = 200;
         _cacheInterval = cacheInterval;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
@@ -496,19 +497,23 @@ static NSString *defaultProjectToken;
         if (self.abtestDesignerConnection.connected) {
             [self flushViaWebSocketEvent:event];
         } else {
-            SugoEvents *sugoEvents = [NSEntityDescription insertNewObjectForEntityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
-            sugoEvents.token = self.apiToken;
-            sugoEvents.event = [NSKeyedArchiver archivedDataWithRootObject:event];
-            __weak Sugo *weakSelf = self;
-            [self.managedObjectContext performBlockAndWait:^{
-                __strong Sugo *strongSelf = weakSelf;
-                if (![strongSelf.managedObjectContext save:nil]) {
-                    MPLogError(@"%@ unable to save event data", self);
+            NSUInteger countForSugoEvents = [self countForSugoEvents];
+            if (countForSugoEvents <= self.flushMaxEvents) {
+                SugoEvents *sugoEvents = [NSEntityDescription insertNewObjectForEntityForName:@"SugoEvents"
+                                                                       inManagedObjectContext:self.managedObjectContext];
+                sugoEvents.token = self.apiToken;
+                sugoEvents.event = [NSKeyedArchiver archivedDataWithRootObject:event];
+                __weak Sugo *weakSelf = self;
+                [self.managedObjectContext performBlockAndWait:^{
+                    __strong Sugo *strongSelf = weakSelf;
+                    if (![strongSelf.managedObjectContext save:nil]) {
+                        MPLogError(@"%@ unable to save event data", self);
+                    }
+                    [strongSelf.managedObjectContext reset];
+                }];
+                if (countForSugoEvents >= self.flushLimit) {
+                    [self flush];
                 }
-                [strongSelf.managedObjectContext reset];
-            }];
-            if ([self countForSugoEvents] >= self.flushLimit) {
-                [self flush];
             }
         }
     }
@@ -860,6 +865,17 @@ static NSString *defaultProjectToken;
         _flushLimit = limit;
     }
     [self flush];
+}
+
+- (NSUInteger)flushMaxEvents {
+    return _flushMaxEvents;
+}
+
+- (void)setflushMaxEvents:(NSUInteger)maxEvent
+{
+    @synchronized (self) {
+        _flushMaxEvents = maxEvent;
+    }
 }
 
 - (void)flush {

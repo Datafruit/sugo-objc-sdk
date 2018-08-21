@@ -149,6 +149,8 @@ extern BOOL SugoCanTrackWebPage;
 
 @property (atomic) NSUInteger flushLimit;
 
+@property (atomic) NSUInteger flushMaxEvents;
+
 /*!
  @property
  
