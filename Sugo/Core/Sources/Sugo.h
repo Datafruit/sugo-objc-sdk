@@ -692,7 +692,7 @@ extern BOOL SugoCanTrackWebPage;
 
 - (void)untrackFirstLogin;
 
-- (void)updateSessionId:(NSString *)sessionId;
+- (void)updateSessionId;
 
 - (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos;
 

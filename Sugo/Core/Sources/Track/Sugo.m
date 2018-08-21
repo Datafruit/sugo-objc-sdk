@@ -745,8 +745,8 @@ static NSString *defaultProjectToken;
     
 }
 
-- (void)updateSessionId:(NSString *)sessionId {
-    _sessionId = sessionId.copy;
+- (void)updateSessionId {
+    _sessionId = [[[NSUUID alloc] init] UUIDString];
 }
 
 - (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos {
