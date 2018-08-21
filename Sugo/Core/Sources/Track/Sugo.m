@@ -159,7 +159,7 @@ static NSString *defaultProjectToken;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
-        _flushLimit = 50;
+        _flushLimit = 16;
         _flushMaxEvents = 200;
         _cacheInterval = cacheInterval;
         self.useIPAddressForGeoLocation = YES;
