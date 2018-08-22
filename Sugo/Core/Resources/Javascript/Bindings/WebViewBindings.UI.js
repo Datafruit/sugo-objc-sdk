@@ -53,7 +53,7 @@ sugo.delegate = function(eventType) {
             }
             var path = event.path.path;
             if (event.similar === true) {
-                path = path.replace(/:nth-child\([0-9]*\)/g, '');
+                path = event.similar_path ? event.similar_path : path.replace(/:nth-child\([0-9]*\)/g, '');
             }
             var eles = document.querySelectorAll(path);
             if (eles) {
@@ -74,6 +74,34 @@ sugo.delegate = function(eventType) {
                             custom_props.from_binding = true;
                             custom_props.event_type = eventType;
                             custom_props.event_label = ele.innerText;
+                            if (event.binds) {
+                                var eventEntirePath = sugoioKit.entire(ele)
+                                for (var key in event.binds) {
+                                    var bind = event.binds[key]
+                                    var bindObj = {}
+                                    if (bind.similar) {
+                                        var reportSimilarPath = sugoioKit.entire(document.querySelector(bind.path))
+                                        var sameIndex = 0
+                                        var pathLength = reportSimilarPath.length > eventEntirePath.length ? reportSimilarPath.length : eventEntirePath.length
+                                        for (var i = 0; i < pathLength; i++) {
+                                            if (sameIndex === 0 && reportSimilarPath[i] !== eventEntirePath[i]) {
+                                                sameIndex = i
+                                            }
+                                        }
+                                        var simalirIndex = eventEntirePath.substr(sameIndex).substring(0, eventEntirePath.substr(sameIndex).indexOf(')'))
+                                        var reportSimalirEndPath =  reportSimilarPath.substr(sameIndex).substring(reportSimilarPath.substr(sameIndex).indexOf(')'))
+                                        var reportSimalirPath = reportSimilarPath.substring(0, sameIndex) + simalirIndex + reportSimalirEndPath
+                                        bindObj = document.querySelector(reportSimalirPath) || {}
+                                    } else {
+                                        bindObj = document.querySelector(bind.path) || {}
+                                    }
+                                    if (bindObj.tagName && (bindObj.tagName === 'INPUT' || bindObj.tagName === 'SELECT')) {
+                                        custom_props[key] = bindObj.value;
+                                    } else if (bindObj.tagName && bindObj.textContent) {
+                                        custom_props[key] = bindObj.textContent;
+                                    }
+                                }
+                            }
                             sugo.rawTrack(event.event_id, event.event_name, custom_props);
                             break;
                         }

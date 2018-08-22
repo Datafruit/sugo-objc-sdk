@@ -159,6 +159,8 @@ static NSString *defaultProjectToken;
         self.apiToken = apiToken;
         self.sessionId = [[[NSUUID alloc] init] UUIDString];
         _flushInterval = flushInterval;
+        _flushLimit = 16;
+        _flushMaxEvents = 200;
         _cacheInterval = cacheInterval;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
@@ -495,17 +497,24 @@ static NSString *defaultProjectToken;
         if (self.abtestDesignerConnection.connected) {
             [self flushViaWebSocketEvent:event];
         } else {
-            SugoEvents *sugoEvents = [NSEntityDescription insertNewObjectForEntityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
-            sugoEvents.token = self.apiToken;
-            sugoEvents.event = [NSKeyedArchiver archivedDataWithRootObject:event];
-            __weak Sugo *weakSelf = self;
-            [self.managedObjectContext performBlockAndWait:^{
-                __strong Sugo *strongSelf = weakSelf;
-                if (![strongSelf.managedObjectContext save:nil]) {
-                    MPLogError(@"%@ unable to save event data", self);
+            NSUInteger countForSugoEvents = [self countForSugoEvents];
+            if (countForSugoEvents <= self.flushMaxEvents) {
+                SugoEvents *sugoEvents = [NSEntityDescription insertNewObjectForEntityForName:@"SugoEvents"
+                                                                       inManagedObjectContext:self.managedObjectContext];
+                sugoEvents.token = self.apiToken;
+                sugoEvents.event = [NSKeyedArchiver archivedDataWithRootObject:event];
+                __weak Sugo *weakSelf = self;
+                [self.managedObjectContext performBlockAndWait:^{
+                    __strong Sugo *strongSelf = weakSelf;
+                    if (![strongSelf.managedObjectContext save:nil]) {
+                        MPLogError(@"%@ unable to save event data", self);
+                    }
+                    [strongSelf.managedObjectContext reset];
+                }];
+                if (countForSugoEvents >= self.flushLimit) {
+                    [self flush];
                 }
-                [strongSelf.managedObjectContext reset];
-            }];
+            }
         }
     }
 }
@@ -517,10 +526,12 @@ static NSString *defaultProjectToken;
     }
     properties = [properties copy];
     [Sugo assertPropertyTypes:properties];
-    dispatch_async(self.serialQueue, ^{
-        NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        [tmp addEntriesFromDictionary:properties];
+    NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
+    [tmp addEntriesFromDictionary:properties];
+    @synchronized (self) {
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
+    }
+    dispatch_async(self.serialQueue, ^{
         [self archiveProperties];
     });
 }
@@ -739,8 +750,8 @@ static NSString *defaultProjectToken;
     
 }
 
-- (void)updateSessionId:(NSString *)sessionId {
-    _sessionId = sessionId.copy;
+- (void)updateSessionId {
+    _sessionId = [[[NSUUID alloc] init] UUIDString];
 }
 
 - (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos {
@@ -844,6 +855,29 @@ static NSString *defaultProjectToken;
     });
 }
 
+- (NSUInteger)flushLimit {
+    return _flushLimit;
+}
+
+- (void)setFlushLimit:(NSUInteger)limit
+{
+    @synchronized (self) {
+        _flushLimit = limit;
+    }
+    [self flush];
+}
+
+- (NSUInteger)flushMaxEvents {
+    return _flushMaxEvents;
+}
+
+- (void)setflushMaxEvents:(NSUInteger)maxEvent
+{
+    @synchronized (self) {
+        _flushMaxEvents = maxEvent;
+    }
+}
+
 - (void)flush {
     [self flushWithCompletion:nil];
 }
@@ -867,7 +901,10 @@ static NSString *defaultProjectToken;
             NSMutableArray *queue = [NSMutableArray array];
             if (eventResult != nil) {
                 for (SugoEvents *event in eventResult) {
-                    [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:event.event]];
+                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
+                    if (object) {
+                        [queue addObject:object];
+                    }
                 }
             }
             [self.network flushEventQueue:queue];
@@ -1010,6 +1047,17 @@ static NSString *defaultProjectToken;
 
     NSArray *eventResult = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil].copy;
     return eventResult;
+}
+
+- (NSUInteger)countForSugoEvents {
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *sugoEventsEntity = [NSEntityDescription entityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:sugoEventsEntity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(token = %@)", self.apiToken];
+    [fetchRequest setPredicate:predicate];
+    NSUInteger eventCount = [self.managedObjectContext countForFetchRequest:fetchRequest error:nil];
+    return eventCount;
 }
 
 - (void)deleteEventResult:(NSArray *)eventResult {
@@ -1387,6 +1435,12 @@ static NSString *defaultProjectToken;
             }
         }
     }
+    
+    // location
+    _locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.pausesLocationUpdatesAutomatically = YES;
 
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
@@ -1533,10 +1587,58 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     }
 }
 
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    
+    CLLocationCoordinate2D l = locations.lastObject.coordinate;
+    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+    if (properties) {
+        properties[@"latitude"] = [NSNumber numberWithDouble:l.latitude];
+        properties[@"longitude"] = [NSNumber numberWithDouble:l.longitude];
+        self.automaticProperties = [properties copy];
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    
+    MPLogInfo(@"Failed to locate device: %@", error);
+    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+    if (properties) {
+        properties[@"latitude"] = @0;
+        properties[@"longitude"] = @0;
+        self.automaticProperties = [properties copy];
+    }
+}
+
+-(void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
+    
+    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+    if (properties) {
+        properties[@"latitude"] = @0;
+        properties[@"longitude"] = @0;
+        self.automaticProperties = [properties copy];
+    }
+}
+
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
+    
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self.locationManager startUpdatingLocation];
+            break;
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+            break;
+        case kCLAuthorizationStatusNotDetermined:
+            [self.locationManager requestAlwaysAuthorization];
+            [self.locationManager requestWhenInUseAuthorization];
+        default:
+            break;
+    }
+    
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1548,6 +1650,19 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
+    
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self.locationManager stopUpdatingLocation];
+            break;
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusNotDetermined:
+        default:
+            break;
+    }
+    
     // Page Stay
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
     if (values) {

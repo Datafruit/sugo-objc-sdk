@@ -147,6 +147,10 @@ extern BOOL SugoCanTrackWebPage;
  */
 @property (atomic) NSUInteger flushInterval;
 
+@property (atomic) NSUInteger flushLimit;
+
+@property (atomic) NSUInteger flushMaxEvents;
+
 /*!
  @property
  
@@ -690,7 +694,7 @@ extern BOOL SugoCanTrackWebPage;
 
 - (void)untrackFirstLogin;
 
-- (void)updateSessionId:(NSString *)sessionId;
+- (void)updateSessionId;
 
 - (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos;
 
