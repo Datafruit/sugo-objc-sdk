@@ -100,6 +100,29 @@ static const NSUInteger kBatchSize = 50;
     }
 }
 
++ (void)flushExceptionEvents:(NSString *)exceptionEvents {
+    
+    // Build URL from path and query items
+    NSURL *serverURL = [NSURL URLWithString:[Sugo sharedInstance].eventCollectionURL];
+    NSURL *urlWithEndpoint = [serverURL URLByAppendingPathComponent:[MPNetwork pathForEndpoint:MPNetworkEndpointTrack]];
+    NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
+                                             resolvingAgainstBaseURL:YES];
+    
+    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
+                                                               value:[NSString stringWithFormat:@"%@_filter", [Sugo sharedInstance].projectID]];
+    NSArray *queryItems = @[queryItem];
+    components.queryItems = queryItems;
+    
+    // Build request from URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[exceptionEvents dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithRequest:request] resume];
+}
+
 - (BOOL)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error {
     MPLogDebug(@"HTTP Response: %@", response.allHeaderFields);
     MPLogDebug(@"HTTP Error: %@", error.localizedDescription);
@@ -351,6 +374,7 @@ static const NSUInteger kBatchSize = 50;
     dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
     dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
     
+    NSMutableArray *exceptionEvents = [NSMutableArray array];
     for (NSDictionary *object in batch) {
         NSMutableDictionary *value = [[NSMutableDictionary alloc] init];
         for (NSString *key in keys) {
@@ -373,10 +397,21 @@ static const NSUInteger kBatchSize = 50;
                     && [types[key] isEqualToString:@"d"]) {
                     [value setValue:[NSString stringWithFormat:@"%.0f", [((NSDate *)object[key]) timeIntervalSince1970] * 1000] forKey:key];
                 } else if ([types[key] isEqualToString:@"s"]) {
-                    [value setValue:object[key] forKey:key];
+                    NSString *stringValue = object[key];
+                    if (stringValue.length > 100) {
+                        stringValue = [stringValue substringToIndex:99];
+                    }
+                    [value setValue:stringValue forKey:key];
                 } else {
                     [value setValue:@"" forKey:key];
                 }
+                if ([object[key] isKindOfClass:[NSString class]]
+                    && ([types[key] isEqualToString:@"i"]
+                        || [types[key] isEqualToString:@"l"]
+                        || [types[key] isEqualToString:@"f"])) {
+                        [exceptionEvents addObject:object];
+                        [value setValue:@0 forKey:key];
+                    }
             } else {
                 if ([types[key] isEqualToString:@"s"]) {
                     [value setValue:@"" forKey:key];
@@ -398,6 +433,12 @@ static const NSUInteger kBatchSize = 50;
         dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
         dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
     }
+    
+    if (exceptionEvents.count > 0) {
+        NSString *exceptionEventsString = [MPNetwork encodeArrayForAPI:exceptionEvents];
+        [MPNetwork flushExceptionEvents:exceptionEventsString];
+    }
+    
     MPLogDebug(@"Data:\n%@", dataString);
     return [MPNetwork encodeBase64ForDataString:dataString];
 }
