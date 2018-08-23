@@ -162,6 +162,9 @@ static NSString *defaultProjectToken;
         _flushLimit = 16;
         _flushMaxEvents = 200;
         _cacheInterval = cacheInterval;
+        _locateInterval = 60 * 30;
+        latitude = @0;
+        longitude = @0;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
@@ -764,6 +767,66 @@ static NSString *defaultProjectToken;
     _serverURL = serverURL.copy;
 }
 
+- (double)locateInterval {
+    return _locateInterval;
+}
+
+- (void)setLocateInterval:(double)interval
+{
+    @synchronized (self) {
+        _locateInterval = interval;
+    }
+    [self startLocationTimer];
+}
+
+- (void)startLocationTimer
+{
+    [self stopLocationTimer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.locateInterval > 0) {
+            self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:self.locateInterval
+                                                                  target:self
+                                                                selector:@selector(locate)
+                                                                userInfo:nil
+                                                                 repeats:YES];
+            MPLogDebug(@"%@ started location timer: %f", self, self.locationTimer.timeInterval);
+        }
+    });
+}
+
+- (void)stopLocationTimer
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.locationTimer) {
+            [self.locationTimer invalidate];
+            MPLogDebug(@"%@ stopped location timer: %f", self, self.locationTimer.timeInterval);
+            self.locationTimer = nil;
+        }
+    });
+}
+
+- (void)locate
+{
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+    if (!keys) {
+        return;
+    }
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self trackEvent:@"位置信息收集" properties:@{keys[@"EventType"]: @"位置",
+                                                    keys[@"PageName"]: @"位置信息收集",
+                                                    @"latitude": latitude,
+                                                    @"longitude": longitude
+                                                    }];
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusNotDetermined:
+        default:
+            break;
+    }
+}
+
 - (double)cacheInterval {
     return _cacheInterval;
 }
@@ -804,6 +867,7 @@ static NSString *defaultProjectToken;
 - (void)cache
 {
     self.decideDimensionsResponseCached = NO;
+    [self checkForDecideDimensionsResponseWithCompletion:nil];
     self.decideBindingsResponseCached = NO;
     [self checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -871,10 +935,10 @@ static NSString *defaultProjectToken;
     return _flushMaxEvents;
 }
 
-- (void)setflushMaxEvents:(NSUInteger)maxEvent
+- (void)setFlushMaxEvents:(NSUInteger)maxEvents
 {
     @synchronized (self) {
-        _flushMaxEvents = maxEvent;
+        _flushMaxEvents = maxEvents;
     }
 }
 
@@ -1590,33 +1654,21 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     
     CLLocationCoordinate2D l = locations.lastObject.coordinate;
-    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-    if (properties) {
-        properties[@"latitude"] = [NSNumber numberWithDouble:l.latitude];
-        properties[@"longitude"] = [NSNumber numberWithDouble:l.longitude];
-        self.automaticProperties = [properties copy];
-    }
+    latitude = [NSNumber numberWithDouble:l.latitude];
+    longitude = [NSNumber numberWithDouble:l.longitude];
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     
     MPLogInfo(@"Failed to locate device: %@", error);
-    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-    if (properties) {
-        properties[@"latitude"] = @0;
-        properties[@"longitude"] = @0;
-        self.automaticProperties = [properties copy];
-    }
+    latitude = @0;
+    longitude = @0;
 }
 
 -(void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
     
-    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-    if (properties) {
-        properties[@"latitude"] = @0;
-        properties[@"longitude"] = @0;
-        self.automaticProperties = [properties copy];
-    }
+    latitude = @0;
+    longitude = @0;
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -1628,6 +1680,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         case kCLAuthorizationStatusAuthorizedAlways:
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             [self.locationManager startUpdatingLocation];
+            [self startLocationTimer];
             break;
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
@@ -1655,6 +1708,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         case kCLAuthorizationStatusAuthorizedAlways:
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             [self.locationManager stopUpdatingLocation];
+            [self stopLocationTimer];
             break;
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
@@ -2160,6 +2214,11 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         MPLogInfo(@"%@ decide check dimensions found %lu dimensions",
                   self,
                   ((NSArray *)dimensions).count);
+    }
+    
+    NSNumber *locationConfigure = object[@"position_config"];
+    if (locationConfigure) {
+        self.locateInterval = locationConfigure.doubleValue * 60;
     }
 }
 
