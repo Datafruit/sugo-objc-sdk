@@ -132,17 +132,17 @@
                     }
                     p[keys[@"EventLabel"]] = eventLabel;
                     p[keys[@"EventType"]] = values[@"click"];
-                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
-                    if ([SugoPageInfos global].infos.count > 0) {
-                        for (NSDictionary *info in [SugoPageInfos global].infos) {
-                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                                p[keys[@"PageName"]] = info[@"page_name"];
-                                if (info[@"page_category"]) {
-                                    p[keys[@"PageCategory"]] = info[@"page_category"];
-                                }
-                            }
-                        }
-                    }
+//                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+//                    if ([SugoPageInfos global].infos.count > 0) {
+//                        for (NSDictionary *info in [SugoPageInfos global].infos) {
+//                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+//                                p[keys[@"PageName"]] = info[@"page_name"];
+//                                if (info[@"page_category"]) {
+//                                    p[keys[@"PageCategory"]] = info[@"page_category"];
+//                                }
+//                            }
+//                        }
+//                    }
                 }
 
                 [[self class] track:[self eventID]

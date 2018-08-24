@@ -117,17 +117,17 @@
                     NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
                     p[keys[@"EventLabel"]] = text;
                     p[keys[@"EventType"]] = values[@"focus"];
-                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
-                    if ([SugoPageInfos global].infos.count > 0) {
-                        for (NSDictionary *info in [SugoPageInfos global].infos) {
-                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                                p[keys[@"PageName"]] = info[@"page_name"];
-                                if (info[@"page_category"]) {
-                                    p[keys[@"PageCategory"]] = info[@"page_category"];
-                                }
-                            }
-                        }
-                    }
+//                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+//                    if ([SugoPageInfos global].infos.count > 0) {
+//                        for (NSDictionary *info in [SugoPageInfos global].infos) {
+//                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+//                                p[keys[@"PageName"]] = info[@"page_name"];
+//                                if (info[@"page_category"]) {
+//                                    p[keys[@"PageCategory"]] = info[@"page_category"];
+//                                }
+//                            }
+//                        }
+//                    }
                 }
                 
                 [[self class] track:[self eventID]

@@ -1245,6 +1245,7 @@ static NSString *defaultProjectToken;
                     }
                 }
             }
+            [self registerSuperProperties:p];
             [self trackEvent:values[@"PageEnter"] properties:p];
             [self timeEvent:values[@"PageStay"]];
         }
