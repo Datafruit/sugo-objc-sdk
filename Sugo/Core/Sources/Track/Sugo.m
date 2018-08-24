@@ -56,9 +56,11 @@ static NSString *defaultProjectToken;
                                  andFlushInterval:flushInterval
                                  andCacheInterval:cacheInterval];
     
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionKeys"]];
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
+    if (keys && values) {
         [instance trackIntegration];
+        [instance unregisterSuperProperty:keys[@"PagePath"]];
         [instance trackEvent:values[@"AppEnter"]];
         [instance timeEvent:values[@"AppStay"]];
         
