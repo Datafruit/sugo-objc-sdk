@@ -395,9 +395,9 @@ static NSString *defaultProjectToken;
 
 - (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName properties:(nullable NSDictionary *)properties
 {
-    dispatch_async(self.serialQueue, ^{
+//    dispatch_async(self.serialQueue, ^{
         [self rawTrack:eventID eventName:eventName properties:properties];
-    });
+//    });
 }
 
 - (void)rawTrack:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties
