@@ -42,7 +42,7 @@
         var eventUUID = sugo.generateUUID();
         var event = {
             'title': window.document.title,
-            'path': sugo.relative_path,
+            'path': sugo.relative_path + (sugo.single_code ? '##' + sugo.single_code : ''),
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,
             'viewportContent': sugo.viewportContent,
