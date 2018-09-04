@@ -2,7 +2,11 @@
         if (!props) {
             props = {};
         }
-        props.path_name = sugo.relative_path;
+        if(sugo.single_code) {
+            props.path_name = sugo.relative_path + "##" + sugo.single_code;
+        } else {
+            props.path_name = sugo.relative_path;
+        }
         if (!props.page_name && sugo.init.page_name) {
             props.page_name = sugo.init.page_name;
             if (sugo.init.page_category !== undefined) {
