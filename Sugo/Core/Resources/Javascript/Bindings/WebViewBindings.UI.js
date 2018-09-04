@@ -88,17 +88,14 @@ sugo.delegate = function(eventType) {
 };
 
 sugo.load = function (code) {
+    if(sugo.single_code) {
+        sugo.trackStayEventWeb();
+    }
     sugo.single_code = code;
     sugo.init_path();
-//    sugo.view_props.page_name = sugo.init.page_name;
-//    sugo.track('浏览', sugo.view_props);
-//    sugo.timeEvent('停留');
+    sugo.view_props.page_name = '';
     sugo.trackBrowseEvent();
 };
-sugo.unLoad = function (code) {
-    sugo.trackStayEventWeb();
-};
-
 
 sugo.bindEvent = function() {
     sugo.delegate('click');

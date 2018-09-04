@@ -27,10 +27,10 @@
         console.log('npi: ' + npi, 'id: ' + id, 'data: ' + sugo.data[id]);
     }
 
-    sugo.dataOf = function(id) {
-        var data = sugo.data[id];
-        delete sugo.data[id];
-        return data;
+    sugo.dataOf = function() {
+        var data_tmp= sugo.data;
+        sugo.data= {};
+        return JSON.stringify(data_tmp);
     };
 
     sugo.rawTrack = function(event_id, event_name, props) {
@@ -98,7 +98,7 @@
 
     sugo.trackStayEventWeb = function() {
         var duration = (new Date().getTime() - sugo.enter_time) / 1000;
-        var tmp_props = JSON.parse(JSON.stringify(sugo.view_props));
+        var tmp_props = sugo.view_props;
         tmp_props.duration = duration;
         sugo.track('停留', tmp_props);
     }

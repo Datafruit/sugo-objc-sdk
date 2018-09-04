@@ -46,7 +46,7 @@ sugo.delegate = function(eventType) {
         var target = evt.target || evt.srcElement;
         var currentTarget = e ? e.currentTarget : this;
         var paths = Object.keys(sugo.current_event_bindings);
-        for (var idx = 0;  idx < paths.length; idx++) {
+        for (var idx = 0; idx < paths.length; idx++) {
             var path_str = paths[idx];
             var event = sugo.current_event_bindings[path_str];
             if (event.event_type != eventType) {
@@ -88,14 +88,13 @@ sugo.delegate = function(eventType) {
 };
 
 sugo.load = function (code) {
+    if(code) {
+        sugo.trackStayEvent();
+    }
     sugo.single_code = code;
     sugo.init_path();
-    sugo.view_props.page_name = sugo.init.page_name;
     sugo.track('浏览', sugo.view_props);
     sugo.timeEvent('停留');
-};
-sugo.unLoad = function (code) {
-    sugo.trackStayEvent()
 };
 
 sugo.bindEvent = function() {
