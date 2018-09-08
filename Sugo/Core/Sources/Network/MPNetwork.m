@@ -49,7 +49,9 @@ static const NSUInteger kBatchSize = 50;
         return;
     }
     
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"SugoDimensions"]) {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray *dimensions = [userDefaults objectForKey:@"SugoDimensions"];
+    if (dimensions.count == 0) {
         return;
     }
     

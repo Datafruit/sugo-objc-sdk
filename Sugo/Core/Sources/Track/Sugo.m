@@ -2208,8 +2208,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     id dimensions = object[@"dimensions"];
     if (dimensions
-        && [dimensions isKindOfClass:[NSArray class]]
-        && ((NSArray *)dimensions).count > 0) {
+        && [dimensions isKindOfClass:[NSArray class]]) {
         
         [[NSUserDefaults standardUserDefaults] setObject:dimensions
                                                   forKey:@"SugoDimensions"];
