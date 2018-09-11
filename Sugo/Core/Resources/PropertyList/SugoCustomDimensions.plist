@@ -69,6 +69,10 @@
 	</dict>
 	<key>Values</key>
 	<dict>
+		<key>touchend</key>
+		<string>触碰结束</string>
+		<key>touchstart</key>
+		<string>触碰开始</string>
 		<key>Integration</key>
 		<string>APP安装</string>
 		<key>FirstVisit</key>
