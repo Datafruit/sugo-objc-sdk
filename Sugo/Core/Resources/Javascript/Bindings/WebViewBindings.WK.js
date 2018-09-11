@@ -54,7 +54,7 @@ sugo.delegate = function(eventType) {
             }
             var path = event.path.path;
             if (event.similar === true) {
-                path = path.replace(/:nth-child\([0-9]*\)/g, '');
+                path = event.similar_path ? event.similar_path : path.replace(/:nth-child\([0-9]*\)/g, '');
             }
             var eles = document.querySelectorAll(path);
             if (eles) {
