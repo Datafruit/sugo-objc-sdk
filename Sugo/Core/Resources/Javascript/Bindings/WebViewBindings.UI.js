@@ -92,8 +92,10 @@ sugo.load = function (code, cite) {
         if(sugo.appendHistory && sugo.appendHistory.length) {
             sugo.appendHistory.push(code);
         } else {
-            sugo.appendHistory= [sugo.single_code, code];
+            sugo.appendHistory = [sugo.single_code, code];
         }
+    } else {
+        sugo.appendHistory = [];
     }
     if(sugo.single_code) {
         sugo.trackStayEventWeb();
