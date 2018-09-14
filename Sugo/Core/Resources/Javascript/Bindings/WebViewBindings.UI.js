@@ -106,12 +106,15 @@ sugo.load = function (code, cite) {
     sugo.trackBrowseEvent();
 };
 
-sugo.unMount = function(cite) {
-    if(cite.options && cite.options.openPolicy === 1) {
-        var hLenght = sugo.appendHistory.length;
-        sugo.appendHistory = sugo.appendHistory.slice(0, hLenght > 0 ? hLenght - 1 : 0);
-        if (sugo.appendHistory.length > 0) {
-            sugo.single_code = sugo.appendHistory[sugo.appendHistory.length - 1];
+sugo.unMount = function(code, cite) {
+    if(cite.options && cite.options.openPolicy === 1 ) {
+        if(sugo.appendHistory && sugo.appendHistory.length) {
+            var hLenght = sugo.appendHistory.findIndex(function(x) { return x === code});
+            sugo.appendHistory = sugo.appendHistory.slice(0, hLenght > 0 ? hLenght : 0);
+            if (sugo.appendHistory.length > 0) {
+                var singleCode = sugo.appendHistory[sugo.appendHistory.length - 1];
+                sugo.load(singleCode, {});
+            }
         }
     }
 }
