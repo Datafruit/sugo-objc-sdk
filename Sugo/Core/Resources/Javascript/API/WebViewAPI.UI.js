@@ -33,6 +33,7 @@
         return JSON.stringify(data_tmp);
     };
 
+    sugo.eventIndex = 0;
     sugo.rawTrack = function(event_id, event_name, props) {
         if (!props) {
             props = {};
@@ -49,7 +50,7 @@
             }
         }
 
-        var eventUUID = sugo.generateUUID();
+        var eventUUID = sugo.eventIndex ++;
         var event = {
             'eventID': event_id,
             'eventName': event_name,
