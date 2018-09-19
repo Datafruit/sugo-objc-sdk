@@ -87,7 +87,16 @@ sugo.delegate = function(eventType) {
     document.addEventListener(eventType, handle, true);
 };
 
-sugo.load = function (code) {
+sugo.load = function (code, cite) {
+    if(cite.options && cite.options.openPolicy === 1) {
+        if(sugo.appendHistory && sugo.appendHistory.length) {
+            sugo.appendHistory.push(code);
+        } else {
+            sugo.appendHistory = [sugo.single_code, code];
+        }
+    } else {
+        sugo.appendHistory = [];
+    }
     if(sugo.single_code) {
         sugo.trackStayEventWeb();
     }
@@ -96,6 +105,19 @@ sugo.load = function (code) {
     sugo.view_props.page_name = '';
     sugo.trackBrowseEvent();
 };
+
+sugo.unMount = function(code, cite) {
+    if(cite.options && cite.options.openPolicy === 1 ) {
+        if(sugo.appendHistory && sugo.appendHistory.length) {
+            var hLenght = sugo.appendHistory.findIndex(function(x) { return x === code});
+            sugo.appendHistory = sugo.appendHistory.slice(0, hLenght > 0 ? hLenght : 0);
+            if (sugo.appendHistory.length > 0) {
+                var singleCode = sugo.appendHistory[sugo.appendHistory.length - 1];
+                sugo.load(singleCode, {});
+            }
+        }
+    }
+}
 
 sugo.bindEvent = function() {
     sugo.delegate('click');

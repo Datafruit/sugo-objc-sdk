@@ -33,6 +33,7 @@
         return JSON.stringify(data_tmp);
     };
 
+    sugo.eventIndex = 0;
     sugo.rawTrack = function(event_id, event_name, props) {
         if (!props) {
             props = {};
@@ -49,7 +50,7 @@
             }
         }
 
-        var eventUUID = sugo.generateUUID();
+        var eventUUID = sugo.eventIndex ++;
         var event = {
             'eventID': event_id,
             'eventName': event_name,
@@ -99,7 +100,7 @@
     sugo.trackStayEventWeb = function() {
         if (sugo.enter_time) {
             var duration = (new Date().getTime() - sugo.enter_time) / 1000;
-            var tmp_props = sugo.view_props;
+            var tmp_props = JSON.parse(JSON.stringify(sugo.view_props));
             tmp_props.duration = duration;
             sugo.track('停留', tmp_props);
             sugo.enter_time = null;
