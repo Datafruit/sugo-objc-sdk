@@ -11,8 +11,8 @@
 
 @interface SugoPeople ()
 
-@property (nonatomic, weak) Sugo *sugo;
 
+@property (nonatomic, weak) Sugo *sugo;
 @property (nonatomic, copy) NSString *distinctId;
 @property (nonatomic, strong) NSDictionary *automaticPeopleProperties;
 

@@ -100,12 +100,13 @@
 - (NSString *)deviceModel;
 - (NSString *)IFA;
 
-- (NSString *)defaultDeviceId;
-- (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
+
+- (NSString *)defaultDeviceId;
+- (NSString *)defaultDistinctId;
 
 - (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion;
 - (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion useCache:(BOOL)useCache;
