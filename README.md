@@ -1,8 +1,6 @@
 # sugo-objc-sdk
 
 
-
-
 [![Build Status](https://travis-ci.org/Datafruit/sugo-objc-sdk.svg?branch=master)](https://travis-ci.org/Datafruit/sugo-objc-sdk)
 [![CocoaPods Compatible](http://img.shields.io/cocoapods/v/sugo-objc-sdk.svg)](https://cocoapods.org/pods/sugo-objc-sdk)
 [![Platform](https://img.shields.io/badge/Platform-iOS%208.0+-66CCFF.svg)](https://cocoapods.org/pods/sugo-objc-sdk)
