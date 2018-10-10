@@ -1916,7 +1916,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion useCache:(BOOL)useCache {
     
-//    dispatch_async(self.serialQueue, ^{
+    dispatch_async(self.serialQueue, ^{
     
         __block BOOL hadError = NO;
         __block NSData *resultData = [NSData data];
@@ -2020,7 +2020,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         if (completion) {
             completion();
         }
-//    });
+    });
 }
 
 - (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion
@@ -2030,7 +2030,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache
 {
-//    dispatch_async(self.serialQueue, ^{
+    dispatch_async(self.serialQueue, ^{
     
         __block BOOL hadError = NO;
         __block NSData *resultData = [NSData data];
@@ -2149,7 +2149,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 completion(self.eventBindings);
             }
         }
-//    });
+    });
 }
 
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion {
