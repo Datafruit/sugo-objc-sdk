@@ -210,7 +210,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
     MPLogDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
-
+    
     if (commandOperation) {
         [_commandQueue addOperation:commandOperation];
     }

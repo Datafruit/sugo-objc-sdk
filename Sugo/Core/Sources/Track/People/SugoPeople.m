@@ -23,14 +23,14 @@
     return self;
 }
 
+- (NSString *)deviceSystemVersion {
+    return [UIDevice currentDevice].systemVersion;
+}
+
 - (NSString *)description
 {
     __strong Sugo *strongSugo = self.sugo;
     return [NSString stringWithFormat:@"<SugoPeople: %p %@>", (void *)self, (strongSugo ? strongSugo.apiToken : @"")];
-}
-
-- (NSString *)deviceSystemVersion {
-    return [UIDevice currentDevice].systemVersion;
 }
 
 - (NSDictionary *)collectAutomaticPeopleProperties

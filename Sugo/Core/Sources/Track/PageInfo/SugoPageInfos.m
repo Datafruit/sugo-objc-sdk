@@ -12,16 +12,6 @@
 
 static SugoPageInfos *singleton = nil;
 
-+ (instancetype)global
-{
-    @synchronized(self) {
-        if (singleton == nil) {
-            singleton = [[self alloc] initSingleton];
-        }
-    }
-    return singleton;
-}
-
 + (instancetype)allocWithZone:(struct _NSZone *)zone
 {
     @synchronized(self) {
@@ -32,6 +22,18 @@ static SugoPageInfos *singleton = nil;
     }
     return nil;
 }
+
++ (instancetype)global
+{
+    @synchronized(self) {
+        if (singleton == nil) {
+            singleton = [[self alloc] initSingleton];
+        }
+    }
+    return singleton;
+}
+
+
 
 - (instancetype)initSingleton
 {

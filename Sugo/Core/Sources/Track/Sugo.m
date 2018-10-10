@@ -1917,7 +1917,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion useCache:(BOOL)useCache {
     
     dispatch_async(self.serialQueue, ^{
-        
+    
         __block BOOL hadError = NO;
         __block NSData *resultData = [NSData data];
         __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
@@ -2031,7 +2031,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache
 {
     dispatch_async(self.serialQueue, ^{
-        
+    
         __block BOOL hadError = NO;
         __block NSData *resultData = [NSData data];
         __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
