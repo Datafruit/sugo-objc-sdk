@@ -15,6 +15,8 @@ sugo.init_path = function() {
     sugo.relative_path += sugo.hash;
     sugo.relative_path = sugo.relative_path.replace('#/', '#');
     var pageInfo = sugo.page_infos[sugo.relative_path + (sugo.single_code ? '##' + sugo.single_code : '')] || {};
+    console.log(sugo.relative_path + (sugo.single_code ? '##' + sugo.single_code : ''));
+    console.log('=========', pageInfo);
     sugo.init = {
         code: pageInfo.code,
         page_name: pageInfo.page_name,

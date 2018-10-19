@@ -21,6 +21,8 @@
 
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView;
 - (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView;
+- (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView withWebViewFrame:(NSDictionary *)webFrame;
+- (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView withWebViewFrame:(NSDictionary *)webFrame;
 
 @end
 
@@ -107,14 +109,26 @@
                                                                   }];
     if ([object isKindOfClass:[UIWebView class]]
         && ((UIWebView *)object).window != nil) {
-        [serializedObject setObject:[self getUIWebViewHTMLInfoFrom:(UIWebView *)object]
+        NSDictionary *webFrame=[self requrieWebViewFrame:serializedObject];
+        [serializedObject setObject:[self getUIWebViewHTMLInfoFrom:(UIWebView *)object withWebViewFrame:webFrame]
                              forKey:@"htmlPage"];
     } else if ([object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading) {
-        [serializedObject setObject:[self getWKWebViewHTMLInfoFrom:(WKWebView *)object]
+        NSDictionary *webFrame=[self requrieWebViewFrame:serializedObject];
+        [serializedObject setObject:[self getWKWebViewHTMLInfoFrom:(WKWebView *)object withWebViewFrame:webFrame]
                              forKey:@"htmlPage"];
     }
 
     [context addSerializedObject:serializedObject];
+}
+
+#pragma mark Gets the frame value of the webview or wkwebview
+-(NSDictionary *)requrieWebViewFrame:(NSMutableDictionary *)serializedObject{
+    NSDictionary *properties=serializedObject[@"properties"];
+    NSDictionary *frame=properties[@"frame"];
+    NSArray *values=frame[@"values"];
+    NSDictionary *dict=values[0];
+    NSDictionary *value=dict[@"value"];
+    return value;
 }
 
 - (NSArray *)classHierarchyArrayForObject:(NSObject *)object
@@ -373,6 +387,65 @@
     [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:nil];
 
     return [[WebViewInfoStorage globalStorage] getHTMLInfo];
+}
+
+
+#pragma mark Gets the frame value of the wkwebview and adds the absolute displacement field to the htmlpage field
+- (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView withWebViewFrame:(NSDictionary *)webFrame
+{
+    WebViewBindings *wvBindings = [WebViewBindings globalBindings];
+    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:nil];
+    
+    
+    
+    NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfo];
+    
+    NSMutableDictionary *newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
+    
+    float clientHeight=[newdict[@"clientHeight"] floatValue];
+    float webHeight=[webFrame[@"Height"] floatValue];
+    float distance= clientHeight==0?0:webHeight-clientHeight;
+    [newdict setValue:[NSString stringWithFormat:@"%lf",distance] forKey:@"distance"];
+    return newdict;
+}
+
+
+
+#pragma mark Get the frame value of the webview and add the absolute displacement field to the htmlpage field
+- (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView withWebViewFrame:(NSDictionary *)webFrame
+{
+    WebViewBindings *wvBindings = [WebViewBindings globalBindings];
+    NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"]];
+    NSLog(@"代码获取string：%@",eventString);
+    NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *tempDic = [NSJSONSerialization JSONObjectWithData:eventData options:0 error:nil];
+    float clientHeight=[tempDic[@"clientHeight"] floatValue];
+    float webHeight=[webFrame[@"Height"] floatValue];
+    float distance= clientHeight==0?0:webHeight-clientHeight;
+    
+    NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                          options:NSJSONReadingMutableContainers
+                                                            error:nil];
+    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+    if (event[@"title"]
+        && event[@"path"]
+        && event[@"clientWidth"]
+        && event[@"clientHeight"]
+        && event[@"viewportContent"]
+        && event[@"nodes"]) {
+        [storage setHTMLInfoWithTitle:(NSString *)event[@"title"]
+                                 path:(NSString *)event[@"path"]
+                                width:(NSString *)event[@"clientWidth"]
+                               height:(NSString *)event[@"clientHeight"]
+                      viewportContent:(NSString *)event[@"viewportContent"]
+                                nodes:(NSString *)event[@"nodes"]
+                             distance:[NSString stringWithFormat:@"%lf",distance]
+         ];
+    }
+    eventString = nil;
+    eventData = nil;
+    event = nil;
+    return [storage getHTMLInfo];
 }
 
 @end

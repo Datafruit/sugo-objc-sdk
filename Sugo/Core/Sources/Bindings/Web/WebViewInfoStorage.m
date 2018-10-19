@@ -18,6 +18,7 @@
 @property NSString *height;
 @property NSString *viewportContent;
 @property NSString *nodes;
+@property NSString *distance;//Calculate the absolute value of moving the h5 element downward
     
 @end
 
@@ -59,6 +60,7 @@ static WebViewInfoStorage *singleton = nil;
     _height = @"";
     _viewportContent = @"";
     _nodes = @"";
+    _distance=@"";
     return self;
 }
 
@@ -96,7 +98,8 @@ static WebViewInfoStorage *singleton = nil;
                  @"clientWidth": _width,
                  @"clientHeight": _height,
                  @"viewportContent": _viewportContent,
-                 @"nodes": _nodes
+                 @"nodes": _nodes,
+                 @"distance":_distance
                  };
     }
 }
@@ -112,6 +115,20 @@ static WebViewInfoStorage *singleton = nil;
          _nodes = nodes;
          _newFrame = true;
      }
+}
+
+- (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes distance:(NSString *)distance
+{
+    @synchronized(self) {
+        _title = title;
+        _path = path;
+        _width = width;
+        _height = height;
+        _viewportContent = viewportContent;
+        _nodes = nodes;
+        _newFrame = true;
+        _distance=distance;
+    }
 }
 
 @end
