@@ -73,6 +73,7 @@
             [self startWKWebViewBindings:&wkWebView];
         };
         
+        
         [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:NSClassFromString(@"UIWebView")
                           withBlock:uiDidMoveToWindowBlock
