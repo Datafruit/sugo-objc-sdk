@@ -416,7 +416,6 @@
 {
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
     NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"]];
-    NSLog(@"代码获取string：%@",eventString);
     NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *tempDic = [NSJSONSerialization JSONObjectWithData:eventData options:0 error:nil];
     float clientHeight=[tempDic[@"clientHeight"] floatValue];
