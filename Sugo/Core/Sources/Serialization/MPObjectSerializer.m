@@ -50,9 +50,21 @@
 
     MPObjectSerializerContext *context = [[MPObjectSerializerContext alloc] initWithRootObject:rootObject];
 
+    int tableViewCell=0;
+    int collectionViewCell=0;
     while ([context hasUnvisitedObjects])
     {
-        [self visitObject:[context dequeueUnvisitedObject] withContext:context];
+        NSObject *object=[context dequeueUnvisitedObject];
+        NSString *objectName=NSStringFromClass([object class]);
+        //This change is to add a subscript to each cell to solve the problem of cell scrambling in the server path
+        if ([objectName isEqualToString:@"UITableViewCell"]) {
+            [self visitObject:object withContext:context cellIndex:tableViewCell++];
+        }else if([objectName isEqualToString:@"UICollectionViewCell"]){
+            [self visitObject:object withContext:context cellIndex:collectionViewCell++];
+        }else{
+            [self visitObject:object withContext:context cellIndex:-1];
+        }
+        
     }
 
     return @{
@@ -61,7 +73,7 @@
     };
 }
 
-- (void)visitObject:(NSObject *)object withContext:(MPObjectSerializerContext *)context
+- (void)visitObject:(NSObject *)object withContext:(MPObjectSerializerContext *)context cellIndex:(NSInteger)cellIndex
 {
     NSParameterAssert(object != nil);
     NSParameterAssert(context != nil);
@@ -78,12 +90,18 @@
     if (classDescription) {
         for (MPPropertyDescription *propertyDescription in [classDescription propertyDescriptions]) {
             if ([propertyDescription shouldReadPropertyValueForObject:object]) {
+                if ([NSStringFromClass([object class]) isEqualToString:@"UITableViewCell"]) {
+                    NSLog(@"控件名称：%@",NSStringFromClass([object class]));
+                }
+                
                 id propertyValue = [self propertyValueForObject:object withPropertyDescription:propertyDescription context:context];
                 propertyValues[propertyDescription.name] = propertyValue ?: [NSNull null];
             }
         }
     }
-
+    if (cellIndex!=-1) {
+        propertyValues[@"cellIndex"]=[NSString stringWithFormat:@"%ld",(long)cellIndex];
+    }
     NSMutableArray *delegateMethods = [NSMutableArray array];
     id delegate;
     SEL delegateSelector = @selector(delegate);

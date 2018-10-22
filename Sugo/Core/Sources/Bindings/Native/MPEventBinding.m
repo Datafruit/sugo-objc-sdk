@@ -12,6 +12,8 @@
 #import "MPUITextViewBinding.h"
 #import "MPUITableViewBinding.h"
 #import "MPUICollectionViewBinding.h"
+#import "MPUITableViewCellBinding.h"
+#import "MPUICollectionViewCellBinding.h"
 #import "MPLogger.h"
 
 @implementation MPEventBinding
@@ -39,7 +41,9 @@
                                    [MPUIViewBinding typeName]: [MPUIViewBinding class],
                                    [MPUITextViewBinding typeName]: [MPUITextViewBinding class],
                                    [MPUITableViewBinding typeName]: [MPUITableViewBinding class],
-                                   [MPUICollectionViewBinding typeName]: [MPUICollectionViewBinding class]
+                                   [MPUICollectionViewBinding typeName]: [MPUICollectionViewBinding class],
+                                   [MPUITableViewCellBinding typeName] : [MPUITableViewCellBinding class],
+                                   [MPUICollectionViewCellBinding typeName]:[MPUICollectionViewCellBinding class]
                                    };
     return classTypeMap[bindingType] ?: [MPUIViewBinding class];
 }
