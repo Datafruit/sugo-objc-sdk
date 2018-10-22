@@ -107,7 +107,7 @@
         }
     }
 
-    var sugoio = {
-        track: sugo.track,
-        time_event: sugo.timeEvent
-    };
+//    var sugoio = {
+//        track: sugo.track,
+//        time_event: sugo.timeEvent
+//    };
