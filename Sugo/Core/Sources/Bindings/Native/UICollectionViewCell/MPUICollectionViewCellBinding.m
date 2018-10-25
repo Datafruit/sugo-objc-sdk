@@ -125,8 +125,12 @@
             //获取路径中的cell是第几个，用来跟indexpath.row比较
             NSString *sectionCell=array[array.count-1];
             NSArray *cellArray=[sectionCell componentsSeparatedByString:@"["];
-            NSInteger row=[[cellArray[1] componentsSeparatedByString:@"]"][0] floatValue];
-            
+            NSInteger row;
+            if (!cellArray||cellArray.count<=1) {//当只有一个元素时，证明是同类元素埋点
+                row=indexPath.row;
+            }else{
+                row=[[cellArray[1] componentsSeparatedByString:@"]"][0] floatValue];
+            }
             // select targets based off path
             if ([self.path isTableViewCellSelected:collectionView fromRoot:root evaluatingFinalPredicate:YES num:1]&&row==indexPath.row) {
                 
