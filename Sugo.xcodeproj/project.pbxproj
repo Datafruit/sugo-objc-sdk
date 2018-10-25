@@ -19,6 +19,10 @@
 		14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */; };
 		14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4D1E13D675002F0C4B /* WebKit.framework */; };
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
+		9B833E29217DD3100034F188 /* MPUICollectionViewCellBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B833E27217DD3100034F188 /* MPUICollectionViewCellBinding.h */; };
+		9B833E2A217DD3100034F188 /* MPUICollectionViewCellBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B833E28217DD3100034F188 /* MPUICollectionViewCellBinding.m */; };
+		9B833E2E217DD4510034F188 /* MPUITableViewCellBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B833E2C217DD4510034F188 /* MPUITableViewCellBinding.m */; };
+		9B833E2F217DD4510034F188 /* MPUITableViewCellBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B833E2D217DD4510034F188 /* MPUITableViewCellBinding.h */; };
 		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
 		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
 		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -201,6 +205,10 @@
 		14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14BA1A4D1E13D675002F0C4B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		9B833E27217DD3100034F188 /* MPUICollectionViewCellBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPUICollectionViewCellBinding.h; path = Sugo/Core/Sources/Bindings/Native/UICollectionViewCell/MPUICollectionViewCellBinding.h; sourceTree = SOURCE_ROOT; };
+		9B833E28217DD3100034F188 /* MPUICollectionViewCellBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPUICollectionViewCellBinding.m; path = Sugo/Core/Sources/Bindings/Native/UICollectionViewCell/MPUICollectionViewCellBinding.m; sourceTree = SOURCE_ROOT; };
+		9B833E2C217DD4510034F188 /* MPUITableViewCellBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPUITableViewCellBinding.m; path = Sugo/Core/Sources/Bindings/Native/UITableViewCell/MPUITableViewCellBinding.m; sourceTree = SOURCE_ROOT; };
+		9B833E2D217DD4510034F188 /* MPUITableViewCellBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPUITableViewCellBinding.h; path = Sugo/Core/Sources/Bindings/Native/UITableViewCell/MPUITableViewCellBinding.h; sourceTree = SOURCE_ROOT; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -439,6 +447,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9B833E26217DD2F50034F188 /* UICollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				9B833E27217DD3100034F188 /* MPUICollectionViewCellBinding.h */,
+				9B833E28217DD3100034F188 /* MPUICollectionViewCellBinding.m */,
+			);
+			name = UICollectionViewCell;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		9B833E2B217DD43B0034F188 /* UITableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				9B833E2D217DD4510034F188 /* MPUITableViewCellBinding.h */,
+				9B833E2C217DD4510034F188 /* MPUITableViewCellBinding.m */,
+			);
+			name = UITableViewCell;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		A700F8A320C7BD24008C0069 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -596,6 +624,8 @@
 				A700FA0120C7C533008C0069 /* UITextView */,
 				A700F9FF20C7C50D008C0069 /* UITableView */,
 				A700F9FE20C7C4F3008C0069 /* UICollectionView */,
+				9B833E26217DD2F50034F188 /* UICollectionViewCell */,
+				9B833E2B217DD43B0034F188 /* UITableViewCell */,
 			);
 			path = Native;
 			sourceTree = "<group>";
@@ -908,6 +938,7 @@
 				A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */,
 				A700F9CE20C7BD24008C0069 /* MPABTestDesignerMessage.h in Headers */,
 				A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */,
+				9B833E2F217DD4510034F188 /* MPUITableViewCellBinding.h in Headers */,
 				A700F96120C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */,
 				A700F9B620C7BD24008C0069 /* MPUITableViewBinding.h in Headers */,
 				A700F99020C7BD24008C0069 /* Attributes.h in Headers */,
@@ -933,6 +964,7 @@
 				A700F9DE20C7BD24008C0069 /* MPSequenceGenerator.h in Headers */,
 				A700F97A20C7BD24008C0069 /* MPDesignerSessionCollection.h in Headers */,
 				A700F9D820C7BD24008C0069 /* MPTypeDescription.h in Headers */,
+				9B833E29217DD3100034F188 /* MPUICollectionViewCellBinding.h in Headers */,
 				A700F9A720C7BD24008C0069 /* MPUIViewBinding.h in Headers */,
 				A700F9CC20C7BD24008C0069 /* NSInvocation+MPHelpers.h in Headers */,
 				A700F9F020C7BD24008C0069 /* MPSwizzle.h in Headers */,
@@ -1042,6 +1074,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B833E2A217DD3100034F188 /* MPUICollectionViewCellBinding.m in Sources */,
 				A700F95B20C7BD24008C0069 /* UIColor+MPColor.m in Sources */,
 				A700F9D220C7BD24008C0069 /* MPNetwork.m in Sources */,
 				A700F9D920C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
@@ -1101,6 +1134,7 @@
 				A700F9B920C7BD24008C0069 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
 				A700F96220C7BD24008C0069 /* MPEnumDescription.m in Sources */,
 				A700F96C20C7BD24008C0069 /* UIApplication+AutomaticEvents.m in Sources */,
+				9B833E2E217DD4510034F188 /* MPUITableViewCellBinding.m in Sources */,
 				A700F95C20C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				A700F9C220C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
 				A700F99520C7BD24008C0069 /* Sugo.m in Sources */,

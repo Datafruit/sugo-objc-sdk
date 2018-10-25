@@ -10,7 +10,7 @@
 
 @interface MPObjectSelector : NSObject
 
-@property (nonatomic, strong, readonly) NSString *string;
+@property (nonatomic, strong) NSString *string;
 
 + (MPObjectSelector *)objectSelectorWithString:(NSString *)string;
 - (instancetype)initWithString:(NSString *)string;
@@ -24,5 +24,7 @@
 - (Class)selectedClass;
 - (BOOL)pathContainsObjectOfClass:(Class)klass;
 - (NSString *)description;
+
+- (BOOL)isTableViewCellSelected:(id)leaf fromRoot:(id)root evaluatingFinalPredicate:(BOOL)finalPredicate num:(NSInteger)num;
 
 @end
