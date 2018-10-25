@@ -51,8 +51,8 @@
         sugo.track('停留', tmp_props);
     };
 
-    var sugoio = {
-        track: sugo.track,
-        time_event: sugo.timeEvent
-    };
-    
+//    var sugoio = {
+//        track: sugo.track,
+//        time_event: sugo.timeEvent
+//    };
+
