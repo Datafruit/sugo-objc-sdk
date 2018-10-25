@@ -37,6 +37,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+const static double locateDefaultInterval=30*60;//默认全局配置上传地理位置时间间隔
 
 @interface Sugo () <CLLocationManagerDelegate>
 {
@@ -48,6 +49,7 @@
     double _locateInterval;
     NSNumber *latitude;
     NSNumber *longitude;
+    long recentlySendLoacationTime;
 }
 
 @property (nonatomic, strong) CLLocationManager *locationManager;

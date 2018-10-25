@@ -164,9 +164,12 @@ static NSString *defaultProjectToken;
         _flushLimit = 16;
         _flushMaxEvents = 200;
         _cacheInterval = cacheInterval;
-        _locateInterval = 60 * 30;
+        _locateInterval = locateDefaultInterval;
         latitude = @0;
         longitude = @0;
+        //0：When you first open the app, you immediately upload your location；
+        //Sets the current timestamp：Upload data at locateInterval
+        recentlySendLoacationTime=0;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
@@ -773,12 +776,22 @@ static NSString *defaultProjectToken;
     return _locateInterval;
 }
 
+-(long)recentlySendLoacationTime{
+    return recentlySendLoacationTime;
+}
+
+-(void)setRecentlySendLoacationTime:(long)time{
+    @synchronized (self) {
+        recentlySendLoacationTime = time;
+    }
+}
+
 - (void)setLocateInterval:(double)interval
 {
     @synchronized (self) {
         _locateInterval = interval;
     }
-    [self startLocationTimer];
+//    [self startLocationTimer];
 }
 
 - (void)startLocationTimer
@@ -1219,6 +1232,7 @@ static NSString *defaultProjectToken;
 
 - (void)trackStayTime
 {
+    typeof(self) __weak weakSelf = self;
     void (^viewDidAppearBlock)(id, SEL) = ^(id viewController, SEL command) {
         UIViewController *vc = (UIViewController *)viewController;
         if (!vc) {
@@ -1250,6 +1264,13 @@ static NSString *defaultProjectToken;
             [self registerSuperProperties:p];
             [self trackEvent:values[@"PageEnter"] properties:p];
             [self timeEvent:values[@"PageStay"]];
+        }
+        
+        //Check the location upload time event
+        long currentTime=[[NSDate date]timeIntervalSince1970];
+        if (weakSelf.locateInterval>0&&currentTime-weakSelf.recentlySendLoacationTime>=weakSelf.locateInterval) {
+            [self locate];
+            weakSelf.recentlySendLoacationTime=currentTime;
         }
     };
     
@@ -1683,7 +1704,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         case kCLAuthorizationStatusAuthorizedAlways:
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             [self.locationManager startUpdatingLocation];
-            [self startLocationTimer];
+//            [self startLocationTimer];
             break;
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
@@ -1711,7 +1732,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         case kCLAuthorizationStatusAuthorizedAlways:
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             [self.locationManager stopUpdatingLocation];
-            [self stopLocationTimer];
+//            [self stopLocationTimer];
             break;
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
