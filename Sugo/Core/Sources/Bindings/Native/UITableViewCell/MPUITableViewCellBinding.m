@@ -124,12 +124,16 @@
             strPath=[strPath stringByAppendingString:@"[0]"];
             self.path.string = strPath;
             
-            
             //获取路径中的cell是第几个，用来跟indexpath.row比较
             NSString * sectionCell=array[array.count-1];
             NSArray * cellArray=[sectionCell componentsSeparatedByString:@"["];
-            NSInteger row=[[cellArray[1] componentsSeparatedByString:@"]"][0] floatValue];
-            
+            NSInteger row;
+            if (!cellArray||cellArray.count<=1) {//当只有一个元素时，证明是同类元素埋点
+                row=indexPath.row;
+            }else{
+                NSString *rowStr= [cellArray[1] componentsSeparatedByString:@"]"][0];
+                row=[rowStr floatValue];
+            }
             
             if ([self.path isTableViewCellSelected:tableView fromRoot:root evaluatingFinalPredicate:YES num:2] &&row==indexPath.row) {
                 NSString *textLabel = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
