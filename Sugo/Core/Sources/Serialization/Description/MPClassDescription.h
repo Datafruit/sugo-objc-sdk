@@ -8,7 +8,7 @@
 
 @property (nonatomic, readonly) MPClassDescription *superclassDescription;
 @property (nonatomic, readonly) NSArray *propertyDescriptions;
-@property (nonatomic, readonly) NSArray *delegateInfos;
+@property (nonatomic, strong) NSArray *delegateInfos;
 
 - (instancetype)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary;
 

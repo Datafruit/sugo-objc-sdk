@@ -43,6 +43,7 @@
     }
     
     Class delegate = NSClassFromString(object[@"table_delegate"]);
+    BOOL isTrue=[delegate instancesRespondToSelector:@selector(tableView:didSelectRowAtIndexPath:)];
     if (!delegate || ![delegate instancesRespondToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
         MPLogDebug(@"binding requires a delegate class");
         return nil;
@@ -110,9 +111,27 @@
             if (!tableView) {//if tableview is null,return the method.
                 return;
             }
+            //获取cell的tableview路径，用来比较tableview是否一样
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             // select targets based off path
-            if ([self.path isLeafSelected:cell fromRoot:root]) {
+            NSString *cellPath=self.path.string;
+            NSArray *array = [cellPath componentsSeparatedByString:@"/"];
+            NSString *strPath=@"";
+            for (int i=1; i<array.count-2; i++) {
+                strPath=[strPath stringByAppendingFormat:@"%@%@", @"/", array[i]];
+            }
+            
+            strPath=[strPath stringByAppendingString:@"[0]"];
+            self.path.string = strPath;
+            
+            
+            //获取路径中的cell是第几个，用来跟indexpath.row比较
+            NSString * sectionCell=array[array.count-1];
+            NSArray * cellArray=[sectionCell componentsSeparatedByString:@"["];
+            NSInteger row=[[cellArray[1] componentsSeparatedByString:@"]"][0] floatValue];
+            
+            
+            if ([self.path isTableViewCellSelected:tableView fromRoot:root evaluatingFinalPredicate:YES num:2] &&row==indexPath.row) {
                 NSString *textLabel = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
                 NSString *detailTextLabel = (cell && cell.detailTextLabel && cell.detailTextLabel.text) ? cell.detailTextLabel.text : @"";
                 
@@ -154,6 +173,7 @@
                           eventName:[self eventName]
                          properties:p];
             }
+            self.path.string = cellPath;
         };
         
         [MPSwizzler swizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)

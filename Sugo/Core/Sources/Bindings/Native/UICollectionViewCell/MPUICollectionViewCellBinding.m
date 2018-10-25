@@ -111,10 +111,24 @@
             if (!collectionView) {
                 return ;
             }
-            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            
+            
+            //获取cell的collectionView路径，用来比较collectionView是否一样
+            NSString *cellPath=self.path.string;
+            NSArray *array = [cellPath componentsSeparatedByString:@"/"];
+            NSString *strPath=@"";
+            for (int i=1; i<array.count-1; i++) {
+                strPath=[strPath stringByAppendingFormat:@"%@%@", @"/", array[i]];
+            }
+            self.path.string = strPath;
+            
+            //获取路径中的cell是第几个，用来跟indexpath.row比较
+            NSString *sectionCell=array[array.count-1];
+            NSArray *cellArray=[sectionCell componentsSeparatedByString:@"["];
+            NSInteger row=[[cellArray[1] componentsSeparatedByString:@"]"][0] floatValue];
             
             // select targets based off path
-            if ([self.path isLeafSelected:cell fromRoot:root]) {
+            if ([self.path isTableViewCellSelected:collectionView fromRoot:root evaluatingFinalPredicate:YES num:1]&&row==indexPath.row) {
                 
                 UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
                 NSMutableDictionary *p = [[NSMutableDictionary alloc]
@@ -153,6 +167,7 @@
                           eventName:[self eventName]
                          properties:p];
             }
+            self.path.string =cellPath;
         };
         
         [MPSwizzler swizzleSelector:@selector(collectionView:didSelectItemAtIndexPath:)
