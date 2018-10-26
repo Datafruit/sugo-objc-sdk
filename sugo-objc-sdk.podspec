@@ -2,7 +2,7 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'sugo-objc-sdk'
   spec.module_name           = 'Sugo'
-  spec.version               = '3.4.1'
+  spec.version               = '3.4.2'
   spec.license               = 'Apache License, Version 2.0'
   spec.summary               = 'Official Sugo SDK for iOS (Objective-C)'
   spec.homepage              = 'https://github.com/Datafruit/sugo-objc-sdk'
