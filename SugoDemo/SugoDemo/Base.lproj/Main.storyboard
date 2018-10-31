@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Dpj-4x-fQr">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Dpj-4x-fQr">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -811,6 +811,26 @@
                                             <segue destination="f76-VP-jdj" kind="show" id="27E-ek-tYo"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="LSc-l8-9Z2">
+                                        <rect key="frame" x="0.0" y="88" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LSc-l8-9Z2" id="6uR-as-52B">
+                                            <rect key="frame" x="0.0" y="0.0" width="286" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DoubleWebView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y26-jg-Vvy">
+                                                    <rect key="frame" x="16" y="11" width="124.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="y26-jg-Vvy" firstAttribute="centerY" secondItem="6uR-as-52B" secondAttribute="centerY" id="0Tr-QA-Pl6"/>
+                                                <constraint firstItem="y26-jg-Vvy" firstAttribute="leading" secondItem="6uR-as-52B" secondAttribute="leading" constant="16" id="4Nv-WN-L8Z"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -1002,6 +1022,41 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wff-mz-qsw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2072" y="1869"/>
+        </scene>
+        <!--DoubleWebView-->
+        <scene sceneID="WwX-ds-xSZ">
+            <objects>
+                <viewController storyboardIdentifier="DoubleWebViewController" id="kut-nL-cJM" customClass="DoubleWebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pQN-Qe-OPc"/>
+                        <viewControllerLayoutGuide type="bottom" id="YKf-tr-KaS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UnC-sr-pUK">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0tB-X0-qw5">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="0tB-X0-qw5" secondAttribute="trailing" id="QYY-wi-QN2"/>
+                            <constraint firstItem="0tB-X0-qw5" firstAttribute="leading" secondItem="UnC-sr-pUK" secondAttribute="leading" id="TQk-Ws-zGY"/>
+                            <constraint firstItem="YKf-tr-KaS" firstAttribute="top" secondItem="0tB-X0-qw5" secondAttribute="bottom" id="rx7-JH-ofQ"/>
+                            <constraint firstItem="0tB-X0-qw5" firstAttribute="top" secondItem="pQN-Qe-OPc" secondAttribute="bottom" id="s4E-Lu-mEV"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="DoubleWebView" id="y9p-k5-Q0b"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="contentView" destination="0tB-X0-qw5" id="Gl3-eX-JuA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Hl-NB-qXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2743" y="1869"/>
         </scene>
     </scenes>
     <resources>

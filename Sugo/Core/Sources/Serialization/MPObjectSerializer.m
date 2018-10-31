@@ -591,13 +591,21 @@
 #pragma mark Gets the frame value of the wkwebview and adds the absolute displacement field to the htmlpage field
 - (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView withWebViewFrame:(NSDictionary *)webFrame
 {
+    NSInteger hash=webView.hash;
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:nil];
+    __block  BOOL isTrue=true;
+    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:^(id object, NSError *error){
+//        NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
+        NSLog(@"加载完成");
+        isTrue = false;
+    }];
     
-    
-    
-    NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfo];
-    
+    if (isTrue) {
+        sleep(1000);
+    }
+    CGFloat y=webView.frame.origin.y;
+  
+    NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
     NSMutableDictionary *newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
     
     float clientHeight=[newdict[@"clientHeight"] floatValue];

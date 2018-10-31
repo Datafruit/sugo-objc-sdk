@@ -83,6 +83,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
                 serializedObjects = [connection sessionObjectForKey:@"snapshot_hierarchy"];
             }
         } else {
+//            dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
             dispatch_sync(dispatch_get_main_queue(), ^{
                 serializedObjects = [serializer objectHierarchyForKeyWindow];
             });

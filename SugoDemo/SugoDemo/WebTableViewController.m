@@ -7,7 +7,7 @@
 //
 
 #import "WebTableViewController.h"
-
+#import "DoubleWebViewController.h"
 @interface WebTableViewController ()
 
 @end
@@ -36,7 +36,16 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 3;
+}
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row==2) {
+        UIStoryboard *story=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        DoubleWebViewController *controller=[story instantiateViewControllerWithIdentifier:@"DoubleWebViewController"];
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 /*

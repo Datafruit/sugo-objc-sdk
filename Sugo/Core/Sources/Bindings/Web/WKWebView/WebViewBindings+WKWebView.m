@@ -20,6 +20,10 @@
 {
     self.wkWebViewCurrentJS = [self wkJavaScript];
     [(*webView).configuration.userContentController addUserScript:[self wkWebViewCurrentJS]];
+    NSInteger hash = (*webView).hash;
+    NSString *javaScriptSource = [NSString stringWithFormat:@"sugo.hash=%ld;",(long)hash];
+    WKUserScript *userScript = [[WKUserScript alloc] initWithSource:javaScriptSource injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+    [(*webView).configuration.userContentController addUserScript:userScript];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
@@ -98,7 +102,8 @@
                                         width:(NSString *)body[@"clientWidth"]
                                        height:(NSString *)body[@"clientHeight"]
                               viewportContent:(NSString *)body[@"viewportContent"]
-                                        nodes:(NSString *)body[@"nodes"]];
+                                        nodes:(NSString *)body[@"nodes"]
+                                        hash:body[@"hash"]];
             }
         }
     } else {

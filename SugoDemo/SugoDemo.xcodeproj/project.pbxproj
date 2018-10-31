@@ -31,7 +31,11 @@
 		14D3A06D1E7F6B4A00DDE9EA /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06C1E7F6B4A00DDE9EA /* ScanViewController.m */; };
 		14D3A0701E7F6B8500DDE9EA /* InstructionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06F1E7F6B8500DDE9EA /* InstructionsViewController.m */; };
 		14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */; };
+		9BCF68652185EE1900CA8DB3 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BCF68642185EE1900CA8DB3 /* Sugo.framework */; };
+		9BCF68662185EE1900CA8DB3 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BCF68642185EE1900CA8DB3 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9BCF68722187ECA500CA8DB3 /* DoubleWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BCF68712187ECA500CA8DB3 /* DoubleWebViewController.m */; };
 		A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */; };
+		ED39B3288B5AB3ED8F3CB741 /* Pods_SugoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD84A472D1E8D4F9DA15C4E4 /* Pods_SugoDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +47,20 @@
 			remoteInfo = SugoDemo;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9BCF68672185EE1900CA8DB3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9BCF68662185EE1900CA8DB3 /* Sugo.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		140CECA21E7FD18A00422EA8 /* NativeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeTableViewController.h; sourceTree = "<group>"; };
@@ -91,8 +109,14 @@
 		14D3A06F1E7F6B8500DDE9EA /* InstructionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstructionsViewController.m; sourceTree = "<group>"; };
 		14D3A0771E7F6CFA00DDE9EA /* HomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTableViewController.h; sourceTree = "<group>"; };
 		14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTableViewController.m; sourceTree = "<group>"; };
+		90A9D991A351B7D5030E374F /* Pods-SugoDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SugoDemo.release.xcconfig"; path = "Target Support Files/Pods-SugoDemo/Pods-SugoDemo.release.xcconfig"; sourceTree = "<group>"; };
+		9BCF68642185EE1900CA8DB3 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BCF68702187ECA500CA8DB3 /* DoubleWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DoubleWebViewController.h; sourceTree = "<group>"; };
+		9BCF68712187ECA500CA8DB3 /* DoubleWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DoubleWebViewController.m; sourceTree = "<group>"; };
 		A7097E251FDBD51A008EC6F4 /* UICollectionViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UICollectionViewViewController.h; sourceTree = "<group>"; };
 		A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UICollectionViewViewController.m; sourceTree = "<group>"; };
+		CD84A472D1E8D4F9DA15C4E4 /* Pods_SugoDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SugoDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E107DA90AFC33437D444A750 /* Pods-SugoDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SugoDemo.debug.xcconfig"; path = "Target Support Files/Pods-SugoDemo/Pods-SugoDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +124,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BCF68652185EE1900CA8DB3 /* Sugo.framework in Frameworks */,
+				ED39B3288B5AB3ED8F3CB741 /* Pods_SugoDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +165,8 @@
 				140CECB51E7FD6DB00422EA8 /* UIWebViewViewController.m */,
 				140CECB71E7FD6E600422EA8 /* WKWebViewViewController.h */,
 				140CECB81E7FD6E600422EA8 /* WKWebViewViewController.m */,
+				9BCF68702187ECA500CA8DB3 /* DoubleWebViewController.h */,
+				9BCF68712187ECA500CA8DB3 /* DoubleWebViewController.m */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -157,10 +185,12 @@
 		141AC78D1E1366DB008D67F6 = {
 			isa = PBXGroup;
 			children = (
+				9BCF68642185EE1900CA8DB3 /* Sugo.framework */,
 				141AC7981E1366DB008D67F6 /* SugoDemo */,
 				14282F1C1E1F381C00B3E4FA /* SugoDemoTests */,
 				141AC7971E1366DB008D67F6 /* Products */,
 				14BA1A7B1E13E9F6002F0C4B /* Frameworks */,
+				49ADDE3D020B01614E98E61F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -229,6 +259,7 @@
 		14BA1A7B1E13E9F6002F0C4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CD84A472D1E8D4F9DA15C4E4 /* Pods_SugoDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -247,6 +278,15 @@
 			name = Demo;
 			sourceTree = "<group>";
 		};
+		49ADDE3D020B01614E98E61F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E107DA90AFC33437D444A750 /* Pods-SugoDemo.debug.xcconfig */,
+				90A9D991A351B7D5030E374F /* Pods-SugoDemo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -254,9 +294,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 141AC7AD1E1366DB008D67F6 /* Build configuration list for PBXNativeTarget "SugoDemo" */;
 			buildPhases = (
+				6F678928C22E7060F6A07F91 /* [CP] Check Pods Manifest.lock */,
 				141AC7921E1366DB008D67F6 /* Sources */,
 				141AC7931E1366DB008D67F6 /* Frameworks */,
 				141AC7941E1366DB008D67F6 /* Resources */,
+				9BCF68672185EE1900CA8DB3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -296,6 +338,7 @@
 				TargetAttributes = {
 					141AC7951E1366DB008D67F6 = {
 						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = 5PCYP5P3P9;
 						ProvisioningStyle = Automatic;
 					};
 					14282F1A1E1F381C00B3E4FA = {
@@ -345,6 +388,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6F678928C22E7060F6A07F91 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SugoDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		141AC7921E1366DB008D67F6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -354,6 +418,7 @@
 				140CECB31E7FD6B100422EA8 /* WebTableViewController.m in Sources */,
 				140CECA71E7FD20C00422EA8 /* UIControlViewController.m in Sources */,
 				14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */,
+				9BCF68722187ECA500CA8DB3 /* DoubleWebViewController.m in Sources */,
 				14D3A06D1E7F6B4A00DDE9EA /* ScanViewController.m in Sources */,
 				140CECB91E7FD6E600422EA8 /* WKWebViewViewController.m in Sources */,
 				14BA1A891E13EC7D002F0C4B /* CodelessCommonViewController.m in Sources */,
@@ -519,24 +584,26 @@
 		};
 		141AC7AE1E1366DB008D67F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E107DA90AFC33437D444A750 /* Pods-SugoDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 5PCYP5P3P9;
 				INFOPLIST_FILE = SugoDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo2233;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
 		141AC7AF1E1366DB008D67F6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90A9D991A351B7D5030E374F /* Pods-SugoDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 5PCYP5P3P9;
 				INFOPLIST_FILE = SugoDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo2233;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

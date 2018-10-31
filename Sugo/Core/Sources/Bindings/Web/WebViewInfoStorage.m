@@ -19,7 +19,8 @@
 @property NSString *viewportContent;
 @property NSString *nodes;
 @property NSString *distance;//Calculate the absolute value of moving the h5 element downward
-    
+
+@property NSMutableDictionary *wkWebViewDict;
 @end
 
 @implementation WebViewInfoStorage
@@ -61,6 +62,7 @@ static WebViewInfoStorage *singleton = nil;
     _viewportContent = @"";
     _nodes = @"";
     _distance=@"";
+    _wkWebViewDict = [[NSMutableDictionary alloc]init];
     return self;
 }
 
@@ -104,6 +106,15 @@ static WebViewInfoStorage *singleton = nil;
     }
 }
 
+-(NSDictionary *)getHTMLInfoWithHash:(NSInteger) hash{
+    @synchronized(self) {
+        if (_newFrame) {
+            _newFrame = false;
+        }
+        return _wkWebViewDict[[NSString stringWithFormat:@"%ld",(long)hash]];
+    }
+}
+
 - (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes
 {
      @synchronized(self) {
@@ -115,6 +126,55 @@ static WebViewInfoStorage *singleton = nil;
          _nodes = nodes;
          _newFrame = true;
      }
+}
+
+- (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes hash:(NSString *)hash
+{
+    @synchronized(self) {
+        
+        [_wkWebViewDict setObject: @{
+                                     @"title": title,
+                                     @"url": path,
+                                     @"clientWidth": width,
+                                     @"clientHeight": height,
+                                     @"viewportContent": viewportContent,
+                                     @"nodes": nodes
+                                     } forKey:hash];
+        
+        
+//        if (_wkWebViewDict.count==0) {
+//            [_wkWebViewDict setObject: @{
+//                                         @"title": title,
+//                                         @"url": path,
+//                                         @"clientWidth": width,
+//                                         @"clientHeight": height,
+//                                         @"viewportContent": viewportContent,
+//                                         @"nodes": nodes
+//                                         } forKey:[NSString stringWithFormat:@"%ld",(long)hash]];
+//        }else{
+//            NSMutableDictionary *dict=_wkWebViewDict[[NSString stringWithFormat:@"%ld",(long)hash]];
+//            if (dict) {
+//
+//            }else{
+//                [_wkWebViewDict setObject: @{
+//                                             @"title": title,
+//                                             @"url": path,
+//                                             @"clientWidth": width,
+//                                             @"clientHeight": height,
+//                                             @"viewportContent": viewportContent,
+//                                             @"nodes": nodes
+//                                             } forKey:[NSString stringWithFormat:@"%ld",(long)hash]];
+//            }
+//        }
+        
+//        _title = title;
+//        _path = path;
+//        _width = width;
+//        _height = height;
+//        _viewportContent = viewportContent;
+//        _nodes = nodes;
+        _newFrame = true;
+    }
 }
 
 - (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes distance:(NSString *)distance
