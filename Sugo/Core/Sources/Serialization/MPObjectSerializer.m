@@ -627,7 +627,10 @@
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView withWebViewFrame:(NSDictionary *)webFrame
 {
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"]];
+    __block NSString *eventString = @"";
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"]];
+    });
     NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *tempDic = [NSJSONSerialization JSONObjectWithData:eventData options:0 error:nil];
     float clientHeight=[tempDic[@"clientHeight"] floatValue];
