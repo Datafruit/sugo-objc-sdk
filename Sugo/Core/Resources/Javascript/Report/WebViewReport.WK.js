@@ -39,6 +39,7 @@ sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
     }
 };
 
+
 sugo.reportNodes = function() {
     var jsonArray = [];
     var body = document.getElementsByTagName('body')[0];

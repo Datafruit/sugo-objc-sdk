@@ -196,17 +196,24 @@
                                                                           @"selectors": delegateMethods
                                                                           }
                                                                   }];
+    __block BOOL isWkWebView=false;
+    __block BOOL isUIWebView=false;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        isUIWebView = [object isKindOfClass:[UIWebView class]]
+        && ((UIWebView *)object).window != nil;
+        isWkWebView = [object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading;
+    });
     
-    if ([object isKindOfClass:[UIWebView class]]
-        && ((UIWebView *)object).window != nil) {
+    if (isUIWebView) {
         NSDictionary *webFrame=[self requrieWidgetFrame:serializedObject];
         [serializedObject setObject:[self getUIWebViewHTMLInfoFrom:(UIWebView *)object withWebViewFrame:webFrame]
                              forKey:@"htmlPage"];
-    } else if ([object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading) {
+    } else if (isWkWebView) {
         NSDictionary *webFrame=[self requrieWidgetFrame:serializedObject];
         [serializedObject setObject:[self getWKWebViewHTMLInfoFrom:(WKWebView *)object withWebViewFrame:webFrame]
                              forKey:@"htmlPage"];
     }
+    
     
     
     if ([NSStringFromClass([object class]) isEqualToString:@"UITableViewCell"]) {
@@ -398,7 +405,7 @@
         else if ([propertyValue isKindOfClass:[NSArray class]] || [propertyValue isKindOfClass:[NSSet class]])
         {
             NSMutableArray *arrayOfIdentifiers = [NSMutableArray array];
-            if (isTrue) {// this block can delete all navigationcoller subviews, and only save the latest subview to the context.unvisitedObjects
+            if (isTrue) {   // this block can delete all navigationcoller subviews, and only save the latest subview to the context.unvisitedObjects
                 NSMutableArray *array=(NSMutableArray *)propertyValue;
                 for (int i=0; i<array.count; i++) {
                     if (i<array.count-1) {
@@ -591,22 +598,21 @@
 #pragma mark Gets the frame value of the wkwebview and adds the absolute displacement field to the htmlpage field
 - (NSDictionary *)getWKWebViewHTMLInfoFrom:(WKWebView *)webView withWebViewFrame:(NSDictionary *)webFrame
 {
+    __block NSMutableDictionary *newdict;
     NSInteger hash=webView.hash;
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
     __block  BOOL isTrue=true;
-    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:^(id object, NSError *error){
-//        NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
-        NSLog(@"加载完成");
-        isTrue = false;
-    }];
-    
-    if (isTrue) {
-        sleep(1000);
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:^(id object, NSError *error){
+            isTrue = false;
+        }];
+    });
+    while (isTrue) {
+        [NSThread sleepForTimeInterval:0.1];
     }
-    CGFloat y=webView.frame.origin.y;
-  
+    
     NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
-    NSMutableDictionary *newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
+    newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
     
     float clientHeight=[newdict[@"clientHeight"] floatValue];
     float webHeight=[webFrame[@"Height"] floatValue];
