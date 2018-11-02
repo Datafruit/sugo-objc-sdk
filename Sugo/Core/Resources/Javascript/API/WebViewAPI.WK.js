@@ -51,6 +51,14 @@
         sugo.track('停留', tmp_props);
     };
 
+    sugo.registerSuperProperties = function(props) {
+        window.webkit.messageHandlers.SugoWKWebViewRegisterSuperProperties.postMessage(props);
+    };
+
+    sugo.registerSuperPropertiesOnce = function (props){
+        window.webkit.messageHandlers.SugoWKWebViewRegisterSuperPropertiesOnce.postMessage(props);
+    };
+
 //    var sugoio = {
 //        track: sugo.track,
 //        time_event: sugo.timeEvent

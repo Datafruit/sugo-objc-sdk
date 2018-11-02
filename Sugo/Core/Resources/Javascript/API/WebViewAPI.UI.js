@@ -107,6 +107,21 @@
         }
     }
 
+
+    sugo.registerSuperProperties = function(props){
+        var eventUUID = sugo.generateUUID();
+        sugo.data[eventUUID] = JSON.stringify(props);
+        sugo.callNative('registerSuperProperties',eventUUID);
+    };
+
+    sugo.registerSuperPropertiesOnce = function(props){
+        var eventUUID = sugo.generateUUID();
+        sugo.data[eventUUID] = JSON.stringify(props);
+        sugo.callNative('registerSuperPropertiesOnce',eventUUID);
+    };
+
+    
+
 //    var sugoio = {
 //        track: sugo.track,
 //        time_event: sugo.timeEvent
