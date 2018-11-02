@@ -35,26 +35,29 @@
             NSDictionary *events = [NSJSONSerialization JSONObjectWithData:eventData
                                                                   options:NSJSONReadingMutableContainers
                                                                     error:nil];
-            for (NSString *object in events) {
-                NSString *eventString1 = events[object];
-                NSData *eventData1 = [eventString1 dataUsingEncoding:NSUTF8StringEncoding];
-                NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData1
-                                                                     options:NSJSONReadingMutableContainers
-                                                                       error:nil];
-                WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-                if ([npi isEqualToString:@"track"]) {
-                    storage.eventID = (NSString *)event[@"eventID"];
-                    storage.eventName = (NSString *)event[@"eventName"];
-                    storage.properties = (NSString *)event[@"properties"];
-                    [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
-                    MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
-                } else if ([npi isEqualToString:@"time"]) {
-                    NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
-                    if (eventName) {
-                        [[Sugo sharedInstance] timeEvent:eventName];
+            
+            
+            if(![self isRegisterSuperProperties:npi events:events]){
+                for (NSString *object in events) {
+                    NSString *eventString1 = events[object];
+                    NSData *eventData1 = [eventString1 dataUsingEncoding:NSUTF8StringEncoding];
+                    NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData1
+                                                                          options:NSJSONReadingMutableContainers
+                                                                            error:nil];
+                    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+                    if ([npi isEqualToString:@"track"]) {
+                        storage.eventID = (NSString *)event[@"eventID"];
+                        storage.eventName = (NSString *)event[@"eventName"];
+                        storage.properties = (NSString *)event[@"properties"];
+                        [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
+                        MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
+                    } else if ([npi isEqualToString:@"time"]) {
+                        NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
+                        if (eventName) {
+                            [[Sugo sharedInstance] timeEvent:eventName];
+                        }
                     }
                 }
-                
             }
             shouldStartLoad = NO;
         }
@@ -102,6 +105,26 @@
             self.uiWebViewSwizzleRunning = YES;
         }
     }
+}
+
+
+-(BOOL)isRegisterSuperProperties:(NSString *)npi events:(NSDictionary *)events{
+    BOOL isDeal = false;
+    if ([npi isEqualToString:@"registerSuperProperties"] || [npi isEqualToString:@"registerSuperPropertiesOnce"]) {
+        NSArray *keyArr= [events allKeys];
+        NSString *eventString = events[keyArr[0]];
+        NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                              options:NSJSONReadingMutableContainers
+                                                                error:nil];
+        isDeal = YES;
+        if ([npi isEqualToString:@"registerSuperProperties"]) {
+            [[Sugo sharedInstance] registerSuperProperties:event];
+        }else{
+            [[Sugo sharedInstance] registerSuperPropertiesOnce:events];
+        }
+    }
+    return isDeal;
 }
 
 - (void)stopUIWebViewBindings

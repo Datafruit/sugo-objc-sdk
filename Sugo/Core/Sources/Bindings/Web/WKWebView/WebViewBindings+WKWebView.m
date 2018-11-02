@@ -23,6 +23,8 @@
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewRegisterSuperProperties"];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewRegisterSuperPropertiesOnce"];
     MPLogDebug(@"WKWebView Injected");
 }
 
@@ -31,6 +33,8 @@
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTrack"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTime"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewRegisterSuperProperties"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewRegisterSuperPropertiesOnce"];
     self.wkWebView = nil;
 }
 
@@ -100,7 +104,14 @@
                               viewportContent:(NSString *)body[@"viewportContent"]
                                         nodes:(NSString *)body[@"nodes"]];
             }
+        }else if ([message.name isEqual:@"SugoWKWebViewRegisterSuperProperties"]){
+            NSDictionary *body = (NSDictionary *)message.body;
+            [[Sugo sharedInstance] registerSuperProperties:body];
+        }else if ([message.name isEqual:@"SugoWKWebViewRegisterSuperPropertiesOnce"]){
+            NSDictionary *body = (NSDictionary *)message.body;
+            [[Sugo sharedInstance] registerSuperPropertiesOnce:body];
         }
+
     } else {
         MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
     }
