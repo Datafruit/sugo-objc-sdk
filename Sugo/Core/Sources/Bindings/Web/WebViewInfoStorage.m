@@ -21,6 +21,7 @@
 @property NSString *distance;//Calculate the absolute value of moving the h5 element downward
 
 @property NSMutableDictionary *wkWebViewDict;
+@property NSMutableDictionary *isHashloadFinish;
 @end
 
 @implementation WebViewInfoStorage
@@ -63,6 +64,7 @@ static WebViewInfoStorage *singleton = nil;
     _nodes = @"";
     _distance=@"";
     _wkWebViewDict = [[NSMutableDictionary alloc]init];
+    _isHashloadFinish = [[NSMutableDictionary alloc]init];
     return self;
 }
 
@@ -86,6 +88,14 @@ static WebViewInfoStorage *singleton = nil;
     @synchronized(self) {
         _newFrame = hasNewFrame;
     }
+}
+
+-(void)setupWebViewLoadStatus:(NSInteger)status hash:(NSInteger)hash{
+    [_isHashloadFinish setObject:[NSString stringWithFormat:@"%ld",(long)status] forKey:[NSString stringWithFormat:@"hash"]];
+}
+
+-(NSInteger)requireWebViewLoadStatus:(NSInteger)hash{
+    return [_isHashloadFinish[[NSString stringWithFormat:@"hash"]] integerValue];
 }
 
 - (NSDictionary *)getHTMLInfo
@@ -140,39 +150,6 @@ static WebViewInfoStorage *singleton = nil;
                                      @"viewportContent": viewportContent,
                                      @"nodes": nodes
                                      } forKey:hash];
-        
-        
-//        if (_wkWebViewDict.count==0) {
-//            [_wkWebViewDict setObject: @{
-//                                         @"title": title,
-//                                         @"url": path,
-//                                         @"clientWidth": width,
-//                                         @"clientHeight": height,
-//                                         @"viewportContent": viewportContent,
-//                                         @"nodes": nodes
-//                                         } forKey:[NSString stringWithFormat:@"%ld",(long)hash]];
-//        }else{
-//            NSMutableDictionary *dict=_wkWebViewDict[[NSString stringWithFormat:@"%ld",(long)hash]];
-//            if (dict) {
-//
-//            }else{
-//                [_wkWebViewDict setObject: @{
-//                                             @"title": title,
-//                                             @"url": path,
-//                                             @"clientWidth": width,
-//                                             @"clientHeight": height,
-//                                             @"viewportContent": viewportContent,
-//                                             @"nodes": nodes
-//                                             } forKey:[NSString stringWithFormat:@"%ld",(long)hash]];
-//            }
-//        }
-        
-//        _title = title;
-//        _path = path;
-//        _width = width;
-//        _height = height;
-//        _viewportContent = viewportContent;
-//        _nodes = nodes;
         _newFrame = true;
     }
 }

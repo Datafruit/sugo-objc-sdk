@@ -198,11 +198,10 @@
                                                                   }];
     __block BOOL isWkWebView=false;
     __block BOOL isUIWebView=false;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        isUIWebView = [object isKindOfClass:[UIWebView class]]
-        && ((UIWebView *)object).window != nil;
+//    dispatch_sync(dispatch_get_main_queue(), ^{
+        isUIWebView = [object isKindOfClass:[UIWebView class]] && ((UIWebView *)object).window != nil;
         isWkWebView = [object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading;
-    });
+//    });
     
     if (isUIWebView) {
         NSDictionary *webFrame=[self requrieWidgetFrame:serializedObject];
@@ -601,23 +600,25 @@
     __block NSMutableDictionary *newdict;
     NSInteger hash=webView.hash;
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    __block  BOOL isTrue=true;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:^(id object, NSError *error){
-            isTrue = false;
-        }];
+    [[WebViewInfoStorage globalStorage]setupWebViewLoadStatus:0 hash:hash];
+//    dispatch_sync(dispatch_get_main_queue(), ^{
+    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:^(id object, NSError *error){
+            [[WebViewInfoStorage globalStorage]setupWebViewLoadStatus:1 hash:hash];
+    }];
+//    });
+    dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_sync(queue,^{
+        while ([[WebViewInfoStorage globalStorage] requireWebViewLoadStatus:hash]) {
+            [NSThread sleepForTimeInterval:0.1];
+        }
+        NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
+        newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
+        float clientHeight=[newdict[@"clientHeight"] floatValue];
+        float webHeight=[webFrame[@"Height"] floatValue];
+        float distance= clientHeight==0?0:webHeight-clientHeight;
+        [newdict setValue:[NSString stringWithFormat:@"%lf",distance] forKey:@"distance"];
+        
     });
-    while (isTrue) {
-        [NSThread sleepForTimeInterval:0.1];
-    }
-    
-    NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
-    newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
-    
-    float clientHeight=[newdict[@"clientHeight"] floatValue];
-    float webHeight=[webFrame[@"Height"] floatValue];
-    float distance= clientHeight==0?0:webHeight-clientHeight;
-    [newdict setValue:[NSString stringWithFormat:@"%lf",distance] forKey:@"distance"];
     return newdict;
 }
 

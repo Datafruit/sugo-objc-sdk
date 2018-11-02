@@ -26,4 +26,7 @@
 - (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes hash:(NSString *)hash;
 
 -(NSDictionary *)getHTMLInfoWithHash:(NSInteger) hash;
+
+-(void)setupWebViewLoadStatus:(NSInteger)status hash:(NSInteger)hash;
+-(NSInteger)requireWebViewLoadStatus:(NSInteger)hash;
 @end
