@@ -31,7 +31,6 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
 {
-    NSLog(@"截图完成");
     __block MPObjectSerializerConfig *serializerConfig = self.configuration;
     __block NSString *imageHash = [self payloadObjectForKey:@"image_hash"];
     __block NSNumber *shouldCompressed = [self payloadObjectForKey:@"should_compressed"];
@@ -84,9 +83,9 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
                 serializedObjects = [connection sessionObjectForKey:@"snapshot_hierarchy"];
             }
         } else {
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_queue_t queue = dispatch_queue_create("com.sugo.SnapShotRequestSerialDispatchQueue", NULL);
+            dispatch_sync(queue, ^{
                 serializedObjects = [serializer objectHierarchyForKeyWindow];
-                
             });
             [connection setSessionObject:serializedObjects forKey:@"snapshot_hierarchy"];
         }

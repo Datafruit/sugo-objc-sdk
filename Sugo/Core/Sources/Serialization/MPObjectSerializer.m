@@ -148,6 +148,8 @@
     NSParameterAssert(object != nil);
     NSParameterAssert(context != nil);
     
+    
+    
 //    if ([object isKindOfClass:[UIView class]] && !((UIView *)object).translatesAutoresizingMaskIntoConstraints) {
 //        [((UIView *)object) setTranslatesAutoresizingMaskIntoConstraints:YES];
 //    }
@@ -196,18 +198,14 @@
                                                                           @"selectors": delegateMethods
                                                                           }
                                                                   }];
-    __block BOOL isWkWebView=false;
-    __block BOOL isUIWebView=false;
-//    dispatch_sync(dispatch_get_main_queue(), ^{
-        isUIWebView = [object isKindOfClass:[UIWebView class]] && ((UIWebView *)object).window != nil;
-        isWkWebView = [object isKindOfClass:[WKWebView class]] && !((WKWebView *)object).loading;
-//    });
+   
+
     
-    if (isUIWebView) {
+    if ([NSStringFromClass([object class]) isEqualToString:@"UIWebView"] && ((UIWebView *)object).window != nil) {
         NSDictionary *webFrame=[self requrieWidgetFrame:serializedObject];
         [serializedObject setObject:[self getUIWebViewHTMLInfoFrom:(UIWebView *)object withWebViewFrame:webFrame]
                              forKey:@"htmlPage"];
-    } else if (isWkWebView) {
+    } else if ([NSStringFromClass([object class]) isEqualToString:@"WKWebView"] && !((WKWebView *)object).loading) {
         NSDictionary *webFrame=[self requrieWidgetFrame:serializedObject];
         [serializedObject setObject:[self getWKWebViewHTMLInfoFrom:(WKWebView *)object withWebViewFrame:webFrame]
                              forKey:@"htmlPage"];
@@ -601,24 +599,20 @@
     NSInteger hash=webView.hash;
     WebViewBindings *wvBindings = [WebViewBindings globalBindings];
     [[WebViewInfoStorage globalStorage]setupWebViewLoadStatus:0 hash:hash];
-//    dispatch_sync(dispatch_get_main_queue(), ^{
-    [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:^(id object, NSError *error){
-            [[WebViewInfoStorage globalStorage]setupWebViewLoadStatus:1 hash:hash];
-    }];
-//    });
-    dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_sync(queue,^{
-        while ([[WebViewInfoStorage globalStorage] requireWebViewLoadStatus:hash]) {
-            [NSThread sleepForTimeInterval:0.1];
-        }
-        NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
-        newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
-        float clientHeight=[newdict[@"clientHeight"] floatValue];
-        float webHeight=[webFrame[@"Height"] floatValue];
-        float distance= clientHeight==0?0:webHeight-clientHeight;
-        [newdict setValue:[NSString stringWithFormat:@"%lf",distance] forKey:@"distance"];
-        
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [webView evaluateJavaScript:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"] completionHandler:^(id object, NSError *error){
+                [[WebViewInfoStorage globalStorage]setupWebViewLoadStatus:1 hash:hash];
+        }];
     });
+    while (![[WebViewInfoStorage globalStorage] requireWebViewLoadStatus:hash]) {
+        [NSThread sleepForTimeInterval:0.1];
+    }
+    NSDictionary *dict=[[WebViewInfoStorage globalStorage] getHTMLInfoWithHash:hash];
+    newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
+    float clientHeight=[newdict[@"clientHeight"] floatValue];
+    float webHeight=[webFrame[@"Height"] floatValue];
+    float distance= clientHeight==0?0:webHeight-clientHeight;
+    [newdict setValue:[NSString stringWithFormat:@"%lf",distance] forKey:@"distance"];
     return newdict;
 }
 

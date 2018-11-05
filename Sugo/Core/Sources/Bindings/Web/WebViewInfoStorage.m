@@ -91,11 +91,11 @@ static WebViewInfoStorage *singleton = nil;
 }
 
 -(void)setupWebViewLoadStatus:(NSInteger)status hash:(NSInteger)hash{
-    [_isHashloadFinish setObject:[NSString stringWithFormat:@"%ld",(long)status] forKey:[NSString stringWithFormat:@"hash"]];
+    [_isHashloadFinish setObject:[NSString stringWithFormat:@"%ld",(long)status] forKey:[NSString stringWithFormat:@"%d",hash]];
 }
 
 -(NSInteger)requireWebViewLoadStatus:(NSInteger)hash{
-    return [_isHashloadFinish[[NSString stringWithFormat:@"hash"]] integerValue];
+    return [_isHashloadFinish[[NSString stringWithFormat:@"%d",hash]] integerValue];
 }
 
 - (NSDictionary *)getHTMLInfo
