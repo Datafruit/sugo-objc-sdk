@@ -31,38 +31,39 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     //    [self buildWebView];
     [self buildWkWebView];
 }
 
 
 -(void)buildWebView{
-    _uiWebView1 =[[UIWebView alloc] initWithFrame:CGRectMake(0,0, FULLSCREENW, (FULLSCREENH-64)/2)];
-    
-    NSURL *url = [[NSURL alloc] initWithString:@"https://jd.com/"];
+    _uiWebView1 =[[UIWebView alloc] initWithFrame:CGRectMake(0,0,_contentView.frame.size.width , _contentView.frame.size.height/2)];
+    NSURL *url = [[NSURL alloc] initWithString:@"http://jd.com"];
     [_uiWebView1 loadRequest:[NSURLRequest requestWithURL:url]];
     _uiWebView1.delegate = self;
     [self.contentView addSubview:_uiWebView1];
     _uiWebView1.tag=1000;
     
-    _uiWebView2 =[[UIWebView alloc] initWithFrame:CGRectMake(0, (FULLSCREENH-64)/2,FULLSCREENW , (FULLSCREENH-64)/2)];
-    NSURL *url2 = [[NSURL alloc] initWithString:@"https://taobao.com/"];
+    _uiWebView2 =[[UIWebView alloc] initWithFrame:CGRectMake(0, _contentView.frame.size.height/2,_contentView.frame.size.width , _contentView.frame.size.height/2)];
+    NSURL *url2 = [[NSURL alloc] initWithString:@"http://h5.chinagames.net/game/CUTV/GameHall.aspx"];
     [_uiWebView2 loadRequest:[NSURLRequest requestWithURL:url2]];
     _uiWebView2.delegate = self;
     [self.contentView addSubview:_uiWebView2];
     NSInteger a= _uiWebView1.hash;
     _uiWebView2.tag=2000;
-    
-    
 }
 
 
 -(void)buildWkWebView{
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-    self.webView1 = [[WKWebView alloc] initWithFrame:CGRectMake(0,0, FULLSCREENW, (FULLSCREENH-64)/2)
+    self.webView1 = [[WKWebView alloc] initWithFrame:CGRectMake(0,0, _contentView.frame.size.width , _contentView.frame.size.height/2)
                                        configuration:configuration];
     self.webView1.navigationDelegate = self;
-    NSURL *url = [[NSURL alloc] initWithString:@"https://jd.com/"];
+    NSURL *url = [[NSURL alloc] initWithString:@"http://taobao.com"];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [self.webView1 loadRequest:request];
     [self.contentView addSubview:self.webView1];
@@ -70,10 +71,10 @@
     self.webView1.tag=1000;
     
     WKWebViewConfiguration *configuration2 = [[WKWebViewConfiguration alloc] init];
-    self.webView2 = [[WKWebView alloc] initWithFrame:CGRectMake(0, (FULLSCREENH-64)/2,FULLSCREENW , (FULLSCREENH-64)/2)
+    self.webView2 = [[WKWebView alloc] initWithFrame:CGRectMake(0,_contentView.frame.size.height/2,_contentView.frame.size.width , _contentView.frame.size.height/2)
                                        configuration:configuration2];
     self.webView2.navigationDelegate = self;
-    NSURL *url2 = [[NSURL alloc] initWithString:@"https://taobao.com/"];
+    NSURL *url2 = [[NSURL alloc] initWithString:@"http://jd.com"];
     NSURLRequest *request2 = [[NSURLRequest alloc] initWithURL:url2];
     [self.webView2 loadRequest:request2];
     [self.contentView addSubview:self.webView2];
