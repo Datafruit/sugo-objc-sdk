@@ -80,7 +80,6 @@
     [self.contentView addSubview:self.webView2];
     NSInteger a= _webView2.hash;
     self.webView2.tag=2000;
-    
 }
 
 - (void)didReceiveMemoryWarning {

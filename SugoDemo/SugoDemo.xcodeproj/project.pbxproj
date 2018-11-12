@@ -31,11 +31,15 @@
 		14D3A06D1E7F6B4A00DDE9EA /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06C1E7F6B4A00DDE9EA /* ScanViewController.m */; };
 		14D3A0701E7F6B8500DDE9EA /* InstructionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06F1E7F6B8500DDE9EA /* InstructionsViewController.m */; };
 		14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */; };
-		9BCF68652185EE1900CA8DB3 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BCF68642185EE1900CA8DB3 /* Sugo.framework */; };
-		9BCF68662185EE1900CA8DB3 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BCF68642185EE1900CA8DB3 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B3DADAF2199189500534670 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BCF68642185EE1900CA8DB3 /* Sugo.framework */; };
+		9B3DADB02199189500534670 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BCF68642185EE1900CA8DB3 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B610DEB219127D100DCF7DD /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B610DEA219127D100DCF7DD /* FirstViewController.m */; };
+		9B610DEE2191284000DCF7DD /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B610DED2191284000DCF7DD /* SecondViewController.m */; };
+		9B610DF12191724400DCF7DD /* ThreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B610DF02191724400DCF7DD /* ThreeController.m */; };
+		9B610DF421943DD100DCF7DD /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B610DF321943DD100DCF7DD /* Sugo.framework */; };
 		9BCF68722187ECA500CA8DB3 /* DoubleWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BCF68712187ECA500CA8DB3 /* DoubleWebViewController.m */; };
 		A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */; };
-		ED39B3288B5AB3ED8F3CB741 /* Pods_SugoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD84A472D1E8D4F9DA15C4E4 /* Pods_SugoDemo.framework */; };
+		CA11096605F15E993717B015 /* Pods_SugoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD84A472D1E8D4F9DA15C4E4 /* Pods_SugoDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,13 +53,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9BCF68672185EE1900CA8DB3 /* Embed Frameworks */ = {
+		9B3DADB12199189500534670 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9BCF68662185EE1900CA8DB3 /* Sugo.framework in Embed Frameworks */,
+				9B3DADB02199189500534670 /* Sugo.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -110,6 +114,13 @@
 		14D3A0771E7F6CFA00DDE9EA /* HomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTableViewController.h; sourceTree = "<group>"; };
 		14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTableViewController.m; sourceTree = "<group>"; };
 		90A9D991A351B7D5030E374F /* Pods-SugoDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SugoDemo.release.xcconfig"; path = "Target Support Files/Pods-SugoDemo/Pods-SugoDemo.release.xcconfig"; sourceTree = "<group>"; };
+		9B610DE9219127D100DCF7DD /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
+		9B610DEA219127D100DCF7DD /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		9B610DEC2191284000DCF7DD /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
+		9B610DED2191284000DCF7DD /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		9B610DEF2191724400DCF7DD /* ThreeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreeController.h; sourceTree = "<group>"; };
+		9B610DF02191724400DCF7DD /* ThreeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThreeController.m; sourceTree = "<group>"; };
+		9B610DF321943DD100DCF7DD /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BCF68642185EE1900CA8DB3 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BCF68702187ECA500CA8DB3 /* DoubleWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DoubleWebViewController.h; sourceTree = "<group>"; };
 		9BCF68712187ECA500CA8DB3 /* DoubleWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DoubleWebViewController.m; sourceTree = "<group>"; };
@@ -124,8 +135,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BCF68652185EE1900CA8DB3 /* Sugo.framework in Frameworks */,
-				ED39B3288B5AB3ED8F3CB741 /* Pods_SugoDemo.framework in Frameworks */,
+				9B610DF421943DD100DCF7DD /* Sugo.framework in Frameworks */,
+				9B3DADAF2199189500534670 /* Sugo.framework in Frameworks */,
+				CA11096605F15E993717B015 /* Pods_SugoDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +271,7 @@
 		14BA1A7B1E13E9F6002F0C4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B610DF321943DD100DCF7DD /* Sugo.framework */,
 				CD84A472D1E8D4F9DA15C4E4 /* Pods_SugoDemo.framework */,
 			);
 			name = Frameworks;
@@ -267,6 +280,7 @@
 		14D3A06A1E7F6B1C00DDE9EA /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				9B610DDE2191226000DCF7DD /* tabbarController */,
 				14D3A0771E7F6CFA00DDE9EA /* HomeTableViewController.h */,
 				14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */,
 				14D3A06E1E7F6B8500DDE9EA /* InstructionsViewController.h */,
@@ -287,6 +301,19 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		9B610DDE2191226000DCF7DD /* tabbarController */ = {
+			isa = PBXGroup;
+			children = (
+				9B610DE9219127D100DCF7DD /* FirstViewController.h */,
+				9B610DEA219127D100DCF7DD /* FirstViewController.m */,
+				9B610DEC2191284000DCF7DD /* SecondViewController.h */,
+				9B610DED2191284000DCF7DD /* SecondViewController.m */,
+				9B610DEF2191724400DCF7DD /* ThreeController.h */,
+				9B610DF02191724400DCF7DD /* ThreeController.m */,
+			);
+			name = tabbarController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -298,7 +325,7 @@
 				141AC7921E1366DB008D67F6 /* Sources */,
 				141AC7931E1366DB008D67F6 /* Frameworks */,
 				141AC7941E1366DB008D67F6 /* Resources */,
-				9BCF68672185EE1900CA8DB3 /* Embed Frameworks */,
+				9B3DADB12199189500534670 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -414,12 +441,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B610DEE2191284000DCF7DD /* SecondViewController.m in Sources */,
 				141AC79E1E1366DB008D67F6 /* AppDelegate.m in Sources */,
 				140CECB31E7FD6B100422EA8 /* WebTableViewController.m in Sources */,
 				140CECA71E7FD20C00422EA8 /* UIControlViewController.m in Sources */,
 				14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */,
 				9BCF68722187ECA500CA8DB3 /* DoubleWebViewController.m in Sources */,
 				14D3A06D1E7F6B4A00DDE9EA /* ScanViewController.m in Sources */,
+				9B610DEB219127D100DCF7DD /* FirstViewController.m in Sources */,
 				140CECB91E7FD6E600422EA8 /* WKWebViewViewController.m in Sources */,
 				14BA1A891E13EC7D002F0C4B /* CodelessCommonViewController.m in Sources */,
 				14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */,
@@ -428,6 +457,7 @@
 				A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */,
 				14776B641E8616F50034ECB7 /* UITextViewViewController.m in Sources */,
 				14BA1A8F1E13ECAB002F0C4B /* WKWebViewController.m in Sources */,
+				9B610DF12191724400DCF7DD /* ThreeController.m in Sources */,
 				14BA1A8C1E13EC9B002F0C4B /* UIWebViewController.m in Sources */,
 				140CECB61E7FD6DB00422EA8 /* UIWebViewViewController.m in Sources */,
 				14D3A0701E7F6B8500DDE9EA /* InstructionsViewController.m in Sources */,
@@ -589,6 +619,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 5PCYP5P3P9;
 				INFOPLIST_FILE = SugoDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo2233;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -602,6 +633,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 5PCYP5P3P9;
 				INFOPLIST_FILE = SugoDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo2233;
 				PRODUCT_NAME = "$(TARGET_NAME)";

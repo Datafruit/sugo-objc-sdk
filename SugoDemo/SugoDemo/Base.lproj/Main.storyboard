@@ -845,6 +845,72 @@
             </objects>
             <point key="canvasLocation" x="1763" y="1081"/>
         </scene>
+        <!--Second View Controller-->
+        <scene sceneID="swV-DN-kIA">
+            <objects>
+                <viewController storyboardIdentifier="SecondViewController" id="KVS-tx-RPo" customClass="SecondViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wio-1q-lKJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="vZR-VK-AAX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tJX-gd-Khp">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4vP-6d-J4t">
+                                <rect key="frame" x="130" y="264" width="60" height="40"/>
+                                <color key="backgroundColor" red="0.070588238540000001" green="0.75294119120000003" blue="0.76862746479999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="778-YU-4Wc"/>
+                                    <constraint firstAttribute="height" constant="40" id="ADg-fR-Qem"/>
+                                </constraints>
+                                <state key="normal" title="点击">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="onclick:" destination="KVS-tx-RPo" eventType="touchUpInside" id="NV9-6g-Jcr"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="4vP-6d-J4t" firstAttribute="centerX" secondItem="tJX-gd-Khp" secondAttribute="centerX" id="ZBk-SP-uwM"/>
+                            <constraint firstItem="4vP-6d-J4t" firstAttribute="centerY" secondItem="tJX-gd-Khp" secondAttribute="centerY" id="sLs-Yf-s1S"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PKG-r9-6oc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2636" y="1081"/>
+        </scene>
+        <!--Three Controller-->
+        <scene sceneID="HEL-FB-9PI">
+            <objects>
+                <viewController storyboardIdentifier="ThreeController" id="VG7-qC-VMw" customClass="ThreeController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="I5L-vp-QXX"/>
+                        <viewControllerLayoutGuide type="bottom" id="FhN-Mr-EeS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fJo-iQ-X82">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="17L-K8-2fR">
+                                <rect key="frame" x="145" y="269" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="btn"/>
+                                <connections>
+                                    <action selector="onclick:" destination="VG7-qC-VMw" eventType="touchUpInside" id="00l-Vi-pw8"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.49803921569999998" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YQG-pU-yaS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3441" y="1081"/>
+        </scene>
         <!--文本控件-->
         <scene sceneID="mZ4-e0-HR4">
             <objects>

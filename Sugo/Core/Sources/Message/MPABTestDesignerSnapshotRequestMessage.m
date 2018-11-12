@@ -174,13 +174,10 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
     NSMutableData *compressed = [NSMutableData dataWithLength:16384];  // 16K chunks for expansion
     
     do {
-        
         if (strm.total_out >= [compressed length])
             [compressed increaseLengthBy: 16384];
-        
         strm.next_out = [compressed mutableBytes] + strm.total_out;
         strm.avail_out = [compressed length] - strm.total_out;
-        
         deflate(&strm, Z_FINISH);
         
     } while (strm.avail_out == 0);

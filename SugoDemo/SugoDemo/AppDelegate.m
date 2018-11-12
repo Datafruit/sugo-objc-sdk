@@ -7,11 +7,13 @@
 //
 
 #import "AppDelegate.h"
+#import "FirstViewController.h"
+#import "SecondViewController.h"
 @import Sugo;
 
 
 @interface AppDelegate ()
-
+@property (nonatomic, strong) UINavigationController *navigationController;
 @end
 
 @implementation AppDelegate
@@ -19,9 +21,39 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    
+//    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+//    self.window.rootViewController = [self buildTabBarController];
+//    self.window.backgroundColor = [UIColor whiteColor];
+//    [self.window makeKeyAndVisible];
+    
+    
     [self initSugo];
     return YES;
 }
+
+-(UITabBarController *) buildTabBarController{
+    UITabBarController* tabBarController = [[UITabBarController alloc] init];
+    FirstViewController *firstController = [[FirstViewController alloc]init];
+    UIImage *mainframeImage   = [UIImage imageNamed:@"tabbar_homeDefault"];
+    UIImage *mainframeHLImage = [UIImage imageNamed:@"tabbar_homeTouch"];
+    firstController.title = @"主页";
+    firstController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"主页" image:mainframeImage selectedImage:mainframeHLImage];
+    UINavigationController *firstNA = [[UINavigationController alloc]initWithRootViewController:firstController];
+    UIStoryboard *story = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIImage *contactsImage   = [UIImage imageNamed:@"tabbar_meDefault"];
+    UIImage *contactsHLImage = [UIImage imageNamed:@"tabbar_meTouch"];
+    SecondViewController *secondController = [story instantiateViewControllerWithIdentifier:@"SecondViewController"];
+    secondController.title = @"通讯录";
+    secondController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"通讯录" image:contactsImage selectedImage:contactsHLImage];
+    UINavigationController *secondNA = [[UINavigationController alloc]initWithRootViewController:secondController];
+    tabBarController.viewControllers = @[firstNA,secondNA];
+    return tabBarController;
+}
+
+
+
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -73,18 +105,44 @@
 //    [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
 //    [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
 //    [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
-//}    
+//}
 
+
+//- (void)initSugo {
+//    NSString *projectID = @"com_SJLnjowGe_project_HyErw0VBW"; // 项目ID
+//    NSString *appToken = @"4216f38f4959de6f2342918d0e3eace1"; // 应用Token
+//    SugoBindingsURL = @"http://192.168.0.82:8080"; // 设置获取绑定事件配置的URL，端口默认为8000
+//    SugoCollectionURL = @"http://192.168.0.220"; // 设置传输绑定事件的网管URL，端口默认为80
+//    SugoCodelessURL = @"ws://192.168.0.82:8887"; // 设置连接可视化埋点的URL，端口默认为8887
+//    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
+//    [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
+//    [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
+//    [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+//}
+
+//- (void)initSugo {
+//    NSString *projectID = @"com_SJLnjowGe_project_HyErw0VBW"; // 项目ID
+//    NSString *appToken = @"4216f38f4959de6f2342918d0e3eace1"; // 应用Token
+//    SugoBindingsURL = @"http://192.168.0.77:8080"; // 设置获取绑定事件配置的URL，端口默认为8000
+//    SugoCollectionURL = @"http://collect.sugo.io"; // 设置传输绑定事件的网管URL，端口默认为80
+//    SugoCodelessURL = @"ws://192.168.0.77:8887"; // 设置连接可视化埋点的URL，端口默认为8887
+//    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
+//    [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
+//    [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
+//    [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+//}
+
+//220
 - (void)initSugo {
     NSString *projectID = @"com_SJLnjowGe_project_HyErw0VBW"; // 项目ID
     NSString *appToken = @"4216f38f4959de6f2342918d0e3eace1"; // 应用Token
-    SugoBindingsURL = @"http://192.168.0.77:8080"; // 设置获取绑定事件配置的URL，端口默认为8000
-    SugoCollectionURL = @"http://collect.sugo.io"; // 设置传输绑定事件的网管URL，端口默认为80
-    SugoCodelessURL = @"ws://192.168.0.77:8887"; // 设置连接可视化埋点的URL，端口默认为8887
+    SugoBindingsURL = @"http://192.168.0.220:8000"; // 设置获取绑定事件配置的URL，端口默认为8000
+    SugoCollectionURL = @"http://192.168.0.220"; // 设置传输绑定事件的网管URL，端口默认为80
+    SugoCodelessURL = @"ws://192.168.0.220:8887"; // 设置连接可视化埋点的URL，端口默认为8887
     [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
     [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
-    [[Sugo sharedInstance] setFlushInterval:600]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
-    [[Sugo sharedInstance] setCacheInterval:600]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+    [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
+    [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
 }
 
 //- (void)initSugo {
