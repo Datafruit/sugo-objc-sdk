@@ -22,8 +22,9 @@
     // Do any additional setup after loading the view.self.webView.delegate = self;
     
     self.webView.delegate = self;
-//    NSURL *url = [[NSURL alloc] initWithString:@"http://h5.chinagames.net/game/CUTV/GameHall.aspx"];
+//    NSURL *url = [[NSURL alloc] initWithString:@"http://192.168.0.202/app/index.html"];
     NSURL *url = [[NSURL alloc] initWithString:@"http://jd.com"];
+    
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [self.webView loadRequest:request];
 }
