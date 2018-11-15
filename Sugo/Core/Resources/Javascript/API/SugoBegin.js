@@ -6,3 +6,6 @@
   Copyright © 2017年 sugo. All rights reserved.
 */
 (function(sugo) {
+ if(typeof sugo.track !== 'undefined') {
+    return 
+ }

@@ -17,7 +17,7 @@ sugo.handleNodeChild = function (childrens, jsonArry, parent_path) {
         htmlNode.path = path;
         
         var rect = children.getBoundingClientRect();
-        if (sugo.isElementInViewport(rect) == true) {
+        if (sugo.isElementInViewport(rect) == true && rect.width && rect.height) {
             var temp_rect = {
             top: rect.top,
             left: rect.left,
