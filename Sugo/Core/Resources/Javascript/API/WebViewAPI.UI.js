@@ -115,7 +115,7 @@
         sugo.callNative('trackFirstLogin',eventUUID);
     };
 
-    sugo.loginout = function(){
+    sugo.logout = function(){
         var eventUUID = sugo.generateUUID();
         var props = {'status':'login_out'};
         sugo.data[eventUUID] = JSON.stringify(props);

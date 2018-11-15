@@ -50,7 +50,7 @@
         window.webkit.messageHandlers.trackFirstLogin.postMessage(props);
     };
 
-    sugo.loginout = function(){
+    sugo.logout = function(){
         var props = {'status':'loginOut'};
         window.webkit.messageHandlers.unTrackFirstLogin.postMessage(props);
     };
