@@ -112,10 +112,8 @@
         }else if ([message.name isEqual:@"trackFirstLogin"]){
             NSDictionary *body = (NSDictionary *)message.body;
             [[Sugo sharedInstance] trackFirstLoginWith:body[@"user_id"] dimension: body[@"user_id_dimension"]];
-            NSLog(@"=======================================================trackFirstLogin");
         }else if ([message.name isEqual:@"unTrackFirstLogin"]){
             [[Sugo sharedInstance] untrackFirstLogin];
-            NSLog(@"=======================================================trackFirstLoginOut");
         }
     } else {
         MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
