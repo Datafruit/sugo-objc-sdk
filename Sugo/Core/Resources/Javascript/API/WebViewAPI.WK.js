@@ -44,13 +44,13 @@
         }
     };
 
-    sugo.trackFirstLogin = function(user_id,user_id_dimension) {
+    sugo.login = function(user_id,user_id_dimension) {
         var props = {'user_id':user_id,
             'user_id_dimension':user_id_dimension};
         window.webkit.messageHandlers.trackFirstLogin.postMessage(props);
     };
 
-    sugo.unTrackFirstLogin = function(){
+    sugo.loginout = function(){
         var props = {'status':'loginOut'};
         window.webkit.messageHandlers.unTrackFirstLogin.postMessage(props);
     };

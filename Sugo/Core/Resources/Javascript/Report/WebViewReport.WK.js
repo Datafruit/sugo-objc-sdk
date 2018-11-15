@@ -47,7 +47,6 @@ sugo.reportNodes = function() {
     var parent_path = '';
     sugo.clientWidth = (window.innerWidth || document.documentElement.clientWidth);
     sugo.clientHeight = (window.innerHeight || document.documentElement.clientHeight);
-    sugo.frame = (window.frame || document.documentElement.frame);
     sugo.viewportContent = (document.querySelector('meta[name=viewport]').content || '');
     sugo.handleNodeChild(childrens, jsonArray, parent_path);
     if (window.webkit.messageHandlers.SugoWKWebViewReporter) {
