@@ -19,7 +19,9 @@
 @property NSString *viewportContent;
 @property NSString *nodes;
 @property NSString *distance;//Calculate the absolute value of moving the h5 element downward
-    
+
+@property NSMutableDictionary *wkWebViewDict;
+@property NSMutableDictionary *isHashloadFinish;
 @end
 
 @implementation WebViewInfoStorage
@@ -61,6 +63,8 @@ static WebViewInfoStorage *singleton = nil;
     _viewportContent = @"";
     _nodes = @"";
     _distance=@"";
+    _wkWebViewDict = [[NSMutableDictionary alloc]init];
+    _isHashloadFinish = [[NSMutableDictionary alloc]init];
     return self;
 }
 
@@ -86,6 +90,14 @@ static WebViewInfoStorage *singleton = nil;
     }
 }
 
+-(void)setupWebViewLoadStatus:(NSInteger)status hash:(NSInteger)hash{
+    [_isHashloadFinish setObject:[NSString stringWithFormat:@"%ld",(long)status] forKey:[NSString stringWithFormat:@"%d",hash]];
+}
+
+-(NSInteger)requireWebViewLoadStatus:(NSInteger)hash{
+    return [_isHashloadFinish[[NSString stringWithFormat:@"%d",hash]] integerValue];
+}
+
 - (NSDictionary *)getHTMLInfo
 {
     @synchronized(self) {
@@ -104,6 +116,15 @@ static WebViewInfoStorage *singleton = nil;
     }
 }
 
+-(NSDictionary *)getHTMLInfoWithHash:(NSInteger) hash{
+    @synchronized(self) {
+        if (_newFrame) {
+            _newFrame = false;
+        }
+        return _wkWebViewDict[[NSString stringWithFormat:@"%ld",(long)hash]];
+    }
+}
+
 - (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes
 {
      @synchronized(self) {
@@ -115,6 +136,22 @@ static WebViewInfoStorage *singleton = nil;
          _nodes = nodes;
          _newFrame = true;
      }
+}
+
+- (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes hash:(NSString *)hash
+{
+    @synchronized(self) {
+        
+        [_wkWebViewDict setObject: @{
+                                     @"title": title,
+                                     @"url": path,
+                                     @"clientWidth": width,
+                                     @"clientHeight": height,
+                                     @"viewportContent": viewportContent,
+                                     @"nodes": nodes
+                                     } forKey:hash];
+        _newFrame = true;
+    }
 }
 
 - (void)setHTMLInfoWithTitle:(NSString *)title path:(NSString *)path width:(NSString *)width height:(NSString *)height viewportContent:(NSString *)viewportContent nodes:(NSString *)nodes distance:(NSString *)distance
@@ -129,6 +166,7 @@ static WebViewInfoStorage *singleton = nil;
         _newFrame = true;
         _distance=distance;
     }
+    
 }
 
 @end

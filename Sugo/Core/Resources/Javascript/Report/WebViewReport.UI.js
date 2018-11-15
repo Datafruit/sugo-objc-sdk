@@ -2,13 +2,13 @@ sugo.isElementInViewport = function (rect) {
     return (rect.top >= 0 && rect.left >= 0 && rect.bottom <= sugo.clientHeight && rect.right <= sugo.clientWidth);
 };
 
+sugo.excludeControl = ['symbol', 'SCRIPT'];
+
 sugo.handleNodeChild = function (childrens, jsonArry, parent_path) {
     var index_map = {};
     for (var i = 0; i < childrens.length; i++) {
         var children = childrens[i];
-//        var path = sugoioKit.optimized(children);
-        var pos = children.getBoundingClientRect()
-        if (!pos.width || !pos.height) {
+        if(sugo.excludeControl.includes(children.tagName)) {
             continue;
         }
         var path = sugoioKit.cssPath(children);
@@ -17,7 +17,7 @@ sugo.handleNodeChild = function (childrens, jsonArry, parent_path) {
         htmlNode.path = path;
         
         var rect = children.getBoundingClientRect();
-        if (sugo.isElementInViewport(rect) == true) {
+        if (sugo.isElementInViewport(rect) == true && rect.width && rect.height) {
             var temp_rect = {
             top: rect.top,
             left: rect.left,

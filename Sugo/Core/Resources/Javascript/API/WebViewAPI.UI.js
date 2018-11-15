@@ -107,7 +107,6 @@
         }
     }
 
-
     sugo.registerSuperProperties = function(props){
         var eventUUID = sugo.generateUUID();
         sugo.data[eventUUID] = JSON.stringify(props);
@@ -120,7 +119,20 @@
         sugo.callNative('registerSuperPropertiesOnce',eventUUID);
     };
 
-    
+    sugo.login = function(user_id,user_id_dimension){
+        var eventUUID = sugo.generateUUID();
+        var props = {'user_id':user_id,
+            'user_id_dimension':user_id_dimension}
+        sugo.data[eventUUID] = JSON.stringify(props);
+        sugo.callNative('trackFirstLogin',eventUUID);
+    };
+
+    sugo.logout = function(){
+        var eventUUID = sugo.generateUUID();
+        var props = {'status':'login_out'};
+        sugo.data[eventUUID] = JSON.stringify(props);
+        sugo.callNative('unTrackFirstLogin',eventUUID);
+    };
 
 //    var sugoio = {
 //        track: sugo.track,

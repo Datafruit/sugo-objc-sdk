@@ -7,12 +7,13 @@ sugo.isElementInViewport = function(rect) {
             );
 };
 
+sugo.excludeControl = ['symbol', 'SCRIPT'];
+
 sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
     var index_map = {};
     for (var i = 0; i < childrens.length; i++) {
         var children = childrens[i];
-        var pos = children.getBoundingClientRect()
-        if (!pos.width || !pos.height) {
+        if(sugo.excludeControl.includes(children.tagName)) {
             continue;
         }
         var path = sugoioKit.cssPath(children);
@@ -21,7 +22,7 @@ sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
         htmlNode.path = path;
         
         var rect = children.getBoundingClientRect();
-        if (sugo.isElementInViewport(rect) == true) {
+        if (sugo.isElementInViewport(rect) == true && rect.width && rect.height) {
             var temp_rect = {
             top: rect.top,
             left: rect.left,
@@ -32,11 +33,13 @@ sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
             jsonArry.push(htmlNode);
         }
         
+        
         if (children.children) {
             sugo.handleNodeChild(children.children, jsonArry, path);
         }
     }
 };
+
 
 sugo.reportNodes = function() {
     var jsonArray = [];
@@ -54,7 +57,9 @@ sugo.reportNodes = function() {
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,
             'viewportContent': sugo.viewportContent,
-            'nodes': JSON.stringify(jsonArray)
+            'nodes': JSON.stringify(jsonArray),
+            'hash': sugo.hash.toString()
+
         };
         window.webkit.messageHandlers.SugoWKWebViewReporter.postMessage(message);
     }
