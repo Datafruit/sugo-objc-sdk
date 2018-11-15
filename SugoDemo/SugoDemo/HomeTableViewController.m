@@ -20,7 +20,6 @@ static int deprecatedTimes = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.deprecatedTimer = [NSTimer scheduledTimerWithTimeInterval:5
                                                             target:self
                                                           selector:@selector(deprecate)

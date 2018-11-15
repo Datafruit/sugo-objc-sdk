@@ -27,6 +27,8 @@
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"trackFirstLogin"];
+     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"unTrackFirstLogin"];
     MPLogDebug(@"WKWebView Injected");
 }
 
@@ -35,6 +37,8 @@
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTrack"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTime"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"trackFirstLogin"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"unTrackFirstLogin"];
     self.wkWebView = nil;
 }
 
@@ -105,6 +109,13 @@
                                         nodes:(NSString *)body[@"nodes"]
                                         hash:body[@"hash"]];
             }
+        }else if ([message.name isEqual:@"trackFirstLogin"]){
+            NSDictionary *body = (NSDictionary *)message.body;
+            [[Sugo sharedInstance] trackFirstLoginWith:body[@"user_id"] dimension: body[@"user_id_dimension"]];
+            NSLog(@"=======================================================trackFirstLogin");
+        }else if ([message.name isEqual:@"unTrackFirstLogin"]){
+            [[Sugo sharedInstance] untrackFirstLogin];
+            NSLog(@"=======================================================trackFirstLoginOut");
         }
     } else {
         MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);

@@ -157,14 +157,17 @@
     [context addVisitedObject:object];
     NSMutableDictionary *propertyValues = [NSMutableDictionary dictionary];
     MPClassDescription *classDescription = [self classDescriptionForObject:object];
-    if (classDescription) {
-        for (MPPropertyDescription *propertyDescription in [classDescription propertyDescriptions]) {
-            if ([propertyDescription shouldReadPropertyValueForObject:object]) {
-                id propertyValue = [self propertyValueForObject:object withPropertyDescription:propertyDescription context:context];
-                propertyValues[propertyDescription.name] = propertyValue ?: [NSNull null];
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        if (classDescription) {
+            for (MPPropertyDescription *propertyDescription in [classDescription propertyDescriptions]) {
+                if ([propertyDescription shouldReadPropertyValueForObject:object]) {
+                    id propertyValue = [self propertyValueForObject:object withPropertyDescription:propertyDescription context:context];
+                    propertyValues[propertyDescription.name] = propertyValue ?: [NSNull null];
+                }
             }
         }
-    }
+    });
     NSMutableArray *delegateMethods = [NSMutableArray array];
     id delegate;
     SEL delegateSelector = @selector(delegate);
@@ -178,6 +181,7 @@
         classDescription = [self classDescriptionForCollectionViewCellObject:object];
         tmpObject=[self requireParentObjectFromCollectionViewCellObject:object];
     }
+    
     
     if ([classDescription delegateInfos].count > 0 && [tmpObject respondsToSelector:delegateSelector]) {
         delegate = ((id (*)(id, SEL))[tmpObject methodForSelector:delegateSelector])(tmpObject, delegateSelector);
@@ -621,39 +625,39 @@
 #pragma mark Get the frame value of the webview and add the absolute displacement field to the htmlpage field
 - (NSDictionary *)getUIWebViewHTMLInfoFrom:(UIWebView *)webView withWebViewFrame:(NSDictionary *)webFrame
 {
-    WebViewBindings *wvBindings = [WebViewBindings globalBindings];
-    __block NSString *eventString = @"";
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"]];
-    });
-    NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *tempDic = [NSJSONSerialization JSONObjectWithData:eventData options:0 error:nil];
-    float clientHeight=[tempDic[@"clientHeight"] floatValue];
-    float webHeight=[webFrame[@"Height"] floatValue];
-    float distance= clientHeight==0?0:webHeight-clientHeight;
-    
-    NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
-                                                          options:NSJSONReadingMutableContainers
-                                                            error:nil];
     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-    if (event[@"title"]
-        && event[@"path"]
-        && event[@"clientWidth"]
-        && event[@"clientHeight"]
-        && event[@"viewportContent"]
-        && event[@"nodes"]) {
-        [storage setHTMLInfoWithTitle:(NSString *)event[@"title"]
-                                 path:(NSString *)event[@"path"]
-                                width:(NSString *)event[@"clientWidth"]
-                               height:(NSString *)event[@"clientHeight"]
-                      viewportContent:(NSString *)event[@"viewportContent"]
-                                nodes:(NSString *)event[@"nodes"]
-                             distance:[NSString stringWithFormat:@"%lf",distance]
-         ];
-    }
-    eventString = nil;
-    eventData = nil;
-    event = nil;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        WebViewBindings *wvBindings = [WebViewBindings globalBindings];
+        NSString *eventString = @"no message";
+        eventString = [webView stringByEvaluatingJavaScriptFromString:[wvBindings jsSourceOfFileName:@"WebViewExecute.Report"]];
+        NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *tempDic = [NSJSONSerialization JSONObjectWithData:eventData options:0 error:nil];
+        float clientHeight=[tempDic[@"clientHeight"] floatValue];
+        float webHeight=[webFrame[@"Height"] floatValue];
+        float distance= clientHeight==0?0:webHeight-clientHeight;
+        
+        NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                              options:NSJSONReadingMutableContainers
+                                                                error:nil];
+        if (event[@"title"]
+            && event[@"path"]
+            && event[@"clientWidth"]
+            && event[@"clientHeight"]
+            && event[@"viewportContent"]
+            && event[@"nodes"]) {
+            [storage setHTMLInfoWithTitle:(NSString *)event[@"title"]
+                                     path:(NSString *)event[@"path"]
+                                    width:(NSString *)event[@"clientWidth"]
+                                   height:(NSString *)event[@"clientHeight"]
+                          viewportContent:(NSString *)event[@"viewportContent"]
+                                    nodes:(NSString *)event[@"nodes"]
+                                 distance:[NSString stringWithFormat:@"%lf",distance]
+             ];
+        }
+        eventString = nil;
+        eventData = nil;
+        event = nil;
+    });
     return [storage getHTMLInfo];
 }
 

@@ -35,8 +35,8 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    //    [self buildWebView];
-    [self buildWkWebView];
+    [self buildWebView];
+//    [self buildWkWebView];
 }
 
 
@@ -49,11 +49,12 @@
     _uiWebView1.tag=1000;
     
     _uiWebView2 =[[UIWebView alloc] initWithFrame:CGRectMake(0, _contentView.frame.size.height/2,_contentView.frame.size.width , _contentView.frame.size.height/2)];
-    NSURL *url2 = [[NSURL alloc] initWithString:@"http://h5.chinagames.net/game/CUTV/GameHall.aspx"];
+    NSURL *url2 = [[NSURL alloc] initWithString:@"http://taobao.com"];
     [_uiWebView2 loadRequest:[NSURLRequest requestWithURL:url2]];
     _uiWebView2.delegate = self;
     [self.contentView addSubview:_uiWebView2];
     NSInteger a= _uiWebView1.hash;
+    NSInteger b= _uiWebView2.hash;
     _uiWebView2.tag=2000;
 }
 

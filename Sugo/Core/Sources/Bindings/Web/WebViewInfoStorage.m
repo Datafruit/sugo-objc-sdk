@@ -166,6 +166,7 @@ static WebViewInfoStorage *singleton = nil;
         _newFrame = true;
         _distance=distance;
     }
+    
 }
 
 @end
