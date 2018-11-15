@@ -867,7 +867,10 @@ static NSString *defaultProjectToken;
             NSMutableArray *queue = [NSMutableArray array];
             if (eventResult != nil) {
                 for (SugoEvents *event in eventResult) {
-                    [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:event.event]];
+                    NSData *data = event.event;
+                    if (data != nil) {
+                        [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+                    }
                 }
             }
             [self.network flushEventQueue:queue];
@@ -1007,7 +1010,6 @@ static NSString *defaultProjectToken;
     NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(token = %@)", self.apiToken];
     [fetchRequest setPredicate:predicate];
     [fetchRequest setFetchLimit: limit];
-
     NSArray *eventResult = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil].copy;
     return eventResult;
 }

@@ -60,7 +60,6 @@
         image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
     }
-
     return image;
 }
 

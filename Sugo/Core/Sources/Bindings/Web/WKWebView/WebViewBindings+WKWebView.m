@@ -20,11 +20,17 @@
 {
     self.wkWebViewCurrentJS = [self wkJavaScript];
     [(*webView).configuration.userContentController addUserScript:[self wkWebViewCurrentJS]];
+    NSInteger hash = (*webView).hash;
+    NSString *javaScriptSource = [NSString stringWithFormat:@"sugo.hash=%ld;",(long)hash];
+    WKUserScript *userScript = [[WKUserScript alloc] initWithSource:javaScriptSource injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+    [(*webView).configuration.userContentController addUserScript:userScript];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewRegisterSuperProperties"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewRegisterSuperPropertiesOnce"];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"trackFirstLogin"];
+     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"unTrackFirstLogin"];
     MPLogDebug(@"WKWebView Injected");
 }
 
@@ -35,6 +41,8 @@
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewRegisterSuperProperties"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewRegisterSuperPropertiesOnce"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"trackFirstLogin"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"unTrackFirstLogin"];
     self.wkWebView = nil;
 }
 
@@ -102,7 +110,8 @@
                                         width:(NSString *)body[@"clientWidth"]
                                        height:(NSString *)body[@"clientHeight"]
                               viewportContent:(NSString *)body[@"viewportContent"]
-                                        nodes:(NSString *)body[@"nodes"]];
+                                        nodes:(NSString *)body[@"nodes"]
+                                        hash:body[@"hash"]];
             }
         }else if ([message.name isEqual:@"SugoWKWebViewRegisterSuperProperties"]){
             NSDictionary *body = (NSDictionary *)message.body;
@@ -110,6 +119,11 @@
         }else if ([message.name isEqual:@"SugoWKWebViewRegisterSuperPropertiesOnce"]){
             NSDictionary *body = (NSDictionary *)message.body;
             [[Sugo sharedInstance] registerSuperPropertiesOnce:body];
+        }else if ([message.name isEqual:@"trackFirstLogin"]){
+            NSDictionary *body = (NSDictionary *)message.body;
+            [[Sugo sharedInstance] trackFirstLoginWith:body[@"user_id"] dimension: body[@"user_id_dimension"]];
+        }else if ([message.name isEqual:@"unTrackFirstLogin"]){
+            [[Sugo sharedInstance] untrackFirstLogin];
         }
 
     } else {

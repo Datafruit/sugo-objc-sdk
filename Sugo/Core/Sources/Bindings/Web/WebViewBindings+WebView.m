@@ -64,6 +64,7 @@
            if (self.wkWebView) {
                 self.wkVcPath = nil;
                 [self stopWKWebViewBindings:wkWebView];
+               [self startWKWebViewBindings:&wkWebView];
                 return;
             }
             self.wkVcPath = nil;

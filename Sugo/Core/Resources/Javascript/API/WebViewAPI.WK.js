@@ -44,6 +44,18 @@
         }
     };
 
+    sugo.login = function(user_id,user_id_dimension) {
+        var props = {'user_id':user_id,
+            'user_id_dimension':user_id_dimension};
+        window.webkit.messageHandlers.trackFirstLogin.postMessage(props);
+    };
+
+    sugo.logout = function(){
+        var props = {'status':'loginOut'};
+        window.webkit.messageHandlers.unTrackFirstLogin.postMessage(props);
+    };
+
+
     sugo.trackStayEvent = function() {
         var duration = (new Date().getTime() - sugo.enter_time) / 1000;
         var tmp_props = JSON.parse(JSON.stringify(sugo.view_props));

@@ -7,12 +7,13 @@ sugo.isElementInViewport = function(rect) {
             );
 };
 
+sugo.excludeControl = ['symbol', 'SCRIPT'];
+
 sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
     var index_map = {};
     for (var i = 0; i < childrens.length; i++) {
         var children = childrens[i];
-        var pos = children.getBoundingClientRect()
-        if (!pos.width || !pos.height) {
+        if(sugo.excludeControl.includes(children.tagName)) {
             continue;
         }
         var path = sugoioKit.cssPath(children);
@@ -38,6 +39,7 @@ sugo.handleNodeChild = function(childrens, jsonArry, parent_path) {
     }
 };
 
+
 sugo.reportNodes = function() {
     var jsonArray = [];
     var body = document.getElementsByTagName('body')[0];
@@ -54,7 +56,9 @@ sugo.reportNodes = function() {
             'clientWidth': sugo.clientWidth,
             'clientHeight': sugo.clientHeight,
             'viewportContent': sugo.viewportContent,
-            'nodes': JSON.stringify(jsonArray)
+            'nodes': JSON.stringify(jsonArray),
+            'hash': sugo.hash.toString()
+
         };
         window.webkit.messageHandlers.SugoWKWebViewReporter.postMessage(message);
     }

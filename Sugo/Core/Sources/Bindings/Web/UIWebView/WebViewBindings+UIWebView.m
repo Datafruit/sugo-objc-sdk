@@ -35,15 +35,14 @@
             NSDictionary *events = [NSJSONSerialization JSONObjectWithData:eventData
                                                                   options:NSJSONReadingMutableContainers
                                                                     error:nil];
-            
-            
             if(![self isRegisterSuperProperties:npi events:events]){
+            if(![self loginStatus:npi events:events]){
                 for (NSString *object in events) {
                     NSString *eventString1 = events[object];
                     NSData *eventData1 = [eventString1 dataUsingEncoding:NSUTF8StringEncoding];
                     NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData1
-                                                                          options:NSJSONReadingMutableContainers
-                                                                            error:nil];
+                                                                         options:NSJSONReadingMutableContainers
+                                                                           error:nil];
                     WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
                     if ([npi isEqualToString:@"track"]) {
                         storage.eventID = (NSString *)event[@"eventID"];
@@ -57,6 +56,7 @@
                             [[Sugo sharedInstance] timeEvent:eventName];
                         }
                     }
+                    
                 }
             }
             shouldStartLoad = NO;
@@ -66,6 +66,7 @@
         }
         return shouldStartLoad;
     };
+    
     
     void (^uiWebViewDidStartLoadBlock)(id, SEL, id) = ^(id viewController, SEL command, id webView) {
         if (self.uiWebViewJavaScriptInjected) {
@@ -80,11 +81,11 @@
             || uiWebView.isLoading) {
             return;
         }
-        if (!self.uiWebViewJavaScriptInjected) {
+//        if (!self.uiWebViewJavaScriptInjected) {
             [uiWebView stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
             self.uiWebViewJavaScriptInjected = YES;
             NSLog(@"UIWebView Injected");
-        }
+//        }
     };
     
     UIWebView *uiWebView = (UIWebView *)webView;
@@ -144,6 +145,29 @@
         self.uiVcPath = nil;
     }
 }
+
+-(BOOL)loginStatus:(NSString *)npi events:(NSDictionary *)events{
+    BOOL isDeal = false;
+    if ([npi isEqualToString:@"trackFirstLogin"] || [npi isEqualToString:@"unTrackFirstLogin"]) {
+        NSArray *keyArr= [events allKeys];
+        NSString *eventString = events[keyArr[0]];
+        NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
+                                                              options:NSJSONReadingMutableContainers
+                                                                error:nil];
+        isDeal = YES;
+        if ([npi isEqualToString:@"trackFirstLogin"]) {
+            [[Sugo sharedInstance] trackFirstLoginWith:event[@"user_id"] dimension: event[@"user_id_dimension"]];
+            
+        }else{
+            [[Sugo sharedInstance] untrackFirstLogin];
+            
+        }
+        
+    }
+    return isDeal;
+}
+
 
 - (void)updateUIWebViewBindings:(UIWebView *)webView
 {
