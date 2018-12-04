@@ -61,7 +61,7 @@ static NSString *defaultProjectToken;
         [instance trackIntegration];
         [instance trackEvent:values[@"AppEnter"]];
         [instance timeEvent:values[@"AppStay"]];
-        
+        [[WebViewBindings globalBindings] fillBindings];
         [instance checkForDecideDimensionsResponseWithCompletion:nil];
         [instance checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
             dispatch_sync(dispatch_get_main_queue(), ^{

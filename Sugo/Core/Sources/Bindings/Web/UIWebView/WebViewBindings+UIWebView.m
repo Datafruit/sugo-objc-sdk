@@ -18,6 +18,8 @@
 
 - (void)startUIWebViewBindings:(UIWebView *)webView
 {
+    //Prevent the webview from loading the url before the movetowindow method is executed
+    [webView stringByEvaluatingJavaScriptFromString:[self jsUIWebView]];
     BOOL (^uiWebViewShouldStartLoadBlock)(id, SEL, id, id, id) = ^(id view, SEL command, id wv, id r, id ssl) {
         
         BOOL shouldStartLoad = [((NSNumber *)ssl) boolValue];
