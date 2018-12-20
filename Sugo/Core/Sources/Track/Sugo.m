@@ -401,7 +401,18 @@ static NSString *defaultProjectToken;
 - (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName properties:(nullable NSDictionary *)properties
 {
 //    dispatch_async(self.serialQueue, ^{
-        [self rawTrack:eventID eventName:eventName properties:properties];
+    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
+    NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+    NSString *typeKey = keys[@"EventType"];
+    NSMutableDictionary *p = [[NSMutableDictionary alloc]initWithDictionary:properties];
+    if( [p objectForKey: typeKey]){
+        NSString *typeName = p[typeKey];
+        NSString *event_type = values[typeName];
+        if (event_type!=nil && ![event_type isEqualToString:@""]) {
+            p[typeKey] = event_type;
+        }
+    }
+    [self rawTrack:eventID eventName:eventName properties:(NSDictionary *)p];
 //    });
 }
 
