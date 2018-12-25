@@ -665,12 +665,13 @@ static NSString *defaultProjectToken;
             [NSUserDefaults.standardUserDefaults synchronize];
             BOOL isFirstLogin = [firstLoginResult[@"isFirstLogin"] boolValue];
             if (isFirstLogin) {
-                NSNumber *firstLoginTime = [NSNumber numberWithDouble:[firstLoginResult[@"firstLoginTime"] doubleValue]];
-                firstLoginTimes[identifer] = firstLoginTime;
-                [NSUserDefaults.standardUserDefaults setObject:firstLoginTimes forKey:keys[firstLoginKey]];
-                [NSUserDefaults.standardUserDefaults synchronize];
                 [strongSelf trackEvent:values[@"FirstLogin"]];
             }
+            NSNumber *firstLoginTime = [NSNumber numberWithDouble:[firstLoginResult[@"firstLoginTime"] doubleValue]];
+            firstLoginTimes[identifer] = firstLoginTime;
+            [NSUserDefaults.standardUserDefaults setObject:firstLoginTimes forKey:keys[firstLoginKey]];
+            [NSUserDefaults.standardUserDefaults synchronize];
+            
         } @catch (NSException *exception) {
             MPLogError(@"unable to request first login with identifer");
         } @finally {
