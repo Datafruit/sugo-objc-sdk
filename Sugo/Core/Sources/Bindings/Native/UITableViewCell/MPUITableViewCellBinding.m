@@ -117,9 +117,19 @@
             NSString *cellPath=self.path.string;
             NSArray *array = [cellPath componentsSeparatedByString:@"/"];
             NSString *strPath=@"";
-            for (int i=1; i<array.count-2; i++) {
+            int distance = 0;
+            for (int i=1;i<array.count;i++){
                 strPath=[strPath stringByAppendingFormat:@"%@%@", @"/", array[i]];
+                if ([array[i] isEqualToString:@"UITableView[0]"]) {
+                    distance = i;
+                    break;
+                }
+                if ([array[i] isEqualToString:@"UITableView"]) {
+                    distance = i;
+                    break;
+                }
             }
+            distance = (int)(array.count-1)-distance;
             
             strPath=[strPath stringByAppendingString:@"[0]"];
             self.path.string = strPath;
@@ -135,7 +145,7 @@
                 row=[rowStr floatValue];
             }
             
-            if ([self.path isTableViewCellSelected:tableView fromRoot:root evaluatingFinalPredicate:YES num:2] &&row==indexPath.row) {
+            if ([self.path isTableViewCellSelected:tableView fromRoot:root evaluatingFinalPredicate:YES num:distance] &&row==indexPath.row) {
                 NSString *textLabel = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
                 NSString *detailTextLabel = (cell && cell.detailTextLabel && cell.detailTextLabel.text) ? cell.detailTextLabel.text : @"";
                 
@@ -160,7 +170,18 @@
                     }
                     p[keys[@"EventLabel"]] = eventLabel;
                     p[keys[@"EventType"]] = values[@"click"];
-                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+                    
+                    
+                    id responder = tableView.nextResponder;
+                    while (![responder isKindOfClass: [UIViewController class]] && ![responder isKindOfClass: [UIWindow class]])
+                    {
+                        responder = [responder nextResponder];
+                    }
+                    if ([responder isKindOfClass: [UIViewController class]])
+                    {
+                        p[keys[@"PagePath"]] = NSStringFromClass([(UIViewController *)responder class]);
+                    }
+                    
                     if ([SugoPageInfos global].infos.count > 0) {
                         for (NSDictionary *info in [SugoPageInfos global].infos) {
                             if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
