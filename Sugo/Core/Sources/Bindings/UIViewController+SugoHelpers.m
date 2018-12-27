@@ -26,6 +26,19 @@
     return [UIViewController searchViewControllerFrom:viewController];
 }
 
++(UIViewController *)sugoCurrentUIViewController:(UIView *) view{
+    id responder = view.nextResponder;
+    while (![responder isKindOfClass: [UIViewController class]] && ![responder isKindOfClass: [UIWindow class]])
+    {
+        responder = [responder nextResponder];
+    }
+    if ([responder isKindOfClass: [UIViewController class]])
+    {
+        return (UIViewController *)responder ;
+    }
+    return nil;
+}
+
 + (UIViewController*)searchViewControllerFrom:(UIViewController*)viewController {
     
     if (viewController.presentedViewController) {

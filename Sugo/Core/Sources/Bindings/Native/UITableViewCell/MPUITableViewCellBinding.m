@@ -120,11 +120,12 @@
             int distance = 0;
             for (int i=1;i<array.count;i++){
                 strPath=[strPath stringByAppendingFormat:@"%@%@", @"/", array[i]];
-                if ([array[i] isEqualToString:@"UITableView[0]"]) {
+                if ([array[i] isEqualToString:@"UITableView"]) {
                     distance = i;
                     break;
                 }
-                if ([array[i] isEqualToString:@"UITableView"]) {
+                NSArray *str=[array[i] componentsSeparatedByString:@"["];
+                if (str.count==2&&[str[0] isEqualToString:@"UITableView"]) {
                     distance = i;
                     break;
                 }
@@ -171,17 +172,7 @@
                     p[keys[@"EventLabel"]] = eventLabel;
                     p[keys[@"EventType"]] = values[@"click"];
                     
-                    
-                    id responder = tableView.nextResponder;
-                    while (![responder isKindOfClass: [UIViewController class]] && ![responder isKindOfClass: [UIWindow class]])
-                    {
-                        responder = [responder nextResponder];
-                    }
-                    if ([responder isKindOfClass: [UIViewController class]])
-                    {
-                        p[keys[@"PagePath"]] = NSStringFromClass([(UIViewController *)responder class]);
-                    }
-                    
+                    p[keys[@"PagePath"]] =NSStringFromClass([[UIViewController sugoCurrentUIViewController:tableView] class]);
                     if ([SugoPageInfos global].infos.count > 0) {
                         for (NSDictionary *info in [SugoPageInfos global].infos) {
                             if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {

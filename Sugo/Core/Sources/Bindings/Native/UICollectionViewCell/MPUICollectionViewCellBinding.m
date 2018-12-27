@@ -154,7 +154,7 @@
                     }
                     p[keys[@"EventLabel"]] = eventLabel;
                     p[keys[@"EventType"]] = values[@"click"];
-                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController:collectionView] class]);
                     if ([SugoPageInfos global].infos.count > 0) {
                         for (NSDictionary *info in [SugoPageInfos global].infos) {
                             if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
