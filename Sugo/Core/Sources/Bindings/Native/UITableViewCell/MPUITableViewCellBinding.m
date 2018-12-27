@@ -117,9 +117,20 @@
             NSString *cellPath=self.path.string;
             NSArray *array = [cellPath componentsSeparatedByString:@"/"];
             NSString *strPath=@"";
-            for (int i=1; i<array.count-2; i++) {
+            int distance = 0;
+            for (int i=1;i<array.count;i++){
                 strPath=[strPath stringByAppendingFormat:@"%@%@", @"/", array[i]];
+                if ([array[i] isEqualToString:@"UITableView"]) {
+                    distance = i;
+                    break;
+                }
+                NSArray *str=[array[i] componentsSeparatedByString:@"["];
+                if (str.count==2&&[str[0] isEqualToString:@"UITableView"]) {
+                    distance = i;
+                    break;
+                }
             }
+            distance = (int)(array.count-1)-distance;
             
             strPath=[strPath stringByAppendingString:@"[0]"];
             self.path.string = strPath;
@@ -135,7 +146,7 @@
                 row=[rowStr floatValue];
             }
             
-            if ([self.path isTableViewCellSelected:tableView fromRoot:root evaluatingFinalPredicate:YES num:2] &&row==indexPath.row) {
+            if ([self.path isTableViewCellSelected:tableView fromRoot:root evaluatingFinalPredicate:YES num:distance] &&row==indexPath.row) {
                 NSString *textLabel = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
                 NSString *detailTextLabel = (cell && cell.detailTextLabel && cell.detailTextLabel.text) ? cell.detailTextLabel.text : @"";
                 
@@ -160,7 +171,8 @@
                     }
                     p[keys[@"EventLabel"]] = eventLabel;
                     p[keys[@"EventType"]] = values[@"click"];
-                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+                    
+                    p[keys[@"PagePath"]] =NSStringFromClass([[UIViewController sugoCurrentUIViewController:tableView] class]);
                     if ([SugoPageInfos global].infos.count > 0) {
                         for (NSDictionary *info in [SugoPageInfos global].infos) {
                             if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {

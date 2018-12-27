@@ -66,9 +66,9 @@
 - (void)initSugo {
     NSString *projectID = @"Add_Your_Project_ID_Here";
     NSString *appToken = @"Add_Your_App_Token_Here";
-//    SugoBindingsURL = @"";
-//    SugoCollectionURL = @"";
-//    SugoCodelessURL = @"";
+    //    SugoBindingsURL = @"";
+    //    SugoCollectionURL = @"";
+    //    SugoCodelessURL = @"";
     NSDictionary *priorityProperties = @{};
     [Sugo registerPriorityProperties:priorityProperties];
     [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];

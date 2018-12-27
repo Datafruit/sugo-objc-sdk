@@ -39,7 +39,7 @@
                     [self trackStayEventOfWebView:self.uiWebView];
                     [self stopUIWebViewBindings];
                 }
-                self.uiVcPath = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+                self.uiVcPath = NSStringFromClass([[UIViewController sugoCurrentUIViewController:webView] class]);
                 self.uiWebView = uiWebView;
                 if (self.uiWebView.delegate) {
                     self.uiWebViewDelegate = self.uiWebView.delegate;
@@ -69,7 +69,7 @@
             }
             self.wkVcPath = nil;
             [self stopWKWebViewBindings:wkWebView];
-            self.wkVcPath = NSStringFromClass([[UIViewController sugoCurrentUIViewController] class]);
+            self.wkVcPath = NSStringFromClass([[UIViewController sugoCurrentUIViewController:wkWebView] class]);
             self.wkWebView = wkWebView;
             [self startWKWebViewBindings:&wkWebView];
         };
