@@ -11,5 +11,5 @@
 @interface UIViewController (SugoHelpers)
 
 + (UIViewController *)sugoCurrentViewController;
-
++ (UIViewController *)sugoCurrentViewController:(UIView *) view;
 @end
