@@ -202,6 +202,8 @@
 		14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14BA1A4D1E13D675002F0C4B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		9B3FC18B21D767340074D519 /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
+		9B3FC18C21D767C80074D519 /* projectMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = projectMacro.h; sourceTree = "<group>"; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -443,6 +445,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9B3FC18A21D767040074D519 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				9B3FC18B21D767340074D519 /* macro.h */,
+				9B3FC18C21D767C80074D519 /* projectMacro.h */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
 		A700F8A320C7BD24008C0069 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,6 +499,7 @@
 		A700F9F420C7BDF6008C0069 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				9B3FC18A21D767040074D519 /* util */,
 				A700F93F20C7BD24008C0069 /* Sugo.h */,
 				A700F8AD20C7BD24008C0069 /* MPLogger.h */,
 				A700FA0A20C7CC6B008C0069 /* Track */,
