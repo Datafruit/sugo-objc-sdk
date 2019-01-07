@@ -1647,7 +1647,7 @@ static NSString *defaultProjectToken;
     float lineNumSerialValue = y/areaHeight;
     int columnSerialNum = (columnSerialValue-(int)columnSerialValue)>0?(int)columnSerialValue+1:columnSerialValue;
     int lineNumSerialNum = (lineNumSerialValue-(int)lineNumSerialValue)>0?(int)lineNumSerialValue:lineNumSerialValue-1;
-    int serialNum = columnSerialNum + lineNumSerialNum*columnNum - 1;
+    int serialNum = columnSerialNum + lineNumSerialNum*columnNum ;
     return serialNum;
 }
 
