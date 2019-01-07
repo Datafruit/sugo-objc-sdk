@@ -19,6 +19,8 @@
 		14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */; };
 		14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4D1E13D675002F0C4B /* WebKit.framework */; };
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
+		9BF5AB8221E34A51001D0F71 /* ReactNative in Resources */ = {isa = PBXBuildFile; fileRef = 9BF5AB8021E34A51001D0F71 /* ReactNative */; };
+		9BF5AB8321E34A51001D0F71 /* Weex in Resources */ = {isa = PBXBuildFile; fileRef = 9BF5AB8121E34A51001D0F71 /* Weex */; };
 		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
 		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
 		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -202,6 +204,8 @@
 		14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14BA1A4D1E13D675002F0C4B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		9BF5AB8021E34A51001D0F71 /* ReactNative */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ReactNative; sourceTree = "<group>"; };
+		9BF5AB8121E34A51001D0F71 /* Weex */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Weex; sourceTree = "<group>"; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -417,6 +421,8 @@
 		141AC7841E1364D7008D67F6 /* Sugo */ = {
 			isa = PBXGroup;
 			children = (
+				9BF5AB8021E34A51001D0F71 /* ReactNative */,
+				9BF5AB8121E34A51001D0F71 /* Weex */,
 				A700F8A320C7BD24008C0069 /* Core */,
 			);
 			path = Sugo;
@@ -1027,10 +1033,12 @@
 				A700F95F20C7BD24008C0069 /* SugoCustomDimensions.plist in Resources */,
 				A700F94F20C7BD24008C0069 /* WebViewReport.WK.js in Resources */,
 				A700F96320C7BD24008C0069 /* WebViewAPI.UI.js in Resources */,
+				9BF5AB8321E34A51001D0F71 /* Weex in Resources */,
 				A700F9AC20C7BD24008C0069 /* SugoBegin.js in Resources */,
 				A700F9DA20C7BD24008C0069 /* SugoEnd.js in Resources */,
 				A700F97B20C7BD24008C0069 /* SugoioKit.js in Resources */,
 				A700F9DD20C7BD24008C0069 /* WebViewAPI.WK.js in Resources */,
+				9BF5AB8221E34A51001D0F71 /* ReactNative in Resources */,
 				A700F9A020C7BD24008C0069 /* WebViewExecute.Report.js in Resources */,
 				A700F9DC20C7BD24008C0069 /* WebViewExecute.Sugo.WK.js in Resources */,
 				A700F9CA20C7BD24008C0069 /* SugoURLs.plist in Resources */,
