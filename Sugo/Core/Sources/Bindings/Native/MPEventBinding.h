@@ -18,7 +18,7 @@
 @property (nonatomic, copy) NSString *eventID;
 @property (nonatomic, copy) NSString *eventName;
 @property (nonatomic, strong) Attributes *attributes;
-
+@property (nonatomic,copy) NSString *classAttr;
 @property (nonatomic, assign) Class swizzleClass;
 
 /*!

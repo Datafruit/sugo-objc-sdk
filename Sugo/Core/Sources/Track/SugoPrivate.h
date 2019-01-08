@@ -66,6 +66,7 @@ const static double locateDefaultInterval=30*60;//默认全局配置上传地理
 
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
+@property (nonatomic,strong)NSMutableDictionary *classAttributeDict;
 
 // re-declare internally as readwrite
 @property (atomic, strong) SugoPeople *people;
@@ -74,6 +75,7 @@ const static double locateDefaultInterval=30*60;//默认全局配置上传地理
 @property (atomic, copy) NSString *deviceId;
 @property (atomic, copy) NSString *distinctId;
 @property (atomic, strong) NSString *sessionId;
+
 
 @property (nonatomic) BOOL enable;
 @property (nonatomic, copy) NSString *apiToken;
@@ -118,6 +120,8 @@ const static double locateDefaultInterval=30*60;//默认全局配置上传地理
 
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion;
 - (void)requestForFirstLoginWithIdentifer:(NSString *)identifer completion:(void (^)(NSData *firstLoginData))completion;
+
+
 
 @end
 

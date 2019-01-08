@@ -165,6 +165,7 @@ static NSString *defaultProjectToken;
         _flushMaxEvents = 200;
         _cacheInterval = cacheInterval;
         _locateInterval = locateDefaultInterval;
+        _classAttributeDict = [[NSMutableDictionary alloc]init];
         latitude = @0;
         longitude = @0;
         //0：When you first open the app, you immediately upload your location；
@@ -239,6 +240,14 @@ static NSString *defaultProjectToken;
     } else {
         [Sugo setSharedAutomatedInstance:nil];
     }
+}
+
+-(NSMutableDictionary *)requireClassAttributeDict{
+    return _classAttributeDict;
+}
+
+-(void)buildClassAttributeDict:(NSMutableDictionary *)dict{
+    _classAttributeDict = dict;
 }
 
 - (BOOL)shouldManageNetworkActivityIndicator {

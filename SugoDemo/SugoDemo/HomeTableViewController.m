@@ -11,6 +11,7 @@
 @interface HomeTableViewController ()
 
 @property (atomic, strong) NSTimer *deprecatedTimer;
+@property (nonatomic,copy) NSString *titleName;
 
 @end
 
@@ -20,7 +21,7 @@ static int deprecatedTimes = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    _titleName = @"hahhaha";
     self.deprecatedTimer = [NSTimer scheduledTimerWithTimeInterval:5
                                                             target:self
                                                           selector:@selector(deprecate)

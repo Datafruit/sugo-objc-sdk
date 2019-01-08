@@ -144,7 +144,14 @@
 //                        }
 //                    }
                 }
-
+                NSString *classAttr = [self classAttr];
+                if (classAttr !=nil&&classAttr.length>0) {
+                    NSArray *attrArray = [classAttr componentsSeparatedByString:@","];
+                    for (NSString *item in attrArray) {
+                        id value = [tableView valueForKey:item];
+                        p[item] = value;
+                    }
+                }
                 [[self class] track:[self eventID]
                           eventName:[self eventName]
                          properties:p];

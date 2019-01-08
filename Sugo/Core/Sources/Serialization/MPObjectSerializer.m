@@ -15,6 +15,8 @@
 #import "NSInvocation+MPHelpers.h"
 #import "WebViewBindings+WebView.h"
 #import "WebViewInfoStorage.h"
+#import "Sugo.h"
+#import <objc/runtime.h>
 
 
 @interface MPObjectSerializer (WebViewSerializer)
@@ -55,7 +57,8 @@
 
     return @{
             @"objects": [context allSerializedObjects],
-            @"rootObject": [_objectIdentityProvider identifierForObject:rootObject]
+            @"rootObject": [_objectIdentityProvider identifierForObject:rootObject],
+            @"classAttr":[[Sugo sharedInstance] requireClassAttributeDict]
     };
 }
 
@@ -94,7 +97,27 @@
             }
         }
     }
-
+    
+    NSMutableDictionary *dict =  [[Sugo sharedInstance] requireClassAttributeDict];
+    NSString *className =[self classHierarchyArrayForObject:object][0];
+    NSString *value = dict[className];
+    if (value == nil || value.length==0 || [value isEqualToString:@""]) {
+        unsigned int count = 0;
+        value = @"";
+        Ivar *ivars = class_copyIvarList([object class], &count);
+        for (int i = 0; i<count; i++) {
+            Ivar ivar = ivars[i];
+            NSString *valueType = [NSString stringWithFormat:@"%s",ivar_getTypeEncoding(ivar)];
+            if ([self isBaseType:valueType]){
+                value = [value stringByAppendingString:[NSString stringWithFormat:@"%s",ivar_getName(ivar)]];
+                value = [value stringByAppendingString:@","];
+            }
+//            NSLog(@"UITextView--->%s------%s", ivar_getName(ivar),ivar_getTypeEncoding(ivar));
+        }
+        dict[className] = value;
+        [[Sugo sharedInstance] buildClassAttributeDict:dict];
+    }
+    
     NSMutableDictionary *serializedObject = [[NSMutableDictionary alloc]
                                              initWithDictionary:@{
                                                                   @"id": [_objectIdentityProvider identifierForObject:object],
@@ -115,6 +138,22 @@
     }
 
     [context addSerializedObject:serializedObject];
+}
+
+-(BOOL)isBaseType:(NSString *)typeName{
+    NSArray *array = [[NSArray alloc]initWithObjects:@"int",@"double",@"float",@"char",@"long",@"short",@"signed",@"unsigned",@"short int",@"long int",@"unsigned int",@"unsigned short",@"unsigned long",@"long double",@"number",@"Boolean",@"BOOL",@"bool",@"NSString",@"NSDate",@"NSNumber",nil];
+    BOOL isBaseType = false;
+    typeName = [typeName stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+    typeName = [typeName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    typeName = [typeName stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    for (NSString *item in array){
+        if ([typeName isEqualToString:item]) {
+            isBaseType = true;
+            break;
+        }
+    }
+    return isBaseType;
+    
 }
 
 - (NSArray *)classHierarchyArrayForObject:(NSObject *)object
