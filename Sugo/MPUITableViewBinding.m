@@ -124,7 +124,8 @@
                     NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
                     NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
                     p[keys[@"EventType"]] = values[@"click"];
-                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController] class]);
+                    p[keys[@"PagePath"]] = NSStringFromClass([[UIViewController sugoCurrentViewController:tableView] class]);
+
                     if ([SugoPageInfos global].infos.count > 0) {
                         for (NSDictionary *info in [SugoPageInfos global].infos) {
                             if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
