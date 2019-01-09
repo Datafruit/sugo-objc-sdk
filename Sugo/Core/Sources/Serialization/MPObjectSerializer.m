@@ -101,7 +101,7 @@
     NSMutableDictionary *dict =  [[Sugo sharedInstance] requireClassAttributeDict];
     NSString *className =[self classHierarchyArrayForObject:object][0];
     NSString *value = dict[className];
-    if (value == nil || value.length==0 || [value isEqualToString:@""]) {
+    if (value == nil) {
         unsigned int count = 0;
         value = @"";
         Ivar *ivars = class_copyIvarList([object class], &count);
@@ -141,7 +141,7 @@
 }
 
 -(BOOL)isBaseType:(NSString *)typeName{
-    NSArray *array = [[NSArray alloc]initWithObjects:@"int",@"double",@"float",@"char",@"long",@"short",@"signed",@"unsigned",@"short int",@"long int",@"unsigned int",@"unsigned short",@"unsigned long",@"long double",@"number",@"Boolean",@"BOOL",@"bool",@"NSString",@"NSDate",@"NSNumber",nil];
+    NSArray *array = [[NSArray alloc]initWithObjects:@"int",@"double",@"float",@"char",@"long",@"short",@"signed",@"unsigned",@"short int",@"long int",@"unsigned int",@"unsigned short",@"unsigned long",@"long double",@"number",@"Boolean",@"BOOL",@"bool",@"NSString",@"NSDate",@"NSNumber",@"NSInteger",@"NSUInteger",@"enum",@"struct",nil];
     BOOL isBaseType = false;
     typeName = [typeName stringByReplacingOccurrencesOfString:@"\\" withString:@""];
     typeName = [typeName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
