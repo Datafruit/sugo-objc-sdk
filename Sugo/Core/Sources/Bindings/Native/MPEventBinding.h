@@ -18,7 +18,7 @@
 @property (nonatomic, copy) NSString *eventID;
 @property (nonatomic, copy) NSString *eventName;
 @property (nonatomic, strong) Attributes *attributes;
-@property (nonatomic,copy) NSString *classAttr;
+@property (nonatomic,copy) NSDictionary *classAttr;
 @property (nonatomic, assign) Class swizzleClass;
 
 /*!
@@ -36,13 +36,13 @@
 + (id)bindingWithJSONObject:(id)object;
 
 - (instancetype)init __unavailable;
-- (instancetype)initWithEventID:(NSString *)eventID eventName:(NSString *)eventName onPath:(NSString *)path withAttributes:(Attributes *)attributes;
+- (instancetype)initWithEventID:(NSString *)eventID eventName:(NSString *)eventName  onPath:(NSString *)path classAttr:(NSDictionary *)classAttr withAttributes:(Attributes *)attributes;
 
 /*!
  Intercepts track calls and adds a property indicating the track event
  was from a binding
  */
-+ (void)track:(NSString *)eventID eventName:(NSString *)eventName properties:(NSDictionary *)properties;
++ (void)track:(NSString *)eventID eventName:(NSString *)eventName  properties:(NSDictionary *)properties;
 /*!
  Method stubs. Implement them in subclasses
  */

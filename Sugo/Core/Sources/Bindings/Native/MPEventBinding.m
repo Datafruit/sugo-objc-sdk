@@ -54,7 +54,9 @@
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
+                      classAttr:(NSDictionary *)classAttr
                  withAttributes:(Attributes *)attributes
+
 {
     if (self = [super init]) {
         self.eventID = eventID;
@@ -63,6 +65,7 @@
         self.attributes = attributes;
         self.name = [[NSUUID UUID] UUIDString];
         self.running = NO;
+        self.classAttr=classAttr;
     }
     return self;
 }
@@ -104,7 +107,8 @@
     NSString *eventID = [aDecoder decodeObjectForKey:@"eventID"];
     NSString *eventName = [aDecoder decodeObjectForKey:@"eventName"];
     NSDictionary *attributesPaths = [aDecoder decodeObjectForKey:@"attributes"];
-    if (self = [self initWithEventID:eventID eventName:eventName onPath:path withAttributes:[[Attributes alloc] initWithAttributes:attributesPaths]]) {
+    NSDictionary *classAttr = [aDecoder decodeObjectForKey:@"classAttr"];
+    if (self = [self initWithEventID:eventID eventName:eventName onPath:path classAttr:classAttr withAttributes:[[Attributes alloc] initWithAttributes:attributesPaths]]) {
         self.ID = [[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.swizzleClass = NSClassFromString([aDecoder decodeObjectForKey:@"swizzleClass"]);
@@ -121,6 +125,7 @@
     [aCoder encodeObject:_eventName forKey:@"eventName"];
     [aCoder encodeObject:NSStringFromClass(_swizzleClass) forKey:@"swizzleClass"];
     [aCoder encodeObject:_attributes.paths forKey:@"attributes"];
+    [aCoder encodeObject:_classAttr forKey:@"classAttr"];
 }
 
 - (BOOL)isEqual:(id)other {

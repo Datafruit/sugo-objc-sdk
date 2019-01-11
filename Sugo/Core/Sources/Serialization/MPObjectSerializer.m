@@ -108,12 +108,17 @@
         for (int i = 0; i<count; i++) {
             Ivar ivar = ivars[i];
             NSString *valueType = [NSString stringWithFormat:@"%s",ivar_getTypeEncoding(ivar)];
+            char *c = ivar_getTypeEncoding(ivar);
+            if ([className isEqualToString:@"CustumButton"]) {
+                NSLog(@"dddddd");
+            }
             if ([self isBaseType:valueType]){
                 value = [value stringByAppendingString:[NSString stringWithFormat:@"%s",ivar_getName(ivar)]];
                 value = [value stringByAppendingString:@","];
             }
 //            NSLog(@"UITextView--->%s------%s", ivar_getName(ivar),ivar_getTypeEncoding(ivar));
         }
+        free(ivars);
         dict[className] = value;
         [[Sugo sharedInstance] buildClassAttributeDict:dict];
     }
@@ -141,7 +146,7 @@
 }
 
 -(BOOL)isBaseType:(NSString *)typeName{
-    NSArray *array = [[NSArray alloc]initWithObjects:@"int",@"double",@"float",@"char",@"long",@"short",@"signed",@"unsigned",@"short int",@"long int",@"unsigned int",@"unsigned short",@"unsigned long",@"long double",@"number",@"Boolean",@"BOOL",@"bool",@"NSString",@"NSDate",@"NSNumber",@"NSInteger",@"NSUInteger",@"enum",@"struct",nil];
+    NSArray *array = [[NSArray alloc]initWithObjects:@"int",@"double",@"float",@"char",@"long",@"short",@"signed",@"unsigned",@"short int",@"long int",@"unsigned int",@"unsigned short",@"unsigned long",@"long double",@"number",@"Boolean",@"BOOL",@"bool",@"NSString",@"NSDate",@"NSNumber",@"NSInteger",@"NSUInteger",@"enum",@"struct",@"B",@"Q",@"d",@"q",@"c",@"i",@"s",@"l",@"C",@"I",@"S",@"L",@"f",@"d",@"b",nil];
     BOOL isBaseType = false;
     typeName = [typeName stringByReplacingOccurrencesOfString:@"\\" withString:@""];
     typeName = [typeName stringByReplacingOccurrencesOfString:@"\"" withString:@""];

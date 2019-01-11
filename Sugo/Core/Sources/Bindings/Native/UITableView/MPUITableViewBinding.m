@@ -49,11 +49,12 @@
 
     NSDictionary *attributesPaths = object[@"attributes"];
     Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
-    
+    NSDictionary *classAttr = [NSDictionary dictionaryWithDictionary:object[@"classAttr"]];
     return [[MPUITableViewBinding alloc] initWithEventID:(NSString *)eventID
                                                eventName:eventName
                                                   onPath:path
                                             withDelegate:delegate
+                                               classAttr:classAttr
                                               attributes:attributes];
 }
 
@@ -68,12 +69,14 @@
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes
 {
     return [self initWithEventID:eventID
                        eventName:eventName
                           onPath:path
                     withDelegate:nil
+                       classAttr:classAttr
                       attributes:attributes];
 }
 
@@ -81,11 +84,13 @@
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
                    withDelegate:(Class)delegateClass
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes
 {
     if (self = [super initWithEventID:eventID
                             eventName:eventName
                                onPath:path
+                            classAttr:classAttr
                        withAttributes:attributes]) {
         [self setSwizzleClass:delegateClass];
     }
@@ -144,13 +149,11 @@
 //                        }
 //                    }
                 }
-                NSString *classAttr = [self classAttr];
-                if (classAttr !=nil&&classAttr.length>0) {
-                    NSArray *attrArray = [classAttr componentsSeparatedByString:@","];
-                    for (NSString *item in attrArray) {
-                        id value = [tableView valueForKey:item];
-                        p[item] = value;
-                    }
+                NSDictionary *classAttr = [self classAttr];
+                for (NSString *key in classAttr){
+                    NSString *value = classAttr[key];
+                    id data = [tableView valueForKey:value];
+                    p[key] = data;
                 }
                 [[self class] track:[self eventID]
                           eventName:[self eventName]

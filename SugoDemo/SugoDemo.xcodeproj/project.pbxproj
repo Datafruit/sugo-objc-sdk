@@ -32,6 +32,8 @@
 		14D3A0701E7F6B8500DDE9EA /* InstructionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A06F1E7F6B8500DDE9EA /* InstructionsViewController.m */; };
 		14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */; };
 		792F6391857EE0AE4308A65C /* Pods_SugoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2F8D208B98A9A8B1ABAC18 /* Pods_SugoDemo.framework */; };
+		9B055EB121E845DF005A3D2A /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B055EB021E845DF005A3D2A /* OpenUDID.m */; };
+		9B055EB421E87271005A3D2A /* CustumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B055EB321E87271005A3D2A /* CustumButton.m */; };
 		9BF5AB8521E351A4001D0F71 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; };
 		9BF5AB8621E351A4001D0F71 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */; };
@@ -110,6 +112,10 @@
 		14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTableViewController.m; sourceTree = "<group>"; };
 		1A2F8D208B98A9A8B1ABAC18 /* Pods_SugoDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SugoDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F50373FF371FBAB25F9FE9C /* Pods-SugoDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SugoDemo.release.xcconfig"; path = "Target Support Files/Pods-SugoDemo/Pods-SugoDemo.release.xcconfig"; sourceTree = "<group>"; };
+		9B055EAF21E845DF005A3D2A /* OpenUDID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
+		9B055EB021E845DF005A3D2A /* OpenUDID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
+		9B055EB221E87271005A3D2A /* CustumButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustumButton.h; sourceTree = "<group>"; };
+		9B055EB321E87271005A3D2A /* CustumButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustumButton.m; sourceTree = "<group>"; };
 		9BF5AB8421E351A4001D0F71 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7097E251FDBD51A008EC6F4 /* UICollectionViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UICollectionViewViewController.h; sourceTree = "<group>"; };
 		A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UICollectionViewViewController.m; sourceTree = "<group>"; };
@@ -158,6 +164,8 @@
 				140CECAC1E7FD37300422EA8 /* UITableViewViewController.m */,
 				A7097E251FDBD51A008EC6F4 /* UICollectionViewViewController.h */,
 				A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */,
+				9B055EB221E87271005A3D2A /* CustumButton.h */,
+				9B055EB321E87271005A3D2A /* CustumButton.m */,
 			);
 			name = Native;
 			sourceTree = "<group>";
@@ -278,6 +286,8 @@
 				140CECBC1E7FE6B000422EA8 /* Scan */,
 				140CECBA1E7FE67C00422EA8 /* Native */,
 				140CECBB1E7FE68500422EA8 /* Web */,
+				9B055EAF21E845DF005A3D2A /* OpenUDID.h */,
+				9B055EB021E845DF005A3D2A /* OpenUDID.m */,
 			);
 			name = Demo;
 			sourceTree = "<group>";
@@ -416,8 +426,10 @@
 				141AC79E1E1366DB008D67F6 /* AppDelegate.m in Sources */,
 				140CECB31E7FD6B100422EA8 /* WebTableViewController.m in Sources */,
 				140CECA71E7FD20C00422EA8 /* UIControlViewController.m in Sources */,
+				9B055EB121E845DF005A3D2A /* OpenUDID.m in Sources */,
 				14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */,
 				14D3A06D1E7F6B4A00DDE9EA /* ScanViewController.m in Sources */,
+				9B055EB421E87271005A3D2A /* CustumButton.m in Sources */,
 				140CECB91E7FD6E600422EA8 /* WKWebViewViewController.m in Sources */,
 				14BA1A891E13EC7D002F0C4B /* CodelessCommonViewController.m in Sources */,
 				14BA1A861E13EC58002F0C4B /* UtilityViewController.m in Sources */,
