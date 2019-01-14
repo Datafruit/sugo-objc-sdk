@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MPObjectSelector.h"
 #import "Attributes.h"
-
+#import "BindingUtils.h"
 @interface MPEventBinding : NSObject <NSCoding>
 
 @property (nonatomic) NSUInteger ID;

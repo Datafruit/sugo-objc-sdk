@@ -149,12 +149,11 @@
 //                        }
 //                    }
                 }
+                
                 NSDictionary *classAttr = [self classAttr];
-                for (NSString *key in classAttr){
-                    NSString *value = classAttr[key];
-                    id data = [tableView valueForKey:value];
-                    p[key] = data;
-                }
+                p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:tableView];
+                
+                
                 [[self class] track:[self eventID]
                           eventName:[self eventName]
                          properties:p];

@@ -58,6 +58,7 @@
     
     NSDictionary *attributesPaths = [NSDictionary dictionaryWithDictionary:object[@"attributes"]];
     NSDictionary *classAttr = [NSDictionary dictionaryWithDictionary:object[@"classAttr"]];
+    
     Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
 
     if (!([object[@"control_event"] isKindOfClass:[NSNull class]])
@@ -273,11 +274,7 @@
 //            }
         }
         NSDictionary *classAttr = [self classAttr];
-        for (NSString *key in classAttr){
-            NSString *value = classAttr[key];
-            id data = [view valueForKey:value];
-            p[key] = data;
-        }
+        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:view];
         
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }
@@ -385,12 +382,9 @@
 //                }
 //            }
         }
+        
         NSDictionary *classAttr = [self classAttr];
-        for (NSString *key in classAttr){
-            NSString *value = classAttr[key];
-            id data = [(UIView *)sender valueForKey:value];
-            p[key] = data;
-        }
+        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:(UIView *)sender];
         
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }
