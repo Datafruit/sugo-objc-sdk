@@ -13,12 +13,12 @@
 +(NSMutableDictionary *)requireExtraAttrWithValue:(NSDictionary *)classAttr p:(NSMutableDictionary *)p view:(UIView *)view{
     for (NSString *key in classAttr){
         NSString *value = classAttr[key];
-        NSArray *array = [value componentsSeparatedByString:@";"];
+        NSArray *array = [value componentsSeparatedByString:@","];
         NSString *data = @"";
         for(int i=0;i<array.count;i++){
             id attr = [view valueForKey:array[i]];
             if (i>0) {
-                data = [data stringByAppendingString:[NSString stringWithFormat:@",%@",attr]];
+                data = [data stringByAppendingString:[NSString stringWithFormat:@";%@",attr]];
             }else{
                 data = [data stringByAppendingString:[NSString stringWithFormat:@"%@",attr]];
             }
