@@ -23,6 +23,7 @@ NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
 BOOL SugoCanTrackNativePage = true;
 BOOL SugoCanTrackWebPage = true;
+const static  NSString * ENTERBACKGROUNDTIME=@"enterBackgroundTime";
 
 @implementation Sugo
 
@@ -163,7 +164,7 @@ static NSString *defaultProjectToken;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
-        
+        self.startupInterval = 30;
         [self setupConfiguration];
         
         self.miniNotificationPresentationTime = 6.0;
@@ -1546,13 +1547,16 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ application will resign active", self);
     [self stopFlushTimer];
+    [self setupBackgroundTime];
 }
+
+
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
-    // Page Stay
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+    // Page Stay
     if (values) {
         [self trackEvent:values[@"BackgroundEnter"]];
         [self timeEvent:values[@"BackgroundStay"]];
@@ -1615,15 +1619,49 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     });
 }
 
+
+//save current time ,use it to judge AppEnter events when back up
+-(void) setupBackgroundTime{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString* timeString = [NSString stringWithFormat:@"%0.f", [self requireCurrentTime]];//转为字符型
+    [userDefaults setValue:timeString forKey:ENTERBACKGROUNDTIME];
+    [userDefaults synchronize];
+}
+
+-(NSTimeInterval) requireBackgroundTime{
+    NSString *timeStr = (NSString *)[NSUserDefaults.standardUserDefaults objectForKey:ENTERBACKGROUNDTIME];
+    NSTimeInterval time = (NSTimeInterval)[timeStr longLongValue];
+    return time;
+}
+
+
+-(NSTimeInterval) requireCurrentTime{
+    NSDate* time = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSTimeInterval timeNum=[time timeIntervalSince1970];
+    return  timeNum;
+}
+
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
     MPLogInfo(@"%@ will enter foreground", self);
-    
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
-        [self trackEvent:values[@"BackgroundStay"]];
-        [self trackEvent:values[@"BackgroundExit"]];
+    NSTimeInterval currentTime = [self requireCurrentTime];
+    NSTimeInterval beforeTime = [self requireBackgroundTime];
+    if (currentTime-beforeTime>self.startupInterval) {
+        if (values) {
+            [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
+            [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
+            [self trackEvent:values[@"AppEnter"]];
+            [self timeEvent:values[@"AppStay"]];
+        }
+    }else{
+        if (values) {
+            [self trackEvent:values[@"BackgroundStay"]];
+            [self trackEvent:values[@"BackgroundExit"]];
+        }
     }
+    
+    
     UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
     WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
     if (uiwv || wkwv) {
@@ -1678,6 +1716,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 //        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
         [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
         [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
+        
     }
     
     dispatch_async(_serialQueue, ^{
