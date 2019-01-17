@@ -39,6 +39,11 @@
     
 + (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer andProjectID: (NSString *)projectID  andToken: (NSString *)token;
 
++ (NSArray<NSURLQueryItem *> *)buildFirsStartTimeQueryForAppId:(NSString *)appId
+                                                    andAppType: (NSString *)appType
+                                                   andDeviceId: (NSString *)deviceId
+                                                 andAppVersion:(NSString *)appVersion;
+
 - (NSURLRequest *)buildRequestForURL:(NSURL *)url
                          andEndpoint:(NSString *)endpoint
                         byHTTPMethod:(NSString *)method

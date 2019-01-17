@@ -14,7 +14,8 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
     MPNetworkEndpointDecideDimension,
     MPNetworkEndpointDecideEvent,
     MPNetworkEndpointHeat,
-    MPNetworkEndpointFirstLogin
+    MPNetworkEndpointFirstLogin,
+    MPNetworkEndpointFirstStartTime
 };
 
 @interface MPNetwork : NSObject
