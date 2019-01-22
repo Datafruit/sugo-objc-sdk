@@ -698,6 +698,10 @@ extern BOOL SugoCanTrackWebPage;
 
 - (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos;
 
+
+-(void)buildClassAttributeDict:(NSMutableDictionary *)dict;
+-(NSMutableDictionary *)requireClassAttributeDict;
+
 /*!
  @method
  

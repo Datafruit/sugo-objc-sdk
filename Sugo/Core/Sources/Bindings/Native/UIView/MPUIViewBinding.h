@@ -20,11 +20,13 @@
                          onPath:(NSString *)path
                withControlEvent:(UIControlEvents)controlEvent
                  andVerifyEvent:(UIControlEvents)verifyEvent
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes;
 
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes;
 
 @end

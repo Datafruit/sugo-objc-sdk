@@ -7,9 +7,11 @@
 //
 
 #import "UIControlViewController.h"
+#import "CustumButton.h"
 @import Sugo;
 
 @interface UIControlViewController ()
+@property (weak, nonatomic) IBOutlet CustumButton *customBtn;
 
 @end
 
@@ -17,7 +19,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    _customBtn.buttonNum = 100;
+    _customBtn.buttonTag=@"你好";
+    _customBtn.isBoolText=YES;
+    [_customBtn buildButtonPrivateAttr:@"内部变量"];
+    // Do; any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {

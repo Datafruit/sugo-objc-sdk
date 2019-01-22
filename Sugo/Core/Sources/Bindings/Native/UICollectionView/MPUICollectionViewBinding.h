@@ -15,6 +15,7 @@
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
                    withDelegate:(Class)delegateClass
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes;
 
 

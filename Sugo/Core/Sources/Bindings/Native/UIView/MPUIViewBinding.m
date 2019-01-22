@@ -57,6 +57,8 @@
     }
     
     NSDictionary *attributesPaths = [NSDictionary dictionaryWithDictionary:object[@"attributes"]];
+    NSDictionary *classAttr = [NSDictionary dictionaryWithDictionary:object[@"classAttr"]];
+    
     Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
 
     if (!([object[@"control_event"] isKindOfClass:[NSNull class]])
@@ -67,12 +69,14 @@
                                                  onPath:path
                                        withControlEvent:[object[@"control_event"] unsignedIntegerValue]
                                          andVerifyEvent:verifyEvent
+                                              classAttr:classAttr
                                              attributes:attributes];
     }
     
     return [[MPUIViewBinding alloc] initWithEventID:eventID
                                           eventName:eventName
                                              onPath:path
+                                          classAttr:classAttr
                                          attributes:attributes];
     
 }
@@ -90,9 +94,10 @@
                          onPath:(NSString *)path
                withControlEvent:(UIControlEvents)controlEvent
                  andVerifyEvent:(UIControlEvents)verifyEvent
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes
 {
-    if (self = [super initWithEventID:eventID eventName:eventName onPath:path withAttributes:attributes]) {
+    if (self = [super initWithEventID:eventID eventName:eventName onPath:path classAttr:classAttr withAttributes:attributes]) {
         [self setSwizzleClass:[UIView class]];
         _controlEvent = controlEvent;
         _verifyEvent = _controlEvent;
@@ -104,9 +109,10 @@
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes
 {
-    if (self = [super initWithEventID:eventID eventName:eventName onPath:path withAttributes:attributes]) {
+    if (self = [super initWithEventID:eventID eventName:eventName onPath:path classAttr:classAttr withAttributes:attributes]) {
         [self setSwizzleClass:[UIView class]];
     }
     return self;
@@ -267,6 +273,9 @@
 //                }
 //            }
         }
+        NSDictionary *classAttr = [self classAttr];
+        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:view];
+        
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }
 }
@@ -373,6 +382,10 @@
 //                }
 //            }
         }
+        
+        NSDictionary *classAttr = [self classAttr];
+        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:(UIView *)sender];
+        
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }
 }

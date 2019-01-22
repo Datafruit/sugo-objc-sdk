@@ -49,12 +49,14 @@
     }
     
     NSDictionary *attributesPaths = object[@"attributes"];
+    NSDictionary *classAttr = [NSDictionary dictionaryWithDictionary:object[@"classAttr"]];
     Attributes *attributes = [[Attributes alloc] initWithAttributes:attributesPaths];
     
     return [[MPUICollectionViewBinding alloc] initWithEventID:(NSString *)eventID
                                                eventName:eventName
                                                   onPath:path
                                             withDelegate:delegate
+                                                classAttr:classAttr
                                               attributes:attributes];
 }
 
@@ -69,12 +71,14 @@
 - (instancetype)initWithEventID:(NSString *)eventID
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes
 {
     return [self initWithEventID:eventID
                        eventName:eventName
                           onPath:path
                     withDelegate:nil
+                       classAttr:classAttr
                       attributes:attributes];
 }
 
@@ -82,11 +86,13 @@
                       eventName:(NSString *)eventName
                          onPath:(NSString *)path
                    withDelegate:(Class)delegateClass
+                      classAttr:(NSDictionary *)classAttr
                      attributes:(Attributes *)attributes
 {
     if (self = [super initWithEventID:eventID
                             eventName:eventName
                                onPath:path
+                            classAttr:classAttr
                        withAttributes:attributes]) {
         [self setSwizzleClass:delegateClass];
     }
@@ -141,6 +147,9 @@
 //                        }
 //                    }
                 }
+                
+                NSDictionary *classAttr = [self classAttr];
+                p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:collectionView];
                 
                 [[self class] track:[self eventID]
                           eventName:[self eventName]
