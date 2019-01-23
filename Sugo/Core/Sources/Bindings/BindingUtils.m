@@ -7,10 +7,15 @@
 //
 
 #import "BindingUtils.h"
-
+#import "Sugo.h"
 @implementation BindingUtils
 
 +(NSMutableDictionary *)requireExtraAttrWithValue:(NSDictionary *)classAttr p:(NSMutableDictionary *)p view:(UIView *)view{
+    BOOL isTrue =  [[Sugo sharedInstance] getStartExtraAttrFuncion];
+    if (!isTrue) {
+        return p;
+    }
+    
     for (NSString *key in classAttr){
         NSString *value = classAttr[key];
         NSArray *array = [value componentsSeparatedByString:@","];
