@@ -149,13 +149,6 @@ static NSString *defaultProjectToken;
 
         // Install uncaught exception handlers first
         [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
-#if DEBUG
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        id overlayClass = NSClassFromString(@"UIDebuggingInformationOverlay");
-        [overlayClass performSelector:NSSelectorFromString(@"prepareDebuggingOverlay")];
-#pragma clang diagnostic pop
-#endif
         self.enable = enable;
         self.projectID = projectID;
         self.apiToken = apiToken;
@@ -1012,9 +1005,13 @@ static NSString *defaultProjectToken;
             NSMutableArray *queue = [NSMutableArray array];
             if (eventResult != nil) {
                 for (SugoEvents *event in eventResult) {
-                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
-                    if (object) {
-                        [queue addObject:object];
+//                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
+//                    if (object) {
+//                        [queue addObject:object];
+//                    }
+                    NSData *data = event.event;
+                    if (data != nil) {
+                        [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
                     }
                 }
             }
