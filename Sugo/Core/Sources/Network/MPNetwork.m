@@ -170,6 +170,19 @@ static const NSUInteger kBatchSize = 50;
     return @[itemVersion, itemLib, itemToken, itemSecretKey];
 }
     
++ (NSArray<NSURLQueryItem *> *)buildFirsStartTimeQueryForAppId:(NSString *)appId
+                                                    andAppType: (NSString *)appType
+                                                   andDeviceId: (NSString *)deviceId
+                                                 andAppVersion:(NSString *)appVersion {
+    
+    NSURLQueryItem *itemAppId = [NSURLQueryItem queryItemWithName:@"app_id" value:appId];
+    NSURLQueryItem *itemAppType = [NSURLQueryItem queryItemWithName:@"app_type" value:appType];
+    NSURLQueryItem *itemDeviceId = [NSURLQueryItem queryItemWithName:@"device_id" value:deviceId];
+    NSURLQueryItem *itemAppVersion = [NSURLQueryItem queryItemWithName:@"app_version" value:appVersion];
+    
+    return @[itemAppId, itemAppType, itemDeviceId,itemAppVersion];
+}
+
 + (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer
                                                    andProjectID: (NSString *)projectID andToken: (NSString *)token {
     
@@ -180,6 +193,8 @@ static const NSUInteger kBatchSize = 50;
     return @[itemIdentifer, itemProjectID, itemToken];
 }
 
+
+
 + (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {
     static NSDictionary *endPointToPath = nil;
     static dispatch_once_t onceToken;
@@ -188,7 +203,10 @@ static const NSUInteger kBatchSize = 50;
                             @(MPNetworkEndpointDecideDimension): @"/api/sdk/decide-dimesion",
                             @(MPNetworkEndpointDecideEvent): @"/api/sdk/decide-event",
                             @(MPNetworkEndpointHeat): @"/api/sdk/heat",
-                            @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time"};
+                            @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time",
+                            @(MPNetworkEndpointFirstStartTime):@"api/sdk/get-first-start-time"
+                            };
+        
     });
     NSNumber *key = @(endpoint);
     return endPointToPath[key];

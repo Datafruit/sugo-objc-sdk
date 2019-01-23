@@ -81,6 +81,7 @@
 
 @property (nonatomic) BOOL decideDimensionsResponseCached;
 @property (nonatomic) BOOL decideBindingsResponseCached;
+@property (nonatomic,assign)NSInteger startupInterval;//unit:second
 
 @property (nonatomic, strong) NSSet *eventBindings;
 

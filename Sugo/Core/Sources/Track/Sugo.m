@@ -23,6 +23,7 @@ NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
 BOOL SugoCanTrackNativePage = true;
 BOOL SugoCanTrackWebPage = true;
+const static  NSString * ENTERBACKGROUNDTIME=@"enterBackgroundTime";
 
 @implementation Sugo
 
@@ -59,8 +60,7 @@ static NSString *defaultProjectToken;
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
     if (values) {
         [instance trackIntegration];
-        [instance trackEvent:values[@"AppEnter"]];
-        [instance timeEvent:values[@"AppStay"]];
+        [instance judgeWakeUpOrStartAppWithSugoStatus:YES];
         [[WebViewBindings globalBindings] fillBindings];
         [instance checkForDecideDimensionsResponseWithCompletion:nil];
         [instance checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
@@ -75,6 +75,26 @@ static NSString *defaultProjectToken;
     }
     
     return instance;
+}
+
+//when sugo instance ,judge this start time is more than the local leave app time
+//isSugoInstance:when this param is yes ,is app instance
+- (void)judgeWakeUpOrStartAppWithSugoStatus:(bool)isSugoInstance{
+    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+    NSTimeInterval currentTime = [self requireCurrentTime];
+    NSTimeInterval beforeTime = [self requireBackgroundTime];
+    if (currentTime-beforeTime>self.startupInterval) {
+        if (values) {
+            [self trackEvent:values[@"AppEnter"]];
+            [self timeEvent:values[@"AppStay"]];
+        }
+    }else{
+        if (values) {
+            [self trackEvent:values[@"BackgroundStay"]];
+            [self trackEvent:values[@"BackgroundExit"]];
+        }
+    }
+    [self setupBackgroundTime];
 }
 
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken
@@ -163,7 +183,7 @@ static NSString *defaultProjectToken;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
-        
+        self.startupInterval = 30;
         [self setupConfiguration];
         
         self.miniNotificationPresentationTime = 6.0;
@@ -680,6 +700,48 @@ static NSString *defaultProjectToken;
         
     }];
 }
+
+
+- (void)requestForFirstStartTime {
+    dispatch_async(self.serialQueue, ^{
+        
+        __block BOOL hadError = NO;
+        NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
+        NSString *appVersion =  [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+        NSArray *queryItems = [MPNetwork buildFirsStartTimeQueryForAppId:self.apiToken andAppType:@"2" andDeviceId:self.deviceId andAppVersion:appVersion];
+        // Build a network request from the URL
+        NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
+                                                        andEndpoint:MPNetworkEndpointFirstStartTime
+                                                     withQueryItems:queryItems];
+        // Send the network request
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            if (error) {
+                MPLogError(@"%@ first login request http error: %@", self, error);
+                hadError = YES;
+                dispatch_semaphore_signal(semaphore);
+                return;
+            }
+            MPLogDebug(@"first login responseData\n%@",[[NSString alloc] initWithData:responseData
+                                                                             encoding:NSUTF8StringEncoding]);
+            NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseData
+                                                                             options:(NSJSONReadingOptions)0
+                                                                               error:nil];
+            NSNumber * boolNum = result[@"isFirstStart"];
+            BOOL isFirstInstallation = [boolNum boolValue];
+            if (isFirstInstallation) {
+                [self trackEvent:keys[@"Integration"]];
+            }
+            dispatch_semaphore_signal(semaphore);
+        }] resume];
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    });
+}
     
 - (void)requestForFirstLoginWithIdentifer:(NSString *)identifer completion:(void (^)(NSData *firstLoginData))completion {
     
@@ -1092,16 +1154,17 @@ static NSString *defaultProjectToken;
     NSString *defaultKey = @"trackedKey";
     if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
         [NSUserDefaults.standardUserDefaults setBool:YES forKey:defaultKey];
-        
         NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         NSDate *date = [NSDate date];
         NSTimeInterval firstVisitTime = [date timeIntervalSince1970] * 1000;
         [NSUserDefaults.standardUserDefaults setDouble:firstVisitTime forKey:keys[@"FirstVisitTime"]];
         [NSUserDefaults.standardUserDefaults synchronize];
+        
         if (values) {
             [self trackEvent:values[@"Integration"]];
             [self trackEvent:values[@"FirstVisit"]];
+            [self requestForFirstStartTime];
         }
     }
 }
@@ -1546,13 +1609,16 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     MPLogInfo(@"%@ application will resign active", self);
     [self stopFlushTimer];
+    [self setupBackgroundTime];
 }
+
+
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
-    // Page Stay
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+    // Page Stay
     if (values) {
         [self trackEvent:values[@"BackgroundEnter"]];
         [self timeEvent:values[@"BackgroundStay"]];
@@ -1615,15 +1681,35 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     });
 }
 
+
+//save current time ,use it to judge AppEnter events when back up
+-(void) setupBackgroundTime{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString* timeString = [NSString stringWithFormat:@"%0.f", [self requireCurrentTime]];//转为字符型
+    [userDefaults setValue:timeString forKey:ENTERBACKGROUNDTIME];
+    [userDefaults synchronize];
+}
+
+-(NSTimeInterval) requireBackgroundTime{
+    NSString *timeStr = (NSString *)[NSUserDefaults.standardUserDefaults objectForKey:ENTERBACKGROUNDTIME];
+    NSTimeInterval time = (NSTimeInterval)[timeStr longLongValue];
+    return time;
+}
+
+
+-(NSTimeInterval) requireCurrentTime{
+    NSDate* time = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSTimeInterval timeNum=[time timeIntervalSince1970];
+    return  timeNum;
+}
+
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
     MPLogInfo(@"%@ will enter foreground", self);
-    
     NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
-        [self trackEvent:values[@"BackgroundStay"]];
-        [self trackEvent:values[@"BackgroundExit"]];
-    }
+    
+    [self judgeWakeUpOrStartAppWithSugoStatus:NO];
+    
     UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
     WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
     if (uiwv || wkwv) {
@@ -1678,6 +1764,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 //        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
         [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
         [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
+        
     }
     
     dispatch_async(_serialQueue, ^{
