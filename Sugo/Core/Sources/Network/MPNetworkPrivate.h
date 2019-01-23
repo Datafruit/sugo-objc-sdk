@@ -42,7 +42,8 @@
 + (NSArray<NSURLQueryItem *> *)buildFirsStartTimeQueryForAppId:(NSString *)appId
                                                     andAppType: (NSString *)appType
                                                    andDeviceId: (NSString *)deviceId
-                                                 andAppVersion:(NSString *)appVersion;
+                                                 andAppVersion:(NSString *)appVersion
+                                                  andProjectId:(NSString *)projectId;
 
 - (NSURLRequest *)buildRequestForURL:(NSURL *)url
                          andEndpoint:(NSString *)endpoint
