@@ -168,6 +168,7 @@ static NSString *defaultProjectToken;
         _classAttributeDict = [[NSMutableDictionary alloc]init];
         latitude = @0;
         longitude = @0;
+        _startExtraAttrFuncion = YES;
         //0：When you first open the app, you immediately upload your location；
         //Sets the current timestamp：Upload data at locateInterval
         recentlySendLoacationTime=0;
@@ -872,6 +873,17 @@ static NSString *defaultProjectToken;
         _cacheInterval = interval;
     }
 }
+
+-(void)setstartExtraAttrFuncion:(BOOL)status{
+    @synchronized (self) {
+        _startExtraAttrFuncion = status;
+    }
+}
+
+-(BOOL)getStartExtraAttrFuncion{
+    return _startExtraAttrFuncion;
+}
+
 
 - (void)startCacheTimer
 {
@@ -2304,7 +2316,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     // Finished bindings are those which should no longer be run.
     NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
-    [finishedEventBindings minusSet:parsedEventBindings];
+//    [finishedEventBindings minusSet:parsedEventBindings];
     [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
     
     // New bindings are those we are running for the first time.
@@ -2316,7 +2328,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     [allEventBindings minusSet:finishedEventBindings];
     [allEventBindings unionSet:newEventBindings];
     
-    self.eventBindings = [allEventBindings copy];
+//    self.eventBindings = [allEventBindings copy];
+    self.eventBindings = [parsedEventBindings copy];
 }
 
 #pragma mark - Sugo Codeless and Heat Map

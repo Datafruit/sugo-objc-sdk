@@ -382,6 +382,10 @@ extern BOOL SugoCanTrackWebPage;
  */
 - (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
 
+
+-(void)setstartExtraAttrFuncion:(BOOL)status;
+-(BOOL)getStartExtraAttrFuncion;
+
 /*!
  @method
  
