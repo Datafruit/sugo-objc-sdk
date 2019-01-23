@@ -173,14 +173,15 @@ static const NSUInteger kBatchSize = 50;
 + (NSArray<NSURLQueryItem *> *)buildFirsStartTimeQueryForAppId:(NSString *)appId
                                                     andAppType: (NSString *)appType
                                                    andDeviceId: (NSString *)deviceId
-                                                 andAppVersion:(NSString *)appVersion {
+                                                 andAppVersion:(NSString *)appVersion
+                                                  andProjectId:(NSString *)projectId{
     
     NSURLQueryItem *itemAppId = [NSURLQueryItem queryItemWithName:@"app_id" value:appId];
     NSURLQueryItem *itemAppType = [NSURLQueryItem queryItemWithName:@"app_type" value:appType];
     NSURLQueryItem *itemDeviceId = [NSURLQueryItem queryItemWithName:@"device_id" value:deviceId];
     NSURLQueryItem *itemAppVersion = [NSURLQueryItem queryItemWithName:@"app_version" value:appVersion];
-    
-    return @[itemAppId, itemAppType, itemDeviceId,itemAppVersion];
+    NSURLQueryItem *itemProjectId = [NSURLQueryItem queryItemWithName:@"project_id" value:projectId];
+    return @[itemAppId, itemAppType, itemDeviceId,itemAppVersion,itemProjectId];
 }
 
 + (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer

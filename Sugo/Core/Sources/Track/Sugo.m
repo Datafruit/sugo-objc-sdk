@@ -708,7 +708,7 @@ static NSString *defaultProjectToken;
         __block BOOL hadError = NO;
         NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
         NSString *appVersion =  [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-        NSArray *queryItems = [MPNetwork buildFirsStartTimeQueryForAppId:self.apiToken andAppType:@"2" andDeviceId:self.deviceId andAppVersion:appVersion];
+        NSArray *queryItems = [MPNetwork buildFirsStartTimeQueryForAppId:self.apiToken andAppType:@"2" andDeviceId:self.deviceId andAppVersion:appVersion andProjectId:self.projectID];
         // Build a network request from the URL
         NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
                                                         andEndpoint:MPNetworkEndpointFirstStartTime
@@ -1151,6 +1151,7 @@ static NSString *defaultProjectToken;
 
 - (void)trackIntegration
 {
+    [self requestForFirstStartTime];
     NSString *defaultKey = @"trackedKey";
     if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
         [NSUserDefaults.standardUserDefaults setBool:YES forKey:defaultKey];
