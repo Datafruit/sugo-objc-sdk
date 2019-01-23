@@ -85,10 +85,6 @@ static NSString *defaultProjectToken;
     NSTimeInterval beforeTime = [self requireBackgroundTime];
     if (currentTime-beforeTime>self.startupInterval) {
         if (values) {
-            if (!isSugoInstance) {
-                [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
-                [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
-            }
             [self trackEvent:values[@"AppEnter"]];
             [self timeEvent:values[@"AppStay"]];
         }
@@ -734,9 +730,9 @@ static NSString *defaultProjectToken;
             NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseData
                                                                              options:(NSJSONReadingOptions)0
-                                                                               error:nil][@"result"];
-            
-            bool isFirstInstallation = result[@"isFirstStart"];
+                                                                               error:nil];
+            NSNumber * boolNum = result[@"isFirstStart"];
+            BOOL isFirstInstallation = [boolNum boolValue];
             if (isFirstInstallation) {
                 [self trackEvent:keys[@"Integration"]];
             }
