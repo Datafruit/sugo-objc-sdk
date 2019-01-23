@@ -1005,9 +1005,13 @@ static NSString *defaultProjectToken;
             NSMutableArray *queue = [NSMutableArray array];
             if (eventResult != nil) {
                 for (SugoEvents *event in eventResult) {
-                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
-                    if (object) {
-                        [queue addObject:object];
+//                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
+//                    if (object) {
+//                        [queue addObject:object];
+//                    }
+                    NSData *data = event.event;
+                    if (data != nil) {
+                        [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
                     }
                 }
             }
