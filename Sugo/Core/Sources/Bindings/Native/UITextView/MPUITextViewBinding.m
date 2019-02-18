@@ -136,7 +136,7 @@
                 }
                 
                 NSDictionary *classAttr = [self classAttr];
-                p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:textView];
+                p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:textView indexPath:nil];
     
                 [[self class] track:[self eventID]
                           eventName:[self eventName]

@@ -98,30 +98,7 @@
         }
     }
     
-    NSMutableDictionary *dict =  [[Sugo sharedInstance] requireClassAttributeDict];
-    NSString *className =[self classHierarchyArrayForObject:object][0];
-    NSString *value = dict[className];
-    if (value == nil) {
-        unsigned int count = 0;
-        value = @"";
-        Ivar *ivars = class_copyIvarList([object class], &count);
-        for (int i = 0; i<count; i++) {
-            Ivar ivar = ivars[i];
-            NSString *valueType = [NSString stringWithFormat:@"%s",ivar_getTypeEncoding(ivar)];
-            char *c = ivar_getTypeEncoding(ivar);
-            if ([className isEqualToString:@"CustumButton"]) {
-                NSLog(@"dddddd");
-            }
-            if ([self isBaseType:valueType]){
-                value = [value stringByAppendingString:[NSString stringWithFormat:@"%s",ivar_getName(ivar)]];
-                value = [value stringByAppendingString:@","];
-            }
-//            NSLog(@"UITextView--->%s------%s", ivar_getName(ivar),ivar_getTypeEncoding(ivar));
-        }
-        free(ivars);
-        dict[className] = value;
-        [[Sugo sharedInstance] buildClassAttributeDict:dict];
-    }
+    [self checkClassAttr:object];
     
     NSMutableDictionary *serializedObject = [[NSMutableDictionary alloc]
                                              initWithDictionary:@{
@@ -144,6 +121,55 @@
 
     [context addSerializedObject:serializedObject];
 }
+
+
+-(void)checkClassAttr:(NSObject *)object{
+    
+    NSMutableDictionary *dict =  [[Sugo sharedInstance] requireClassAttributeDict];
+    NSString *className =[self classHierarchyArrayForObject:object][0];
+    if ([className isEqualToString:@"CustumButton"]) {
+        NSLog(@"dddc");
+    }
+    NSString *value = dict[className];
+    if (value != nil) {
+        return;
+    }
+    unsigned int count = 0;
+    Class c = [object class];
+    NSMutableArray *valueArray = [[NSMutableArray alloc]init];
+    while (c) {
+        NSMutableDictionary *widgetAttr = [[Sugo sharedInstance]requireWidgetAttributeDict];
+        NSString *widgetName =NSStringFromClass(c);
+        NSMutableArray *widgetAttrValue = widgetAttr[widgetName];
+        if (widgetAttrValue!=nil) {
+            [valueArray addObjectsFromArray:widgetAttrValue];
+            c = class_getSuperclass(c);
+            continue;
+        }
+        NSMutableArray *currentValue = [[NSMutableArray alloc]init];
+        Ivar *ivars = class_copyIvarList(c, &count);
+        for (int i = 0; i<count; i++) {
+            Ivar ivar = ivars[i];
+            NSString *valueType = [NSString stringWithFormat:@"%s",ivar_getTypeEncoding(ivar)];
+            if ([self isBaseType:valueType]){
+                [currentValue addObject:[NSString stringWithFormat:@"%s",ivar_getName(ivar)]];
+            }
+        }
+        widgetAttrValue = [[NSMutableArray alloc]init];
+        [widgetAttrValue addObjectsFromArray:currentValue];
+        [valueArray addObjectsFromArray:currentValue];
+        widgetAttr[widgetName]=widgetAttrValue;
+        [[Sugo sharedInstance]buildWidgetAttributeDict:widgetAttr];
+        free(ivars);
+        c = class_getSuperclass(c);
+    }
+    [valueArray addObject:@"text"];
+    value = [valueArray componentsJoinedByString:@","];
+    dict[className] = value;
+    [[Sugo sharedInstance] buildClassAttributeDict:dict];
+}
+
+
 
 -(BOOL)isBaseType:(NSString *)typeName{
     NSArray *array = [[NSArray alloc]initWithObjects:@"int",@"double",@"float",@"char",@"long",@"short",@"signed",@"unsigned",@"short int",@"long int",@"unsigned int",@"unsigned short",@"unsigned long",@"long double",@"number",@"Boolean",@"BOOL",@"bool",@"NSString",@"NSDate",@"NSNumber",@"NSInteger",@"NSUInteger",@"enum",@"struct",@"B",@"Q",@"d",@"q",@"c",@"i",@"s",@"l",@"C",@"I",@"S",@"L",@"f",@"d",@"b",nil];

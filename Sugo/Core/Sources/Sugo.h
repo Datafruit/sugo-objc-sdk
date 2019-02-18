@@ -705,6 +705,10 @@ extern BOOL SugoCanTrackWebPage;
 
 -(void)buildClassAttributeDict:(NSMutableDictionary *)dict;
 -(NSMutableDictionary *)requireClassAttributeDict;
+-(NSMutableDictionary *)requireWidgetAttributeDict;
+-(void)buildWidgetAttributeDict:(NSMutableDictionary *)dict;
+
+
 
 /*!
  @method

@@ -67,6 +67,7 @@ const static double locateDefaultInterval=30*60;//默认全局配置上传地理
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
 @property (nonatomic,strong)NSMutableDictionary *classAttributeDict;
+@property (nonatomic,strong)NSMutableDictionary *widgetAttributeDict;
 @property (nonatomic,assign)bool startExtraAttrFuncion;//default no
 
 // re-declare internally as readwrite

@@ -151,7 +151,7 @@
                 }
                 
                 NSDictionary *classAttr = [self classAttr];
-                p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:tableView];
+                p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:tableView indexPath:indexPath];
                 
                 
                 [[self class] track:[self eventID]
