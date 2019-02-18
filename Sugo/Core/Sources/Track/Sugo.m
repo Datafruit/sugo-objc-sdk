@@ -159,6 +159,7 @@ static NSString *defaultProjectToken;
         _cacheInterval = cacheInterval;
         _locateInterval = locateDefaultInterval;
         _classAttributeDict = [[NSMutableDictionary alloc]init];
+        _widgetAttributeDict = [[NSMutableDictionary alloc] init];
         latitude = @0;
         longitude = @0;
         _startExtraAttrFuncion = YES;
@@ -242,6 +243,14 @@ static NSString *defaultProjectToken;
 
 -(void)buildClassAttributeDict:(NSMutableDictionary *)dict{
     _classAttributeDict = dict;
+}
+
+-(NSMutableDictionary *)requireWidgetAttributeDict{
+    return _widgetAttributeDict;
+}
+
+-(void)buildWidgetAttributeDict:(NSMutableDictionary *)dict{
+    _widgetAttributeDict = dict;
 }
 
 - (BOOL)shouldManageNetworkActivityIndicator {

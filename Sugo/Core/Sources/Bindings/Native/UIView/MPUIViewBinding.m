@@ -274,7 +274,7 @@
 //            }
         }
         NSDictionary *classAttr = [self classAttr];
-        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:view];
+        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:view indexPath:nil];
         
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }
@@ -384,7 +384,7 @@
         }
         
         NSDictionary *classAttr = [self classAttr];
-        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:(UIView *)sender];
+        p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:(UIView *)sender indexPath:nil];
         
         [[self class] track:[self eventID] eventName:[self eventName] properties:p];
     }
