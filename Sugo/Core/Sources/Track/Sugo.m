@@ -734,7 +734,7 @@ static NSString *defaultProjectToken;
             NSNumber * boolNum = result[@"isFirstStart"];
             BOOL isFirstInstallation = [boolNum boolValue];
             if (isFirstInstallation) {
-                [self trackEvent:keys[@"Integration"]];
+                [self trackEvent:keys[@"FirstInstallation"]];
             }
             dispatch_semaphore_signal(semaphore);
         }] resume];
@@ -1151,7 +1151,6 @@ static NSString *defaultProjectToken;
 
 - (void)trackIntegration
 {
-    [self requestForFirstStartTime];
     NSString *defaultKey = @"trackedKey";
     if (![NSUserDefaults.standardUserDefaults boolForKey:defaultKey]) {
         [NSUserDefaults.standardUserDefaults setBool:YES forKey:defaultKey];
