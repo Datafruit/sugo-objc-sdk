@@ -151,13 +151,6 @@ static NSString *defaultProjectToken;
 
         // Install uncaught exception handlers first
         [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
-#if DEBUG
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        id overlayClass = NSClassFromString(@"UIDebuggingInformationOverlay");
-        [overlayClass performSelector:NSSelectorFromString(@"prepareDebuggingOverlay")];
-#pragma clang diagnostic pop
-#endif
         self.enable = enable;
         self.projectID = projectID;
         self.apiToken = apiToken;
@@ -167,8 +160,11 @@ static NSString *defaultProjectToken;
         _flushMaxEvents = 200;
         _cacheInterval = cacheInterval;
         _locateInterval = locateDefaultInterval;
+        _classAttributeDict = [[NSMutableDictionary alloc]init];
+        _widgetAttributeDict = [[NSMutableDictionary alloc] init];
         latitude = @0;
         longitude = @0;
+        _startExtraAttrFuncion = YES;
         //0：When you first open the app, you immediately upload your location；
         //Sets the current timestamp：Upload data at locateInterval
         recentlySendLoacationTime=0;
@@ -241,6 +237,22 @@ static NSString *defaultProjectToken;
     } else {
         [Sugo setSharedAutomatedInstance:nil];
     }
+}
+
+-(NSMutableDictionary *)requireClassAttributeDict{
+    return _classAttributeDict;
+}
+
+-(void)buildClassAttributeDict:(NSMutableDictionary *)dict{
+    _classAttributeDict = dict;
+}
+
+-(NSMutableDictionary *)requireWidgetAttributeDict{
+    return _widgetAttributeDict;
+}
+
+-(void)buildWidgetAttributeDict:(NSMutableDictionary *)dict{
+    _widgetAttributeDict = dict;
 }
 
 - (BOOL)shouldManageNetworkActivityIndicator {
@@ -866,6 +878,17 @@ static NSString *defaultProjectToken;
     }
 }
 
+-(void)setstartExtraAttrFuncion:(BOOL)status{
+    @synchronized (self) {
+        _startExtraAttrFuncion = status;
+    }
+}
+
+-(BOOL)getStartExtraAttrFuncion{
+    return _startExtraAttrFuncion;
+}
+
+
 - (void)startCacheTimer
 {
     [self stopCacheTimer];
@@ -993,9 +1016,13 @@ static NSString *defaultProjectToken;
             NSMutableArray *queue = [NSMutableArray array];
             if (eventResult != nil) {
                 for (SugoEvents *event in eventResult) {
-                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
-                    if (object) {
-                        [queue addObject:object];
+//                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
+//                    if (object) {
+//                        [queue addObject:object];
+//                    }
+                    NSData *data = event.event;
+                    if (data != nil) {
+                        [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
                     }
                 }
             }
@@ -2375,7 +2402,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     // Finished bindings are those which should no longer be run.
     NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
-    [finishedEventBindings minusSet:parsedEventBindings];
+//    [finishedEventBindings minusSet:parsedEventBindings];
     [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
     
     // New bindings are those we are running for the first time.
@@ -2387,7 +2414,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     [allEventBindings minusSet:finishedEventBindings];
     [allEventBindings unionSet:newEventBindings];
     
-    self.eventBindings = [allEventBindings copy];
+//    self.eventBindings = [allEventBindings copy];
+    self.eventBindings = [parsedEventBindings copy];
 }
 
 #pragma mark - Sugo Codeless and Heat Map

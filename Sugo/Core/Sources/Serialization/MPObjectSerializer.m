@@ -15,6 +15,8 @@
 #import "NSInvocation+MPHelpers.h"
 #import "WebViewBindings+WebView.h"
 #import "WebViewInfoStorage.h"
+#import "Sugo.h"
+#import <objc/runtime.h>
 
 
 @interface MPObjectSerializer (WebViewSerializer)
@@ -55,7 +57,8 @@
 
     return @{
             @"objects": [context allSerializedObjects],
-            @"rootObject": [_objectIdentityProvider identifierForObject:rootObject]
+            @"rootObject": [_objectIdentityProvider identifierForObject:rootObject],
+            @"classAttr":[[Sugo sharedInstance] requireClassAttributeDict]
     };
 }
 
@@ -94,7 +97,9 @@
             }
         }
     }
-
+    
+    [self checkClassAttr:object];
+    
     NSMutableDictionary *serializedObject = [[NSMutableDictionary alloc]
                                              initWithDictionary:@{
                                                                   @"id": [_objectIdentityProvider identifierForObject:object],
@@ -115,6 +120,71 @@
     }
 
     [context addSerializedObject:serializedObject];
+}
+
+
+-(void)checkClassAttr:(NSObject *)object{
+    
+    NSMutableDictionary *dict =  [[Sugo sharedInstance] requireClassAttributeDict];
+    NSString *className =[self classHierarchyArrayForObject:object][0];
+    if ([className isEqualToString:@"CustumButton"]) {
+        NSLog(@"dddc");
+    }
+    NSString *value = dict[className];
+    if (value != nil) {
+        return;
+    }
+    unsigned int count = 0;
+    Class c = [object class];
+    NSMutableArray *valueArray = [[NSMutableArray alloc]init];
+    while (c) {
+        NSMutableDictionary *widgetAttr = [[Sugo sharedInstance]requireWidgetAttributeDict];
+        NSString *widgetName =NSStringFromClass(c);
+        NSMutableArray *widgetAttrValue = widgetAttr[widgetName];
+        if (widgetAttrValue!=nil) {
+            [valueArray addObjectsFromArray:widgetAttrValue];
+            c = class_getSuperclass(c);
+            continue;
+        }
+        NSMutableArray *currentValue = [[NSMutableArray alloc]init];
+        Ivar *ivars = class_copyIvarList(c, &count);
+        for (int i = 0; i<count; i++) {
+            Ivar ivar = ivars[i];
+            NSString *valueType = [NSString stringWithFormat:@"%s",ivar_getTypeEncoding(ivar)];
+            if ([self isBaseType:valueType]){
+                [currentValue addObject:[NSString stringWithFormat:@"%s",ivar_getName(ivar)]];
+            }
+        }
+        widgetAttrValue = [[NSMutableArray alloc]init];
+        [widgetAttrValue addObjectsFromArray:currentValue];
+        [valueArray addObjectsFromArray:currentValue];
+        widgetAttr[widgetName]=widgetAttrValue;
+        [[Sugo sharedInstance]buildWidgetAttributeDict:widgetAttr];
+        free(ivars);
+        c = class_getSuperclass(c);
+    }
+    [valueArray addObject:@"text"];
+    value = [valueArray componentsJoinedByString:@","];
+    dict[className] = value;
+    [[Sugo sharedInstance] buildClassAttributeDict:dict];
+}
+
+
+
+-(BOOL)isBaseType:(NSString *)typeName{
+    NSArray *array = [[NSArray alloc]initWithObjects:@"int",@"double",@"float",@"char",@"long",@"short",@"signed",@"unsigned",@"short int",@"long int",@"unsigned int",@"unsigned short",@"unsigned long",@"long double",@"number",@"Boolean",@"BOOL",@"bool",@"NSString",@"NSDate",@"NSNumber",@"NSInteger",@"NSUInteger",@"enum",@"struct",@"B",@"Q",@"d",@"q",@"c",@"i",@"s",@"l",@"C",@"I",@"S",@"L",@"f",@"d",@"b",nil];
+    BOOL isBaseType = false;
+    typeName = [typeName stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+    typeName = [typeName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    typeName = [typeName stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    for (NSString *item in array){
+        if ([typeName isEqualToString:item]) {
+            isBaseType = true;
+            break;
+        }
+    }
+    return isBaseType;
+    
 }
 
 - (NSArray *)classHierarchyArrayForObject:(NSObject *)object

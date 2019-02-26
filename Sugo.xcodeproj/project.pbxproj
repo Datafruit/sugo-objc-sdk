@@ -19,6 +19,8 @@
 		14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */; };
 		14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4D1E13D675002F0C4B /* WebKit.framework */; };
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
+		9B24948921EC311900739385 /* BindingUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B24948721EC311900739385 /* BindingUtils.h */; };
+		9B24948A21EC311900739385 /* BindingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B24948821EC311900739385 /* BindingUtils.m */; };
 		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
 		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
 		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -204,6 +206,8 @@
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		9B3FC18B21D767340074D519 /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
 		9B3FC18C21D767C80074D519 /* projectMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = projectMacro.h; sourceTree = "<group>"; };
+		9B24948721EC311900739385 /* BindingUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BindingUtils.h; sourceTree = "<group>"; };
+		9B24948821EC311900739385 /* BindingUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BindingUtils.m; sourceTree = "<group>"; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -599,6 +603,8 @@
 				A700FA0820C7C7D4008C0069 /* Attributes */,
 				A700F9FC20C7C4AF008C0069 /* Native */,
 				A700F9FD20C7C4C8008C0069 /* Web */,
+				9B24948721EC311900739385 /* BindingUtils.h */,
+				9B24948821EC311900739385 /* BindingUtils.m */,
 			);
 			path = Bindings;
 			sourceTree = "<group>";
@@ -926,6 +932,7 @@
 				A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */,
 				A700F96120C7BD24008C0069 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */,
 				A700F9B620C7BD24008C0069 /* MPUITableViewBinding.h in Headers */,
+				9B24948921EC311900739385 /* BindingUtils.h in Headers */,
 				A700F99020C7BD24008C0069 /* Attributes.h in Headers */,
 				A700F9C920C7BD24008C0069 /* MPUITextViewBinding.h in Headers */,
 				A700F96D20C7BD24008C0069 /* MPABTestDesignerClearRequestMessage.h in Headers */,
@@ -1061,6 +1068,7 @@
 				A700F95B20C7BD24008C0069 /* UIColor+MPColor.m in Sources */,
 				A700F9D220C7BD24008C0069 /* MPNetwork.m in Sources */,
 				A700F9D920C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
+				9B24948A21EC311900739385 /* BindingUtils.m in Sources */,
 				A700F97920C7BD24008C0069 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
 				A700F9EA20C7BD24008C0069 /* Attributes.m in Sources */,
 				A700F9E220C7BD24008C0069 /* MPResources.m in Sources */,

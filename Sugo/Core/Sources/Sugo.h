@@ -382,6 +382,10 @@ extern BOOL SugoCanTrackWebPage;
  */
 - (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval;
 
+
+-(void)setstartExtraAttrFuncion:(BOOL)status;
+-(BOOL)getStartExtraAttrFuncion;
+
 /*!
  @method
  
@@ -697,6 +701,14 @@ extern BOOL SugoCanTrackWebPage;
 - (void)updateSessionId;
 
 - (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos;
+
+
+-(void)buildClassAttributeDict:(NSMutableDictionary *)dict;
+-(NSMutableDictionary *)requireClassAttributeDict;
+-(NSMutableDictionary *)requireWidgetAttributeDict;
+-(void)buildWidgetAttributeDict:(NSMutableDictionary *)dict;
+
+
 
 /*!
  @method
