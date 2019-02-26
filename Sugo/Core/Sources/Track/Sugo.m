@@ -16,6 +16,8 @@
 
 #import "MPLogger.h"
 #import "MPFoundation.h"
+#import "macro.h"
+#import "projectMacro.h"
 
 
 NSString *SugoBindingsURL;
@@ -1289,6 +1291,9 @@ static NSString *defaultProjectToken;
         NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
         if (keys && values) {
             p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+            //save current controller，and use it in buildApplicationMoveEvent method
+            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+            [user setObject:p[keys[@"PagePath"]] forKey:CURRENTCONTROLLER];
             if ([SugoPageInfos global].infos.count > 0) {
                 for (NSDictionary *info in [SugoPageInfos global].infos) {
                     if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
@@ -1542,6 +1547,8 @@ static NSString *defaultProjectToken;
 
 - (void)setUpListeners
 {
+    [self buildApplicationMoveEvent];
+    
     if (SugoCanTrackNativePage) {
         [self trackStayTime];
     }
@@ -1598,6 +1605,79 @@ static NSString *defaultProjectToken;
 
 //    [self initializeGestureRecognizer];
 }
+
+-(void)buildApplicationMoveEvent{
+    void (^sendEventBlock)(id, SEL,id) = ^(id application, SEL command,UIEvent *event) {
+        UIApplication *app = (UIApplication *)application;
+        if (!app) {
+            return;
+        }
+        NSSet *touches = [event allTouches];
+        for (UITouch *touch in touches) {
+            switch ([touch phase]) {
+                case UITouchPhaseBegan:
+                {
+                    CGPoint point = [touch locationInView:[UIApplication sharedApplication].keyWindow];
+                    int x = point.x;
+                    int y = point.y;
+                    NSInteger serialNum = [self calculateTouchArea:x withY:y];
+                    NSMutableDictionary *p = [[NSMutableDictionary alloc]init];
+                    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
+                    NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+                    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+                    NSString *pathName = [ user objectForKey:CURRENTCONTROLLER];
+                    p[keys[@"PagePath"]] = pathName;
+                    p[keys[@"OnclickPoint"]] = [NSString stringWithFormat:@"%ld",serialNum];
+                    
+                    //                    if (webviewUrl !=nil && ![webviewUrl isEqualToString:@""]) {
+                    //                        p[@"path_name"] = webviewUrl;
+                    //                    }
+                    [self trackEvent:values[@"ScreenTouch"] properties:p];
+                    break;
+                }
+                case UITouchPhaseMoved:
+                case UITouchPhaseEnded:
+                case UITouchPhaseCancelled:
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+    };
+    [MPSwizzler swizzleSelector:@selector(sendEvent:)
+                        onClass:[UIApplication class]
+                      withBlock:sendEventBlock
+                          named:[[NSUUID UUID] UUIDString]];
+}
+
+-(NSInteger)calculateTouchArea:(float)x withY:(float) y{
+    int columnNum = 18;
+    int lineNum = 32;
+    float areaWidth;
+    float areaHeight;
+    if (SUGOFULLSCREENH>SUGOFULLSCREENW) {//Vertical screen situation
+        areaWidth = SUGOFULLSCREENW/columnNum;
+        areaHeight = SUGOFULLSCREENH/lineNum;
+    }else{//Landscape situation
+        float ratio = (SUGOFULLSCREENH/columnNum)/(SUGOFULLSCREENW/lineNum);
+        areaWidth = SUGOFULLSCREENW/columnNum;
+        areaHeight = areaWidth*ratio;
+        float statusHeight = 20;
+        if (SUGOisiPhoneX) {
+            statusHeight = 44;
+        }
+        float statusBarRatioHeight = areaHeight/((SUGOFULLSCREENW/lineNum)/statusHeight);
+        y = y + statusBarRatioHeight;
+    }
+    float columnSerialValue =x/areaWidth;
+    float lineNumSerialValue = y/areaHeight;
+    int columnSerialNum = (columnSerialValue-(int)columnSerialValue)>0?(int)columnSerialValue+1:columnSerialValue;
+    int lineNumSerialNum = (lineNumSerialValue-(int)lineNumSerialValue)>0?(int)lineNumSerialValue:lineNumSerialValue-1;
+    int serialNum = columnSerialNum + lineNumSerialNum*columnNum ;
+    return serialNum;
+}
+
 
 - (void) initializeGestureRecognizer {
     dispatch_async(dispatch_get_main_queue(), ^{

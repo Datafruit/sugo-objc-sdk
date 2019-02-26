@@ -12,6 +12,7 @@
 #import "MPSwizzler.h"
 #import "SugoPrivate.h"
 #import "MPLogger.h"
+#import "projectMacro.h"
 
 
 @implementation WebViewBindings (WKWebView)
@@ -23,6 +24,7 @@
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
+    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"registerPathName"];
     MPLogDebug(@"WKWebView Injected");
 }
 
@@ -31,6 +33,7 @@
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTrack"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTime"];
     [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
+    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"registerPathName"];
     self.wkWebView = nil;
 }
 
@@ -100,6 +103,10 @@
                               viewportContent:(NSString *)body[@"viewportContent"]
                                         nodes:(NSString *)body[@"nodes"]];
             }
+        }else if([message.name isEqual:@"registerPathName"]){
+            NSDictionary *body = (NSDictionary *)message.body;
+            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+            [user setObject:body[@"path_name"] forKey:CURRENTCONTROLLER];
         }
     } else {
         MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);

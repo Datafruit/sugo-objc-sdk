@@ -12,6 +12,7 @@
 #import "MPSwizzler.h"
 #import "SugoPrivate.h"
 #import "MPLogger.h"
+#import "projectMacro.h"
 
 
 @implementation WebViewBindings (UIWebView)
@@ -29,26 +30,27 @@
         NSURL *url = request.URL;
         MPLogDebug(@"%@: request = %@", NSStringFromSelector(_cmd), url.absoluteString);
         if ([url.scheme isEqualToString:@"sugo.npi"]) {
-            NSString *npi = url.host;
-            NSString *uuid = [url.query componentsSeparatedByString:@"="].lastObject;
-            NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"sugo.dataOf('%@');", uuid]];
+            NSString *eventString = [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"sugo.dataOf();"]];
             NSData *eventData = [eventString dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData
-                                                                  options:NSJSONReadingMutableContainers
-                                                                    error:nil];
-            WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-            if ([npi isEqualToString:@"track"]) {
-                storage.eventID = (NSString *)event[@"eventID"];
-                storage.eventName = (NSString *)event[@"eventName"];
-                storage.properties = (NSString *)event[@"properties"];
-                [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
-                MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
-            } else if ([npi isEqualToString:@"time"]) {
-                NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
-                if (eventName) {
-                    [[Sugo sharedInstance] timeEvent:eventName];
+            NSDictionary *events = [NSJSONSerialization JSONObjectWithData:eventData
+                                                                   options:NSJSONReadingMutableContainers
+                                                                     error:nil];
+            
+            
+            for (NSString *object in events) {
+                NSString *eventString1 = events[object];
+                NSData *eventData1 = [eventString1 dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *event = [NSJSONSerialization JSONObjectWithData:eventData1
+                                                                      options:NSJSONReadingMutableContainers
+                                                                        error:nil];
+                NSString *npiStr = event[@"eventType"];
+                if([npiStr isEqualToString:@"registerPathName"]){
+                    [self registerPathName:npiStr events:event];
+                }else{
+                    [self isTrackEvent:npiStr events:event];
                 }
             }
+            
             shouldStartLoad = NO;
         }
         if (shouldStartLoad && webView.window != nil) {
@@ -93,6 +95,28 @@
                               withBlock:uiWebViewDidFinishLoadBlock
                                   named:self.uiWebViewDidFinishLoadBlockName];
             self.uiWebViewSwizzleRunning = YES;
+        }
+    }
+}
+
+
+-(void)registerPathName:(NSString *)npi events:(NSDictionary *)event{
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    [user setObject:event[@"path_name"] forKey:CURRENTCONTROLLER];
+}
+
+-(void)isTrackEvent:(NSString *)npi events:(NSDictionary *)event{
+    WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+    if ([npi isEqualToString:@"track"]) {
+        storage.eventID = (NSString *)event[@"eventID"];
+        storage.eventName = (NSString *)event[@"eventName"];
+        storage.properties = (NSString *)event[@"properties"];
+        [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
+        MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
+    } else if ([npi isEqualToString:@"time"]) {
+        NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
+        if (eventName) {
+            [[Sugo sharedInstance] timeEvent:eventName];
         }
     }
 }

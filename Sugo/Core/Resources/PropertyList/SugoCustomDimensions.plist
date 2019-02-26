@@ -4,6 +4,8 @@
 <dict>
 	<key>Keys</key>
 	<dict>
+		<key>OnclickPoint</key>
+		<string>onclick_point</string>
 		<key>EventName</key>
 		<string>event_name</string>
 		<key>EventID</key>
@@ -69,6 +71,8 @@
 	</dict>
 	<key>Values</key>
 	<dict>
+		<key>ScreenTouch</key>
+		<string>屏幕点击</string>
 		<key>Integration</key>
 		<string>APP安装</string>
 		<key>FirstVisit</key>

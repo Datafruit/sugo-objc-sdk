@@ -27,11 +27,17 @@
         console.log('npi: ' + npi, 'id: ' + id, 'data: ' + sugo.data[id]);
     }
 
-    sugo.dataOf = function(id) {
-        var data = sugo.data[id];
-        delete sugo.data[id];
-        return data;
+    sugo.dataOf = function() {
+        var data_tmp= sugo.data;
+        sugo.data= {};
+        return JSON.stringify(data_tmp);
     };
+
+//    sugo.dataOf = function(id) {
+//        var data = sugo.data[id];
+//        delete sugo.data[id];
+//        return data;
+//    };
 
     sugo.rawTrack = function(event_id, event_name, props) {
         if (!props) {
@@ -49,7 +55,9 @@
         var event = {
             'eventID': event_id,
             'eventName': event_name,
-            'properties': JSON.stringify(props)
+            'properties': JSON.stringify(props),
+            'eventType' : 'track'
+            
         };
         sugo.data[eventUUID] = JSON.stringify(event);
         sugo.callNative('track', eventUUID);
@@ -60,10 +68,10 @@
     };
 
     sugo.timeEvent = function(event_name) {
-
         var eventUUID = sugo.generateUUID();
         var event = {
-            'eventName': event_name
+            'eventName': event_name,
+            'eventType' : 'time'
         };
         sugo.data[eventUUID] = JSON.stringify(event);
         sugo.callNative('time', eventUUID);
@@ -73,6 +81,7 @@
         if (sugo.can_track_web_page) {
             sugo.track('浏览', sugo.view_props);
             sugo.enter_time = new Date().getTime();
+            sugo.registerPathName();
         }
     };
 
@@ -95,4 +104,20 @@
     var sugoio = {
         track: sugo.track,
         time_event: sugo.timeEvent
+    };
+
+    sugo.registerPathName = function(){
+        var props = {};
+        props.path_name = sugo.relative_path;
+        if (!props.page_name && sugo.init.page_name) {
+            props.page_name = sugo.init.page_name;
+        }
+        
+        var eventUUID = sugo.generateUUID();
+        var path_event = {
+            'path_name': props.path_name,
+            'eventType': 'registerPathName'
+        };
+        sugo.data[eventUUID] = JSON.stringify(path_event);
+        sugo.callNative('registerPathName', eventUUID);
     };
