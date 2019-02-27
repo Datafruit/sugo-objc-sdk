@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
     core.resources              = 'Sugo/Core/Resources/**/*.js', 'Sugo/Core/Resources/**/Sugo*.plist', 'Sugo/Core/Resources/**/*.xcdatamodeld'
     core.private_header_files   = 'Sugo/Core/Sources/Track/SugoPrivate.h', 'Sugo/Core/Sources/Track/People/SugoPeoplePrivate.h', 'Sugo/Core/Sources/Network/MPNetworkPrivate.h', 'Sugo/Core/Sources/MPLogger.h', 'Sugo/Core/Sources/Track/CoreData/SugoEvents+CoreDataProperties.h', 'Sugo/Core/Sources/Track/CoreData/SugoEvents+CoreDataClass.h'
     core.libraries              = 'icucore'
-    core.frameworks             = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'WebKit', 'CoreData'
+    core.frameworks             = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'WebKit', 'CoreData', 'CoreLocation'
   end
 
   spec.subspec 'weex' do |weex|
