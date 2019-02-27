@@ -68,7 +68,8 @@ const static double locateDefaultInterval=30*60;//默认全局配置上传地理
 @property (nonatomic, strong) UIViewController *notificationViewController;
 @property (nonatomic,strong)NSMutableDictionary *classAttributeDict;
 @property (nonatomic,strong)NSMutableDictionary *widgetAttributeDict;
-@property (nonatomic,assign)bool startExtraAttrFuncion;//default no
+@property (nonatomic,assign)bool startExtraAttrFuncion;//default yes
+@property (nonatomic,assign)bool startSubmitPointEventFuncion;//default yes
 
 // re-declare internally as readwrite
 @property (atomic, strong) SugoPeople *people;
