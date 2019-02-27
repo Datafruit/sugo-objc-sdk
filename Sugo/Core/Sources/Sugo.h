@@ -386,6 +386,9 @@ extern BOOL SugoCanTrackWebPage;
 -(void)setstartExtraAttrFuncion:(BOOL)status;
 -(BOOL)getStartExtraAttrFuncion;
 
+-(BOOL)getStartSubmitPointEventFuncion;
+-(void)setStartSubmitPointEventFuncion:(BOOL)status;
+
 /*!
  @method
  

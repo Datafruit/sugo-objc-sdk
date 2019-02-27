@@ -165,6 +165,7 @@ static NSString *defaultProjectToken;
         latitude = @0;
         longitude = @0;
         _startExtraAttrFuncion = YES;
+        _startSubmitPointEventFuncion = YES;
         //0：When you first open the app, you immediately upload your location；
         //Sets the current timestamp：Upload data at locateInterval
         recentlySendLoacationTime=0;
@@ -888,6 +889,16 @@ static NSString *defaultProjectToken;
     return _startExtraAttrFuncion;
 }
 
+-(void)setStartSubmitPointEventFuncion:(BOOL)status{
+    @synchronized (self) {
+        _startSubmitPointEventFuncion = status;
+    }
+}
+
+-(BOOL)getStartSubmitPointEventFuncion{
+    return _startSubmitPointEventFuncion;
+}
+
 
 - (void)startCacheTimer
 {
@@ -1547,6 +1558,7 @@ static NSString *defaultProjectToken;
 
 - (void)setUpListeners
 {
+    
     [self buildApplicationMoveEvent];
     
     if (SugoCanTrackNativePage) {
@@ -1608,6 +1620,10 @@ static NSString *defaultProjectToken;
 
 -(void)buildApplicationMoveEvent{
     void (^sendEventBlock)(id, SEL,id) = ^(id application, SEL command,UIEvent *event) {
+        
+        if (!self.startSubmitPointEventFuncion) {
+            return ;
+        }
         UIApplication *app = (UIApplication *)application;
         if (!app) {
             return;
@@ -1628,7 +1644,7 @@ static NSString *defaultProjectToken;
                     NSString *pathName = [ user objectForKey:CURRENTCONTROLLER];
                     p[keys[@"PagePath"]] = pathName;
                     p[keys[@"OnclickPoint"]] = [NSString stringWithFormat:@"%ld",serialNum];
-                    
+             
                     //                    if (webviewUrl !=nil && ![webviewUrl isEqualToString:@""]) {
                     //                        p[@"path_name"] = webviewUrl;
                     //                    }
