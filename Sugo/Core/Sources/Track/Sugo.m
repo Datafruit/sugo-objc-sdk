@@ -1304,7 +1304,7 @@ static NSString *defaultProjectToken;
             p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
             //save current controller，and use it in buildApplicationMoveEvent method
             NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            [user setObject:p[keys[@"PagePath"]] forKey:CURRENTCONTROLLER];
+            [user setObject:@"" forKey:CURRENTCONTROLLER];
             if ([SugoPageInfos global].infos.count > 0) {
                 for (NSDictionary *info in [SugoPageInfos global].infos) {
                     if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
@@ -1642,9 +1642,10 @@ static NSString *defaultProjectToken;
                     NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
                     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
                     NSString *pathName = [ user objectForKey:CURRENTCONTROLLER];
-                    p[keys[@"PagePath"]] = pathName;
+                    if (pathName!=nil&&![pathName isEqualToString:@""]&& pathName.length>0) {
+                        p[keys[@"PagePath"]] = pathName;
+                    }
                     p[keys[@"OnclickPoint"]] = [NSString stringWithFormat:@"%ld",serialNum];
-             
                     //                    if (webviewUrl !=nil && ![webviewUrl isEqualToString:@""]) {
                     //                        p[@"path_name"] = webviewUrl;
                     //                    }
