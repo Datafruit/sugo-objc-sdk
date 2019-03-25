@@ -1669,8 +1669,8 @@ static NSString *defaultProjectToken;
 }
 
 -(NSInteger)calculateTouchArea:(float)x withY:(float) y{
-    int columnNum = 18;
-    int lineNum = 32;
+    int columnNum = 36;
+    int lineNum = 64;
     float areaWidth;
     float areaHeight;
     if (SUGOFULLSCREENH>SUGOFULLSCREENW) {//Vertical screen situation
@@ -1692,6 +1692,9 @@ static NSString *defaultProjectToken;
     int columnSerialNum = (columnSerialValue-(int)columnSerialValue)>0?(int)columnSerialValue+1:columnSerialValue;
     int lineNumSerialNum = (lineNumSerialValue-(int)lineNumSerialValue)>0?(int)lineNumSerialValue:lineNumSerialValue-1;
     int serialNum = columnSerialNum + lineNumSerialNum*columnNum ;
+    if(x==0){
+        serialNum+=1;
+    }
     return serialNum;
 }
 
