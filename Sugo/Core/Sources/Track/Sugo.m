@@ -61,7 +61,7 @@ static NSString *defaultProjectToken;
     if (values) {
         [instance trackIntegration];
         [instance judgeWakeUpOrStartAppWithSugoStatus:YES];
-        [[WebViewBindings globalBindings] fillBindings];
+//        [[WebViewBindings globalBindings] fillBindings];
         [instance checkForDecideDimensionsResponseWithCompletion:nil];
         [instance checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
             dispatch_sync(dispatch_get_main_queue(), ^{
