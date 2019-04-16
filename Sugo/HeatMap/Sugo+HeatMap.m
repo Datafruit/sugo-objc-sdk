@@ -1,19 +1,13 @@
 //
-//  HeatMapFunction.m
+//  Sugo+HeatMap.m
 //  Sugo
 //
 //  Created by 陈宇艺 on 2019/4/16.
 //  Copyright © 2019 sugo. All rights reserved.
 //
 
-#import "HeatMapFunction.h"
-#import <UIKit/UIKit.h>
-#import "macro.h"
-#import "Sugo.h"
-#import "MPSwizzler.h"
-#import "projectMacro.h"
-@implementation HeatMapFunction
-
+#import "Sugo+HeatMap.h"
+@implementation Sugo (HeatMap)
 -(void)buildApplicationMoveEvent{
     void (^sendEventBlock)(id, SEL,id) = ^(id application, SEL command,UIEvent *event) {
         UIApplication *app = (UIApplication *)application;
@@ -89,5 +83,4 @@
     }
     return serialNum;
 }
-
 @end

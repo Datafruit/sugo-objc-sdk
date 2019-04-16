@@ -20,6 +20,8 @@
 #import "projectMacro.h"
 
 
+
+
 NSString *SugoBindingsURL;
 NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
@@ -1558,9 +1560,6 @@ static NSString *defaultProjectToken;
 
 - (void)setUpListeners
 {
-    
-    [self buildApplicationMoveEvent];
-    
     if (SugoCanTrackNativePage) {
         [self trackStayTime];
     }
@@ -1618,16 +1617,6 @@ static NSString *defaultProjectToken;
 //    [self initializeGestureRecognizer];
 }
 
--(void)buildApplicationMoveEvent{
-    Class class = NSClassFromString(@"HeatMapFunction");
-    if (class) {
-        SEL selector = NSSelectorFromString(@"buildApplicationMoveEvent");
-        NSObject *instance =  [class new];
-        IMP imp = [instance methodForSelector:selector];
-        void(*func)(id, SEL) = (void *)imp;
-        func(instance, selector);
-    }
-}
 
 -(NSMutableDictionary *)requireSugoConfigurationWithKey:(NSString *)key{
     return [Sugo sharedInstance].sugoConfiguration[key];
