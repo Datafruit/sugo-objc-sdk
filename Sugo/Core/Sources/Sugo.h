@@ -497,6 +497,8 @@ extern BOOL SugoCanTrackWebPage;
  */
 - (void)trackEventID:(nullable NSString *)eventID eventName:(NSString *)eventName;
 
+-(NSMutableDictionary *)requireSugoConfigurationWithKey:(NSString *)key;
+
 /*!
  @method
  
@@ -844,6 +846,8 @@ extern BOOL SugoCanTrackWebPage;
  @param sugo        Sugo API instance
  */
 - (BOOL)sugoWillFlush:(Sugo *)sugo;
+
+
 
 @end
 

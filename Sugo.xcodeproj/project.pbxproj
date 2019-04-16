@@ -21,6 +21,8 @@
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
 		9B24948921EC311900739385 /* BindingUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B24948721EC311900739385 /* BindingUtils.h */; };
 		9B24948A21EC311900739385 /* BindingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B24948821EC311900739385 /* BindingUtils.m */; };
+		9B67D88522658693000DCFCA /* HeatMapFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B67D88322658693000DCFCA /* HeatMapFunction.h */; };
+		9B67D88622658693000DCFCA /* HeatMapFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B67D88422658693000DCFCA /* HeatMapFunction.m */; };
 		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
 		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
 		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -208,6 +210,8 @@
 		9B24948821EC311900739385 /* BindingUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BindingUtils.m; sourceTree = "<group>"; };
 		9B3FC18B21D767340074D519 /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
 		9B3FC18C21D767C80074D519 /* projectMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = projectMacro.h; sourceTree = "<group>"; };
+		9B67D88322658693000DCFCA /* HeatMapFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeatMapFunction.h; sourceTree = "<group>"; };
+		9B67D88422658693000DCFCA /* HeatMapFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HeatMapFunction.m; sourceTree = "<group>"; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -423,6 +427,7 @@
 		141AC7841E1364D7008D67F6 /* Sugo */ = {
 			isa = PBXGroup;
 			children = (
+				9B67D8822265867D000DCFCA /* HeatMap */,
 				A700F8A320C7BD24008C0069 /* Core */,
 			);
 			path = Sugo;
@@ -456,6 +461,15 @@
 				9B3FC18C21D767C80074D519 /* projectMacro.h */,
 			);
 			path = util;
+			sourceTree = "<group>";
+		};
+		9B67D8822265867D000DCFCA /* HeatMap */ = {
+			isa = PBXGroup;
+			children = (
+				9B67D88322658693000DCFCA /* HeatMapFunction.h */,
+				9B67D88422658693000DCFCA /* HeatMapFunction.m */,
+			);
+			path = HeatMap;
 			sourceTree = "<group>";
 		};
 		A700F8A320C7BD24008C0069 /* Core */ = {
@@ -910,6 +924,7 @@
 				A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */,
 				A700F97720C7BD24008C0069 /* SugoEvents+CoreDataProperties.h in Headers */,
 				A700F95420C7BD24008C0069 /* MPLogger.h in Headers */,
+				9B67D88522658693000DCFCA /* HeatMapFunction.h in Headers */,
 				A700F9C520C7BD24008C0069 /* SugoPeoplePrivate.h in Headers */,
 				A700F96420C7BD24008C0069 /* SugoPrivate.h in Headers */,
 				A700F9B320C7BD24008C0069 /* MPNetworkPrivate.h in Headers */,
@@ -1120,6 +1135,7 @@
 				A700F9EB20C7BD24008C0069 /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				A700F9A420C7BD24008C0069 /* MPUILayoutSupportToNSStringValueTransformer.m in Sources */,
 				A700F98B20C7BD24008C0069 /* MPSwizzle.m in Sources */,
+				9B67D88622658693000DCFCA /* HeatMapFunction.m in Sources */,
 				A700F9E820C7BD24008C0069 /* MPObjectSelector.m in Sources */,
 				A700F9EE20C7BD24008C0069 /* HeatMapLayer.m in Sources */,
 				A700F9B920C7BD24008C0069 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
