@@ -7,7 +7,7 @@ Pod::Spec.new do |spec|
   spec.summary               = 'Official Sugo SDK for iOS (Objective-C)'
   spec.homepage              = 'https://github.com/Datafruit/sugo-objc-sdk'
   spec.author                = { 'sugo.io' => 'developer@sugo.io' }
-  spec.source                = { :git => 'https://github.com/Datafruit/sugo-objc-sdk.git', :tag => spec.version ,:branch => 'infinitus'}
+  spec.source                = { :git => 'https://github.com/Datafruit/sugo-objc-sdk.git', :tag => spec.version ,:branch => 'fxj-heatmap'}
   spec.ios.deployment_target = '8.0'
   spec.default_subspec       = 'core'
 
