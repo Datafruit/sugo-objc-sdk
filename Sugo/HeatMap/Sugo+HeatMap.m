@@ -7,6 +7,11 @@
 //
 
 #import "Sugo+HeatMap.h"
+#import <UIKit/UIKit.h>
+#import "macro.h"
+#import "Sugo.h"
+#import "MPSwizzler.h"
+#import "projectMacro.h"
 @implementation Sugo (HeatMap)
 -(void)buildApplicationMoveEvent{
     void (^sendEventBlock)(id, SEL,id) = ^(id application, SEL command,UIEvent *event) {

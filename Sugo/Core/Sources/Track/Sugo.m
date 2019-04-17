@@ -2251,7 +2251,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
                                                         andEndpoint:MPNetworkEndpointHeat
                                                      withQueryItems:queryItems];
-        
         // Send the network request
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         NSURLSession *session = [NSURLSession sharedSession];
@@ -2292,7 +2291,6 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     id dimensions = object[@"dimensions"];
     if (dimensions
         && [dimensions isKindOfClass:[NSArray class]]) {
-        
         [[NSUserDefaults standardUserDefaults] setObject:dimensions
                                                   forKey:@"SugoDimensions"];
         [[NSUserDefaults standardUserDefaults] synchronize];
