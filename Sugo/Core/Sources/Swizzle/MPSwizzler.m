@@ -212,13 +212,15 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                 
                 // Add the swizzle as a new local method on the class.
                 if (!class_addMethod(aClass, aSelector, swizzledMethod, method_getTypeEncoding(aMethod))) {
-                    NSAssert(NO, @"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+//                    NSAssert(NO, @"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                    NSLog(@"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
                     return;
                 }
                 // Now re-get the Method, it should be the one we just added.
                 Method newMethod = class_getInstanceMethod(aClass, aSelector);
                 if (aMethod == newMethod) {
-                    NSAssert(NO, @"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+//                    NSAssert(NO, @"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                    NSLog(@"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
                     return;
                 }
                 
@@ -231,10 +233,12 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                 [self setSwizzle:newSwizzle forMethod:newMethod];
             }
         } else {
-            NSAssert(NO, @"SwizzlerAssert: Cannot swizzle method with %d args", numArgs);
+//            NSAssert(NO, @"SwizzlerAssert: Cannot swizzle method with %d args", numArgs);
+            NSLog( @"SwizzlerAssert: Cannot swizzle method with %d args", numArgs);
         }
     } else {
-        NSAssert(NO, @"SwizzlerAssert: Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass));
+//        NSAssert(NO, @"SwizzlerAssert: Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass));
+        NSLog(@"SwizzlerAssert: Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass));
     }
 }
 
@@ -281,13 +285,15 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                 
                 // Add the swizzle as a new local method on the class.
                 if (!class_addMethod(aClass, aSelector, swizzledMethod, method_getTypeEncoding(aMethod))) {
-                    NSAssert(NO, @"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+//                    NSAssert(NO, @"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                    NSLog(@"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
                     return;
                 }
                 // Now re-get the Method, it should be the one we just added.
                 Method newMethod = class_getInstanceMethod(aClass, aSelector);
                 if (aMethod == newMethod) {
-                    NSAssert(NO, @"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+//                    NSAssert(NO, @"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                    NSLog(@"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
                     return;
                 }
                 
@@ -300,10 +306,12 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                 [self setSwizzle:newSwizzle forMethod:newMethod];
             }
         } else {
-            NSAssert(NO, @"SwizzlerAssert: Cannot swizzle method with %d args", numArgs);
+//            NSAssert(NO, @"SwizzlerAssert: Cannot swizzle method with %d args", numArgs);
+            NSLog(@"SwizzlerAssert: Cannot swizzle method with %d args", numArgs);
         }
     } else {
-        NSAssert(NO, @"SwizzlerAssert: Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass));
+        NSLog(@"SwizzlerAssert: Cannot find method for %@ on %@",NSStringFromSelector(aSelector), NSStringFromClass(aClass));
+//        NSAssert(YES, @"SwizzlerAssert: Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass));
     }
 }
 
