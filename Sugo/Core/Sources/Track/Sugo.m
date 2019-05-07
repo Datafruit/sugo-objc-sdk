@@ -20,8 +20,6 @@
 #import "projectMacro.h"
 
 
-
-
 NSString *SugoBindingsURL;
 NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
@@ -202,6 +200,7 @@ static NSString *defaultProjectToken;
 
         self.decideDimensionsResponseCached = NO;
         self.decideBindingsResponseCached = NO;
+        [self buildPageInfo];
         
         [self setUpListeners];
         [self unarchive];
@@ -209,6 +208,29 @@ static NSString *defaultProjectToken;
         instances[apiToken] = self;
     }
     return self;
+}
+
+
+
+-(void)buildPageInfo{
+    @try {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSData *cachedData = [userDefaults dataForKey:@"SugoEventBindings"];
+        if (cachedData==nil) {
+            [[SugoPageInfos global].infos addObjectsFromArray:[NSMutableArray array]];
+            return ;
+        }
+        NSMutableDictionary *cachedObject = [[NSMutableDictionary alloc] init];
+        NSError *cacheError = nil;
+        
+        cachedObject = [NSJSONSerialization JSONObjectWithData:cachedData
+                                                       options:(NSJSONReadingOptions)0
+                                                         error:&cacheError];
+        NSArray *pageInfos = cachedObject[@"page_info"];
+        [[SugoPageInfos global].infos addObjectsFromArray:pageInfos];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+    }
 }
 
 - (instancetype)initWithID:(NSString *)projectID token:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval andCacheInterval:(double)cacheInterval
