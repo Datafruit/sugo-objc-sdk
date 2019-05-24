@@ -185,6 +185,7 @@ static const NSUInteger kBatchSize = 50;
              itemProperties];
 }
 
+
 + (NSArray<NSURLQueryItem *> *)buildHeatQueryForToken:(NSString *)token andSecretKey:(NSString *)secretKey {
     NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
                                                               value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
@@ -213,7 +214,10 @@ static const NSUInteger kBatchSize = 50;
                             @(MPNetworkEndpointDecideDimension): @"/api/sdk/decide-dimesion",
                             @(MPNetworkEndpointDecideEvent): @"/api/sdk/decide-event",
                             @(MPNetworkEndpointHeat): @"/api/sdk/heat",
-                            @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time"};
+                            @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time",
+                            @(MPNetworkEndpointInitSugo):@"/api/sdk/decide-config"
+                            };
+        
     });
     NSNumber *key = @(endpoint);
     return endPointToPath[key];
@@ -245,22 +249,27 @@ static const NSUInteger kBatchSize = 50;
                         byHTTPMethod:(NSString *)method
                       withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                              andBody:(NSString *)body {
-    // Build URL from path and query items
-    NSURL *urlWithEndpoint = [url URLByAppendingPathComponent:endpoint];
-    NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
-                                             resolvingAgainstBaseURL:YES];
-    components.queryItems = queryItems;
-
-    // Build request from URL
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
-    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    [request setHTTPMethod:method];
-    [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+    @try {
+        // Build URL from path and query items
+        NSURL *urlWithEndpoint = [url URLByAppendingPathComponent:endpoint];
+        NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
+                                                 resolvingAgainstBaseURL:YES];
+        components.queryItems = queryItems;
+        
+        // Build request from URL
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
+        [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        [request setHTTPMethod:method];
+        [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        MPLogDebug(@"build request: %@", [request URL].absoluteString);
+        MPLogDebug(@"%@ http request: %@?%@", self, request, body);
+        
+        return [request copy];
+    } @catch (NSException *exception) {
+        NSLog(@"SUGO_buildRequestForURL:%@",exception);
+    }
     
-    MPLogDebug(@"build request: %@", [request URL].absoluteString);
-    MPLogDebug(@"%@ http request: %@?%@", self, request, body);
-    
-    return [request copy];
 }
 
 + (NSString *)encodeArrayForAPI:(NSArray *)array {
