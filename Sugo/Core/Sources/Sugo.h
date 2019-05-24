@@ -329,6 +329,8 @@ extern BOOL SugoCanTrackWebPage;
  @param launchOptions   your application delegate's launchOptions
  
  */
++ (void)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withCompletion:(void (^)())completion;
+
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
 /*!

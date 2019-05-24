@@ -16,10 +16,12 @@
 #import "SugoPrivate.h"
 @implementation Sugo (HeatMap)
 -(void)buildApplicationMoveEvent{
-    if(![self openHeatMapFunc]){
-        return;
-    }
-    @try {
+     @try {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        bool isHeatMapFunc = [userDefaults boolForKey:@"isHeatMapFunc"];
+        if(!isHeatMapFunc||![self openHeatMapFunc]){
+            return;
+        }
         void (^sendEventBlock)(id, SEL,id) = ^(id application, SEL command,UIEvent *event) {
             @try {
                 UIApplication *app = (UIApplication *)application;

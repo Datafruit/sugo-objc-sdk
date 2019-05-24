@@ -38,6 +38,24 @@ static NSString *defaultProjectToken;
     [userDefaults synchronize];
 }
 
++ (void)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withCompletion:(void (^)())completion  {
+    @try {
+        [[[Sugo alloc]init:apiToken] initSugoRequestWithProject:projectID withToken:apiToken withCompletion:^() {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            bool isSugoInitialize = [userDefaults boolForKey:@"isSugoInitialize"];
+            if (!isSugoInitialize) {
+                return ;
+            }
+            [Sugo sharedInstanceWithEnable:YES projectID:projectID token:apiToken launchOptions:launchOptions];
+            if (completion!=nil) {
+                completion();
+            }
+        }];
+    } @catch (NSException *exception) {
+        NSLog(@"SUGO_sharedInstanceWithID:%@",exception);
+    }
+}
+
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions {
     return [Sugo sharedInstanceWithEnable:YES projectID:projectID token:apiToken launchOptions:launchOptions];
 }
@@ -50,6 +68,7 @@ static NSString *defaultProjectToken;
 
     const NSUInteger flushInterval = 60;
     const double cacheInterval = 3600;
+    
 
     Sugo *instance = [[self alloc] initWithEnable:enable
                                         projectID:projectID
@@ -1346,7 +1365,9 @@ static NSString *defaultProjectToken;
         
         //Check the location upload time event
         long currentTime=[[NSDate date]timeIntervalSince1970];
-        if (weakSelf.locateInterval>0&&currentTime-weakSelf.recentlySendLoacationTime>=weakSelf.locateInterval) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSInteger uploadLocation = [userDefaults integerForKey:@"uploadLocation"];
+        if (uploadLocation>0&&weakSelf.locateInterval>0&&currentTime-weakSelf.recentlySendLoacationTime>=uploadLocation*60) {
             [self locate];
             weakSelf.recentlySendLoacationTime=currentTime;
         }
@@ -2255,6 +2276,98 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             }
         }
     });
+}
+
+-(void)initSugoRequestWithProject:(NSString *)projectID withToken:(NSString *)token withCompletion:(void (^)())completion{
+    @try {
+        dispatch_queue_t queue = dispatch_queue_create("io.sugo.SugoDemo", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(queue, ^{
+            __block BOOL hadError = NO;
+            __block NSData *resultData = [NSData data];
+            __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
+            
+            NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"appVersion"
+                                                                      value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
+            NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
+            NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"tokenId" value:token];
+            NSArray *queryItems = @[itemVersion,
+                                    itemProjectID,
+                                    itemToken];
+            
+            // Build a network request from the URL
+            MPNetwork *mMPNetwork = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:SugoBindingsURL]
+                                                   andEventCollectionURL:[NSURL URLWithString:SugoCollectionURL]];
+            NSURLRequest *request = [mMPNetwork buildGetRequestForURL:[NSURL URLWithString:SugoBindingsURL]
+                                                          andEndpoint:MPNetworkEndpointInitSugo
+                                                       withQueryItems:queryItems];
+            
+            // Send the network request
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSession *session = [NSURLSession sharedSession];
+            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                      NSURLResponse *urlResponse,
+                                                                      NSError *error) {
+                if (error) {
+                    MPLogError(@"%@ request init sugo http error: %@", self, error);
+                    hadError = YES;
+                    dispatch_semaphore_signal(semaphore);
+                    return;
+                }
+                MPLogDebug(@"request init sugo \n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                
+                // Handle network response
+                @try {
+                    responseObject = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
+                    if (error) {
+                        MPLogError(@"%@ request init sugo json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    if (responseObject[@"error"]) {
+                        MPLogError(@"%@ request init sugo api error: %@", self, responseObject[@"error"]);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    if (responseObject[@"isSugoInitialize"]) {
+                        [userDefaults setBool:[(NSNumber *)responseObject[@"isSugoInitialize"] boolValue]forKey:@"isSugoInitialize"];
+                    }
+                    
+                    if (responseObject[@"isHeatMapFunc"]) {
+                        [userDefaults setBool:[(NSNumber *)responseObject[@"isHeatMapFunc"] boolValue] forKey:@"isHeatMapFunc"];
+                    }
+                    
+                    if (responseObject[@"uploadLocation"]) {
+                        long uploadLocation =[responseObject[@"uploadLocation"] longValue];
+                        [userDefaults setInteger:uploadLocation forKey:@"uploadLocation"];
+                    }
+                    [userDefaults synchronize];
+                    
+                    resultData = responseData;
+                    
+                } @catch (NSException *exception) {
+                    MPLogError(@"exception: %@, request init sugo responseData: %@, object: %@",
+                               exception,
+                               responseData,
+                               responseObject);
+                }
+                
+                dispatch_semaphore_signal(semaphore);
+            }] resume];
+            
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            if (!hadError) {
+                if (completion!=nil) {
+                    completion();
+                }
+            }
+        });
+    } @catch (NSException *exception) {
+        NSLog(@"SUGO_initSugoRequestWithProject:%@",exception);
+    }
+    
 }
 
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion {
