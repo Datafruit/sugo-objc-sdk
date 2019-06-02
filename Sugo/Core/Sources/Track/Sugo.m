@@ -2065,32 +2065,43 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     
     dispatch_async(self.serialQueue, ^{
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
-        bool isUpdateConfig = [uDefaults boolForKey:@"isUpdateConfig"];
-        long latestDimensionVersion = [uDefaults integerForKey:@"latestDimensionVersion"];
-        NSData *cacheDa = [uDefaults dataForKey:@"SugoEventDimensions"];
-        NSMutableDictionary *cachedObj = [[NSMutableDictionary alloc] init];
-        NSError *caError = nil;
-        cachedObj = [NSJSONSerialization JSONObjectWithData:cacheDa
-                                                       options:(NSJSONReadingOptions)0
-                                                         error:&caError];
-        if (isUpdateConfig) {
-            NSMutableDictionary * mdic = [NSMutableDictionary dictionaryWithDictionary:cachedObj];
-            mdic[@"dimension_version"]=@(-1);
-            NSData *newData= [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:nil];
-            [uDefaults setObject:newData forKey:@"SugoEventDimensions"];
-            [uDefaults synchronize];
-        }else{
-            long localVersion = [cachedObj[@"dimension_version"] longLongValue];
-            if (localVersion == latestDimensionVersion) {
-                [self handleDecideDimensionsObject:cachedObj];
-                if (completion) {
-                    completion();
+        @try {
+            
+            NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
+            bool isUpdateConfig = [uDefaults boolForKey:@"isUpdateConfig"];
+            long latestDimensionVersion = [uDefaults integerForKey:@"latestDimensionVersion"];
+            NSData *cacheDa = [uDefaults dataForKey:@"SugoEventDimensions"];
+            NSMutableDictionary *cachedObj = [[NSMutableDictionary alloc] init];
+            if (cacheDa) {
+                NSError *caError = nil;
+                cachedObj = [NSJSONSerialization JSONObjectWithData:cacheDa
+                                                            options:(NSJSONReadingOptions)0
+                                                              error:&caError];
+                if (isUpdateConfig) {
+                    NSMutableDictionary * mdic = [NSMutableDictionary dictionaryWithDictionary:cachedObj];
+                    mdic[@"dimension_version"]=@(-1);
+                    NSData *newData= [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:nil];
+                    [uDefaults setObject:newData forKey:@"SugoEventDimensions"];
+                    [uDefaults synchronize];
+                }else{
+                    if([cachedObj objectForKey:@"dimension_version"]){
+                        long localVersion = [cachedObj[@"dimension_version"] longLongValue];
+                        if (localVersion == latestDimensionVersion) {
+                            [self handleDecideDimensionsObject:cachedObj];
+                            if (completion) {
+                                completion();
+                            }
+                            dispatch_semaphore_signal(semaphore);
+                            return ;
+                        }
+                    }
                 }
-                dispatch_semaphore_signal(semaphore);
-                return ;
             }
+            
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception);
         }
+        
     
         __block BOOL hadError = NO;
         __block NSData *resultData = [NSData data];
@@ -2198,6 +2209,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             completion();
         }
     });
+    
 }
 
 - (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion
@@ -2209,31 +2221,39 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 {
     dispatch_async(self.serialQueue, ^{
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
-        bool isUpdateConfig = [uDefaults boolForKey:@"isUpdateConfig"];
-        long latestEventBindingVersion = [uDefaults integerForKey:@"latestEventBindingVersion"];
-        NSData *cacheDa = [uDefaults dataForKey:@"SugoEventBindings"];
-        NSError *caError = nil;
-        NSMutableDictionary *cachedObj = [[NSMutableDictionary alloc] init];
-        cachedObj = [NSJSONSerialization JSONObjectWithData:cacheDa
-                                                       options:(NSJSONReadingOptions)0
-                                                         error:&caError];
-        if (isUpdateConfig) {
-            NSMutableDictionary * mdic = [NSMutableDictionary dictionaryWithDictionary:cachedObj];
-            mdic[@"dimension_version"]=@(-1);
-            NSData *newData= [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:nil];
-            [uDefaults setObject:newData forKey:@"SugoEventDimensions"];
-            [uDefaults synchronize];
-        }else{
-            long localVersion = [cachedObj[@"event_bindings_version"] longLongValue];
-            if (localVersion==latestEventBindingVersion) {
-                [self handleDecideDimensionsObject:cachedObj];
-                if (completion) {
-                    completion(self.eventBindings);
+        @try {
+            NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
+            bool isUpdateConfig = [uDefaults boolForKey:@"isUpdateConfig"];
+            long latestEventBindingVersion = [uDefaults integerForKey:@"latestEventBindingVersion"];
+            NSData *cacheDa = [uDefaults dataForKey:@"SugoEventBindings"];
+            if (cacheDa) {
+                NSError *caError = nil;
+                NSMutableDictionary *cachedObj = [[NSMutableDictionary alloc] init];
+                cachedObj = [NSJSONSerialization JSONObjectWithData:cacheDa
+                                                            options:(NSJSONReadingOptions)0
+                                                              error:&caError];
+                if (isUpdateConfig) {
+                    NSMutableDictionary * mdic = [NSMutableDictionary dictionaryWithDictionary:cachedObj];
+                    mdic[@"dimension_version"]=@(-1);
+                    NSData *newData= [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:nil];
+                    [uDefaults setObject:newData forKey:@"SugoEventDimensions"];
+                    [uDefaults synchronize];
+                }else{
+                    if (cachedObj[@"event_bindings_version"]) {
+                        long localVersion = [cachedObj[@"event_bindings_version"] longLongValue];
+                        if (localVersion==latestEventBindingVersion) {
+                            [self handleDecideDimensionsObject:cachedObj];
+                            if (completion) {
+                                completion(self.eventBindings);
+                            }
+                            dispatch_semaphore_signal(semaphore);
+                            return;
+                        }
+                    }
                 }
-                dispatch_semaphore_signal(semaphore);
-                return;
             }
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception);
         }
     
         __block BOOL hadError = NO;
