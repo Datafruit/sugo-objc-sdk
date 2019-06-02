@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 @import Sugo;
+
 @interface AppDelegate ()
 
 @end
@@ -67,11 +68,11 @@
     SugoBindingsURL = @"http://192.168.0.220:8000"; // 设置获取绑定事件配置的URL，端口默认为8000
     SugoCollectionURL = @"http://192.168.0.220"; // 设置传输绑定事件的网管URL，端口默认为80
     SugoCodelessURL = @"ws://192.168.0.220:8887"; // 设置连接可视化埋点的URL，端口默认为8887
+    SugoExceptionTopic=@"sugo_exception";
     [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil withCompletion:^() {
         [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
         [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
         [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
-        [[Sugo sharedInstance]buildApplicationMoveEvent];
     }];
 }
 

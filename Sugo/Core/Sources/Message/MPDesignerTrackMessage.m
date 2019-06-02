@@ -9,6 +9,8 @@
 #import "MPDesignerEventBindingMessage.h"
 #import "MPNetwork.h"
 #import "MPLogger.h"
+#import "Sugo.h"
+#import "projectMacro.h"
 
 NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
 
@@ -54,6 +56,7 @@ NSString *const MPDesignerEventBindingTrackMessageType = @"track_message";
                                                      error:&error];
     }
     @catch (NSException *exception) {
+        [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
         MPLogError(@"exception encoding api data: %@", exception);
     }
     

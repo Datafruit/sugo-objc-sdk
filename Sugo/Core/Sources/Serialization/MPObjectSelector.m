@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 #import "MPObjectSelector.h"
 #import "UIViewController+SugoHelpers.h"
+#import "Sugo.h"
+#import "projectMacro.h"
 
 @interface MPObjectFilter : NSObject
 
@@ -175,11 +177,13 @@
                             return [parsedPredicate evaluateWithObject:evaluatedObject substitutionVariables:bindings];
                         }
                         @catch (NSException *exception) {
+                            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
                             return false;
                         }
                     }];
                 }
                 @catch (NSException *exception) {
+                    [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
                     filter.predicate = [NSPredicate predicateWithValue:NO];
                 }
 

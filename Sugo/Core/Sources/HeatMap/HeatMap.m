@@ -11,6 +11,8 @@
 #import <UIKit/UIKit.h>
 #import "MPLogger.h"
 #import "MPObjectSelector.h"
+#import "Sugo.h"
+#import "projectMacro.h"
 
 @implementation HeatMap
 
@@ -144,6 +146,7 @@
                                                                  error:nil];
         heats = object[@"heat_map"];
     } @catch (NSException *exception) {
+        [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
         MPLogError(@"exception: %@, data: %@, heats: %@", exception, self.data, heats);
     }
     return heats;
@@ -166,6 +169,7 @@
                 }
             }
         } @catch (NSException *exception) {
+            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
             MPLogError(@"exception: %@, data: %@, heats: %@", exception, self.data);
         }
     }
