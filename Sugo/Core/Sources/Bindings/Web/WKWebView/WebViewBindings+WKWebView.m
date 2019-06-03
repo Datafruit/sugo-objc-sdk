@@ -170,6 +170,7 @@
             resString = [[NSMutableString alloc] initWithData:resJSON
                                                      encoding:NSUTF8StringEncoding];
         } @catch (NSException *exception) {
+            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
             MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
                        exception,
                        resJSON,
@@ -187,6 +188,7 @@
             infosString = [[NSMutableString alloc] initWithData:infosJSON
                                                        encoding:NSUTF8StringEncoding];
         } @catch (NSException *exception) {
+            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
             MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
                        exception,
                        infosJSON,

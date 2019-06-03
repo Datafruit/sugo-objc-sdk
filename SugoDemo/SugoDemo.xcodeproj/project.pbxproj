@@ -33,8 +33,8 @@
 		14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */; };
 		792F6391857EE0AE4308A65C /* Pods_SugoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2F8D208B98A9A8B1ABAC18 /* Pods_SugoDemo.framework */; };
 		9B055EB421E87271005A3D2A /* CustumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B055EB321E87271005A3D2A /* CustumButton.m */; };
-		9BBCA0CE2265E81800B84DD2 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; };
-		9BBCA0CF2265E81800B84DD2 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B2D4A96229D4C4D00CC70B3 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; };
+		9B2D4A97229D4C4D00CC70B3 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -49,13 +49,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9BBCA0D02265E81800B84DD2 /* Embed Frameworks */ = {
+		9B2D4A98229D4C4D00CC70B3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9BBCA0CF2265E81800B84DD2 /* Sugo.framework in Embed Frameworks */,
+				9B2D4A97229D4C4D00CC70B3 /* Sugo.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BBCA0CE2265E81800B84DD2 /* Sugo.framework in Frameworks */,
+				9B2D4A96229D4C4D00CC70B3 /* Sugo.framework in Frameworks */,
 				792F6391857EE0AE4308A65C /* Pods_SugoDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,7 +298,7 @@
 				141AC7921E1366DB008D67F6 /* Sources */,
 				141AC7931E1366DB008D67F6 /* Frameworks */,
 				141AC7941E1366DB008D67F6 /* Resources */,
-				9BBCA0D02265E81800B84DD2 /* Embed Frameworks */,
+				9B2D4A98229D4C4D00CC70B3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -338,7 +338,7 @@
 				TargetAttributes = {
 					141AC7951E1366DB008D67F6 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 5PCYP5P3P9;
+						DevelopmentTeam = 5S8G446N92;
 						ProvisioningStyle = Automatic;
 					};
 					14282F1A1E1F381C00B3E4FA = {
@@ -591,10 +591,10 @@
 			baseConfigurationReference = D36BEAE025849408C114DA27 /* Pods-SugoDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5PCYP5P3P9;
+				DEVELOPMENT_TEAM = 5S8G446N92;
 				INFOPLIST_FILE = SugoDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo22333;
+				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -604,10 +604,10 @@
 			baseConfigurationReference = 3F50373FF371FBAB25F9FE9C /* Pods-SugoDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5PCYP5P3P9;
+				DEVELOPMENT_TEAM = 5S8G446N92;
 				INFOPLIST_FILE = SugoDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo22333;
+				PRODUCT_BUNDLE_IDENTIFIER = io.sugo.SugoDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

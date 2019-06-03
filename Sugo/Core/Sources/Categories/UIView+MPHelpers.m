@@ -3,6 +3,8 @@
 #import <CommonCrypto/CommonDigest.h>
 #import "UIView+MPHelpers.h"
 #import "MPLogger.h"
+#import "Sugo.h"
+#import "projectMacro.h"
 
 // NB If you add any more fingerprint methods, increment this.
 #define MP_FINGERPRINT_VERSION 1
@@ -22,6 +24,7 @@
         [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
         image = UIGraphicsGetImageFromCurrentImageContext();
     } @catch (NSException *exception) {
+        [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
         MPLogError(@"exception getting snapshot image %@ for view %@", exception, self);
     }
 

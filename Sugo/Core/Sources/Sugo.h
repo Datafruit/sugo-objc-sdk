@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *SugoBindingsURL;
 extern NSString *SugoCollectionURL;
 extern NSString *SugoCodelessURL;
+extern NSString *SugoExceptionTopic;
 extern BOOL SugoCanTrackNativePage;
 extern BOOL SugoCanTrackWebPage;
 
@@ -103,6 +104,7 @@ extern BOOL SugoCanTrackWebPage;
  Useful if you need to proxy Sugo requests.
  */
 @property (nonatomic, copy) NSString *serverURL;
+
 
 /*!
  @property
@@ -474,6 +476,8 @@ extern BOOL SugoCanTrackWebPage;
  @param event       event name
  */
 - (void)trackEvent:(NSString *)event;
+
+-(NSMutableDictionary *)exceptionInfoWithException:(NSException *)exception;
 
 /*!
  @method

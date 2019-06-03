@@ -11,6 +11,8 @@
 #import "WebViewBindings+UIWebView.h"
 #import "WebViewBindings+WKWebView.h"
 #import "MPLogger.h"
+#import "Sugo.h"
+#import "projectMacro.h"
 
 @interface WebViewBindings ()
 
@@ -132,6 +134,7 @@ static WebViewBindings *globalBindings = nil;
                                                                encoding:NSUTF8StringEncoding];
             MPLogDebug(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
         } @catch (NSException *exception) {
+            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
             MPLogError(@"exception: %@, decoding jsonBindings data: %@ -> %@",
                        exception,
                        [self.bindings debugDescription],
