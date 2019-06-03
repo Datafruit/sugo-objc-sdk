@@ -2234,9 +2234,9 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                                                               error:&caError];
                 if (isUpdateConfig) {
                     NSMutableDictionary * mdic = [NSMutableDictionary dictionaryWithDictionary:cachedObj];
-                    mdic[@"dimension_version"]=@(-1);
+                    mdic[@"event_bindings_version"]=@(-1);
                     NSData *newData= [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:nil];
-                    [uDefaults setObject:newData forKey:@"SugoEventDimensions"];
+                    [uDefaults setObject:newData forKey:@"SugoEventBindings"];
                     [uDefaults synchronize];
                 }else{
                     if (cachedObj[@"event_bindings_version"]) {
