@@ -10,6 +10,5 @@
 #define projectMacro_h
 
 #define CURRENTCONTROLLER @"CURRENTCONTROLLER"  // current webview's url tag to NSUserDefaults  
-#define SDKEXCEPTION @"SugoSdkException"
 #define SDKTOASE @"toast"
 #endif /* projectMacro_h */

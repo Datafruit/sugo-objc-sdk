@@ -477,7 +477,6 @@ extern BOOL SugoCanTrackWebPage;
  */
 - (void)trackEvent:(NSString *)event;
 
--(NSMutableDictionary *)exceptionInfoWithException:(NSException *)exception;
 
 /*!
  @method

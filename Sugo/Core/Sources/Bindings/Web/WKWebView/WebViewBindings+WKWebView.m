@@ -13,6 +13,7 @@
 #import "SugoPrivate.h"
 #import "MPLogger.h"
 #import "projectMacro.h"
+#import "ExceptionUtils.h"
 
 
 @implementation WebViewBindings (WKWebView)
@@ -170,11 +171,15 @@
             resString = [[NSMutableString alloc] initWithData:resJSON
                                                      encoding:NSUTF8StringEncoding];
         } @catch (NSException *exception) {
-            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-            MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
-                       exception,
-                       resJSON,
-                       resString);
+            @try {
+                [ExceptionUtils exceptionToNetWork:exception];
+                MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
+                           exception,
+                           resJSON,
+                           resString);
+            } @catch (NSException *exception) {
+                
+            }
         }
     }
     NSMutableString *infosString = nil;
@@ -188,11 +193,15 @@
             infosString = [[NSMutableString alloc] initWithData:infosJSON
                                                        encoding:NSUTF8StringEncoding];
         } @catch (NSException *exception) {
-            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-            MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
-                       exception,
-                       infosJSON,
-                       infosString);
+            @try {
+                MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
+                           exception,
+                           infosJSON,
+                           infosString);
+                [ExceptionUtils exceptionToNetWork:exception];
+            } @catch (NSException *exception) {
+                
+            }
         }
     }
     NSString *vcPath = [NSString stringWithFormat:@"sugo.view_controller = '%@';\n", self.wkVcPath];
