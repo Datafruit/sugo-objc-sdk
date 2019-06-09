@@ -21,6 +21,8 @@
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
 		9B24948921EC311900739385 /* BindingUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B24948721EC311900739385 /* BindingUtils.h */; };
 		9B24948A21EC311900739385 /* BindingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B24948821EC311900739385 /* BindingUtils.m */; };
+		9BB422D922ACD35300AFF1B8 /* ExceptionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BB422D722ACD35300AFF1B8 /* ExceptionUtils.h */; };
+		9BB422DA22ACD35300AFF1B8 /* ExceptionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BB422D822ACD35300AFF1B8 /* ExceptionUtils.m */; };
 		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
 		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
 		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -208,6 +210,8 @@
 		9B24948821EC311900739385 /* BindingUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BindingUtils.m; sourceTree = "<group>"; };
 		9B3FC18B21D767340074D519 /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
 		9B3FC18C21D767C80074D519 /* projectMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = projectMacro.h; sourceTree = "<group>"; };
+		9BB422D722ACD35300AFF1B8 /* ExceptionUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExceptionUtils.h; sourceTree = "<group>"; };
+		9BB422D822ACD35300AFF1B8 /* ExceptionUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExceptionUtils.m; sourceTree = "<group>"; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -454,6 +458,8 @@
 			children = (
 				9B3FC18B21D767340074D519 /* macro.h */,
 				9B3FC18C21D767C80074D519 /* projectMacro.h */,
+				9BB422D722ACD35300AFF1B8 /* ExceptionUtils.h */,
+				9BB422D822ACD35300AFF1B8 /* ExceptionUtils.m */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -919,6 +925,7 @@
 				A700F96A20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h in Headers */,
 				A700F95920C7BD24008C0069 /* MPApplicationStateSerializer.h in Headers */,
 				A700F9D120C7BD24008C0069 /* UIViewController+AutomaticEvents.h in Headers */,
+				9BB422D922ACD35300AFF1B8 /* ExceptionUtils.h in Headers */,
 				A700F95320C7BD24008C0069 /* MPClassDescription.h in Headers */,
 				A700F96620C7BD24008C0069 /* HeatMap.h in Headers */,
 				A700F9B020C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.h in Headers */,
@@ -1133,6 +1140,7 @@
 				A700F98620C7BD24008C0069 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				A700F9E120C7BD24008C0069 /* MPObjectSerializer.m in Sources */,
 				A700F9DB20C7BD24008C0069 /* WebViewBindings+WKWebView.m in Sources */,
+				9BB422DA22ACD35300AFF1B8 /* ExceptionUtils.m in Sources */,
 				A700F9BC20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.m in Sources */,
 				A700F96F20C7BD24008C0069 /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
 				A700F99220C7BD24008C0069 /* WebViewBindings+WebView.m in Sources */,

@@ -13,6 +13,7 @@
 #import "MPObjectSelector.h"
 #import "Sugo.h"
 #import "projectMacro.h"
+#import "ExceptionUtils.h"
 
 @implementation HeatMap
 
@@ -146,8 +147,13 @@
                                                                  error:nil];
         heats = object[@"heat_map"];
     } @catch (NSException *exception) {
-        [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-        MPLogError(@"exception: %@, data: %@, heats: %@", exception, self.data, heats);
+        @try {
+            MPLogError(@"exception: %@, data: %@, heats: %@", exception, self.data, heats);
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
+        }
+        
     }
     return heats;
 }
@@ -169,8 +175,12 @@
                 }
             }
         } @catch (NSException *exception) {
-            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-            MPLogError(@"exception: %@, data: %@, heats: %@", exception, self.data);
+            @try {
+                MPLogError(@"exception: %@, data: %@, heats: %@", exception, self.data);
+                [ExceptionUtils exceptionToNetWork:exception];
+            } @catch (NSException *exception) {
+                
+            }
         }
     }
     

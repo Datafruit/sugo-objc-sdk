@@ -18,6 +18,8 @@
 #import "MPFoundation.h"
 #import "macro.h"
 #import "projectMacro.h"
+#import "ExceptionUtils.h"
+
 
 
 
@@ -42,6 +44,7 @@ static NSString *defaultProjectToken;
 
 + (void)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withCompletion:(void (^)())completion  {
     @try {
+        [ExceptionUtils buildTokenId:apiToken projectId:projectID];
         [[[Sugo alloc]init:apiToken] initSugoRequestWithProject:projectID withToken:apiToken withCompletion:^() {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             bool isSugoInitialize = [userDefaults boolForKey:@"isSugoInitialize"];
@@ -59,6 +62,11 @@ static NSString *defaultProjectToken;
         [userDefaults setBool:false forKey:@"isSugoInitialize"];
         [userDefaults synchronize];
         NSLog(@"SUGO_sharedInstanceWithID:%@",exception);
+        @try {
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
+        }
     }
 }
 
@@ -155,7 +163,6 @@ static NSString *defaultProjectToken;
             defaultProjectToken = apiToken;
         });
     }
-
     return self;
 }
 
@@ -254,7 +261,11 @@ static NSString *defaultProjectToken;
         NSArray *pageInfos = cachedObject[@"page_info"];
         [[SugoPageInfos global].infos addObjectsFromArray:pageInfos];
     } @catch (NSException *exception) {
-        [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
+        @try {
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
+        }
         NSLog(@"%@",exception);
     }
 }
@@ -778,8 +789,12 @@ static NSString *defaultProjectToken;
                 [strongSelf trackEvent:values[@"FirstLogin"]];
             }
         } @catch (NSException *exception) {
-            [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
             MPLogError(@"unable to request first login with identifer");
+            @try {
+                [ExceptionUtils exceptionToNetWork:exception];
+            } @catch (NSException *exception) {
+                
+            }
         } @finally {
             return;
         }
@@ -1206,7 +1221,11 @@ static NSString *defaultProjectToken;
             return NO;
         }
     } @catch (NSException* exception) {
-        [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
+        @try {
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
+        }
         NSAssert(@"Got exception: %@, reason: %@. You can only send to Sugo values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
         return NO;
     }
@@ -1289,15 +1308,19 @@ static NSString *defaultProjectToken;
         MPLogInfo(@"%@ unarchived data from %@: %@", self, filePath, unarchivedData);
     }
     @catch (NSException *exception) {
-        [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-        MPLogError(@"%@ unable to unarchive data in %@, starting fresh", self, filePath);
-        // Reset un archived data
-        unarchivedData = nil;
-        // Remove the (possibly) corrupt data from the disk
-        NSError *error = NULL;
-        BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-        if (!removed) {
-            MPLogWarning(@"%@ unable to remove archived file at %@ - %@", self, filePath, error);
+        @try {
+            MPLogError(@"%@ unable to unarchive data in %@, starting fresh", self, filePath);
+            // Reset un archived data
+            unarchivedData = nil;
+            // Remove the (possibly) corrupt data from the disk
+            NSError *error = NULL;
+            BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+            if (!removed) {
+                MPLogWarning(@"%@ unable to remove archived file at %@ - %@", self, filePath, error);
+            }
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
         }
     }
     return unarchivedData;
@@ -2124,13 +2147,17 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                 cachedVersion = cachedObject[@"dimension_version"];
                 
             } @catch (NSException *exception) {
-                [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-                self.decideDimensionsResponseCached = NO;
-                MPLogError(@"exception: %@, cachedData: %@, object: %@, version: %@",
-                           exception,
-                           cachedData,
-                           cachedObject,
-                           cachedVersion);
+                @try {
+                    self.decideDimensionsResponseCached = NO;
+                    MPLogError(@"exception: %@, cachedData: %@, object: %@, version: %@",
+                               exception,
+                               cachedData,
+                               cachedObject,
+                               cachedVersion);
+                    [ExceptionUtils exceptionToNetWork:exception];
+                } @catch (NSException *exception) {
+                    
+                }
             }
         }
         
@@ -2179,11 +2206,15 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     self.decideDimensionsResponseCached = YES;
                     
                 } @catch (NSException *exception) {
-                    [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-                    MPLogError(@"exception: %@, dimensions responseData: %@, object: %@",
-                               exception,
-                               responseData,
-                               responseObject);
+                    @try {
+                        MPLogError(@"exception: %@, dimensions responseData: %@, object: %@",
+                                   exception,
+                                   responseData,
+                                   responseObject);
+                        [ExceptionUtils exceptionToNetWork:exception];
+                    } @catch (NSException *exception) {
+                        
+                    }
                 }
                 
                 dispatch_semaphore_signal(semaphore);
@@ -2282,12 +2313,17 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     cacheVersion = cachedObject[@"event_bindings_version"];
                 }
             } @catch (NSException *exception) {
-                [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-                self.decideBindingsResponseCached = NO;
-                MPLogError(@"exception: %@, bindings cacheData: %@, object: %@",
-                           exception,
-                           cachedData,
-                           cachedObject);
+                @try {
+                    self.decideBindingsResponseCached = NO;
+                    MPLogError(@"exception: %@, bindings cacheData: %@, object: %@",
+                               exception,
+                               cachedData,
+                               cachedObject);
+                    [ExceptionUtils exceptionToNetWork:exception];
+                } @catch (NSException *exception) {
+                    
+                }
+                
             }
         }
         
@@ -2336,13 +2372,16 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     self.decideBindingsResponseCached = YES;
                     
                 } @catch (NSException *exception) {
-                    [[Sugo sharedInstance]trackEvent:SDKEXCEPTION properties:[[Sugo sharedInstance]exceptionInfoWithException:exception]];
-                    MPLogError(@"exception: %@, bindings responseData: %@, object: %@",
-                               exception,
-                               responseData,
-                               responseObject);
+                    @try {
+                        MPLogError(@"exception: %@, bindings responseData: %@, object: %@",
+                                   exception,
+                                   responseData,
+                                   responseObject);
+                        [ExceptionUtils exceptionToNetWork:exception];
+                    } @catch (NSException *exception) {
+                        
+                    }
                 }
-                
                 dispatch_semaphore_signal(semaphore);
             }] resume];
             
@@ -2379,62 +2418,8 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     });
 }
 
--(NSMutableDictionary *)exceptionInfoWithException:(NSException *)exception{
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
-    @try {
-        [dict setObject:self.apiToken forKey:@"token"];
-        [dict setObject:self.projectID forKey:@"projectId"];
-        [dict setObject:[self libVersion] forKey:@"sdkVersion" ];
-        [dict setObject:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"appVersion" ];
-        [dict setObject:[self defaultDeviceId] forKey:@"deviceId"];
-        [dict setObject:SUGOSSystemVersion forKey:@"systemVersion"];
-        [dict setObject:SUGODeviceModel forKey:@"PhoneModel"];
-        [dict setObject:exception.description forKey:@"exception"];
-    } @catch (NSException *exception) {
-        NSLog(@"%@",exception);
-    }
-    return dict;
-}
 
--(void)exceptionToNetWork:(NSException *)exception{
-    @try {
-        dispatch_queue_t queue = dispatch_queue_create("io.sugo.SugoDemo", DISPATCH_QUEUE_SERIAL);
-        //        [self ExceptionInfoWithException:nil];
-        dispatch_async(queue, ^{
-            NSString *topic =@"sugo_exception";
-            if (SugoExceptionTopic!=nil&&SugoExceptionTopic.length>0) {
-                topic = SugoExceptionTopic;
-            }
-            
-            NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
-                                                                       value:topic];
-            NSMutableDictionary *dict = [self exceptionInfoWithException:exception];
-            NSArray *queryItems = @[queryItem];
-            NSError *error;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
-            NSString *requestData = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-            NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
-            MPNetwork *mMPNetwork = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:SugoBindingsURL]
-                                                   andEventCollectionURL:[NSURL URLWithString:SugoCollectionURL]];
-            NSURLRequest *request = [mMPNetwork buildPostRequestForURL:[NSURL URLWithString:SugoCollectionURL]
-                                                           andEndpoint:MPNetworkEndpointTrack
-                                                        withQueryItems:queryItems
-                                                               andBody:postBody];
-            NSURLSession *session = [NSURLSession sharedSession];
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                      NSURLResponse *urlResponse,
-                                                                      NSError *error) {
-                NSString *requestData = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
-                dispatch_semaphore_signal(semaphore);
-            }] resume];
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        });
-    } @catch (NSException *exception) {
-        NSLog(@"%@",exception);
-    }
-    
-}
+
 
 -(void)initSugoRequestWithProject:(NSString *)projectID withToken:(NSString *)token withCompletion:(void (^)())completion{
     @try {
@@ -2526,15 +2511,19 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     resultData = responseData;
                     
                 } @catch (NSException *exception) {
-                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                    [userDefaults setBool:false forKey:@"isSugoInitialize"];
-                    [userDefaults synchronize];
-                    [self exceptionToNetWork:exception];
-                    NSLog(@"SUGO_initSugoRequestWithProject:%@",exception);
-                    MPLogError(@"exception: %@, request init sugo responseData: %@, object: %@",
-                               exception,
-                               responseData,
-                               responseObject);
+                    @try {
+                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                        [userDefaults setBool:false forKey:@"isSugoInitialize"];
+                        [userDefaults synchronize];
+                        NSLog(@"SUGO_initSugoRequestWithProject:%@",exception);
+                        [ExceptionUtils exceptionToNetWork:exception];
+                        MPLogError(@"exception: %@, request init sugo responseData: %@, object: %@",
+                                   exception,
+                                   responseData,
+                                   responseObject);
+                    } @catch (NSException *exception) {
+                    }
+                   
                 }
                 
                 dispatch_semaphore_signal(semaphore);
@@ -2548,11 +2537,15 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
             }
         });
     } @catch (NSException *exception) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setBool:false forKey:@"isSugoInitialize"];
-        [userDefaults synchronize];
-        NSLog(@"SUGO_initSugoRequestWithProject:%@",exception);
-        [self exceptionToNetWork:exception];
+        @try {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:false forKey:@"isSugoInitialize"];
+            [userDefaults synchronize];
+            NSLog(@"SUGO_initSugoRequestWithProject:%@",exception);
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
+        }
     }
     
 }
