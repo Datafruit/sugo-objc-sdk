@@ -13,5 +13,6 @@
 + (UIViewController *)sugoCurrentUIViewController;
 + (UINavigationController *)sugoCurrentUINavigationController;
 + (UITabBarController *)sugoCurrentUITabBarController;
++(UIViewController *)sugoCurrentUIViewController:(UIView *) view;
 
 @end

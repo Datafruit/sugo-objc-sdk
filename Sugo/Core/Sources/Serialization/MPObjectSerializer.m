@@ -49,20 +49,110 @@
     NSParameterAssert(rootObject != nil);
 
     MPObjectSerializerContext *context = [[MPObjectSerializerContext alloc] initWithRootObject:rootObject];
-
+    NSMutableArray *collectionViewCellArray=[NSMutableArray new];
     while ([context hasUnvisitedObjects])
     {
-        [self visitObject:[context dequeueUnvisitedObject] withContext:context];
+        NSObject *object=[context dequeueUnvisitedObject];
+        NSString *objectName=NSStringFromClass([object class]);
+        //This change is to add a subscript to each cell to solve the problem of cell scrambling in the server path
+        if([objectName isEqualToString:@"UICollectionViewCell"]){
+            collectionViewCellArray=[self visitObject:object withContext:context withItemArray:collectionViewCellArray];
+        }else{
+            [self visitObject:object withContext:context withItemArray:nil];
+        }
     }
+    
+    NSMutableArray *objectArray=[[context allSerializedObjects] mutableCopy];
+    
+    
+    //if have collectionviewcell，set cellindex value to the collectionviewcell。
+    if (collectionViewCellArray.count>0) {
+        NSDictionary *xDict=[self findCollectionViewCellInterval:collectionViewCellArray withType:0];
+        NSDictionary *yDict=[self findCollectionViewCellInterval:collectionViewCellArray withType:1];
+        CGFloat xDistance=[xDict[@"distance"] floatValue];
+        CGFloat xMegin=[xDict[@"megin"] floatValue];
+        CGFloat itemNum=[xDict[@"itemNum"] floatValue];
+        CGFloat yDistance=[yDict[@"distance"] floatValue];
+        CGFloat yMegin=[yDict[@"megin"] floatValue];
+        for (NSMutableDictionary *dict in collectionViewCellArray) {
+            NSDictionary *value=[self requrieWidgetFrame:dict];
+            CGFloat y=[value[@"Y"] floatValue];
+            CGFloat x=[value[@"X"] floatValue];
+            CGFloat width=[value[@"Width"] floatValue];
+            CGFloat height=[value[@"Height"] floatValue];
+            CGFloat xNum = (x-xMegin)/(xDistance+width)-(int)((x-xMegin)/(xDistance+width))>0?(int)(x-xMegin)/(xDistance+width)+1:(x-xMegin)/(xDistance+width);
+            NSInteger cellIndex= (y-yMegin)/(yDistance+height)*itemNum + xNum;
+            [dict[@"properties"] setValue:[NSString stringWithFormat:@"%d",cellIndex] forKey:@"cellIndex"];
+        }
+        [objectArray addObjectsFromArray:collectionViewCellArray];
+    }
+    
 
     return @{
-            @"objects": [context allSerializedObjects],
+            @"objects": objectArray,
             @"rootObject": [_objectIdentityProvider identifierForObject:rootObject],
             @"classAttr":[[Sugo sharedInstance] requireClassAttributeDict]
     };
 }
 
-- (void)visitObject:(NSObject *)object withContext:(MPObjectSerializerContext *)context
+#pragma mark Gets the frame value of the webview or wkwebview
+-(NSDictionary *)requrieWidgetFrame:(NSMutableDictionary *)serializedObject{
+    NSDictionary *properties=serializedObject[@"properties"];
+    NSDictionary *frame=properties[@"frame"];
+    NSArray *values=frame[@"values"];
+    NSDictionary *dict=values[0];
+    NSDictionary *value=dict[@"value"];
+    return value;
+}
+
+//find collection的line distance，item distance，left megin，top megin。
+//type:require X array or Y array;     0:X array ;   1:Y array;
+-(NSDictionary *)findCollectionViewCellInterval:(NSMutableArray *)xArray withType:(NSInteger)type{
+    NSDictionary *value=[self requrieWidgetFrame:xArray[0]];
+    CGFloat size;
+    if (type==0) {
+        size=[((NSString *)value[@"Width"]) floatValue];
+    }else{
+        size=[((NSString *)value[@"Height"]) floatValue];
+    }
+    
+    NSMutableArray *arr=[[NSMutableArray alloc]init];
+    for (int i=0; i<xArray.count; i++) {
+        NSDictionary *value=[self requrieWidgetFrame:xArray[i]];
+        CGFloat num;
+        if (type==0) {
+            num=[((NSString *)value[@"X"]) floatValue];
+        }else{
+            num=[((NSString *)value[@"Y"]) floatValue];
+        }
+        [arr addObject:@(num)];
+    }
+    
+    //Delete the same element，and sort .
+    NSArray *newArray=[[[NSSet setWithArray:arr] allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    float distance=0;
+    float megin=0;
+    CGFloat itemNum=0;
+    
+    if (newArray.count==1) {//special case
+        megin=[newArray[0] floatValue];
+    }else if(newArray.count>1){
+        distance =[newArray[1] floatValue]-[newArray[0] floatValue]-size;
+        NSInteger tmp= [newArray[0] floatValue]/(distance+size);
+        megin=[newArray[0] floatValue]- tmp*(distance+size) ;
+    }
+    
+    if (type==0) {//when is x array,require per line cell num;
+        itemNum=([newArray[newArray.count-1] floatValue] - [newArray[0] floatValue])/(distance+size)+1;
+    }
+    NSDictionary * result = @{@"distance":@(distance),
+                              @"megin":@(megin),
+                              @"itemNum":@(itemNum)
+                              };
+    return result;
+}
+
+- (NSMutableArray *)visitObject:(NSObject *)object withContext:(MPObjectSerializerContext *)context withItemArray:(NSMutableArray *)itemArray
 {
     NSParameterAssert(object != nil);
     NSParameterAssert(context != nil);
@@ -74,8 +164,8 @@
     [context addVisitedObject:object];
 
     NSMutableDictionary *propertyValues = [NSMutableDictionary dictionary];
-
     MPClassDescription *classDescription = [self classDescriptionForObject:object];
+    
     if (classDescription) {
         for (MPPropertyDescription *propertyDescription in [classDescription propertyDescriptions]) {
             if ([propertyDescription shouldReadPropertyValueForObject:object]) {
@@ -88,9 +178,19 @@
     NSMutableArray *delegateMethods = [NSMutableArray array];
     id delegate;
     SEL delegateSelector = @selector(delegate);
+    NSObject *tmpObject=object;
+    
+    //Special circumstances:get the delegateclass and delegateMethods of subView through parentView;so transform parentView;
+    if ([NSStringFromClass([object class]) isEqualToString:@"UITableViewCell"]) {
+        classDescription = [self classDescriptionForTableViewCellObject:object];
+        tmpObject=[self requireParentObjectFromTableViewCellObject:object];
+    }else if([NSStringFromClass([object class]) isEqualToString:@"UICollectionViewCell"]){
+        classDescription = [self classDescriptionForCollectionViewCellObject:object];
+        tmpObject=[self requireParentObjectFromCollectionViewCellObject:object];
+    }
 
-    if ([classDescription delegateInfos].count > 0 && [object respondsToSelector:delegateSelector]) {
-        delegate = ((id (*)(id, SEL))[object methodForSelector:delegateSelector])(object, delegateSelector);
+    if ([classDescription delegateInfos].count > 0 && [tmpObject respondsToSelector:delegateSelector]) {
+        delegate = ((id (*)(id, SEL))[tmpObject methodForSelector:delegateSelector])(tmpObject, delegateSelector);
         for (MPDelegateInfo *delegateInfo in [classDescription delegateInfos]) {
             if ([delegate respondsToSelector:NSSelectorFromString(delegateInfo.selectorName)]) {
                 [delegateMethods addObject:delegateInfo.selectorName];
@@ -119,7 +219,68 @@
                              forKey:@"htmlPage"];
     }
 
-    [context addSerializedObject:serializedObject];
+    if ([NSStringFromClass([object class]) isEqualToString:@"UITableViewCell"]) {
+        [context addSerializedObject:[self addTableViewCellIndexToSerializedObject:serializedObject]];
+        return nil;
+    }else if([NSStringFromClass([object class]) isEqualToString:@"UICollectionViewCell"]){
+        [itemArray addObject:serializedObject];
+        return itemArray;
+    }else{
+        [context addSerializedObject:serializedObject];
+        return  nil;
+    }
+}
+
+#pragma mark add cellIndex value To the uitableviewcell
+-(NSMutableDictionary *)addTableViewCellIndexToSerializedObject:(NSMutableDictionary *)serializedObject{
+    NSDictionary *properties=serializedObject[@"properties"];
+    NSDictionary *frame=properties[@"frame"];
+    NSArray *values=frame[@"values"];
+    NSDictionary *dict=values[0];
+    NSDictionary *value=dict[@"value"];
+    CGFloat height=[((NSString *)value[@"Height"]) floatValue];
+    
+    NSDictionary *center=properties[@"center"];
+    NSArray *valuesCenter=center[@"values"];
+    NSDictionary *dictCenter=valuesCenter[0];
+    NSDictionary *valueCenter=dictCenter[@"value"];
+    CGFloat y =[((NSString *)valueCenter[@"Y"]) floatValue];
+    int i=(y-height/2)/height;
+    [serializedObject[@"properties"] setValue:[NSString stringWithFormat:@"%d",i] forKey:@"cellIndex"];
+    return serializedObject;
+}
+
+// according to the  tableviewcell to find tableview's MPClassDescription，the purpose is require tableviewcell's delegateclass
+-(MPClassDescription *)classDescriptionForTableViewCellObject:(NSObject *)object{
+    NSParameterAssert(object != nil);
+    MPClassDescription *parentDescription;
+    Class viewClass=[[self requireParentObjectFromTableViewCellObject:object] class];
+    parentDescription = [_configuration classWithName:NSStringFromClass(viewClass)];
+    return parentDescription;
+}
+
+-(NSObject *)requireParentObjectFromTableViewCellObject:(NSObject *)object{
+    UIView *view=(UIView *)object;
+    while (![NSStringFromClass([view class]) isEqualToString:@"UITableView"]) {
+        view=view.superview;
+    }
+    return (NSObject *)view;
+}
+
+-(MPClassDescription *)classDescriptionForCollectionViewCellObject:(NSObject *)object{
+    NSParameterAssert(object != nil);
+    MPClassDescription *parentDescription;
+    Class viewClass=[[self requireParentObjectFromCollectionViewCellObject:object] class];
+    parentDescription = [_configuration classWithName:NSStringFromClass(viewClass)];
+    return parentDescription;
+}
+
+-(NSObject *)requireParentObjectFromCollectionViewCellObject:(NSObject *)object{
+    UIView *view=(UIView *)object;
+    while (![NSStringFromClass([view class]) isEqualToString:@"UICollectionView"]) {
+        view=view.superview;
+    }
+    return (NSObject *)view;
 }
 
 
@@ -127,9 +288,6 @@
     
     NSMutableDictionary *dict =  [[Sugo sharedInstance] requireClassAttributeDict];
     NSString *className =[self classHierarchyArrayForObject:object][0];
-    if ([className isEqualToString:@"CustumButton"]) {
-        NSLog(@"dddc");
-    }
     NSString *value = dict[className];
     if (value != nil) {
         return;

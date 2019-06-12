@@ -23,6 +23,10 @@
 		9B24948A21EC311900739385 /* BindingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B24948821EC311900739385 /* BindingUtils.m */; };
 		9BB422D922ACD35300AFF1B8 /* ExceptionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BB422D722ACD35300AFF1B8 /* ExceptionUtils.h */; };
 		9BB422DA22ACD35300AFF1B8 /* ExceptionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BB422D822ACD35300AFF1B8 /* ExceptionUtils.m */; };
+		9BF8AE3122B0E60A00C99E59 /* MPUITableViewCellBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BF8AE2F22B0E60A00C99E59 /* MPUITableViewCellBinding.h */; };
+		9BF8AE3222B0E60A00C99E59 /* MPUITableViewCellBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF8AE3022B0E60A00C99E59 /* MPUITableViewCellBinding.m */; };
+		9BF8AE3522B0E73100C99E59 /* MPUICollectionViewCellBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BF8AE3322B0E73100C99E59 /* MPUICollectionViewCellBinding.h */; };
+		9BF8AE3622B0E73100C99E59 /* MPUICollectionViewCellBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF8AE3422B0E73100C99E59 /* MPUICollectionViewCellBinding.m */; };
 		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
 		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
 		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -212,6 +216,10 @@
 		9B3FC18C21D767C80074D519 /* projectMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = projectMacro.h; sourceTree = "<group>"; };
 		9BB422D722ACD35300AFF1B8 /* ExceptionUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExceptionUtils.h; sourceTree = "<group>"; };
 		9BB422D822ACD35300AFF1B8 /* ExceptionUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExceptionUtils.m; sourceTree = "<group>"; };
+		9BF8AE2F22B0E60A00C99E59 /* MPUITableViewCellBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUITableViewCellBinding.h; sourceTree = "<group>"; };
+		9BF8AE3022B0E60A00C99E59 /* MPUITableViewCellBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUITableViewCellBinding.m; sourceTree = "<group>"; };
+		9BF8AE3322B0E73100C99E59 /* MPUICollectionViewCellBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUICollectionViewCellBinding.h; sourceTree = "<group>"; };
+		9BF8AE3422B0E73100C99E59 /* MPUICollectionViewCellBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUICollectionViewCellBinding.m; sourceTree = "<group>"; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -464,6 +472,24 @@
 			path = util;
 			sourceTree = "<group>";
 		};
+		9BF8AE2D22B0E5CA00C99E59 /* UICollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				9BF8AE3322B0E73100C99E59 /* MPUICollectionViewCellBinding.h */,
+				9BF8AE3422B0E73100C99E59 /* MPUICollectionViewCellBinding.m */,
+			);
+			path = UICollectionViewCell;
+			sourceTree = "<group>";
+		};
+		9BF8AE2E22B0E5E200C99E59 /* UITableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				9BF8AE2F22B0E60A00C99E59 /* MPUITableViewCellBinding.h */,
+				9BF8AE3022B0E60A00C99E59 /* MPUITableViewCellBinding.m */,
+			);
+			path = UITableViewCell;
+			sourceTree = "<group>";
+		};
 		A700F8A320C7BD24008C0069 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -618,6 +644,8 @@
 		A700F9FC20C7C4AF008C0069 /* Native */ = {
 			isa = PBXGroup;
 			children = (
+				9BF8AE2E22B0E5E200C99E59 /* UITableViewCell */,
+				9BF8AE2D22B0E5CA00C99E59 /* UICollectionViewCell */,
 				A700F8F120C7BD24008C0069 /* MPEventBinding.h */,
 				A700F93A20C7BD24008C0069 /* MPEventBinding.m */,
 				A700FA0020C7C524008C0069 /* UIView */,
@@ -922,6 +950,7 @@
 				A700F98C20C7BD24008C0069 /* MPObjectIdentifierProvider.h in Headers */,
 				A700F97E20C7BD24008C0069 /* MPNetwork.h in Headers */,
 				A700F99D20C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.h in Headers */,
+				9BF8AE3122B0E60A00C99E59 /* MPUITableViewCellBinding.h in Headers */,
 				A700F96A20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h in Headers */,
 				A700F95920C7BD24008C0069 /* MPApplicationStateSerializer.h in Headers */,
 				A700F9D120C7BD24008C0069 /* UIViewController+AutomaticEvents.h in Headers */,
@@ -930,6 +959,7 @@
 				A700F96620C7BD24008C0069 /* HeatMap.h in Headers */,
 				A700F9B020C7BD24008C0069 /* MPABTestDesignerTweakResponseMessage.h in Headers */,
 				A700F99E20C7BD24008C0069 /* NSNotificationCenter+AutomaticEvents.h in Headers */,
+				9BF8AE3522B0E73100C99E59 /* MPUICollectionViewCellBinding.h in Headers */,
 				A700F9BF20C7BD24008C0069 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				A700F9CB20C7BD24008C0069 /* UIViewController+SugoHelpers.h in Headers */,
 				A700F9ED20C7BD24008C0069 /* MPObjectIdentityProvider.h in Headers */,
@@ -1074,6 +1104,7 @@
 			files = (
 				A700F95B20C7BD24008C0069 /* UIColor+MPColor.m in Sources */,
 				A700F9D220C7BD24008C0069 /* MPNetwork.m in Sources */,
+				9BF8AE3622B0E73100C99E59 /* MPUICollectionViewCellBinding.m in Sources */,
 				A700F9D920C7BD24008C0069 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				9B24948A21EC311900739385 /* BindingUtils.m in Sources */,
 				A700F97920C7BD24008C0069 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
@@ -1102,6 +1133,7 @@
 				A700F9AF20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				A700F9A120C7BD24008C0069 /* MPApplicationStateSerializer.m in Sources */,
 				A700F96E20C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
+				9BF8AE3222B0E60A00C99E59 /* MPUITableViewCellBinding.m in Sources */,
 				A700F96920C7BD24008C0069 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				A700F99C20C7BD24008C0069 /* MPTypeDescription.m in Sources */,
 				A700F9D520C7BD24008C0069 /* UIImage+MPAverageColor.m in Sources */,
