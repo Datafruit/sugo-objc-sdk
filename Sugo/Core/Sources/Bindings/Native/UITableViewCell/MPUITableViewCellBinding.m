@@ -188,6 +188,9 @@
                     }
                 }
                 
+                NSDictionary *classAttr = [self classAttr];
+                p = [BindingUtils requireExtraAttrWithValue:classAttr p:p view:cell indexPath:indexPath];
+                
                 [[self class] track:[self eventID]
                           eventName:[self eventName]
                          properties:p];
