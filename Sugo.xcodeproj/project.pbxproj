@@ -23,6 +23,9 @@
 		9B833E2A217DD3100034F188 /* MPUICollectionViewCellBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B833E28217DD3100034F188 /* MPUICollectionViewCellBinding.m */; };
 		9B833E2E217DD4510034F188 /* MPUITableViewCellBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B833E2C217DD4510034F188 /* MPUITableViewCellBinding.m */; };
 		9B833E2F217DD4510034F188 /* MPUITableViewCellBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B833E2D217DD4510034F188 /* MPUITableViewCellBinding.h */; };
+		9BF8AE3A22B22E2D00C99E59 /* ExceptionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BF8AE3822B22E2D00C99E59 /* ExceptionUtils.h */; };
+		9BF8AE3B22B22E2D00C99E59 /* ExceptionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF8AE3922B22E2D00C99E59 /* ExceptionUtils.m */; };
+		9BF8AE3E22B22F1A00C99E59 /* macro.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BF8AE3C22B22F1A00C99E59 /* macro.h */; };
 		A700F94B20C7BD24008C0069 /* MPObjectSerializerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */; };
 		A700F94C20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */; };
 		A700F94D20C7BD24008C0069 /* SugoEvents+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -209,6 +212,9 @@
 		9B833E28217DD3100034F188 /* MPUICollectionViewCellBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPUICollectionViewCellBinding.m; path = Sugo/Core/Sources/Bindings/Native/UICollectionViewCell/MPUICollectionViewCellBinding.m; sourceTree = SOURCE_ROOT; };
 		9B833E2C217DD4510034F188 /* MPUITableViewCellBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPUITableViewCellBinding.m; path = Sugo/Core/Sources/Bindings/Native/UITableViewCell/MPUITableViewCellBinding.m; sourceTree = SOURCE_ROOT; };
 		9B833E2D217DD4510034F188 /* MPUITableViewCellBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPUITableViewCellBinding.h; path = Sugo/Core/Sources/Bindings/Native/UITableViewCell/MPUITableViewCellBinding.h; sourceTree = SOURCE_ROOT; };
+		9BF8AE3822B22E2D00C99E59 /* ExceptionUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExceptionUtils.h; sourceTree = "<group>"; };
+		9BF8AE3922B22E2D00C99E59 /* ExceptionUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExceptionUtils.m; sourceTree = "<group>"; };
+		9BF8AE3C22B22F1A00C99E59 /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
 		A700F8A420C7BD24008C0069 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A700F8A520C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
 		A700F8A620C7BD24008C0069 /* SugoEvents+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SugoEvents+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -467,6 +473,16 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
+		9BF8AE3722B22E1500C99E59 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				9BF8AE3822B22E2D00C99E59 /* ExceptionUtils.h */,
+				9BF8AE3922B22E2D00C99E59 /* ExceptionUtils.m */,
+				9BF8AE3C22B22F1A00C99E59 /* macro.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		A700F8A320C7BD24008C0069 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -512,6 +528,7 @@
 		A700F9F420C7BDF6008C0069 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				9BF8AE3722B22E1500C99E59 /* utils */,
 				A700F93F20C7BD24008C0069 /* Sugo.h */,
 				A700F8AD20C7BD24008C0069 /* MPLogger.h */,
 				A700FA0A20C7CC6B008C0069 /* Track */,
@@ -922,6 +939,7 @@
 				A700F96420C7BD24008C0069 /* SugoPrivate.h in Headers */,
 				A700F9B320C7BD24008C0069 /* MPNetworkPrivate.h in Headers */,
 				A700F98C20C7BD24008C0069 /* MPObjectIdentifierProvider.h in Headers */,
+				9BF8AE3E22B22F1A00C99E59 /* macro.h in Headers */,
 				A700F97E20C7BD24008C0069 /* MPNetwork.h in Headers */,
 				A700F99D20C7BD24008C0069 /* MPABTestDesignerClearResponseMessage.h in Headers */,
 				A700F96A20C7BD24008C0069 /* MPAbstractABTestDesignerMessage.h in Headers */,
@@ -966,6 +984,7 @@
 				A700F9D820C7BD24008C0069 /* MPTypeDescription.h in Headers */,
 				9B833E29217DD3100034F188 /* MPUICollectionViewCellBinding.h in Headers */,
 				A700F9A720C7BD24008C0069 /* MPUIViewBinding.h in Headers */,
+				9BF8AE3A22B22E2D00C99E59 /* ExceptionUtils.h in Headers */,
 				A700F9CC20C7BD24008C0069 /* NSInvocation+MPHelpers.h in Headers */,
 				A700F9F020C7BD24008C0069 /* MPSwizzle.h in Headers */,
 				A700F99A20C7BD24008C0069 /* WebViewBindings+WKWebView.h in Headers */,
@@ -1101,6 +1120,7 @@
 				A700F9C320C7BD24008C0069 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				A700F9B120C7BD24008C0069 /* UIImage+MPImageEffects.m in Sources */,
 				A700F9BD20C7BD24008C0069 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
+				9BF8AE3B22B22E2D00C99E59 /* ExceptionUtils.m in Sources */,
 				A700F9AF20C7BD24008C0069 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				A700F9A120C7BD24008C0069 /* MPApplicationStateSerializer.m in Sources */,
 				A700F96E20C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m in Sources */,

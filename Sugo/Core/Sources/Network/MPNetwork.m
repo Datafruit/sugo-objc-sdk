@@ -205,7 +205,8 @@ static const NSUInteger kBatchSize = 50;
                             @(MPNetworkEndpointDecideEvent): @"/api/sdk/decide-event",
                             @(MPNetworkEndpointHeat): @"/api/sdk/heat",
                             @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time",
-                            @(MPNetworkEndpointFirstStartTime):@"api/sdk/get-first-start-time"
+                            @(MPNetworkEndpointFirstStartTime):@"api/sdk/get-first-start-time",
+                            @(MPNetworkEndpointInitSugo):@"/api/sdk/decide-config"
                             };
         
     });
