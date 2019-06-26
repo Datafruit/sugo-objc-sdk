@@ -41,8 +41,9 @@
                             NSMutableDictionary *p = [[NSMutableDictionary alloc]init];
                             NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[[Sugo sharedInstance]requireSugoConfigurationWithKey:@"DimensionKeys"]];
                             NSDictionary *values = [NSDictionary dictionaryWithDictionary:[[Sugo sharedInstance]requireSugoConfigurationWithKey:@"DimensionValues"]];
-                            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-                            NSString *pathName = [ user objectForKey:CURRENTCONTROLLER];
+//                            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//                            NSString *pathName = [ user objectForKey:CURRENTCONTROLLER];
+                            NSString *pathName = [[Sugo sharedInstance] requireWebViewPath];
                             if (pathName!=nil&&![pathName isEqualToString:@""]&& pathName.length>0) {
                                 p[keys[@"PagePath"]] = pathName;
                             }

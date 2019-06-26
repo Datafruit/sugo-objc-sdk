@@ -20,7 +20,7 @@
 
 - (void)startWKWebViewBindings:(WKWebView **)webView
 {
-    self.wkWebViewCurrentJS = [self wkJavaScript];
+    self.wkWebViewCurrentJS = [self wkJavaScriptWithWebView:(*webView)];
     [(*webView).configuration.userContentController addUserScript:[self wkWebViewCurrentJS]];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
     [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
@@ -50,14 +50,13 @@
     for (WKUserScript *userScript in userScripts) {
         [(*webView).configuration.userContentController addUserScript:userScript];
     }
-    self.wkWebViewCurrentJS = [self wkJavaScript];
+    self.wkWebViewCurrentJS = [self wkJavaScriptWithWebView:(*webView)];
     [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
     MPLogDebug(@"WKWebView Updated");
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
-    
     if ([message.body isKindOfClass:[NSDictionary class]]) {
         if ([message.name isEqualToString:@"SugoWKWebViewBindingsTrack"]) {
             NSDictionary *body = [[NSDictionary alloc] initWithDictionary:(NSDictionary *)message.body];
@@ -106,20 +105,21 @@
             }
         }else if([message.name isEqual:@"registerPathName"]){
             NSDictionary *body = (NSDictionary *)message.body;
-            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            [user setObject:body[@"path_name"] forKey:CURRENTCONTROLLER];
+            [[Sugo sharedInstance].webViewDict setObject:body[@"webview_hashcode"] forKey:body[@"path_name"]];
+//            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//            [user setObject:body[@"path_name"] forKey:CURRENTCONTROLLER];
         }
     } else {
         MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
     }
 }
 
-- (WKUserScript *)wkJavaScript
+- (WKUserScript *)wkJavaScriptWithWebView:(WKWebView *)wkWebView
 {
     NSString *js = [[NSString alloc] initWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n",
                     [self jsWKWebViewSugoioKit],
                     [self jsWKWebViewSugoBegin],
-                    [self jsWKWebViewVariables],
+                    [self jsWKWebViewVariablesWithWebView:wkWebView],
                     [self jsWKWebViewAPI],
                     [self jsWKWebViewBindings],
                     [self jsWKWebViewReport],
@@ -142,7 +142,7 @@
     return [self jsSourceOfFileName:@"SugoBegin"];
 }
 
-- (NSString *)jsWKWebViewVariables
+- (NSString *)jsWKWebViewVariablesWithWebView:(WKWebView *)webView
 {
     NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -207,6 +207,7 @@
     NSString *vcPath = [NSString stringWithFormat:@"sugo.view_controller = '%@';\n", self.wkVcPath];
     NSString *homePath = [NSString stringWithFormat:@"sugo.home_path = '%@';\n", homePathKey];
     NSString *homePathReplacement = [NSString stringWithFormat:@"sugo.home_path_replacement = '%@';\n", homePathValue];
+    NSString *webviewHashCode = [NSString stringWithFormat:@"sugo.webview_hashcode = '%@';\n",[NSString stringWithFormat:@"%ld",webView.hash]];
     NSString *regularExpressions = [NSString stringWithFormat:@"sugo.regular_expressions = %@;\n", resString?resString:@"[]"];
     NSString *pageInfos = [NSString stringWithFormat:@"sugo.page_infos = %@;\n", infosString?infosString:@"[]"];
     NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
@@ -216,10 +217,12 @@
     NSString *vars = [self jsSourceOfFileName:@"WebViewVariables"];
     
     
-    NSString *variables = [[NSString alloc] initWithFormat:@"%@%@%@%@%@%@%@%@%@%@",
+    
+    NSString *variables = [[NSString alloc] initWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@",
                            vcPath,
                            homePath,
                            homePathReplacement,
+                           webviewHashCode,
                            regularExpressions,
                            pageInfos,
                            bindings,

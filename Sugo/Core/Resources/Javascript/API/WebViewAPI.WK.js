@@ -61,15 +61,6 @@
         } else {
             props.path_name = sugo.relative_path;
         }
-        window.webkit.messageHandlers.registerPathName.postMessage(props);
-    };
-
-    sugo.registerPathName = function() {
-        props = {};
-        if(sugo.single_code) {
-            props.path_name = sugo.relative_path + "##" + sugo.single_code;
-        } else {
-            props.path_name = sugo.relative_path;
-        }
+        props.webview_hashcode =sugo.webview_hashcode;
         window.webkit.messageHandlers.registerPathName.postMessage(props);
     };

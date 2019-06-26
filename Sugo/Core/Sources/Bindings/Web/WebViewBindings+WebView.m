@@ -28,6 +28,7 @@
             if (![webView isKindOfClass:[UIWebView class]]) {
                 return;
             }
+            [[Sugo sharedInstance].webViewArray addObject:webView];
             UIWebView *uiWebView = (UIWebView *)webView;
             if (!self.uiWebView || uiWebView.window) {
                 if (self.uiWebView && self.uiWebView == uiWebView) {
@@ -61,6 +62,7 @@
             if (!wkWebView) {
                 return;
             }
+            [[Sugo sharedInstance].webViewArray addObject:webView];
            if (self.wkWebView) {
                 self.wkVcPath = nil;
                 [self stopWKWebViewBindings:wkWebView];
@@ -73,14 +75,46 @@
             [self startWKWebViewBindings:&wkWebView];
         };
         
+        void (^uiWillRemoveToWindowBlock)(id,SEL) = ^(id webView, SEL command) {
+            if (![webView isKindOfClass:[UIWebView class]]) {
+                return;
+            }
+            [[Sugo sharedInstance].webViewArray removeObject:webView];
+            NSString *hashCode = [NSString stringWithFormat:@"%d",[webView hash]];
+            [[Sugo sharedInstance].webViewDict removeObjectForKey:hashCode];
+        };
+        
+        void (^wkWillRemoveToWindowBlock)(id,SEL) = ^(id webView, SEL command) {
+            if (![webView isKindOfClass:[WKWebView class]]) {
+                return;
+            }
+            [[Sugo sharedInstance].webViewArray removeObject:webView];
+            NSString *hashCode = [NSString stringWithFormat:@"%d",[webView hash]];
+            [[Sugo sharedInstance].webViewDict removeObjectForKey:hashCode];
+        };
+        
         [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:NSClassFromString(@"UIWebView")
                           withBlock:uiDidMoveToWindowBlock
                               named:self.uiDidMoveToWindowBlockName];
+        
         [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:NSClassFromString(@"WKWebView")
                           withBlock:wkDidMoveToWindowBlock
                               named:self.wkDidMoveToWindowBlockName];
+        
+//        [MPSwizzler swizzleSelector:@selector(viewDidDisappear:)
+//                            onClass:[UIWebView class]
+//                          withBlock:uiWillRemoveToWindowBlock
+//                              named:[[NSUUID UUID] UUIDString]];
+//        [MPSwizzler swizzleSelector:NSSelectorFromString(@"ViewDidDisappear")
+//                            onClass:NSClassFromString(@"UIWebView")
+//                          withBlock:uiWillRemoveToWindowBlock
+//                              named:self.uiDidMoveToWindowBlockName];
+//        [MPSwizzler swizzleSelector:NSSelectorFromString(@"ViewDidDisappear")
+//                            onClass:NSClassFromString(@"WKWebView")
+//                          withBlock:wkWillRemoveToWindowBlock
+//                              named:self.wkDidMoveToWindowBlockName];
         self.viewSwizzleRunning = YES;
     }
 }

@@ -47,7 +47,7 @@
                                                                         error:nil];
                 NSString *npiStr = event[@"eventType"];
                 if([npiStr isEqualToString:@"registerPathName"]){
-                    [self registerPathName:npiStr events:event];
+                    [self registerPathName:npiStr webView:webView events:event];
                 }else{
                     [self isTrackEvent:npiStr events:event];
                 }
@@ -102,9 +102,8 @@
 }
 
 
--(void)registerPathName:(NSString *)npi events:(NSDictionary *)event{
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    [user setObject:event[@"path_name"] forKey:CURRENTCONTROLLER];
+-(void)registerPathName:(NSString *)npi webView:(UIWebView *)webView events:(NSDictionary *)event{
+    [[Sugo sharedInstance].webViewDict setObject:event[@"path_name"] forKey:[NSString stringWithFormat:@"%lu",(unsigned long)webView.hash]];
 }
 
 -(void)isTrackEvent:(NSString *)npi events:(NSDictionary *)event{

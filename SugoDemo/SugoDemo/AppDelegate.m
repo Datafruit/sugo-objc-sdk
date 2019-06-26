@@ -69,10 +69,12 @@
     SugoCollectionURL = @"http://collect.sugo.io:81"; // 设置传输绑定事件的网管URL，端口默认为80
     SugoCodelessURL = @"ws://192.168.0.122:8887"; // 设置连接可视化埋点的URL，端口默认为8887
     SugoExceptionTopic = @"sugo_exception"; // 设置sdk异常上报topic名称，默认为sugo_exception
-    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
-    [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
-    [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
-    [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil withCompletion:^() {
+        [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
+        [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
+        [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+        [[Sugo sharedInstance]buildApplicationMoveEvent];//需要热图时添加
+    }];
 }
 
 

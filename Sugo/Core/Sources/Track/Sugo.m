@@ -19,7 +19,7 @@
 #import "macro.h"
 #import "projectMacro.h"
 #import "ExceptionUtils.h"
-
+#import "Sugo+HeatMap.h"
 
 
 
@@ -136,6 +136,8 @@ static NSString *defaultProjectToken;
 - (instancetype)init:(NSString *)apiToken
 {
     if (self = [super init]) {
+        _webViewDict = [[NSMutableDictionary alloc]init];
+        _webViewArray = [[NSMutableArray alloc]init];
         self.eventsQueue = [NSMutableArray array];
         
         NSURL *modelURL = [[NSBundle bundleForClass: [self class]] URLForResource: @"Sugo" withExtension: @"momd"];
@@ -2807,6 +2809,18 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
         [self connectToABTestDesigner];
     }
+}
+
+-(NSString *)requireWebViewPath{
+    for (int i=0; i<_webViewArray.count; i++) {
+        UIView *view = _webViewArray[i];
+        NSString *hashCode = [NSString stringWithFormat:@"%ld",view.hash];
+        if (!view.isHidden) {
+            NSString *url = [_webViewDict objectForKey:hashCode];
+            return url;
+        }
+    }
+    return nil;
 }
 
 - (void)requestForHeatMapViaURL:(NSURL *)url
