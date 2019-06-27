@@ -52,6 +52,7 @@
                             storage.properties = (NSString *)event[@"properties"];
                             NSString *str = (NSString *)event[@"properties"];
                             NSData *eData = [str dataUsingEncoding:NSUTF8StringEncoding];
+                            //当是列表时，会自动获取到列表中的字符，不用前端去设置事件名称
                             if ([storage.eventName isEqualToString:@"$$text$$"]) {
                                 NSDictionary *propertiesDir = [NSJSONSerialization JSONObjectWithData:eData
                                                                                               options:NSJSONReadingMutableContainers

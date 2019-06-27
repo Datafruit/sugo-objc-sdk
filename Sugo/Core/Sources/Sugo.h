@@ -330,6 +330,8 @@ extern BOOL SugoCanTrackWebPage;
  */
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
+
++ (void)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withCompletion:(void (^)())completion;
 /*!
  @method
  
