@@ -104,10 +104,13 @@
                                         nodes:(NSString *)body[@"nodes"]];
             }
         }else if([message.name isEqual:@"registerPathName"]){
-            NSDictionary *body = (NSDictionary *)message.body;
-            [[Sugo sharedInstance].webViewDict setObject:body[@"webview_hashcode"] forKey:body[@"path_name"]];
-//            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-//            [user setObject:body[@"path_name"] forKey:CURRENTCONTROLLER];
+            @try {
+                NSDictionary *body = (NSDictionary *)message.body;
+                [[Sugo sharedInstance].webViewDict setObject:body[@"path_name"] forKey:body[@"webview_hashcode"] ];
+            } @catch (NSException *exception) {
+                NSLog(@"%@",exception);
+                [ExceptionUtils exceptionToNetWork:exception];
+            }
         }
     } else {
         MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);

@@ -33,6 +33,8 @@
 		14D3A0791E7F6CFA00DDE9EA /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D3A0781E7F6CFA00DDE9EA /* HomeTableViewController.m */; };
 		792F6391857EE0AE4308A65C /* Pods_SugoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2F8D208B98A9A8B1ABAC18 /* Pods_SugoDemo.framework */; };
 		9B055EB421E87271005A3D2A /* CustumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B055EB321E87271005A3D2A /* CustumButton.m */; };
+		9B0C04ED22C49AF100175000 /* MoreWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0C04EC22C49AF100175000 /* MoreWebViewController.m */; };
+		9B0C04F022C4A40800175000 /* MoreWKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0C04EF22C4A40800175000 /* MoreWKViewController.m */; };
 		9B2D4A96229D4C4D00CC70B3 /* Sugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; };
 		9B2D4A97229D4C4D00CC70B3 /* Sugo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF5AB8421E351A4001D0F71 /* Sugo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */; };
@@ -113,6 +115,10 @@
 		3F50373FF371FBAB25F9FE9C /* Pods-SugoDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SugoDemo.release.xcconfig"; path = "Target Support Files/Pods-SugoDemo/Pods-SugoDemo.release.xcconfig"; sourceTree = "<group>"; };
 		9B055EB221E87271005A3D2A /* CustumButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustumButton.h; sourceTree = "<group>"; };
 		9B055EB321E87271005A3D2A /* CustumButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustumButton.m; sourceTree = "<group>"; };
+		9B0C04EB22C49AF100175000 /* MoreWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoreWebViewController.h; sourceTree = "<group>"; };
+		9B0C04EC22C49AF100175000 /* MoreWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MoreWebViewController.m; sourceTree = "<group>"; };
+		9B0C04EE22C4A40800175000 /* MoreWKViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoreWKViewController.h; sourceTree = "<group>"; };
+		9B0C04EF22C4A40800175000 /* MoreWKViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MoreWKViewController.m; sourceTree = "<group>"; };
 		9BF5AB8421E351A4001D0F71 /* Sugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7097E251FDBD51A008EC6F4 /* UICollectionViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UICollectionViewViewController.h; sourceTree = "<group>"; };
 		A7097E261FDBD51A008EC6F4 /* UICollectionViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UICollectionViewViewController.m; sourceTree = "<group>"; };
@@ -176,6 +182,10 @@
 				140CECB51E7FD6DB00422EA8 /* UIWebViewViewController.m */,
 				140CECB71E7FD6E600422EA8 /* WKWebViewViewController.h */,
 				140CECB81E7FD6E600422EA8 /* WKWebViewViewController.m */,
+				9B0C04EB22C49AF100175000 /* MoreWebViewController.h */,
+				9B0C04EC22C49AF100175000 /* MoreWebViewController.m */,
+				9B0C04EE22C4A40800175000 /* MoreWKViewController.h */,
+				9B0C04EF22C4A40800175000 /* MoreWKViewController.m */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -432,12 +442,14 @@
 				A7097E271FDBD51A008EC6F4 /* UICollectionViewViewController.m in Sources */,
 				14776B641E8616F50034ECB7 /* UITextViewViewController.m in Sources */,
 				14BA1A8F1E13ECAB002F0C4B /* WKWebViewController.m in Sources */,
+				9B0C04ED22C49AF100175000 /* MoreWebViewController.m in Sources */,
 				14BA1A8C1E13EC9B002F0C4B /* UIWebViewController.m in Sources */,
 				140CECB61E7FD6DB00422EA8 /* UIWebViewViewController.m in Sources */,
 				14D3A0701E7F6B8500DDE9EA /* InstructionsViewController.m in Sources */,
 				141AC79B1E1366DB008D67F6 /* main.m in Sources */,
 				140CECA41E7FD18A00422EA8 /* NativeTableViewController.m in Sources */,
 				14BA1A831E13EC18002F0C4B /* TrackingViewController.m in Sources */,
+				9B0C04F022C4A40800175000 /* MoreWKViewController.m in Sources */,
 				14BA1A921E13ECD7002F0C4B /* ActionCompleteViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -19,8 +19,6 @@
 		14BA1A4C1E13D66E002F0C4B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */; };
 		14BA1A4E1E13D675002F0C4B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4D1E13D675002F0C4B /* WebKit.framework */; };
 		14BA1A501E13D679002F0C4B /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */; };
-		9B0C04E922C37FD700175000 /* Sugo+HeatMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0C04E722C37FD700175000 /* Sugo+HeatMap.m */; };
-		9B0C04EA22C37FD700175000 /* Sugo+HeatMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B0C04E822C37FD700175000 /* Sugo+HeatMap.h */; };
 		9B24948921EC311900739385 /* BindingUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B24948721EC311900739385 /* BindingUtils.h */; };
 		9B24948A21EC311900739385 /* BindingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B24948821EC311900739385 /* BindingUtils.m */; };
 		9BB422D922ACD35300AFF1B8 /* ExceptionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BB422D722ACD35300AFF1B8 /* ExceptionUtils.h */; };
@@ -212,8 +210,6 @@
 		14BA1A4B1E13D66E002F0C4B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14BA1A4D1E13D675002F0C4B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		14BA1A4F1E13D679002F0C4B /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		9B0C04E722C37FD700175000 /* Sugo+HeatMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Sugo+HeatMap.m"; path = "Sugo/HeatMap/Sugo+HeatMap.m"; sourceTree = SOURCE_ROOT; };
-		9B0C04E822C37FD700175000 /* Sugo+HeatMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Sugo+HeatMap.h"; path = "Sugo/HeatMap/Sugo+HeatMap.h"; sourceTree = SOURCE_ROOT; };
 		9B24948721EC311900739385 /* BindingUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BindingUtils.h; sourceTree = "<group>"; };
 		9B24948821EC311900739385 /* BindingUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BindingUtils.m; sourceTree = "<group>"; };
 		9B3FC18B21D767340074D519 /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
@@ -539,8 +535,6 @@
 		A700F9F420C7BDF6008C0069 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				9B0C04E822C37FD700175000 /* Sugo+HeatMap.h */,
-				9B0C04E722C37FD700175000 /* Sugo+HeatMap.m */,
 				9B3FC18A21D767040074D519 /* util */,
 				A700F93F20C7BD24008C0069 /* Sugo.h */,
 				A700F8AD20C7BD24008C0069 /* MPLogger.h */,
@@ -1009,7 +1003,6 @@
 				A700F99720C7BD24008C0069 /* MPEventBinding.h in Headers */,
 				A700F95020C7BD24008C0069 /* WebViewBindings.h in Headers */,
 				A700F9C620C7BD24008C0069 /* MPABTestDesignerConnection.h in Headers */,
-				9B0C04EA22C37FD700175000 /* Sugo+HeatMap.h in Headers */,
 				A700F99420C7BD24008C0069 /* MPObjectSelector.h in Headers */,
 				A700F9B220C7BD24008C0069 /* Sugo+AutomaticEvents.h in Headers */,
 				A700F98120C7BD24008C0069 /* AutomaticEventsConstants.h in Headers */,
@@ -1141,7 +1134,6 @@
 				A700F9A120C7BD24008C0069 /* MPApplicationStateSerializer.m in Sources */,
 				A700F96E20C7BD24008C0069 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				9BF8AE3222B0E60A00C99E59 /* MPUITableViewCellBinding.m in Sources */,
-				9B0C04E922C37FD700175000 /* Sugo+HeatMap.m in Sources */,
 				A700F96920C7BD24008C0069 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				A700F99C20C7BD24008C0069 /* MPTypeDescription.m in Sources */,
 				A700F9D520C7BD24008C0069 /* UIImage+MPAverageColor.m in Sources */,

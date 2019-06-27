@@ -19,7 +19,6 @@
 #import "macro.h"
 #import "projectMacro.h"
 #import "ExceptionUtils.h"
-#import "Sugo+HeatMap.h"
 
 
 
@@ -2812,13 +2811,23 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 }
 
 -(NSString *)requireWebViewPath{
-    for (int i=0; i<_webViewArray.count; i++) {
-        UIView *view = _webViewArray[i];
-        NSString *hashCode = [NSString stringWithFormat:@"%ld",view.hash];
-        if (!view.isHidden) {
-            NSString *url = [_webViewDict objectForKey:hashCode];
-            return url;
+    @try {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        bool isHeatMapFunc = [userDefaults boolForKey:@"isHeatMapFunc"];
+        if (isHeatMapFunc) {
+            for (int i=0; i<_webViewArray.count; i++) {
+                UIView *view = _webViewArray[i];
+                NSString *hashCode = [NSString stringWithFormat:@"%ld",view.hash];
+                if (!view.isHidden) {
+                    NSString *url = [_webViewDict objectForKey:hashCode];
+                    return url;
+                }
+            }
         }
+    }@catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
     }
     return nil;
 }

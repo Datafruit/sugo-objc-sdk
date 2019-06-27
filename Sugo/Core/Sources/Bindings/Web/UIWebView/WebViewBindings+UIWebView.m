@@ -103,7 +103,12 @@
 
 
 -(void)registerPathName:(NSString *)npi webView:(UIWebView *)webView events:(NSDictionary *)event{
-    [[Sugo sharedInstance].webViewDict setObject:event[@"path_name"] forKey:[NSString stringWithFormat:@"%lu",(unsigned long)webView.hash]];
+    @try {
+        [[Sugo sharedInstance].webViewDict setObject:event[@"path_name"] forKey:[NSString stringWithFormat:@"%lu",(unsigned long)webView.hash]];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 -(void)isTrackEvent:(NSString *)npi events:(NSDictionary *)event{

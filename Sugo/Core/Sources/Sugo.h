@@ -81,7 +81,6 @@ extern BOOL SugoCanTrackWebPage;
 @property (atomic,strong) NSMutableArray *webViewArray;//保存当前存在的webview
 @property (atomic,strong) NSMutableDictionary *webViewDict;//保存webview的哈希值相对应的url
 
--(void)buildApplicationMoveEvent;
 -(NSString *)requireWebViewPath;
 /*!
  @property
