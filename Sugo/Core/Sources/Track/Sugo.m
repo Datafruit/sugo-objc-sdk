@@ -22,7 +22,6 @@
 
 
 
-
 NSString *SugoBindingsURL;
 NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
@@ -136,6 +135,8 @@ static NSString *defaultProjectToken;
 - (instancetype)init:(NSString *)apiToken
 {
     if (self = [super init]) {
+        _webViewDict = [[NSMutableDictionary alloc]init];
+        _webViewArray = [[NSMutableArray alloc]init];
         self.eventsQueue = [NSMutableArray array];
         
         NSURL *modelURL = [[NSBundle bundleForClass: [self class]] URLForResource: @"Sugo" withExtension: @"momd"];
@@ -2807,6 +2808,28 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
         [self connectToABTestDesigner];
     }
+}
+
+-(NSString *)requireWebViewPath{
+    @try {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        bool isHeatMapFunc = [userDefaults boolForKey:@"isHeatMapFunc"];
+        if (isHeatMapFunc) {
+            for (int i=0; i<_webViewArray.count; i++) {
+                UIView *view = _webViewArray[i];
+                NSString *hashCode = [NSString stringWithFormat:@"%ld",view.hash];
+                if (!view.isHidden) {
+                    NSString *url = [_webViewDict objectForKey:hashCode];
+                    return url;
+                }
+            }
+        }
+    }@catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
+    }
+    return nil;
 }
 
 - (void)requestForHeatMapViaURL:(NSURL *)url

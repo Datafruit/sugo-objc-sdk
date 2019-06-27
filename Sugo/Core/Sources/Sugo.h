@@ -33,6 +33,7 @@ extern NSString *SugoExceptionTopic;
 extern BOOL SugoCanTrackNativePage;
 extern BOOL SugoCanTrackWebPage;
 
+
 /*!
  @class
  Sugo API.
@@ -76,6 +77,11 @@ extern BOOL SugoCanTrackWebPage;
  */
 @property (atomic, readonly, strong) SugoPeople *people;
 
+
+@property (atomic,strong) NSMutableArray *webViewArray;//保存当前存在的webview
+@property (atomic,strong) NSMutableDictionary *webViewDict;//保存webview的哈希值相对应的url
+
+-(NSString *)requireWebViewPath;
 /*!
  @property
  

@@ -108,6 +108,26 @@
     return views;
 }
 
+- (BOOL)isTableViewCellSelected:(id)leaf fromRoot:(id)root evaluatingFinalPredicate:(BOOL)finalPredicate num:(NSInteger)num
+{
+    BOOL isSelected = YES;
+    NSArray *views = @[leaf];
+    NSUInteger n = _filters.count, i = n-num;
+    while (i--) {
+        MPObjectFilter *filter = _filters[i];
+        filter.nameOnly = (i == n-1 && !finalPredicate);
+        if (![filter appliesToAny:views]) {
+            isSelected = NO;
+            break;
+        }
+        views = [filter applyReverse:views];
+        if (views.count == 0) {
+            break;
+        }
+    }
+    return isSelected && [views indexOfObject:root] != NSNotFound;
+}
+
 
 /*
  Starting at a leaf node, determine if it would be selected
