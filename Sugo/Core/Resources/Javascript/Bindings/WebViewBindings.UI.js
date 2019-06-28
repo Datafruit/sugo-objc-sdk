@@ -75,6 +75,7 @@ sugo.delegate = function(eventType) {
                             custom_props.from_binding = true;
                             custom_props.event_type = eventType;
                             custom_props.event_label = ele.innerText;
+                            
                             sugo.rawTrack(event.event_id, event.event_name, custom_props);
                             break;
                         }

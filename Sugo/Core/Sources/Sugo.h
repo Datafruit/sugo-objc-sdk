@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *SugoBindingsURL;
 extern NSString *SugoCollectionURL;
 extern NSString *SugoCodelessURL;
+extern NSString *SugoExceptionTopic;
 extern BOOL SugoCanTrackNativePage;
 extern BOOL SugoCanTrackWebPage;
 
@@ -329,6 +330,8 @@ extern BOOL SugoCanTrackWebPage;
  */
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
+
++ (void)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withCompletion:(void (^)())completion;
 /*!
  @method
  

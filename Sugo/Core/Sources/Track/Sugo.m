@@ -16,11 +16,13 @@
 
 #import "MPLogger.h"
 #import "MPFoundation.h"
+#import "ExceptionUtils.h"
 
 
 NSString *SugoBindingsURL;
 NSString *SugoCollectionURL;
 NSString *SugoCodelessURL;
+NSString *SugoExceptionTopic;
 BOOL SugoCanTrackNativePage = true;
 BOOL SugoCanTrackWebPage = true;
 const static  NSString * ENTERBACKGROUNDTIME=@"enterBackgroundTime";
@@ -75,6 +77,162 @@ static NSString *defaultProjectToken;
     }
     
     return instance;
+}
+
++ (void)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withCompletion:(void (^)())completion  {
+    @try {
+        [ExceptionUtils buildTokenId:apiToken projectId:projectID];
+        [[[Sugo alloc]init:apiToken] initSugoRequestWithProject:projectID withToken:apiToken withCompletion:^() {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            bool isSugoInitialize = [userDefaults boolForKey:@"isSugoInitialize"];
+            if (!isSugoInitialize) {
+                
+                return ;
+            }
+            [Sugo sharedInstanceWithEnable:YES projectID:projectID token:apiToken launchOptions:launchOptions];
+            if (completion!=nil) {
+                completion();
+            }
+        }];
+    } @catch (NSException *exception) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:false forKey:@"isSugoInitialize"];
+        [userDefaults synchronize];
+        NSLog(@"SUGO_sharedInstanceWithID:%@",exception);
+        @try {
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
+        }
+    }
+}
+
+-(void)initSugoRequestWithProject:(NSString *)projectID withToken:(NSString *)token withCompletion:(void (^)())completion{
+    @try {
+        self.apiToken = token;
+        self.projectID = projectID;
+        dispatch_queue_t queue = dispatch_queue_create("io.sugo.SugoDemo", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(queue, ^{
+            __block BOOL hadError = NO;
+            __block NSData *resultData = [NSData data];
+            __block NSDictionary *responseObject = [[NSMutableDictionary alloc] init];
+            
+            NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"appVersion"
+                                                                      value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
+            NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
+            NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"tokenId" value:token];
+            NSArray *queryItems = @[itemVersion,
+                                    itemProjectID,
+                                    itemToken];
+            
+            // Build a network request from the URL
+            MPNetwork *mMPNetwork = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:SugoBindingsURL]
+                                                   andEventCollectionURL:[NSURL URLWithString:SugoCollectionURL]];
+            NSURLRequest *request = [mMPNetwork buildGetRequestForURL:[NSURL URLWithString:SugoBindingsURL]
+                                                          andEndpoint:MPNetworkEndpointInitSugo
+                                                       withQueryItems:queryItems];
+            
+            // Send the network request
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSession *session = [NSURLSession sharedSession];
+            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                      NSURLResponse *urlResponse,
+                                                                      NSError *error) {
+                if (error) {
+                    MPLogError(@"%@ request init sugo http error: %@", self, error);
+                    hadError = YES;
+                    dispatch_semaphore_signal(semaphore);
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    [userDefaults setBool:false forKey:@"isSugoInitialize"];
+                    [userDefaults synchronize];
+                    return;
+                }
+                MPLogDebug(@"request init sugo \n%@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                
+                // Handle network response
+                @try {
+                    responseObject = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingAllowFragments error:&error];
+                    if (error) {
+                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                        [userDefaults setBool:false forKey:@"isSugoInitialize"];
+                        [userDefaults synchronize];
+                        MPLogError(@"%@ request init sugo json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    if (responseObject[@"error"]) {
+                        MPLogError(@"%@ request init sugo api error: %@", self, responseObject[@"error"]);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    if (responseObject[@"isSugoInitialize"]&&responseObject[@"isSugoInitialize"]!=[NSNull null]) {
+                        [userDefaults setBool:[(NSNumber *)responseObject[@"isSugoInitialize"] boolValue]forKey:@"isSugoInitialize"];
+                    }
+                    
+                    if (responseObject[@"isHeatMapFunc"]&&responseObject[@"isHeatMapFunc"]!=[NSNull null]) {
+                        [userDefaults setBool:[(NSNumber *)responseObject[@"isHeatMapFunc"] boolValue] forKey:@"isHeatMapFunc"];
+                    }
+                    
+                    if (responseObject[@"uploadLocation"]&&responseObject[@"uploadLocation"]!=[NSNull null]) {
+                        long uploadLocation =[responseObject[@"uploadLocation"] longValue];
+                        [userDefaults setInteger:uploadLocation forKey:@"uploadLocation"];
+                    }
+                    if(responseObject[@"latestEventBindingVersion"]&&responseObject[@"latestEventBindingVersion"]!=[NSNull null]){
+                        long latestEventBindingVersion =[responseObject[@"latestEventBindingVersion"] longValue];
+                        [userDefaults setInteger:latestEventBindingVersion forKey:@"latestEventBindingVersion"];
+                    }
+                    if(responseObject[@"latestDimensionVersion"]&&responseObject[@"latestDimensionVersion"]!=[NSNull null]){
+                        long latestDimensionVersion =[responseObject[@"latestDimensionVersion"] longValue];
+                        [userDefaults setInteger:latestDimensionVersion forKey:@"latestDimensionVersion"];
+                    }
+                    
+                    if (responseObject[@"isUpdateConfig"]&&responseObject[@"isUpdateConfig"]!=[NSNull null]) {
+                        [userDefaults setBool:[(NSNumber *)responseObject[@"isUpdateConfig"] boolValue]forKey:@"isUpdateConfig"];
+                    }
+                    [userDefaults synchronize];
+                    
+                    resultData = responseData;
+                    
+                } @catch (NSException *exception) {
+                    @try {
+                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                        [userDefaults setBool:false forKey:@"isSugoInitialize"];
+                        [userDefaults synchronize];
+                        NSLog(@"SUGO_initSugoRequestWithProject:%@",exception);
+                        [ExceptionUtils exceptionToNetWork:exception];
+                        MPLogError(@"exception: %@, request init sugo responseData: %@, object: %@",
+                                   exception,
+                                   responseData,
+                                   responseObject);
+                    } @catch (NSException *exception) {
+                    }
+                    
+                }
+                
+                dispatch_semaphore_signal(semaphore);
+            }] resume];
+            
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            if (!hadError) {
+                if (completion!=nil) {
+                    completion();
+                }
+            }
+        });
+    } @catch (NSException *exception) {
+        @try {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:false forKey:@"isSugoInitialize"];
+            [userDefaults synchronize];
+            NSLog(@"SUGO_initSugoRequestWithProject:%@",exception);
+            [ExceptionUtils exceptionToNetWork:exception];
+        } @catch (NSException *exception) {
+            
+        }
+    }
 }
 
 //when sugo instance ,judge this start time is more than the local leave app time
@@ -1835,6 +1993,44 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)checkForDecideDimensionsResponseWithCompletion:(void (^)(void))completion useCache:(BOOL)useCache {
     
     dispatch_async(self.serialQueue, ^{
+        // Send the network request
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        @try {
+            NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
+            bool isUpdateConfig = [uDefaults boolForKey:@"isUpdateConfig"];
+            long latestDimensionVersion = [uDefaults integerForKey:@"latestDimensionVersion"];
+            NSData *cacheDa = [uDefaults dataForKey:@"SugoEventDimensions"];
+            NSMutableDictionary *cachedObj = [[NSMutableDictionary alloc] init];
+            if (cacheDa) {
+                NSError *caError = nil;
+                cachedObj = [NSJSONSerialization JSONObjectWithData:cacheDa
+                                                            options:(NSJSONReadingOptions)0
+                                                              error:&caError];
+                if (isUpdateConfig) {
+                    NSMutableDictionary * mdic = [NSMutableDictionary dictionaryWithDictionary:cachedObj];
+                    mdic[@"dimension_version"]=@(-1);
+                    NSData *newData= [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:nil];
+                    [uDefaults setObject:newData forKey:@"SugoEventDimensions"];
+                    [uDefaults synchronize];
+                }else{
+                    if([cachedObj objectForKey:@"dimension_version"]){
+                        long localVersion = [cachedObj[@"dimension_version"] longLongValue];
+                        if (localVersion == latestDimensionVersion) {
+                            [self handleDecideDimensionsObject:cachedObj];
+                            if (completion) {
+                                completion();
+                            }
+                            dispatch_semaphore_signal(semaphore);
+                            return ;
+                        }
+                    }
+                }
+            }
+            
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception);
+        }
         
         __block BOOL hadError = NO;
         __block NSData *resultData = [NSData data];
@@ -1877,8 +2073,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                                                             andEndpoint:MPNetworkEndpointDecideDimension
                                                          withQueryItems:queryItems];
             
-            // Send the network request
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            
             NSURLSession *session = [NSURLSession sharedSession];
             [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                       NSURLResponse *urlResponse,
@@ -1949,7 +2144,42 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 - (void)checkForDecideBindingsResponseWithCompletion:(void (^)(NSSet *eventBindings))completion useCache:(BOOL)useCache
 {
     dispatch_async(self.serialQueue, ^{
-        
+        // Send the network request
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        @try {
+            NSUserDefaults *uDefaults = [NSUserDefaults standardUserDefaults];
+            bool isUpdateConfig = [uDefaults boolForKey:@"isUpdateConfig"];
+            long latestEventBindingVersion = [uDefaults integerForKey:@"latestEventBindingVersion"];
+            NSData *cacheDa = [uDefaults dataForKey:@"SugoEventBindings"];
+            if (cacheDa) {
+                NSError *caError = nil;
+                NSMutableDictionary *cachedObj = [[NSMutableDictionary alloc] init];
+                cachedObj = [NSJSONSerialization JSONObjectWithData:cacheDa
+                                                            options:(NSJSONReadingOptions)0
+                                                              error:&caError];
+                if (isUpdateConfig) {
+                    NSMutableDictionary * mdic = [NSMutableDictionary dictionaryWithDictionary:cachedObj];
+                    mdic[@"event_bindings_version"]=@(-1);
+                    NSData *newData= [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:nil];
+                    [uDefaults setObject:newData forKey:@"SugoEventBindings"];
+                    [uDefaults synchronize];
+                }else{
+                    if (cachedObj[@"event_bindings_version"]) {
+                        long localVersion = [cachedObj[@"event_bindings_version"] longLongValue];
+                        if (localVersion==latestEventBindingVersion) {
+                            [self handleDecideDimensionsObject:cachedObj];
+                            if (completion) {
+                                completion(self.eventBindings);
+                            }
+                            dispatch_semaphore_signal(semaphore);
+                            return;
+                        }
+                    }
+                }
+            }
+        } @catch (NSException *exception) {
+            NSLog(@"%@",exception);
+        }
         __block BOOL hadError = NO;
         __block NSData *resultData = [NSData data];
         __block NSMutableDictionary *responseObject = [[NSMutableDictionary alloc] init];
@@ -1995,8 +2225,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                                                             andEndpoint:MPNetworkEndpointDecideEvent
                                                          withQueryItems:queryItems];
             
-            // Send the network request
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            
             NSURLSession *session = [NSURLSession sharedSession];
             [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                       NSURLResponse *urlResponse,

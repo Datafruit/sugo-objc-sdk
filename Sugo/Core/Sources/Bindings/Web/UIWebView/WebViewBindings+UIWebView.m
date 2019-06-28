@@ -50,7 +50,18 @@
                             storage.eventID = (NSString *)event[@"eventID"];
                             storage.eventName = (NSString *)event[@"eventName"];
                             storage.properties = (NSString *)event[@"properties"];
-                            [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
+                            NSString *str = (NSString *)event[@"properties"];
+                            NSData *eData = [str dataUsingEncoding:NSUTF8StringEncoding];
+                            //当是列表时，会自动获取到列表中的字符，不用前端去设置事件名称
+                            if ([storage.eventName isEqualToString:@"$$text$$"]) {
+                                NSDictionary *propertiesDir = [NSJSONSerialization JSONObjectWithData:eData
+                                                                                              options:NSJSONReadingMutableContainers
+                                                                                                error:nil];
+                                NSString *eventLabel = (NSString *)propertiesDir[@"event_label"];
+                                [self trackEventID:storage.eventID eventName:eventLabel properties:storage.properties];
+                            }else{
+                                [self trackEventID:storage.eventID eventName:storage.eventName properties:storage.properties];
+                            }
                             MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
                         } else if ([npi isEqualToString:@"time"]) {
                             NSString *eventName = [[NSString alloc] initWithString:(NSString *)event[@"eventName"]];
