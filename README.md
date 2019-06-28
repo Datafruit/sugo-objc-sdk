@@ -29,7 +29,7 @@
 （如无，请创建或从我们提供的SugoDemo目录中[获取](https://github.com/Datafruit/sugo-objc-sdk/blob/master/SugoDemo/Podfile)并作出相应修改）文件中添加以下字符串：
 
 ```
-pod 'sugo-objc-sdk'
+pod 'sugo-objc-sdk' , '2.7.5'
 ```
 
 若需要支持**Weex**的可视化埋点功能，请**替代**使用
@@ -77,7 +77,7 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 ### 2.1 获取SDK配置信息
 
-登陆数果星盘后，可在平台界面中创建项目和数据接入方式，创建数据接入方式时，即可获得项目ID与Token。
+登陆行为分析平台后，可在平台界面中创建项目和数据接入方式，创建数据接入方式时，即可获得项目ID与Token。
 
 ### 2.2 配置并获取SDK对象
 
@@ -103,13 +103,18 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 ```
 - (void)initSugo {
-	NSString *projectID = @"Add_Your_Project_ID_Here";
-	NSString *appToken = @"Add_Your_App_Token_Here";
-	[Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil];
-	[[Sugo sharedInstance] setEnableLogging:YES];	// 如果需要查看SDK的Log，请设置为true
-	[[Sugo sharedInstance] setFlushInterval:5]; 	// 被绑定的事件数据往服务端上传的时间间隔，单位是秒，如若不设置，默认时间是60秒
-	[[Sugo sharedInstance] setCacheInterval:60]; 	// 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
-    // [[Sugo sharedInstance] registerModule];		// 需要支持Weex可视化埋点时调用
+    NSString *projectID = @"com_rJFxdRfMg_mobile_sdk_S1e7lRSwl"; // 项目ID
+    NSString *appToken = @"6be26949e984d8d85bc77531d6a11b86"; // 应用Token
+    SugoBindingsURL = @"http://uits-test.infinitus.com.cn/uits-gateway"; // 设置获取绑定事件配置的URL，端口默认为8000
+    SugoCollectionURL = @"http://uits-test.infinitus.com.cn/uits-gateway"; // 设置传输绑定事件的网管URL，端口默认为80
+    SugoCodelessURL = @"ws://10.87.134.115:8887"; // 设置连接可视化埋点的URL，端口默认为8887
+    SugoExceptionTopic = @"sugo_exception"; // 设置sdk异常上报topic名称，默认为sugo_exception
+    [Sugo sharedInstanceWithID:projectID token:appToken launchOptions:nil withCompletion:^() {
+        [[Sugo sharedInstance] setEnableLogging:YES]; // 如果需要查看SDK的Log，请设置为true
+        [[Sugo sharedInstance] setFlushInterval:5]; // 被绑定的事件数据往服务端上传的事件间隔，单位是秒，如若不设置，默认时间是60秒
+        [[Sugo sharedInstance] setCacheInterval:60]; // 从服务端拉取绑定事件配置的时间间隔，单位是秒，如若不设置，默认时间是1小时
+        [[Sugo sharedInstance]buildApplicationMoveEvent];//需要热图时添加
+    }];
 }
 ```
 
@@ -157,7 +162,7 @@ git submodule add git@github.com:Datafruit/sugo-objc-sdk.git
 
 ##### 2.3.1.4 连接
 
-登陆数果星盘，进入对应Token的可视化埋点界面，可看见二维码，保持埋点设备网络畅通，通过设备任意可扫二维码的应用扫一扫，然后用Safari打开链接，点击网页中的链接，即可进入可视化埋点模式。
+登陆行为分析平台，进入对应Token的可视化埋点界面，可看见二维码，保持埋点设备网络畅通，通过设备任意可扫二维码的应用扫一扫，然后用Safari打开链接，点击网页中的链接，即可进入可视化埋点模式。
 此时设备上方将出现可视化埋点连接条，网页可视化埋点界面将显示设备当前页面及相应可绑定控件信息。
 
 #### 2.3.2 通过自身应用进行扫码
