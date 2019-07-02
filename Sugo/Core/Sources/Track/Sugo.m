@@ -19,7 +19,6 @@
 #import "macro.h"
 #import "projectMacro.h"
 #import "ExceptionUtils.h"
-#import "Sugo+HeatMap.h"
 
 
 NSString *SugoBindingsURL;
