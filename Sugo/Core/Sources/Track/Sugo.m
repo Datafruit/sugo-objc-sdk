@@ -19,7 +19,7 @@
 #import "macro.h"
 #import "projectMacro.h"
 #import "ExceptionUtils.h"
-
+#import "Sugo+HeatMap.h"
 
 
 NSString *SugoBindingsURL;
@@ -553,6 +553,18 @@ static NSString *defaultProjectToken;
         [p addEntriesFromDictionary:self.priorityProperties];
         if (properties) {
             [p addEntriesFromDictionary:properties];
+        }
+        NSString *pathName = [p objectForKey:@"path_name"];
+        if (pathName!=nil&&![pathName isEqualToString:@""]) {
+            for (NSDictionary *info in [SugoPageInfos global].infos) {
+                if ([info[@"page"] isEqualToString:pathName]) {
+                    NSString *pageName = info[@"page_name"];
+                    if (pageName!=nil&&![pageName isEqualToString:@""]) {
+                        [p setObject:pageName forKey:@"page_name"];
+                    }
+                    break;
+                }
+            }
         }
 
         NSString *loginUserIdDimension = [NSUserDefaults.standardUserDefaults stringForKey:keys[@"LoginUserIdDimension"]];
@@ -1392,7 +1404,6 @@ static NSString *defaultProjectToken;
             p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
             //save current controller，and use it in buildApplicationMoveEvent method
             NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            [user setObject:@"" forKey:CURRENTCONTROLLER];
             if ([SugoPageInfos global].infos.count > 0) {
                 for (NSDictionary *info in [SugoPageInfos global].infos) {
                     if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
