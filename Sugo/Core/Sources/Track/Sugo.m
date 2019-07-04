@@ -51,6 +51,7 @@ static NSString *defaultProjectToken;
                 return ;
             }
             [Sugo sharedInstanceWithEnable:YES projectID:projectID token:apiToken launchOptions:launchOptions];
+            
             if (completion!=nil) {
                 completion();
             }
@@ -236,6 +237,13 @@ static NSString *defaultProjectToken;
         
         [self setUpListeners];
         [self unarchive];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSInteger uploadLocation = [userDefaults integerForKey:@"uploadLocation"];
+        if (uploadLocation > 0 ) {
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+       
 
         instances[apiToken] = self;
     }
@@ -951,7 +959,9 @@ static NSString *defaultProjectToken;
                                                     }];
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
+            break;
         case kCLAuthorizationStatusNotDetermined:
+//            [self.locationManager requestWhenInUseAuthorization];
         default:
             break;
     }
@@ -1870,8 +1880,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         case kCLAuthorizationStatusRestricted:
             break;
         case kCLAuthorizationStatusNotDetermined:
-            [self.locationManager requestAlwaysAuthorization];
-            [self.locationManager requestWhenInUseAuthorization];
+//            [self.locationManager requestWhenInUseAuthorization];
         default:
             break;
     }
@@ -2504,6 +2513,7 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
                     if (responseObject[@"uploadLocation"]&&responseObject[@"uploadLocation"]!=[NSNull null]) {
                         long uploadLocation =[responseObject[@"uploadLocation"] longValue];
                         [userDefaults setInteger:uploadLocation forKey:@"uploadLocation"];
+                    
                     }
                     if(responseObject[@"latestEventBindingVersion"]&&responseObject[@"latestEventBindingVersion"]!=[NSNull null]){
                         long latestEventBindingVersion =[responseObject[@"latestEventBindingVersion"] longValue];
