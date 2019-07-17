@@ -893,6 +893,7 @@ static NSString *defaultProjectToken;
             BOOL isFirstInstallation = [boolNum boolValue];
             if (isFirstInstallation) {
                 [self trackEvent:keys[@"FirstInstallation"]];
+                [self trackEvent:keys[@"FirstVisit"]];
             }
             dispatch_semaphore_signal(semaphore);
         }] resume];
@@ -1321,7 +1322,6 @@ static NSString *defaultProjectToken;
         
         if (values) {
             [self trackEvent:values[@"Integration"]];
-            [self trackEvent:values[@"FirstVisit"]];
             [self requestForFirstStartTime];
         }
     }
