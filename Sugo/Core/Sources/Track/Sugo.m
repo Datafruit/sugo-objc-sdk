@@ -1433,6 +1433,7 @@ static NSString *defaultProjectToken;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSInteger uploadLocation = [userDefaults integerForKey:@"uploadLocation"];
         if (uploadLocation>0&&weakSelf.locateInterval>0&&currentTime-weakSelf.recentlySendLoacationTime>=uploadLocation*60) {
+            [self.locationManager startUpdatingLocation];
             [self locate];
             weakSelf.recentlySendLoacationTime=currentTime;
         }
@@ -1688,11 +1689,17 @@ static NSString *defaultProjectToken;
         }
     }
     
-    // location
-    _locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    self.locationManager.pausesLocationUpdatesAutomatically = YES;
+    __weak __typeof(self) weakself= self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakself.locationManager = [[CLLocationManager alloc] init];
+        weakself.locationManager.delegate = self;
+        weakself.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        weakself.locationManager.pausesLocationUpdatesAutomatically = YES;
+        [weakself.locationManager startUpdatingLocation];
+    });
+    
+    
 
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
