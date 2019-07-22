@@ -1692,9 +1692,6 @@ static NSString *defaultProjectToken;
     __weak __typeof(self) weakself= self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        // 通知主线程刷新 神马的
-        // location
         weakself.locationManager = [[CLLocationManager alloc] init];
         weakself.locationManager.delegate = self;
         weakself.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
