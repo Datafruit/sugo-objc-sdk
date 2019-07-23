@@ -954,8 +954,8 @@ static NSString *defaultProjectToken;
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             [self trackEvent:@"位置信息收集" properties:@{keys[@"EventType"]: @"位置",
                                                     keys[@"PageName"]: @"位置信息收集",
-                                                    @"latitude": latitude,
-                                                    @"longitude": longitude
+                                                    @"sugo_latitude": latitude,
+                                                    @"sugo_longitude": longitude
                                                     }];
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
