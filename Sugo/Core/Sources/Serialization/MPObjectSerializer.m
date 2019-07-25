@@ -81,8 +81,34 @@
             CGFloat x=[value[@"X"] floatValue];
             CGFloat width=[value[@"Width"] floatValue];
             CGFloat height=[value[@"Height"] floatValue];
-            NSInteger cellIndex= (y-yMegin)/(yDistance+height)*itemNum + (x-xMegin)/(xDistance+width);
-            [dict[@"properties"] setValue:[NSString stringWithFormat:@"%d",cellIndex] forKey:@"cellIndex"];
+            CGFloat xMiddle = x + width/2;
+            CGFloat xLeftBorder = xMegin;
+            CGFloat xRightBorder = xMegin+width;
+            int xIndex = 0 ;
+            while (true) {
+                if (xMiddle>xLeftBorder&&xMiddle<xRightBorder) {
+                    break;
+                }else{
+                    xLeftBorder += xDistance + width;
+                    xRightBorder += xDistance + width;
+                    xIndex += 1;
+                }
+            }
+            int yIndex = 0;
+            CGFloat yUpBorder = yMegin;
+            CGFloat yDownBorder = yMegin + height;
+            CGFloat yMiddle = y + height/2;
+            while (true) {
+                if (yMiddle > yUpBorder && yMiddle < yDownBorder) {
+                    break;
+                }else{
+                    yUpBorder += yDistance + height;
+                    yDownBorder += yDistance + height;
+                    yIndex += 1;
+                }
+            }
+            NSInteger cellIndex = yIndex *itemNum + xIndex;
+            [dict[@"properties"] setValue:[NSString stringWithFormat:@"%ld",(long)cellIndex] forKey:@"cellIndex"];
         }
         [objectArray addObjectsFromArray:collectionViewCellArray];
     }
