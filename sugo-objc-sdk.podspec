@@ -2,12 +2,12 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'sugo-objc-sdk'
   spec.module_name           = 'Sugo'
-  spec.version               = '3.5.8.11'
+  spec.version               = '3.5.8.12'
   spec.license               = 'Apache License, Version 2.0'
   spec.summary               = 'Official Sugo SDK for iOS (Objective-C)'
   spec.homepage              = 'https://github.com/Datafruit/sugo-objc-sdk'
   spec.author                = { 'sugo.io' => 'developer@sugo.io' }
-  spec.source                = { :git => 'https://github.com/Datafruit/sugo-objc-sdk.git', :tag => spec.version ,:branch => 'infinitus'}
+  spec.source                = { :git => 'https://github.com/Datafruit/sugo-objc-sdk.git', :tag => spec.version ,:branch => 'infinitus-text'}
   spec.ios.deployment_target = '8.0'
   spec.default_subspec       = 'core'
 
@@ -28,6 +28,7 @@ Pod::Spec.new do |spec|
     spec.subspec 'heatmap' do |heatmap|
       heatmap.source_files   = 'Sugo/HeatMap/*.{m,h}'
       heatmap.dependency 'sugo-objc-sdk/core'
+      heatmap.dependency 'HeatMap'
     end
 
 end
