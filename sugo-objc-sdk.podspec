@@ -28,7 +28,6 @@ Pod::Spec.new do |spec|
     spec.subspec 'heatmap' do |heatmap|
       heatmap.source_files   = 'Sugo/HeatMap/*.{m,h}'
       heatmap.dependency 'sugo-objc-sdk/core'
-      heatmap.dependency 'HeatMap'
     end
 
 end
