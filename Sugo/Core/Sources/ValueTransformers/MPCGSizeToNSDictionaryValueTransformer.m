@@ -2,7 +2,7 @@
 // Copyright (c) 2014 Sugo. All rights reserved.
 
 #import "MPValueTransformers.h"
-
+#import "ExceptionUtils.h"
 @implementation MPCGSizeToNSDictionaryValueTransformer
 
 + (Class)transformedValueClass
@@ -17,11 +17,15 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(CGSizeValue)]) {
-        CGSize size = [value CGSizeValue];
-        size.width = isnormal(size.width) ? size.width : 0.0f;
-        size.height = isnormal(size.height) ? size.height : 0.0f;
-        return CFBridgingRelease(CGSizeCreateDictionaryRepresentation(size));
+    @try {
+        if ([value respondsToSelector:@selector(CGSizeValue)]) {
+            CGSize size = [value CGSizeValue];
+            size.width = isnormal(size.width) ? size.width : 0.0f;
+            size.height = isnormal(size.height) ? size.height : 0.0f;
+            return CFBridgingRelease(CGSizeCreateDictionaryRepresentation(size));
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 
     return nil;

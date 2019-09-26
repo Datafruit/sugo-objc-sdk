@@ -3,6 +3,7 @@
 
 #import "MPClassDescription.h"
 #import "MPPropertyDescription.h"
+#import "ExceptionUtils.h"
 
 @implementation MPDelegateInfo
 
@@ -25,22 +26,27 @@
 
 - (instancetype)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary
 {
+    
     self = [super initWithDictionary:dictionary];
-    if (self) {
-        _superclassDescription = superclassDescription;
+    @try {
+        if (self) {
+            _superclassDescription = superclassDescription;
 
-        NSMutableArray *propertyDescriptions = [NSMutableArray array];
-        for (NSDictionary *propertyDictionary in dictionary[@"properties"]) {
-            [propertyDescriptions addObject:[[MPPropertyDescription alloc] initWithDictionary:propertyDictionary]];
+            NSMutableArray *propertyDescriptions = [NSMutableArray array];
+            for (NSDictionary *propertyDictionary in dictionary[@"properties"]) {
+                [propertyDescriptions addObject:[[MPPropertyDescription alloc] initWithDictionary:propertyDictionary]];
+            }
+
+            _propertyDescriptions = [propertyDescriptions copy];
+
+            NSMutableArray *delegateInfos = [NSMutableArray array];
+            for (NSDictionary *delegateInfoDictionary in dictionary[@"delegateImplements"]) {
+                [delegateInfos addObject:[[MPDelegateInfo alloc] initWithDictionary:delegateInfoDictionary]];
+            }
+            _delegateInfos = [delegateInfos copy];
         }
-
-        _propertyDescriptions = [propertyDescriptions copy];
-
-        NSMutableArray *delegateInfos = [NSMutableArray array];
-        for (NSDictionary *delegateInfoDictionary in dictionary[@"delegateImplements"]) {
-            [delegateInfos addObject:[[MPDelegateInfo alloc] initWithDictionary:delegateInfoDictionary]];
-        }
-        _delegateInfos = [delegateInfos copy];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 
     return self;
@@ -48,20 +54,25 @@
 
 - (NSArray *)propertyDescriptions
 {
-    NSMutableDictionary *allPropertyDescriptions = [NSMutableDictionary dictionary];
+    @try {
+        NSMutableDictionary *allPropertyDescriptions = [NSMutableDictionary dictionary];
 
-    MPClassDescription *description = self;
-    while (description)
-    {
-        for (MPPropertyDescription *propertyDescription in description->_propertyDescriptions) {
-            if (!allPropertyDescriptions[propertyDescription.name]) {
-                allPropertyDescriptions[propertyDescription.name] = propertyDescription;
+        MPClassDescription *description = self;
+        while (description)
+        {
+            for (MPPropertyDescription *propertyDescription in description->_propertyDescriptions) {
+                if (!allPropertyDescriptions[propertyDescription.name]) {
+                    allPropertyDescriptions[propertyDescription.name] = propertyDescription;
+                }
             }
+            description = description.superclassDescription;
         }
-        description = description.superclassDescription;
-    }
 
-    return allPropertyDescriptions.allValues;
+        return allPropertyDescriptions.allValues;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return [[NSArray alloc]init];
+    }
 }
 
 - (BOOL)isDescriptionForKindOfClass:(Class)aClass

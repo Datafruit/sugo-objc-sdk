@@ -64,7 +64,7 @@ static NSString *defaultProjectToken;
         @try {
             [ExceptionUtils exceptionToNetWork:exception];
         } @catch (NSException *exception) {
-            
+            NSLog(@"%@", exception);
         }
     }
 }
@@ -75,42 +75,48 @@ static NSString *defaultProjectToken;
 
 + (Sugo *)sharedInstanceWithEnable:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions
 {
-    if (instances[projectID] && instances[apiToken]) {
-        return instances[apiToken];
-    }
-
-    const NSUInteger flushInterval = 60;
-    const double cacheInterval = 3600;
-    
-
-    Sugo *instance = [[self alloc] initWithEnable:enable
-                                        projectID:projectID
-                                            token:apiToken
-                                    launchOptions:launchOptions
-                                 andFlushInterval:flushInterval
-                                 andCacheInterval:cacheInterval];
-    
-    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionKeys"]];
-    NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
-    if (keys && values) {
-        [instance trackIntegration];
-        [instance unregisterSuperProperty:keys[@"PagePath"]];
-        [instance trackEvent:values[@"AppEnter"]];
-        [instance timeEvent:values[@"AppStay"]];
+    @try {
+        if (instances[projectID] && instances[apiToken]) {
+            return instances[apiToken];
+        }
         
-        [instance checkForDecideDimensionsResponseWithCompletion:nil];
-        [instance checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                for (MPEventBinding *binding in eventBindings) {
-                    [binding execute];
-                }
-                [[WebViewBindings globalBindings] fillBindings];
-            });
-        }];
-        [instance startCacheTimer];
+        const NSUInteger flushInterval = 60;
+        const double cacheInterval = 3600;
+        
+        
+        Sugo *instance = [[self alloc] initWithEnable:enable
+                                            projectID:projectID
+                                                token:apiToken
+                                        launchOptions:launchOptions
+                                     andFlushInterval:flushInterval
+                                     andCacheInterval:cacheInterval];
+        
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionKeys"]];
+        NSDictionary *values = [NSDictionary dictionaryWithDictionary:instance.sugoConfiguration[@"DimensionValues"]];
+        if (keys && values) {
+            [instance trackIntegration];
+            [instance unregisterSuperProperty:keys[@"PagePath"]];
+            [instance trackEvent:values[@"AppEnter"]];
+            [instance timeEvent:values[@"AppStay"]];
+            
+            [instance checkForDecideDimensionsResponseWithCompletion:nil];
+            [instance checkForDecideBindingsResponseWithCompletion:^(NSSet *eventBindings) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    for (MPEventBinding *binding in eventBindings) {
+                        [binding execute];
+                    }
+                    [[WebViewBindings globalBindings] fillBindings];
+                });
+            }];
+            [instance startCacheTimer];
+        }
+        return instance;
+    } @catch (NSException *exception) {
+        NSLog(@"%@", exception);
     }
+    return nil;
     
-    return instance;
+    
 }
 
 + (Sugo *)sharedInstanceWithID:(NSString *)projectID token:(NSString *)apiToken
@@ -134,36 +140,41 @@ static NSString *defaultProjectToken;
 
 - (instancetype)init:(NSString *)apiToken
 {
-    if (self = [super init]) {
-        _webViewDict = [[NSMutableDictionary alloc]init];
-        _webViewArray = [[NSMutableArray alloc]init];
-        self.eventsQueue = [NSMutableArray array];
-        
-        NSURL *modelURL = [[NSBundle bundleForClass: [self class]] URLForResource: @"Sugo" withExtension: @"momd"];
-        if (modelURL != nil) {
-            NSManagedObjectModel *mom  = [[NSManagedObjectModel alloc] initWithContentsOfURL: modelURL];
-            NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: mom];
-            NSString *dbPath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
-                                stringByAppendingPathComponent: @"SugoEvents.sqlite"];
-            NSLog(@"Events.sqlite path: %@", dbPath);
-            NSURL *url = [NSURL fileURLWithPath: dbPath];
-            NSError *error = nil;
-            [psc addPersistentStoreWithType: NSSQLiteStoreType configuration:nil URL: url options: nil error: &error];
-            if (error != nil) {
-                NSLog(@"Failed to add persistent store. Error %@", error);
-            } else {
-                self.managedObjectContext  = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
-                self.managedObjectContext.persistentStoreCoordinator = psc;
+    @try {
+        if (self = [super init]) {
+            _webViewDict = [[NSMutableDictionary alloc]init];
+            _webViewArray = [[NSMutableArray alloc]init];
+            self.eventsQueue = [NSMutableArray array];
+            
+            NSURL *modelURL = [[NSBundle bundleForClass: [self class]] URLForResource: @"Sugo" withExtension: @"momd"];
+            if (modelURL != nil) {
+                NSManagedObjectModel *mom  = [[NSManagedObjectModel alloc] initWithContentsOfURL: modelURL];
+                NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: mom];
+                NSString *dbPath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+                                    stringByAppendingPathComponent: @"SugoEvents.sqlite"];
+                NSLog(@"Events.sqlite path: %@", dbPath);
+                NSURL *url = [NSURL fileURLWithPath: dbPath];
+                NSError *error = nil;
+                [psc addPersistentStoreWithType: NSSQLiteStoreType configuration:nil URL: url options: nil error: &error];
+                if (error != nil) {
+                    NSLog(@"Failed to add persistent store. Error %@", error);
+                } else {
+                    self.managedObjectContext  = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
+                    self.managedObjectContext.persistentStoreCoordinator = psc;
+                }
             }
+            
+            self.timedEvents = [NSMutableDictionary dictionary];
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                instances = [NSMutableDictionary dictionary];
+                defaultProjectToken = apiToken;
+            });
         }
-        
-        self.timedEvents = [NSMutableDictionary dictionary];
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            instances = [NSMutableDictionary dictionary];
-            defaultProjectToken = apiToken;
-        });
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
     }
+    
     return self;
 }
 
@@ -174,78 +185,82 @@ static NSString *defaultProjectToken;
 
 - (instancetype)initWithEnable:(BOOL)enable projectID:(NSString *)projectID token:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval  andCacheInterval:(double)cacheInterval
 {
-    if (apiToken.length == 0) {
-        if (apiToken == nil) {
-            apiToken = @"";
+    @try {
+        if (apiToken.length == 0) {
+            if (apiToken == nil) {
+                apiToken = @"";
+            }
+            MPLogWarning(@"%@ empty api token", self);
         }
-        MPLogWarning(@"%@ empty api token", self);
-    }
-    if (self = [self init:apiToken]) {
-
-        // Install uncaught exception handlers first
-        [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
-        self.enable = enable;
-        self.projectID = projectID;
-        self.apiToken = apiToken;
-        self.sessionId = [[[NSUUID alloc] init] UUIDString];
-        _flushInterval = flushInterval;
-        _flushLimit = 16;
-        _flushMaxEvents = 200;
-        _cacheInterval = cacheInterval;
-        _locateInterval = locateDefaultInterval;
-        _classAttributeDict = [[NSMutableDictionary alloc]init];
-        _widgetAttributeDict = [[NSMutableDictionary alloc] init];
-        latitude = @0;
-        longitude = @0;
-        _startExtraAttrFuncion = YES;
-        _startSubmitPointEventFuncion = YES;
-        //0：When you first open the app, you immediately upload your location；
-        //Sets the current timestamp：Upload data at locateInterval
-        recentlySendLoacationTime=0;
-        self.useIPAddressForGeoLocation = YES;
-        self.shouldManageNetworkActivityIndicator = YES;
-        self.flushOnBackground = YES;
-        
-        [self setupConfiguration];
-        
-        self.miniNotificationPresentationTime = 6.0;
-
-        self.deviceId = [self defaultDeviceId];
-        self.distinctId = [self defaultDistinctId];
-        self.superProperties = [NSMutableDictionary dictionary];
-        self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
-        self.automaticProperties = [self collectAutomaticProperties];
-        self.priorityProperties = [self obtainPriorityProperties];
-        self.taskId = UIBackgroundTaskInvalid;
-        
-        NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
-        self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        
+        if (self = [self init:apiToken]) {
+            // Install uncaught exception handlers first
+            [[SugoExceptionHandler sharedHandler] addSugoInstance:self];
+            self.enable = enable;
+            self.projectID = projectID;
+            self.apiToken = apiToken;
+            self.sessionId = [[[NSUUID alloc] init] UUIDString];
+            _flushInterval = flushInterval;
+            _flushLimit = 16;
+            _flushMaxEvents = 200;
+            _cacheInterval = cacheInterval;
+            _locateInterval = locateDefaultInterval;
+            _classAttributeDict = [[NSMutableDictionary alloc]init];
+            _widgetAttributeDict = [[NSMutableDictionary alloc] init];
+            latitude = @0;
+            longitude = @0;
+            _startExtraAttrFuncion = YES;
+            _startSubmitPointEventFuncion = YES;
+            //0：When you first open the app, you immediately upload your location；
+            //Sets the current timestamp：Upload data at locateInterval
+            recentlySendLoacationTime=0;
+            self.useIPAddressForGeoLocation = YES;
+            self.shouldManageNetworkActivityIndicator = YES;
+            self.flushOnBackground = YES;
+            
+            [self setupConfiguration];
+            
+            self.miniNotificationPresentationTime = 6.0;
+            
+            self.deviceId = [self defaultDeviceId];
+            self.distinctId = [self defaultDistinctId];
+            self.superProperties = [NSMutableDictionary dictionary];
+            self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
+            self.automaticProperties = [self collectAutomaticProperties];
+            self.priorityProperties = [self obtainPriorityProperties];
+            self.taskId = UIBackgroundTaskInvalid;
+            
+            NSString *label = [NSString stringWithFormat:@"io.sugo.%@.%p", apiToken, (void *)self];
+            self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
+            
 #if defined(DISABLE_SUGO_AB_DESIGNER) // Deprecated in v3.0.1
-        self.enableVisualABTestAndCodeless = NO;
+            self.enableVisualABTestAndCodeless = NO;
 #else
-        self.enableVisualABTestAndCodeless = YES;
+            self.enableVisualABTestAndCodeless = YES;
 #endif
-        self.heatMap = [[HeatMap alloc] initWithData:[NSData data]];
-        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]
-                                      andEventCollectionURL:[NSURL URLWithString:self.eventCollectionURL]];
-        self.people = [[SugoPeople alloc] initWithSugo:self];
-
-        self.decideDimensionsResponseCached = NO;
-        self.decideBindingsResponseCached = NO;
-        [self buildPageInfo];
-        
-        [self setUpListeners];
-        [self unarchive];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSInteger uploadLocation = [userDefaults integerForKey:@"uploadLocation"];
-        if (uploadLocation > 0 ) {
-            [self.locationManager requestWhenInUseAuthorization];
+            self.heatMap = [[HeatMap alloc] initWithData:[NSData data]];
+            self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]
+                                          andEventCollectionURL:[NSURL URLWithString:self.eventCollectionURL]];
+            self.people = [[SugoPeople alloc] initWithSugo:self];
+            
+            self.decideDimensionsResponseCached = NO;
+            self.decideBindingsResponseCached = NO;
+            [self buildPageInfo];
+            
+            [self setUpListeners];
+            [self unarchive];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSInteger uploadLocation = [userDefaults integerForKey:@"uploadLocation"];
+            if (uploadLocation > 0 ) {
+                [self.locationManager requestWhenInUseAuthorization];
+            }
+            
+            
+            instances[apiToken] = self;
         }
-       
-
-        instances[apiToken] = self;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        NSLog(@"%@",exception);
     }
     return self;
 }
@@ -391,65 +406,84 @@ static NSString *defaultProjectToken;
 
 + (void)assertPropertyTypesInArray:(NSArray *)arrayOfProperties depth:(NSUInteger)depth
 {
-    if([arrayOfProperties count] > 1000) {
-        MPLogWarning(@"You have an NSArray in your properties that is bigger than 1000 in size. \
-                     Generally this is not recommended due to its size.");
+    @try {
+        if([arrayOfProperties count] > 1000) {
+            MPLogWarning(@"You have an NSArray in your properties that is bigger than 1000 in size. \
+                         Generally this is not recommended due to its size.");
+        }
+        for (id value in arrayOfProperties) {
+            [Sugo assertPropertyType:value depth:depth];
+        }
+    } @catch (NSException *exception) {
+         [ExceptionUtils exceptionToNetWork:exception];
     }
-    for (id value in arrayOfProperties) {
-        [Sugo assertPropertyType:value depth:depth];
-    }
+    
+    
 }
 
 - (NSString *)defaultDeviceId
 {
-    NSString *deviceId = [self IFA];
-
-    if (!deviceId && NSClassFromString(@"UIDevice")) {
-        deviceId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    @try {
+        NSString *deviceId = [self IFA];
+        if (!deviceId && NSClassFromString(@"UIDevice")) {
+            deviceId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+        }
+        if (!deviceId) {
+            MPLogDebug(@"%@ error getting device identifier: falling back to uuid", self);
+            deviceId = @"";
+        }
+        return deviceId;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    if (!deviceId) {
-        MPLogDebug(@"%@ error getting device identifier: falling back to uuid", self);
-        deviceId = @"";
-    }
-    return deviceId;
+    return @"";
 }
 
 - (NSString *)defaultDistinctId
 {
-    NSString *distinctId;
-    
-    NSString *defaultKey = @"distinctId";
-    if (![NSUserDefaults.standardUserDefaults stringForKey:defaultKey]) {
+    @try {
+        NSString *distinctId;
         
-        distinctId = [[NSUUID UUID] UUIDString];
-        
-        [NSUserDefaults.standardUserDefaults setObject:distinctId
-                                                forKey:defaultKey];
-        [NSUserDefaults.standardUserDefaults synchronize];
-        
-        return distinctId;
-        
-    } else {
-        distinctId = (NSString *) [NSUserDefaults.standardUserDefaults objectForKey:defaultKey];
-        return distinctId;
+        NSString *defaultKey = @"distinctId";
+        if (![NSUserDefaults.standardUserDefaults stringForKey:defaultKey]) {
+            
+            distinctId = [[NSUUID UUID] UUIDString];
+            
+            [NSUserDefaults.standardUserDefaults setObject:distinctId
+                                                    forKey:defaultKey];
+            [NSUserDefaults.standardUserDefaults synchronize];
+            
+            return distinctId;
+            
+        } else {
+            distinctId = (NSString *) [NSUserDefaults.standardUserDefaults objectForKey:defaultKey];
+            return distinctId;
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
+    return @"";
 }
 
 
 - (void)identify:(NSString *)distinctId
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        if (distinctId.length == 0) {
+            MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
+            return;
+        }
+        
+        dispatch_async(self.serialQueue, ^{
+            self.distinctId = distinctId;
+            [self archiveProperties];
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    if (distinctId.length == 0) {
-        MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
-        return;
-    }
-    
-    dispatch_async(self.serialQueue, ^{
-        self.distinctId = distinctId;
-        [self archiveProperties];
-    });
 }
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
@@ -615,7 +649,6 @@ static NSString *defaultProjectToken;
         }
 
         MPLogDebug(@"%@ queueing event: %@", self, event);
-
         if (event) {
             if (self.abtestDesignerConnection.connected) {
                 [self flushViaWebSocketEvent:event];
@@ -647,252 +680,315 @@ static NSString *defaultProjectToken;
 
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        properties = [properties copy];
+        [Sugo assertPropertyTypes:properties];
+        NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
+        [tmp addEntriesFromDictionary:properties];
+        @synchronized (self) {
+            self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
+        }
+        dispatch_async(self.serialQueue, ^{
+            [self archiveProperties];
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    properties = [properties copy];
-    [Sugo assertPropertyTypes:properties];
-    NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-    [tmp addEntriesFromDictionary:properties];
-    @synchronized (self) {
-        self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-    }
-    dispatch_async(self.serialQueue, ^{
-        [self archiveProperties];
-    });
 }
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties
 {
-    [self registerSuperPropertiesOnce:properties defaultValue:nil];
+    @try {
+        [self registerSuperPropertiesOnce:properties defaultValue:nil];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue
 {
-    if (!self.enable) {
-        return;
-    }
-    properties = [properties copy];
-    [Sugo assertPropertyTypes:properties];
-    dispatch_async(self.serialQueue, ^{
-        NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        for (NSString *key in properties) {
-            id value = tmp[key];
-            if (value == nil || [value isEqual:defaultValue]) {
-                tmp[key] = properties[key];
-            }
+    @try {
+        if (!self.enable) {
+            return;
         }
-        self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        [self archiveProperties];
-    });
+        properties = [properties copy];
+        [Sugo assertPropertyTypes:properties];
+        dispatch_async(self.serialQueue, ^{
+            NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
+            for (NSString *key in properties) {
+                id value = tmp[key];
+                if (value == nil || [value isEqual:defaultValue]) {
+                    tmp[key] = properties[key];
+                }
+            }
+            self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
+            [self archiveProperties];
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
+
 }
 
 - (void)unregisterSuperProperty:(NSString *)propertyName
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        dispatch_async(self.serialQueue, ^{
+            NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
+            tmp[propertyName] = nil;
+            self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
+            [self archiveProperties];
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    dispatch_async(self.serialQueue, ^{
-        NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        tmp[propertyName] = nil;
-        self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        [self archiveProperties];
-    });
 }
 
 - (void)clearSuperProperties
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        dispatch_async(self.serialQueue, ^{
+            self.superProperties = @{};
+            [self archiveProperties];
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    dispatch_async(self.serialQueue, ^{
-        self.superProperties = @{};
-        [self archiveProperties];
-    });
+
 }
 
 - (NSDictionary *)currentSuperProperties
 {
-    if (!self.enable) {
-        return @{};
+    @try {
+        if (!self.enable) {
+            return @{};
+        }
+        return [self.superProperties copy];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    return [self.superProperties copy];
+    return [[NSDictionary alloc]init];
 }
 
 - (void)timeEvent:(NSString *)event
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        NSNumber *startTime = @([[NSDate date] timeIntervalSince1970]);
+        
+        if (event.length == 0) {
+            MPLogError(@"Sugo cannot time an empty event");
+            return;
+        }
+        dispatch_async(self.serialQueue, ^{
+            self.timedEvents[event] = startTime;
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    NSNumber *startTime = @([[NSDate date] timeIntervalSince1970]);
-    
-    if (event.length == 0) {
-        MPLogError(@"Sugo cannot time an empty event");
-        return;
-    }
-    dispatch_async(self.serialQueue, ^{
-        self.timedEvents[event] = startTime;
-    });
 }
 
 - (void)clearTimedEvents
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        dispatch_async(self.serialQueue, ^{
+            self.timedEvents = [NSMutableDictionary dictionary];
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    dispatch_async(self.serialQueue, ^{
-        self.timedEvents = [NSMutableDictionary dictionary];
-    });
+
 }
 
 - (void)reset
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        dispatch_async(self.serialQueue, ^{
+            self.deviceId = [self defaultDeviceId];
+            self.distinctId = [self defaultDistinctId];
+            self.superProperties = [NSMutableDictionary dictionary];
+            self.people.distinctId = nil;
+            self.eventsQueue = [NSMutableArray array];;
+            self.timedEvents = [NSMutableDictionary dictionary];
+            self.decideDimensionsResponseCached = NO;
+            self.decideBindingsResponseCached = NO;
+            self.eventBindings = [NSSet set];
+            [self archive];
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    dispatch_async(self.serialQueue, ^{
-        self.deviceId = [self defaultDeviceId];
-        self.distinctId = [self defaultDistinctId];
-        self.superProperties = [NSMutableDictionary dictionary];
-        self.people.distinctId = nil;
-        self.eventsQueue = [NSMutableArray array];;
-        self.timedEvents = [NSMutableDictionary dictionary];
-        self.decideDimensionsResponseCached = NO;
-        self.decideBindingsResponseCached = NO;
-        self.eventBindings = [NSSet set];
-        [self archive];
-    });
 }
     
 - (void)trackFirstLoginWith:(nullable NSString *)identifer dimension:(nullable NSString *)dimension {
-    
-    if (!self.enable) {
-        return;
-    }
-    __block NSString *firstLoginKey = @"FirstLoginTime";
-    __block NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-    __block NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    __block NSMutableDictionary *firstLoginTimes = [NSMutableDictionary dictionary];
-    NSDictionary *times = [NSUserDefaults.standardUserDefaults dictionaryForKey:firstLoginKey];
-    if (times) {
-        [firstLoginTimes addEntriesFromDictionary:times];
-    }
-    for (NSString *firstLoginTimeKey in firstLoginTimes.allKeys) {
-        if ([identifer isEqualToString:firstLoginTimeKey]) {
-            [NSUserDefaults.standardUserDefaults setObject:identifer forKey:keys[@"LoginUserId"]];
-            [NSUserDefaults.standardUserDefaults synchronize];
+    @try {
+        if (!self.enable) {
             return;
         }
-    }
-    
-    __weak Sugo *weakSelf = self;
-    
-    [self requestForFirstLoginWithIdentifer:identifer completion:^(NSData *firstLoginData) {
-        
-        __strong Sugo *strongSelf = weakSelf;
-        if (!firstLoginData) {
-            return;
+        __block NSString *firstLoginKey = @"FirstLoginTime";
+        __block NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+        __block NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+        __block NSMutableDictionary *firstLoginTimes = [NSMutableDictionary dictionary];
+        NSDictionary *times = [NSUserDefaults.standardUserDefaults dictionaryForKey:firstLoginKey];
+        if (times) {
+            [firstLoginTimes addEntriesFromDictionary:times];
         }
-        @try {
-            NSDictionary *firstLoginResult = [NSJSONSerialization JSONObjectWithData:firstLoginData
-                                                                             options:(NSJSONReadingOptions)0
-                                                                               error:nil][@"result"];
-            [NSUserDefaults.standardUserDefaults setObject:dimension forKey:keys[@"LoginUserIdDimension"]];
-            [NSUserDefaults.standardUserDefaults setObject:identifer forKey:keys[@"LoginUserId"]];
-            [NSUserDefaults.standardUserDefaults synchronize];
-            BOOL isFirstLogin = [firstLoginResult[@"isFirstLogin"] boolValue];
-            if (isFirstLogin) {
-                NSNumber *firstLoginTime = [NSNumber numberWithDouble:[firstLoginResult[@"firstLoginTime"] doubleValue]];
-                firstLoginTimes[identifer] = firstLoginTime;
-                [NSUserDefaults.standardUserDefaults setObject:firstLoginTimes forKey:keys[firstLoginKey]];
+        for (NSString *firstLoginTimeKey in firstLoginTimes.allKeys) {
+            if ([identifer isEqualToString:firstLoginTimeKey]) {
+                [NSUserDefaults.standardUserDefaults setObject:identifer forKey:keys[@"LoginUserId"]];
                 [NSUserDefaults.standardUserDefaults synchronize];
-                [strongSelf trackEvent:values[@"FirstLogin"]];
+                return;
             }
-        } @catch (NSException *exception) {
-            MPLogError(@"unable to request first login with identifer");
-            @try {
-                [ExceptionUtils exceptionToNetWork:exception];
-            } @catch (NSException *exception) {
-                
-            }
-        } @finally {
-            return;
         }
         
-    }];
+        __weak Sugo *weakSelf = self;
+        
+        [self requestForFirstLoginWithIdentifer:identifer completion:^(NSData *firstLoginData) {
+            
+            __strong Sugo *strongSelf = weakSelf;
+            if (!firstLoginData) {
+                return;
+            }
+            @try {
+                NSDictionary *firstLoginResult = [NSJSONSerialization JSONObjectWithData:firstLoginData
+                                                                                 options:(NSJSONReadingOptions)0
+                                                                                   error:nil][@"result"];
+                [NSUserDefaults.standardUserDefaults setObject:dimension forKey:keys[@"LoginUserIdDimension"]];
+                [NSUserDefaults.standardUserDefaults setObject:identifer forKey:keys[@"LoginUserId"]];
+                [NSUserDefaults.standardUserDefaults synchronize];
+                BOOL isFirstLogin = [firstLoginResult[@"isFirstLogin"] boolValue];
+                if (isFirstLogin) {
+                    NSNumber *firstLoginTime = [NSNumber numberWithDouble:[firstLoginResult[@"firstLoginTime"] doubleValue]];
+                    firstLoginTimes[identifer] = firstLoginTime;
+                    [NSUserDefaults.standardUserDefaults setObject:firstLoginTimes forKey:keys[firstLoginKey]];
+                    [NSUserDefaults.standardUserDefaults synchronize];
+                    [strongSelf trackEvent:values[@"FirstLogin"]];
+                }
+            } @catch (NSException *exception) {
+                MPLogError(@"unable to request first login with identifer");
+                @try {
+                    [ExceptionUtils exceptionToNetWork:exception];
+                } @catch (NSException *exception) {
+                    
+                }
+            } @finally {
+                return;
+            }
+            
+        }];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
     
 - (void)requestForFirstLoginWithIdentifer:(NSString *)identifer completion:(void (^)(NSData *firstLoginData))completion {
-    
-    dispatch_async(self.serialQueue, ^{
-        
-        __block BOOL hadError = NO;
-        __block NSData *data = [[NSData alloc] init];
-        
-        NSArray *queryItems = [MPNetwork buildFirstLoginQueryForIdentifer:identifer andProjectID:self.projectID andToken:self.apiToken];
-        // Build a network request from the URL
-        NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
-                                                        andEndpoint:MPNetworkEndpointFirstLogin
-                                                     withQueryItems:queryItems];
-        // Send the network request
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                  NSURLResponse *urlResponse,
-                                                                  NSError *error) {
-            if (error) {
-                MPLogError(@"%@ first login request http error: %@", self, error);
-                hadError = YES;
-                dispatch_semaphore_signal(semaphore);
-                return;
+    @try {
+        dispatch_async(self.serialQueue, ^{
+            @try {
+                __block BOOL hadError = NO;
+                __block NSData *data = [[NSData alloc] init];
+                
+                NSArray *queryItems = [MPNetwork buildFirstLoginQueryForIdentifer:identifer andProjectID:self.projectID andToken:self.apiToken];
+                // Build a network request from the URL
+                NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
+                                                                andEndpoint:MPNetworkEndpointFirstLogin
+                                                             withQueryItems:queryItems];
+                // Send the network request
+                dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                NSURLSession *session = [NSURLSession sharedSession];
+                [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                          NSURLResponse *urlResponse,
+                                                                          NSError *error) {
+                    if (error) {
+                        MPLogError(@"%@ first login request http error: %@", self, error);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    MPLogDebug(@"first login responseData\n%@",[[NSString alloc] initWithData:responseData
+                                                                              encoding:NSUTF8StringEncoding]);
+                    
+                    // Handle network response
+                    data = responseData;
+                    
+                    dispatch_semaphore_signal(semaphore);
+                }] resume];
+                
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                
+                // handle response
+                if (hadError) {
+                    if (completion) {
+                        completion(nil);
+                    }
+                } else {
+                    if (completion) {
+                        completion(data);
+                    }
+                }
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
             }
-            MPLogDebug(@"first login responseData\n%@",[[NSString alloc] initWithData:responseData
-                                                                      encoding:NSUTF8StringEncoding]);
-            
-            // Handle network response
-            data = responseData;
-            
-            dispatch_semaphore_signal(semaphore);
-        }] resume];
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-        // handle response
-        if (hadError) {
-            if (completion) {
-                completion(nil);
-            }
-        } else {
-            if (completion) {
-                completion(data);
-            }
-        }
-    });
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)untrackFirstLogin {
-    
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+        [NSUserDefaults.standardUserDefaults removeObjectForKey:keys[@"LoginUserId"]];
+        [NSUserDefaults.standardUserDefaults synchronize];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-    [NSUserDefaults.standardUserDefaults removeObjectForKey:keys[@"LoginUserId"]];
-    [NSUserDefaults.standardUserDefaults synchronize];
-    
 }
 
 - (void)updateSessionId {
-    _sessionId = [[[NSUUID alloc] init] UUIDString];
+    @try {
+        _sessionId = [[[NSUUID alloc] init] UUIDString];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)setPageInfos:(NSArray<NSDictionary *> *)pageInfos {
-    [SugoPageInfos global].infos = [pageInfos copy];
+    @try {
+        [SugoPageInfos global].infos = [pageInfos copy];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 #pragma mark - Network control
 - (void)setServerURL:(NSString *)serverURL
 {
-    _serverURL = serverURL.copy;
+    @try {
+        _serverURL = serverURL.copy;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (double)locateInterval {

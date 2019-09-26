@@ -20,100 +20,124 @@
 
 - (void)startWKWebViewBindings:(WKWebView **)webView
 {
-    self.wkWebViewCurrentJS = [self wkJavaScriptWithWebView:(*webView)];
-    [(*webView).configuration.userContentController addUserScript:[self wkWebViewCurrentJS]];
-    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
-    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
-    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
-    [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"registerPathName"];
-    MPLogDebug(@"WKWebView Injected");
+    @try {
+        self.wkWebViewCurrentJS = [self wkJavaScriptWithWebView:(*webView)];
+        [(*webView).configuration.userContentController addUserScript:[self wkWebViewCurrentJS]];
+        [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTrack"];
+        [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewBindingsTime"];
+        [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"SugoWKWebViewReporter"];
+        [(*webView).configuration.userContentController addScriptMessageHandler:self name:@"registerPathName"];
+        MPLogDebug(@"WKWebView Injected");
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)stopWKWebViewBindings:(WKWebView *)webView
 {
-    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTrack"];
-    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTime"];
-    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
-    [webView.configuration.userContentController removeScriptMessageHandlerForName:@"registerPathName"];
-    self.wkWebView = nil;
+    @try {
+        [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTrack"];
+        [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewBindingsTime"];
+        [webView.configuration.userContentController removeScriptMessageHandlerForName:@"SugoWKWebViewReporter"];
+        [webView.configuration.userContentController removeScriptMessageHandlerForName:@"registerPathName"];
+        self.wkWebView = nil;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)updateWKWebViewBindings:(WKWebView **)webView
 {
-    NSMutableArray<WKUserScript *> *userScripts = [[NSMutableArray<WKUserScript *> alloc]
-                                                   initWithArray:(*webView).configuration.userContentController.userScripts];
-    
-    if ([userScripts containsObject:self.wkWebViewCurrentJS]) {
-        [userScripts removeObject:self.wkWebViewCurrentJS];
+    @try {
+        NSMutableArray<WKUserScript *> *userScripts = [[NSMutableArray<WKUserScript *> alloc]
+                                                       initWithArray:(*webView).configuration.userContentController.userScripts];
+        
+        if ([userScripts containsObject:self.wkWebViewCurrentJS]) {
+            [userScripts removeObject:self.wkWebViewCurrentJS];
+        }
+        [(*webView).configuration.userContentController removeAllUserScripts];
+        for (WKUserScript *userScript in userScripts) {
+            [(*webView).configuration.userContentController addUserScript:userScript];
+        }
+        self.wkWebViewCurrentJS = [self wkJavaScriptWithWebView:(*webView)];
+        [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
+        MPLogDebug(@"WKWebView Updated");
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    [(*webView).configuration.userContentController removeAllUserScripts];
-    for (WKUserScript *userScript in userScripts) {
-        [(*webView).configuration.userContentController addUserScript:userScript];
-    }
-    self.wkWebViewCurrentJS = [self wkJavaScriptWithWebView:(*webView)];
-    [(*webView).configuration.userContentController addUserScript:self.wkWebViewCurrentJS];
-    MPLogDebug(@"WKWebView Updated");
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
-    if ([message.body isKindOfClass:[NSDictionary class]]) {
-        if ([message.name isEqualToString:@"SugoWKWebViewBindingsTrack"]) {
-            NSDictionary *body = [[NSDictionary alloc] initWithDictionary:(NSDictionary *)message.body];
-            WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-            storage.eventID = (NSString *)body[@"eventID"];
-            storage.eventName = (NSString *)body[@"eventName"];
-            storage.properties = (NSString *)body[@"properties"];
-            NSData *pData = [storage.properties dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *pJSON = [NSJSONSerialization JSONObjectWithData:pData
-                                                                  options:NSJSONReadingMutableContainers
-                                                                    error:nil];
-            if (pJSON != nil)
-            {
-                NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
-                NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
-                NSString *keyEventType = keys[@"EventType"];
-                NSString *valueEventType = values[pJSON[keyEventType]];
-                [pJSON setValue:valueEventType forKey:keyEventType];
-                [[Sugo sharedInstance] trackEventID:storage.eventID
-                                   eventName:storage.eventName
-                                  properties:pJSON];
-            }
-            else
-            {
-                [[Sugo sharedInstance] trackEventID:storage.eventID
-                                   eventName:storage.eventName];
-            }
-            MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
-        } else if ([message.name isEqualToString:@"SugoWKWebViewBindingsTime"]) {
-            NSDictionary *body = [[NSDictionary alloc] initWithDictionary:(NSDictionary *)message.body];
-            NSString *eventName = [[NSString alloc] initWithString:(NSString *)body[@"eventName"]];
-            if (eventName) {
-                [[Sugo sharedInstance] timeEvent:eventName];
-            }
-        } else if ([message.name  isEqual: @"SugoWKWebViewReporter"]) {
-            NSDictionary *body = (NSDictionary *)message.body;
-            WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
-            
-            if (body[@"title"] && body[@"path"] && body[@"clientWidth"] && body[@"clientHeight"] && body[@"viewportContent"] && body[@"nodes"]) {
-                [storage setHTMLInfoWithTitle:(NSString *)body[@"title"]
-                                         path:(NSString *)body[@"path"]
-                                        width:(NSString *)body[@"clientWidth"]
-                                       height:(NSString *)body[@"clientHeight"]
-                              viewportContent:(NSString *)body[@"viewportContent"]
-                                        nodes:(NSString *)body[@"nodes"]];
-            }
-        }else if([message.name isEqual:@"registerPathName"]){
-            @try {
+    @try {
+        if ([message.body isKindOfClass:[NSDictionary class]]) {
+            if ([message.name isEqualToString:@"SugoWKWebViewBindingsTrack"]) {
+                NSDictionary *body = [[NSDictionary alloc] initWithDictionary:(NSDictionary *)message.body];
+                WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+                storage.eventID = (NSString *)body[@"eventID"];
+                storage.eventName = (NSString *)body[@"eventName"];
+                storage.properties = (NSString *)body[@"properties"];
+                NSData *pData = [storage.properties dataUsingEncoding:NSUTF8StringEncoding];
+                NSMutableDictionary *pJSON = [NSJSONSerialization JSONObjectWithData:pData
+                                                                      options:NSJSONReadingMutableContainers
+                                                                        error:nil];
+                NSArray *array = [pJSON allKeys];
+                NSMutableDictionary *newDict = [[NSMutableDictionary alloc]init];
+                for (NSString *key in array) {
+                    id aValue = pJSON[key];
+                    if (aValue == nil || aValue == [NSNull null] || [aValue isEqual:nil]||aValue == NULL||[aValue isKindOfClass:[NSNull class]]){
+                         [pJSON setObject:@"" forKey:key];
+                    }
+                }
+                if (pJSON != nil)
+                {
+                    NSDictionary *values = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionValues"]];
+                    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:[Sugo sharedInstance].sugoConfiguration[@"DimensionKeys"]];
+                    NSString *keyEventType = keys[@"EventType"];
+                    NSString *valueEventType = values[pJSON[keyEventType]];
+                    [pJSON setValue:valueEventType forKey:keyEventType];
+                    [[Sugo sharedInstance] trackEventID:storage.eventID
+                                       eventName:storage.eventName
+                                      properties:pJSON];
+                }
+                else
+                {
+                    [[Sugo sharedInstance] trackEventID:storage.eventID
+                                       eventName:storage.eventName];
+                }
+                MPLogDebug(@"HTML Event: id = %@, name = %@", storage.eventID, storage.eventName);
+            } else if ([message.name isEqualToString:@"SugoWKWebViewBindingsTime"]) {
+                NSDictionary *body = [[NSDictionary alloc] initWithDictionary:(NSDictionary *)message.body];
+                NSString *eventName = [[NSString alloc] initWithString:(NSString *)body[@"eventName"]];
+                if (eventName) {
+                    [[Sugo sharedInstance] timeEvent:eventName];
+                }
+            } else if ([message.name  isEqual: @"SugoWKWebViewReporter"]) {
                 NSDictionary *body = (NSDictionary *)message.body;
-                [[Sugo sharedInstance].webViewDict setObject:body[@"path_name"] forKey:body[@"webview_hashcode"] ];
-            } @catch (NSException *exception) {
-                NSLog(@"%@",exception);
-                [ExceptionUtils exceptionToNetWork:exception];
+                WebViewInfoStorage *storage = [WebViewInfoStorage globalStorage];
+                
+                if (body[@"title"] && body[@"path"] && body[@"clientWidth"] && body[@"clientHeight"] && body[@"viewportContent"] && body[@"nodes"]) {
+                    [storage setHTMLInfoWithTitle:(NSString *)body[@"title"]
+                                             path:(NSString *)body[@"path"]
+                                            width:(NSString *)body[@"clientWidth"]
+                                           height:(NSString *)body[@"clientHeight"]
+                                  viewportContent:(NSString *)body[@"viewportContent"]
+                                            nodes:(NSString *)body[@"nodes"]];
+                }
+            }else if([message.name isEqual:@"registerPathName"]){
+                @try {
+                    NSDictionary *body = (NSDictionary *)message.body;
+                    [[Sugo sharedInstance].webViewDict setObject:body[@"path_name"] forKey:body[@"webview_hashcode"] ];
+                } @catch (NSException *exception) {
+                    NSLog(@"%@",exception);
+                    [ExceptionUtils exceptionToNetWork:exception];
+                }
             }
+        } else {
+            MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
         }
-    } else {
-        MPLogDebug(@"Wrong message body type: name = %@, body = %@", message.name, message.body);
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -147,94 +171,99 @@
 
 - (NSString *)jsWKWebViewVariablesWithWebView:(WKWebView *)webView
 {
-    NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *rpr = (NSDictionary *)[userDefaults objectForKey:@"HomePath"];
-    NSString *homePathKey = [[NSString alloc] init];
-    NSString *homePathValue = [[NSString alloc] init];
-    if (rpr) {
-        homePathKey = (NSString *)rpr.allKeys.firstObject;
-        homePathValue = (NSString *)rpr[homePathKey];
-    }
-    NSMutableArray *res = [[NSMutableArray alloc] init];
-    NSMutableString *resString = nil;
-    if (replacements) {
-        for (NSString *replacement in replacements) {
-            NSDictionary *r = (NSDictionary *)replacements[replacement];
-            NSString *key = (NSString *)r.allKeys.firstObject;
-            NSString *value = (NSString *)r[key];
-            [res addObject:@{key: value}];
+    @try {
+        NSDictionary *replacements = [Sugo sharedInstance].sugoConfiguration[@"ResourcesPathReplacements"];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSDictionary *rpr = (NSDictionary *)[userDefaults objectForKey:@"HomePath"];
+        NSString *homePathKey = [[NSString alloc] init];
+        NSString *homePathValue = [[NSString alloc] init];
+        if (rpr) {
+            homePathKey = (NSString *)rpr.allKeys.firstObject;
+            homePathValue = (NSString *)rpr[homePathKey];
         }
-        NSError *error = nil;
-        NSData *resJSON = nil;
-        @try {
-            resJSON = [NSJSONSerialization dataWithJSONObject:res
-                                                      options:NSJSONWritingPrettyPrinted
-                                                        error:&error];
-            resString = [[NSMutableString alloc] initWithData:resJSON
-                                                     encoding:NSUTF8StringEncoding];
-        } @catch (NSException *exception) {
+        NSMutableArray *res = [[NSMutableArray alloc] init];
+        NSMutableString *resString = nil;
+        if (replacements) {
+            for (NSString *replacement in replacements) {
+                NSDictionary *r = (NSDictionary *)replacements[replacement];
+                NSString *key = (NSString *)r.allKeys.firstObject;
+                NSString *value = (NSString *)r[key];
+                [res addObject:@{key: value}];
+            }
+            NSError *error = nil;
+            NSData *resJSON = nil;
             @try {
-                [ExceptionUtils exceptionToNetWork:exception];
-                MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
-                           exception,
-                           resJSON,
-                           resString);
+                resJSON = [NSJSONSerialization dataWithJSONObject:res
+                                                          options:NSJSONWritingPrettyPrinted
+                                                            error:&error];
+                resString = [[NSMutableString alloc] initWithData:resJSON
+                                                         encoding:NSUTF8StringEncoding];
             } @catch (NSException *exception) {
-                
+                @try {
+                    [ExceptionUtils exceptionToNetWork:exception];
+                    MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
+                               exception,
+                               resJSON,
+                               resString);
+                } @catch (NSException *exception) {
+                    
+                }
             }
         }
-    }
-    NSMutableString *infosString = nil;
-    if ([SugoPageInfos global].infos.count > 0) {
-        NSError *error = nil;
-        NSData *infosJSON = nil;
-        @try {
-            infosJSON = [NSJSONSerialization dataWithJSONObject:[SugoPageInfos global].infos
-                                                        options:NSJSONWritingPrettyPrinted
-                                                          error:&error];
-            infosString = [[NSMutableString alloc] initWithData:infosJSON
-                                                       encoding:NSUTF8StringEncoding];
-        } @catch (NSException *exception) {
+        NSMutableString *infosString = nil;
+        if ([SugoPageInfos global].infos.count > 0) {
+            NSError *error = nil;
+            NSData *infosJSON = nil;
             @try {
-                MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
-                           exception,
-                           infosJSON,
-                           infosString);
-                [ExceptionUtils exceptionToNetWork:exception];
+                infosJSON = [NSJSONSerialization dataWithJSONObject:[SugoPageInfos global].infos
+                                                            options:NSJSONWritingPrettyPrinted
+                                                              error:&error];
+                infosString = [[NSMutableString alloc] initWithData:infosJSON
+                                                           encoding:NSUTF8StringEncoding];
             } @catch (NSException *exception) {
-                
+                @try {
+                    MPLogError(@"exception: %@, decoding resJSON data: %@ -> %@",
+                               exception,
+                               infosJSON,
+                               infosString);
+                    [ExceptionUtils exceptionToNetWork:exception];
+                } @catch (NSException *exception) {
+                    
+                }
             }
         }
+        NSString *vcPath = [NSString stringWithFormat:@"sugo.view_controller = '%@';\n", self.wkVcPath];
+        NSString *homePath = [NSString stringWithFormat:@"sugo.home_path = '%@';\n", homePathKey];
+        NSString *homePathReplacement = [NSString stringWithFormat:@"sugo.home_path_replacement = '%@';\n", homePathValue];
+        NSString *webviewHashCode = [NSString stringWithFormat:@"sugo.webview_hashcode = '%@';\n",[NSString stringWithFormat:@"%ld",webView.hash]];
+        NSString *regularExpressions = [NSString stringWithFormat:@"sugo.regular_expressions = %@;\n", resString?resString:@"[]"];
+        NSString *pageInfos = [NSString stringWithFormat:@"sugo.page_infos = %@;\n", infosString?infosString:@"[]"];
+        NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
+        NSString *canTrackWebPage = [NSString stringWithFormat:@"sugo.can_track_web_page = %@;\n", SugoCanTrackWebPage?@"true":@"false"];
+        NSString *canShowHeatMap = [NSString stringWithFormat:@"sugo.can_show_heat_map = %@;\n", self.isHeatMapModeOn?@"true":@"false"];
+        NSString *heats = [NSString stringWithFormat:@"sugo.h5_heats = %@;\n", self.stringHeats];
+        NSString *vars = [self jsSourceOfFileName:@"WebViewVariables"];
+    
+    
+    
+        NSString *variables = [[NSString alloc] initWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@",
+                               vcPath,
+                               homePath,
+                               homePathReplacement,
+                               webviewHashCode,
+                               regularExpressions,
+                               pageInfos,
+                               bindings,
+                               canTrackWebPage,
+                               canShowHeatMap,
+                               heats,
+                               vars];
+    
+        return variables;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return @"";
     }
-    NSString *vcPath = [NSString stringWithFormat:@"sugo.view_controller = '%@';\n", self.wkVcPath];
-    NSString *homePath = [NSString stringWithFormat:@"sugo.home_path = '%@';\n", homePathKey];
-    NSString *homePathReplacement = [NSString stringWithFormat:@"sugo.home_path_replacement = '%@';\n", homePathValue];
-    NSString *webviewHashCode = [NSString stringWithFormat:@"sugo.webview_hashcode = '%@';\n",[NSString stringWithFormat:@"%ld",webView.hash]];
-    NSString *regularExpressions = [NSString stringWithFormat:@"sugo.regular_expressions = %@;\n", resString?resString:@"[]"];
-    NSString *pageInfos = [NSString stringWithFormat:@"sugo.page_infos = %@;\n", infosString?infosString:@"[]"];
-    NSString *bindings = [NSString stringWithFormat:@"sugo.h5_event_bindings = %@;\n", self.stringBindings];
-    NSString *canTrackWebPage = [NSString stringWithFormat:@"sugo.can_track_web_page = %@;\n", SugoCanTrackWebPage?@"true":@"false"];
-    NSString *canShowHeatMap = [NSString stringWithFormat:@"sugo.can_show_heat_map = %@;\n", self.isHeatMapModeOn?@"true":@"false"];
-    NSString *heats = [NSString stringWithFormat:@"sugo.h5_heats = %@;\n", self.stringHeats];
-    NSString *vars = [self jsSourceOfFileName:@"WebViewVariables"];
-    
-    
-    
-    NSString *variables = [[NSString alloc] initWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@",
-                           vcPath,
-                           homePath,
-                           homePathReplacement,
-                           webviewHashCode,
-                           regularExpressions,
-                           pageInfos,
-                           bindings,
-                           canTrackWebPage,
-                           canShowHeatMap,
-                           heats,
-                           vars];
-    
-    return variables;
 }
 
 - (NSString *)jsWKWebViewAPI

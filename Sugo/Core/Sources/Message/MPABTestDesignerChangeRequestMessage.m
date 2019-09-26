@@ -5,6 +5,7 @@
 #import "MPABTestDesignerChangeResponseMessage.h"
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerSnapshotResponseMessage.h"
+#import "ExceptionUtils.h"
 
 NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
 
@@ -17,16 +18,21 @@ NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
 {
-    __weak MPABTestDesignerConnection *weak_connection = connection;
-    NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-        MPABTestDesignerConnection *conn = weak_connection;
+    @try {
+        __weak MPABTestDesignerConnection *weak_connection = connection;
+        NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+            MPABTestDesignerConnection *conn = weak_connection;
 
-        MPABTestDesignerChangeResponseMessage *changeResponseMessage = [MPABTestDesignerChangeResponseMessage message];
-        changeResponseMessage.status = @"OK";
-        [conn sendMessage:changeResponseMessage];
-    }];
+            MPABTestDesignerChangeResponseMessage *changeResponseMessage = [MPABTestDesignerChangeResponseMessage message];
+            changeResponseMessage.status = @"OK";
+            [conn sendMessage:changeResponseMessage];
+        }];
 
-    return operation;
+        return operation;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
+    }
 }
 
 @end

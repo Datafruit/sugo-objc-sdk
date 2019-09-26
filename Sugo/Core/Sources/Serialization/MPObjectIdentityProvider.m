@@ -3,7 +3,7 @@
 
 #import "MPObjectIdentityProvider.h"
 #import "MPSequenceGenerator.h"
-
+#import "ExceptionUtils.h"
 @implementation MPObjectIdentityProvider
 
 {
@@ -13,27 +13,35 @@
 
 - (instancetype)init
 {
-    self = [super init];
-    if (self) {
-        _objectToIdentifierMap = [NSMapTable weakToStrongObjectsMapTable];
-        _sequenceGenerator = [[MPSequenceGenerator alloc] init];
+    @try {
+        self = [super init];
+        if (self) {
+            _objectToIdentifierMap = [NSMapTable weakToStrongObjectsMapTable];
+            _sequenceGenerator = [[MPSequenceGenerator alloc] init];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return self;
 }
 
 - (NSString *)identifierForObject:(id)object
 {
-    if ([object isKindOfClass:[NSString class]]) {
-        return object;
+    @try {
+        if ([object isKindOfClass:[NSString class]]) {
+            return object;
+        }
+        NSString *identifier = [_objectToIdentifierMap objectForKey:object];
+        if (identifier == nil) {
+            identifier = [NSString stringWithFormat:@"$%" PRIi32, [_sequenceGenerator nextValue]];
+            [_objectToIdentifierMap setObject:identifier forKey:object];
+        }
+        return identifier;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return @"";
     }
-    NSString *identifier = [_objectToIdentifierMap objectForKey:object];
-    if (identifier == nil) {
-        identifier = [NSString stringWithFormat:@"$%" PRIi32, [_sequenceGenerator nextValue]];
-        [_objectToIdentifierMap setObject:identifier forKey:object];
-    }
-
-    return identifier;
+    
 }
 
 @end

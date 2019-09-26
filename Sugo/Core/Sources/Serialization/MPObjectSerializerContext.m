@@ -2,7 +2,7 @@
 // Copyright (c) 2014 Sugo. All rights reserved.
 
 #import "MPObjectSerializerContext.h"
-
+#import "ExceptionUtils.h"
 @implementation MPObjectSerializerContext
 
 {
@@ -13,14 +13,18 @@
 
 - (instancetype)initWithRootObject:(id)object
 {
-    self = [super init];
-    if (self) {
-        _visitedObjects = [NSMutableSet set];
-        _unvisitedObjects = [NSMutableSet setWithObject:object];
-        _serializedObjects = [NSMutableDictionary dictionary];
-    }
+    @try {
+        self = [super init];
+        if (self) {
+            _visitedObjects = [NSMutableSet set];
+            _unvisitedObjects = [NSMutableSet setWithObject:object];
+            _serializedObjects = [NSMutableDictionary dictionary];
+        }
 
-    return self;
+        return self;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (BOOL)hasUnvisitedObjects
@@ -30,35 +34,57 @@
 
 - (void)enqueueUnvisitedObject:(NSObject *)object
 {
-    NSParameterAssert(object != nil);
+    @try {
+        NSParameterAssert(object != nil);
 
-    [_unvisitedObjects addObject:object];
+        [_unvisitedObjects addObject:object];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (NSObject *)dequeueUnvisitedObject
 {
-    NSObject *object = [_unvisitedObjects anyObject];
-    [_unvisitedObjects removeObject:object];
-
-    return object;
+    @try {
+        NSObject *object = [_unvisitedObjects anyObject];
+        [_unvisitedObjects removeObject:object];
+        return object;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
+    }
 }
 
 - (void)addVisitedObject:(NSObject *)object
 {
-    NSParameterAssert(object != nil);
+    @try {
+        NSParameterAssert(object != nil);
 
-    [_visitedObjects addObject:object];
+        [_visitedObjects addObject:object];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (BOOL)isVisitedObject:(NSObject *)object
 {
-    return object && [_visitedObjects containsObject:object];
+    @try {
+        return object && [_visitedObjects containsObject:object];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return NO;
+    }
+    
 }
 
 - (void)addSerializedObject:(NSDictionary *)serializedObject
 {
-    NSParameterAssert(serializedObject[@"id"] != nil);
-    _serializedObjects[serializedObject[@"id"]] = serializedObject;
+    @try {
+        NSParameterAssert(serializedObject[@"id"] != nil);
+        _serializedObjects[serializedObject[@"id"]] = serializedObject;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (NSArray *)allSerializedObjects

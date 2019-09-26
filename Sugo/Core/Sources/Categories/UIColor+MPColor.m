@@ -1,34 +1,39 @@
 #import "UIColor+MPColor.h"
-
+#import "ExceptionUtils.h"
 @implementation UIColor (MPColor)
 
 + (UIColor *)mp_applicationPrimaryColor
 {
-    // First try and find the color of the UINavigationBar of the top UINavigationController that is showing now.
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    UINavigationController *topNavigationController = nil;
+    @try {
+        // First try and find the color of the UINavigationBar of the top UINavigationController that is showing now.
+        UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+        UINavigationController *topNavigationController = nil;
 
-    do {
-        if ([rootViewController isKindOfClass:[UINavigationController class]]) {
-            topNavigationController = (UINavigationController *)rootViewController;
-        } else if (rootViewController.navigationController) {
-            topNavigationController = rootViewController.navigationController;
+        do {
+            if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+                topNavigationController = (UINavigationController *)rootViewController;
+            } else if (rootViewController.navigationController) {
+                topNavigationController = rootViewController.navigationController;
+            }
+        } while ((rootViewController = rootViewController.presentedViewController));
+
+        UIColor *color = [topNavigationController navigationBar].barTintColor;
+
+        // Then try and use the UINavigationBar default color for the app
+        if (!color) {
+            color = [UINavigationBar appearance].barTintColor;
         }
-    } while ((rootViewController = rootViewController.presentedViewController));
 
-    UIColor *color = [topNavigationController navigationBar].barTintColor;
+        // Or the UITabBar default color
+        if (!color) {
+            color = [UITabBar appearance].barTintColor;
+        }
 
-    // Then try and use the UINavigationBar default color for the app
-    if (!color) {
-        color = [UINavigationBar appearance].barTintColor;
+        return color;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return UIColor.clearColor;
     }
-
-    // Or the UITabBar default color
-    if (!color) {
-        color = [UITabBar appearance].barTintColor;
-    }
-
-    return color;
 }
 
 + (UIColor *)mp_lightEffectColor

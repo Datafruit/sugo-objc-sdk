@@ -31,112 +31,140 @@
 }
 
 - (void)switchMode:(BOOL)mode {
-    if (self.mode == mode) {
-        return;
-    }
-    if (mode == true) {
-        self.mode = true;
-    } else if (mode == false) {
-        self.mode = false;
+    @try {
+        if (self.mode == mode) {
+            return;
+        }
+        if (mode == true) {
+            self.mode = true;
+        } else if (mode == false) {
+            self.mode = false;
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
 - (void)renderObjectOfPath:(NSString *)path fromRoot:(id)root {
+    @try {
+        NSDictionary *heats = [self parse];
     
-    NSDictionary *heats = [self parse];
+        if (!heats[path] || [self.hmLayers.allKeys containsObject:path]) {
+            return;
+        }
     
-    if (!heats[path] || [self.hmLayers.allKeys containsObject:path]) {
-        return;
-    }
-    
-    MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:path];
-    NSArray *objects = [selector selectFromRoot:root];
-    for (UIControl *control in objects) {
-        HeatMapLayer *hmLayer = [[HeatMapLayer alloc] initWithFrame:control.layer.bounds
-                                                               heat:[self colorOfRate:[heats[path] doubleValue]]];
-        [hmLayer setNeedsDisplay];
-        [control.layer addSublayer:hmLayer];
-        [self.hmLayers addEntriesFromDictionary:@{path: hmLayer}];
+        MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:path];
+        NSArray *objects = [selector selectFromRoot:root];
+        for (UIControl *control in objects) {
+            HeatMapLayer *hmLayer = [[HeatMapLayer alloc] initWithFrame:control.layer.bounds
+                                                                   heat:[self colorOfRate:[heats[path] doubleValue]]];
+            [hmLayer setNeedsDisplay];
+            [control.layer addSublayer:hmLayer];
+            [self.hmLayers addEntriesFromDictionary:@{path: hmLayer}];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
 - (void)wipeObjectOfPath:(NSString *)path {
-    
-    if ([self.hmLayers.allKeys containsObject:path]) {
-        [(CALayer *)self.hmLayers[path] removeFromSuperlayer];
-        [self.hmLayers removeObjectForKey:path];
+    @try {
+        if ([self.hmLayers.allKeys containsObject:path]) {
+            [(CALayer *)self.hmLayers[path] removeFromSuperlayer];
+            [self.hmLayers removeObjectForKey:path];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
 // Color
 - (NSDictionary *)colorOfRate:(double)rate {
-    NSMutableDictionary *color = [[NSMutableDictionary alloc] initWithDictionary:self.coldColor];
-    
-    double red = ([self.hotColor[@"red"] doubleValue] - [self.coldColor[@"red"] doubleValue]) * rate;
-    double green = ([self.hotColor[@"green"] doubleValue] - [self.coldColor[@"green"] doubleValue]) * rate;
-    double blue = ([self.hotColor[@"blue"] doubleValue] - [self.coldColor[@"blue"] doubleValue]) * rate;
-    
-    color[@"red"] = @([color[@"red"] doubleValue] + red);
-    color[@"green"] = @([color[@"green"] doubleValue] + green);
-    color[@"blue"] = @([color[@"blue"] doubleValue] + blue);
-    
-    return color;
+    @try {
+        NSMutableDictionary *color = [[NSMutableDictionary alloc] initWithDictionary:self.coldColor];
+        
+        double red = ([self.hotColor[@"red"] doubleValue] - [self.coldColor[@"red"] doubleValue]) * rate;
+        double green = ([self.hotColor[@"green"] doubleValue] - [self.coldColor[@"green"] doubleValue]) * rate;
+        double blue = ([self.hotColor[@"blue"] doubleValue] - [self.coldColor[@"blue"] doubleValue]) * rate;
+        
+        color[@"red"] = @([color[@"red"] doubleValue] + red);
+        color[@"green"] = @([color[@"green"] doubleValue] + green);
+        color[@"blue"] = @([color[@"blue"] doubleValue] + blue);
+        
+        return color;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return @{@"red":@(0),
+                 @"green":@(0),
+                 @"blue":@(0),
+                 };
+    }
 }
 
 - (NSDictionary *)parse {
-    
-    NSMutableDictionary *heats = [NSMutableDictionary dictionary];
-    
-    NSDictionary *nativeEventBindings = [self serializedNativeEventBindings];
-    if (nativeEventBindings) {
-        NSDictionary *heatMap = [self serializedHeatMap];
+    @try {
+        NSMutableDictionary *heats = [NSMutableDictionary dictionary];
         
-        NSMutableDictionary *hs = [NSMutableDictionary dictionary];
-        NSMutableDictionary *locations = [NSMutableDictionary dictionary];
-        for (NSString *eventId in heatMap.allKeys) {
-            NSString *path = nativeEventBindings[eventId][@"path"];
-            NSString *page = [self pageOfPath:path];
-            if (path && page) {
-                [locations addEntriesFromDictionary:@{path: page}];
-                [hs addEntriesFromDictionary:@{path: heatMap[eventId]}];
-            }
-        }
-        
-        NSMutableDictionary *pages = [NSMutableDictionary dictionary];
-        for (NSString *path in locations.allKeys) {
-            NSString *page = locations[path];
-            NSMutableArray *paths = [NSMutableArray array];
-            if (pages[page]) {
-                paths = pages[page];
-            }
-            [paths addObject:path];
-            [pages addEntriesFromDictionary:@{page: paths}];
-        }
-        
-        for (NSString *page in pages.allKeys) {
-            double events = 0.0;
-            for (NSString *path in pages[page]) {
-                if (events < [hs[path] doubleValue]) {
-                    events = [hs[path] doubleValue];
+        NSDictionary *nativeEventBindings = [self serializedNativeEventBindings];
+        if (nativeEventBindings) {
+            NSDictionary *heatMap = [self serializedHeatMap];
+            
+            NSMutableDictionary *hs = [NSMutableDictionary dictionary];
+            NSMutableDictionary *locations = [NSMutableDictionary dictionary];
+            for (NSString *eventId in heatMap.allKeys) {
+                NSString *path = nativeEventBindings[eventId][@"path"];
+                NSString *page = [self pageOfPath:path];
+                if (path && page) {
+                    [locations addEntriesFromDictionary:@{path: page}];
+                    [hs addEntriesFromDictionary:@{path: heatMap[eventId]}];
                 }
             }
-            for (NSString *path in pages[page]) {
-                if (hs[path]) {
-                    NSNumber *rate = @([hs[path] doubleValue] / events);
-                    [heats addEntriesFromDictionary:@{path: rate}];
+            
+            NSMutableDictionary *pages = [NSMutableDictionary dictionary];
+            for (NSString *path in locations.allKeys) {
+                NSString *page = locations[path];
+                NSMutableArray *paths = [NSMutableArray array];
+                if (pages[page]) {
+                    paths = pages[page];
+                }
+                [paths addObject:path];
+                [pages addEntriesFromDictionary:@{page: paths}];
+            }
+            
+            for (NSString *page in pages.allKeys) {
+                double events = 0.0;
+                for (NSString *path in pages[page]) {
+                    if (events < [hs[path] doubleValue]) {
+                        events = [hs[path] doubleValue];
+                    }
+                }
+                for (NSString *path in pages[page]) {
+                    if (hs[path]) {
+                        NSNumber *rate = @([hs[path] doubleValue] / events);
+                        [heats addEntriesFromDictionary:@{path: rate}];
+                    }
                 }
             }
         }
+        return heats;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return [[NSDictionary alloc]init];
     }
-    return heats;
 }
 
 - (NSString *)pageOfPath:(NSString *)path {
-    NSString *page = @"";
-    if ([[path componentsSeparatedByString:@"/"] count] > 2) {
-        page = [path componentsSeparatedByString:@"/"][1];
+    @try {
+        NSString *page = @"";
+        if ([[path componentsSeparatedByString:@"/"] count] > 2) {
+            page = [path componentsSeparatedByString:@"/"][1];
+        }
+        return page;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return @"";
     }
-    return page;
+
 }
 
 - (NSDictionary *)serializedHeatMap {

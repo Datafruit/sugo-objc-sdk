@@ -2,7 +2,7 @@
 // Copyright (c) 2014 Sugo. All rights reserved.
 
 #import "MPPropertyDescription.h"
-
+#import "ExceptionUtils.h"
 @implementation MPPropertySelectorParameterDescription
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
@@ -11,11 +11,14 @@
     NSParameterAssert(dictionary[@"type"] != nil);
 
     self = [super init];
-    if (self) {
-        _name = [dictionary[@"name"] copy];
-        _type = [dictionary[@"type"] copy];
+    @try {
+        if (self) {
+            _name = [dictionary[@"name"] copy];
+            _type = [dictionary[@"type"] copy];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return self;
 }
 
@@ -29,17 +32,20 @@
     NSParameterAssert(dictionary[@"parameters"] != nil);
 
     self = [super init];
-    if (self) {
-        _selectorName = [dictionary[@"selector"] copy];
-        NSMutableArray *parameters = [NSMutableArray arrayWithCapacity:[dictionary[@"parameters"] count]];
-        for (NSDictionary *parameter in dictionary[@"parameters"]) {
-            [parameters addObject:[[MPPropertySelectorParameterDescription alloc] initWithDictionary:parameter]];
+    @try {
+        if (self) {
+            _selectorName = [dictionary[@"selector"] copy];
+            NSMutableArray *parameters = [NSMutableArray arrayWithCapacity:[dictionary[@"parameters"] count]];
+            for (NSDictionary *parameter in dictionary[@"parameters"]) {
+                [parameters addObject:[[MPPropertySelectorParameterDescription alloc] initWithDictionary:parameter]];
+            }
+
+            _parameters = [parameters copy];
+            _returnType = [dictionary[@"result"][@"type"] copy]; // optional
         }
-
-        _parameters = [parameters copy];
-        _returnType = [dictionary[@"result"][@"type"] copy]; // optional
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return self;
 }
 
@@ -56,76 +62,82 @@
 + (NSValueTransformer *)valueTransformerForType:(NSString *)typeName
 {
     // TODO: lookup transformer by type
-
-    for (NSString *toTypeName in @[@"NSDictionary", @"NSNumber", @"NSString"]) {
-        NSString *toTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", typeName, toTypeName];
-        NSValueTransformer *toTransformer = [NSValueTransformer valueTransformerForName:toTransformerName];
-        if (toTransformer) {
-            return toTransformer;
+    @try {
+        for (NSString *toTypeName in @[@"NSDictionary", @"NSNumber", @"NSString"]) {
+            NSString *toTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", typeName, toTypeName];
+            NSValueTransformer *toTransformer = [NSValueTransformer valueTransformerForName:toTransformerName];
+            if (toTransformer) {
+                return toTransformer;
+            }
         }
-    }
 
-    // Default to pass-through.
-    return [NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"];
+        // Default to pass-through.
+        return [NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
+    }
 }
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
     NSParameterAssert(dictionary[@"name"] != nil);
-
     self = [super init];
-    if (self) {
-        _name = [dictionary[@"name"] copy]; // required
-        _useInstanceVariableAccess = [dictionary[@"use_ivar"] boolValue]; // Optional
-        _readonly = [dictionary[@"readonly"] boolValue]; // Optional
-        _nofollow = [dictionary[@"nofollow"] boolValue]; // Optional
+    @try {
+        if (self) {
+            _name = [dictionary[@"name"] copy]; // required
+            _useInstanceVariableAccess = [dictionary[@"use_ivar"] boolValue]; // Optional
+            _readonly = [dictionary[@"readonly"] boolValue]; // Optional
+            _nofollow = [dictionary[@"nofollow"] boolValue]; // Optional
 
-        NSString *predicateFormat = dictionary[@"predicate"]; // Optional
-        if (predicateFormat) {
-            _predicate = [NSPredicate predicateWithFormat:predicateFormat];
+            NSString *predicateFormat = dictionary[@"predicate"]; // Optional
+            if (predicateFormat) {
+                _predicate = [NSPredicate predicateWithFormat:predicateFormat];
+            }
+
+            NSDictionary *get = dictionary[@"get"];
+            if (get == nil) {
+                NSParameterAssert(dictionary[@"type"] != nil);
+                get = @{
+                        @"selector": _name,
+                        @"result": @{
+                                @"type": dictionary[@"type"],
+                                @"name": @"value"
+                        },
+                        @"parameters": @[]
+                };
+            }
+
+            NSDictionary *set = dictionary[@"set"];
+            if (set == nil && _readonly == NO) {
+                NSParameterAssert(dictionary[@"type"] != nil);
+                set = @{
+                        @"selector": [NSString stringWithFormat:@"set%@:", _name.capitalizedString],
+                        @"parameters": @[
+                                @{
+                                        @"name": @"value",
+                                        @"type": dictionary[@"type"]
+                                }
+                        ]
+                };
+            }
+
+            _getSelectorDescription = [[MPPropertySelectorDescription alloc] initWithDictionary:get];
+            if (set) {
+                _setSelectorDescription = [[MPPropertySelectorDescription alloc] initWithDictionary:set];
+            } else {
+                _readonly = YES;
+            }
+
+            BOOL useKVC = (dictionary[@"use_kvc"] == nil ? YES : [dictionary[@"use_kvc"] boolValue]) && _useInstanceVariableAccess == NO;
+            _useKeyValueCoding = useKVC &&
+                    _getSelectorDescription.parameters.count == 0 &&
+                    (_setSelectorDescription == nil || _setSelectorDescription.parameters.count == 1);
         }
-
-        NSDictionary *get = dictionary[@"get"];
-        if (get == nil) {
-            NSParameterAssert(dictionary[@"type"] != nil);
-            get = @{
-                    @"selector": _name,
-                    @"result": @{
-                            @"type": dictionary[@"type"],
-                            @"name": @"value"
-                    },
-                    @"parameters": @[]
-            };
-        }
-
-        NSDictionary *set = dictionary[@"set"];
-        if (set == nil && _readonly == NO) {
-            NSParameterAssert(dictionary[@"type"] != nil);
-            set = @{
-                    @"selector": [NSString stringWithFormat:@"set%@:", _name.capitalizedString],
-                    @"parameters": @[
-                            @{
-                                    @"name": @"value",
-                                    @"type": dictionary[@"type"]
-                            }
-                    ]
-            };
-        }
-
-        _getSelectorDescription = [[MPPropertySelectorDescription alloc] initWithDictionary:get];
-        if (set) {
-            _setSelectorDescription = [[MPPropertySelectorDescription alloc] initWithDictionary:set];
-        } else {
-            _readonly = YES;
-        }
-
-        BOOL useKVC = (dictionary[@"use_kvc"] == nil ? YES : [dictionary[@"use_kvc"] boolValue]) && _useInstanceVariableAccess == NO;
-        _useKeyValueCoding = useKVC &&
-                _getSelectorDescription.parameters.count == 0 &&
-                (_setSelectorDescription == nil || _setSelectorDescription.parameters.count == 1);
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
-    return self;
+        return self;
 }
 
 - (NSString *)type
