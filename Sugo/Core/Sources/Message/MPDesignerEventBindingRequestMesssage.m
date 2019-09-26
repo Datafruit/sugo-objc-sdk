@@ -17,6 +17,7 @@
 #import "MPSwizzler.h"
 #import "WebViewBindings.h"
 #import "MPLogger.h"
+#import "ExceptionUtils.h"
 
 NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_request";
 
@@ -30,21 +31,25 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 
 - (void)updateBindings:(NSArray *)bindingPayload
 {
-    NSMutableArray *newBindings = [NSMutableArray array];
-    for (NSDictionary *bindingInfo in bindingPayload) {
-        MPEventBinding *binding = [MPEventBinding bindingWithJSONObject:bindingInfo];
-        if (binding) {
-            [newBindings addObject:binding];
+    @try {
+        NSMutableArray *newBindings = [NSMutableArray array];
+        for (NSDictionary *bindingInfo in bindingPayload) {
+            MPEventBinding *binding = [MPEventBinding bindingWithJSONObject:bindingInfo];
+            if (binding) {
+                [newBindings addObject:binding];
+            }
         }
-    }
 
-    for (MPEventBinding *oldBinding in [Sugo sharedInstance].eventBindings) {
-        [oldBinding stop];
-    }
-    self.bindings = newBindings;
-    [Sugo sharedInstance].eventBindings = [NSSet setWithArray:[newBindings copy]];
-    for (MPEventBinding *newBinding in self.bindings) {
-        [newBinding execute];
+        for (MPEventBinding *oldBinding in [Sugo sharedInstance].eventBindings) {
+            [oldBinding stop];
+        }
+        self.bindings = newBindings;
+        [Sugo sharedInstance].eventBindings = [NSSet setWithArray:[newBindings copy]];
+        for (MPEventBinding *newBinding in self.bindings) {
+            [newBinding execute];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -67,44 +72,49 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
 {
-    __weak MPABTestDesignerConnection *weak_connection = connection;
-    NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-        MPABTestDesignerConnection *conn = weak_connection;
+    @try {
+        __weak MPABTestDesignerConnection *weak_connection = connection;
+        NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+            MPABTestDesignerConnection *conn = weak_connection;
 
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            
-            NSArray *pageInfos = [self payload][@"page_info"];
-            if (pageInfos) {
-                [[SugoPageInfos global].infos removeAllObjects];
-                [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
-            }
-            
-            NSArray *commonEvents = [self payload][@"events"];
-            MPLogDebug(@"Loading event bindings:\n%@", commonEvents);
-            MPEventBindingCollection *bindingCollection = [conn sessionObjectForKey:@"event_bindings"];
-            if (!bindingCollection) {
-                bindingCollection = [[MPEventBindingCollection alloc] init];
-                [conn setSessionObject:bindingCollection forKey:@"event_bindings"];
-            }
-            
-            [bindingCollection updateBindings:commonEvents];
-            
-            NSArray *htmlEvents = [self payload][@"h5_events"];
-            if (htmlEvents) {
-                [[WebViewBindings globalBindings].codelessBindings removeAllObjects];
-                [[WebViewBindings globalBindings].codelessBindings addObjectsFromArray:htmlEvents];
-                [WebViewBindings globalBindings].mode = Codeless;
-                [WebViewBindings globalBindings].isWebViewNeedInject = YES;
-                [[WebViewBindings globalBindings] fillBindings];
-            }
-        });
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                NSArray *pageInfos = [self payload][@"page_info"];
+                if (pageInfos) {
+                    [[SugoPageInfos global].infos removeAllObjects];
+                    [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
+                }
+                
+                NSArray *commonEvents = [self payload][@"events"];
+                MPLogDebug(@"Loading event bindings:\n%@", commonEvents);
+                MPEventBindingCollection *bindingCollection = [conn sessionObjectForKey:@"event_bindings"];
+                if (!bindingCollection) {
+                    bindingCollection = [[MPEventBindingCollection alloc] init];
+                    [conn setSessionObject:bindingCollection forKey:@"event_bindings"];
+                }
+                
+                [bindingCollection updateBindings:commonEvents];
+                
+                NSArray *htmlEvents = [self payload][@"h5_events"];
+                if (htmlEvents) {
+                    [[WebViewBindings globalBindings].codelessBindings removeAllObjects];
+                    [[WebViewBindings globalBindings].codelessBindings addObjectsFromArray:htmlEvents];
+                    [WebViewBindings globalBindings].mode = Codeless;
+                    [WebViewBindings globalBindings].isWebViewNeedInject = YES;
+                    [[WebViewBindings globalBindings] fillBindings];
+                }
+            });
 
-        MPDesignerEventBindingResponseMessage *changeResponseMessage = [MPDesignerEventBindingResponseMessage message];
-        changeResponseMessage.status = @"OK";
-        [conn sendMessage:changeResponseMessage];
-    }];
+            MPDesignerEventBindingResponseMessage *changeResponseMessage = [MPDesignerEventBindingResponseMessage message];
+            changeResponseMessage.status = @"OK";
+            [conn sendMessage:changeResponseMessage];
+        }];
 
-    return operation;
+        return operation;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
+    }
 }
 
 @end

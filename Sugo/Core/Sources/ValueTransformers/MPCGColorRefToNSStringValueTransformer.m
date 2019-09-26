@@ -2,7 +2,7 @@
 // Copyright (c) 2014 Sugo. All rights reserved.
 
 #import "MPValueTransformers.h"
-
+#import "ExceptionUtils.h"
 @implementation MPCGColorRefToNSStringValueTransformer
 
 + (Class)transformedValueClass
@@ -17,19 +17,27 @@
 
 - (id)transformedValue:(id)value
 {
-    if (value && CFGetTypeID((__bridge CFTypeRef)value) == CGColorGetTypeID()) {
-        NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:@"MPUIColorToNSStringValueTransformer"];
-        return [transformer transformedValue:[[UIColor alloc] initWithCGColor:(__bridge CGColorRef)value]];
+    @try {
+        if (value && CFGetTypeID((__bridge CFTypeRef)value) == CGColorGetTypeID()) {
+            NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:@"MPUIColorToNSStringValueTransformer"];
+            return [transformer transformedValue:[[UIColor alloc] initWithCGColor:(__bridge CGColorRef)value]];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return nil;
 }
 
 - (id)reverseTransformedValue:(id)value
 {
-    NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:@"MPUIColorToNSStringValueTransformer"];
-    UIColor *uiColor =  [transformer reverseTransformedValue:value];
-    return CFBridgingRelease(CGColorCreateCopy([uiColor CGColor]));
+    @try {
+        NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:@"MPUIColorToNSStringValueTransformer"];
+        UIColor *uiColor =  [transformer reverseTransformedValue:value];
+        return CFBridgingRelease(CGColorCreateCopy([uiColor CGColor]));
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
+    }
 }
 
 @end

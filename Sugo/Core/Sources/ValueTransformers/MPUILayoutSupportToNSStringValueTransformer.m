@@ -7,7 +7,7 @@
 //
 
 #import "MPValueTransformers.h"
-
+#import "ExceptionUtils.h"
 @implementation MPUILayoutSupportToNSStringValueTransformer
 
 + (Class)transformedValueClass
@@ -22,10 +22,14 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value conformsToProtocol:@protocol(UILayoutSupport)]) {
-        id<UILayoutSupport> v = value;
-        NSString *length = [NSString stringWithFormat:@"%f", v.length];
-        return length;
+    @try {
+        if ([value conformsToProtocol:@protocol(UILayoutSupport)]) {
+            id<UILayoutSupport> v = value;
+            NSString *length = [NSString stringWithFormat:@"%f", v.length];
+            return length;
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
     return nil;
 }

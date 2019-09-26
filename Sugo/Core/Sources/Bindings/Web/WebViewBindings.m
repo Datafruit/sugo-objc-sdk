@@ -46,43 +46,48 @@ static WebViewBindings *globalBindings = nil;
 
 - (instancetype)initSingleton
 {
-    _mode = Designer;
-    _codelessBindings = [[NSMutableArray alloc] init];
-    _designerBindings = [[NSMutableArray alloc] init];
-    _bindings = [[NSMutableArray alloc] init];
-    _stringBindings = [[NSMutableString alloc] init];
-    _stringHeats = [[NSMutableString alloc] initWithString:@"{}"];
-    self  = [super init];
-    
-    _uiVcPath = [[NSMutableString alloc] init];
-    _wkVcPath = [[NSMutableString alloc] init];
-    _isWebViewNeedReload = NO;
-    _isWebViewNeedInject = YES;
-    _isHeatMapModeOn = false;
-    _viewSwizzleRunning = NO;
-    
-    _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
-    _uiWebViewJavaScriptInjected = NO;
-    _uiWebViewShouldStartLoadBlockName = [[NSUUID UUID] UUIDString];
-    _uiWebViewDidStartLoadBlockName = [[NSUUID UUID] UUIDString];
-    _uiWebViewDidFinishLoadBlockName = [[NSUUID UUID] UUIDString];
-    
-    _wkDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
-    _wkWebViewCurrentJS = [[WKUserScript alloc] init];
-    [self addObserver:self
-           forKeyPath:@"stringBindings"
-              options:NSKeyValueObservingOptionNew
-              context:nil];
-    [self addObserver:self
-           forKeyPath:@"isWebViewNeedReload"
-              options:NSKeyValueObservingOptionNew
-              context:nil];
-    [self addObserver:self
-           forKeyPath:@"isHeatMapModeOn"
-              options:NSKeyValueObservingOptionNew
-              context:nil];
-    
-    return self;
+    @try {
+        _mode = Designer;
+        _codelessBindings = [[NSMutableArray alloc] init];
+        _designerBindings = [[NSMutableArray alloc] init];
+        _bindings = [[NSMutableArray alloc] init];
+        _stringBindings = [[NSMutableString alloc] init];
+        _stringHeats = [[NSMutableString alloc] initWithString:@"{}"];
+        self  = [super init];
+        
+        _uiVcPath = [[NSMutableString alloc] init];
+        _wkVcPath = [[NSMutableString alloc] init];
+        _isWebViewNeedReload = NO;
+        _isWebViewNeedInject = YES;
+        _isHeatMapModeOn = false;
+        _viewSwizzleRunning = NO;
+        
+        _uiDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
+        _uiWebViewJavaScriptInjected = NO;
+        _uiWebViewShouldStartLoadBlockName = [[NSUUID UUID] UUIDString];
+        _uiWebViewDidStartLoadBlockName = [[NSUUID UUID] UUIDString];
+        _uiWebViewDidFinishLoadBlockName = [[NSUUID UUID] UUIDString];
+        
+        _wkDidMoveToWindowBlockName = [[NSUUID UUID] UUIDString];
+        _wkWebViewCurrentJS = [[WKUserScript alloc] init];
+        [self addObserver:self
+               forKeyPath:@"stringBindings"
+                  options:NSKeyValueObservingOptionNew
+                  context:nil];
+        [self addObserver:self
+               forKeyPath:@"isWebViewNeedReload"
+                  options:NSKeyValueObservingOptionNew
+                  context:nil];
+        [self addObserver:self
+               forKeyPath:@"isHeatMapModeOn"
+                  options:NSKeyValueObservingOptionNew
+                  context:nil];
+        
+        return self;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return [super init];
+    }
 }
 
 - (instancetype)init
@@ -95,59 +100,67 @@ static WebViewBindings *globalBindings = nil;
 
 - (void)dealloc
 {
-    _mode = Designer;
-    [_designerBindings removeAllObjects];
-    [_codelessBindings removeAllObjects];
-    [_bindings removeAllObjects];
-    _stringBindings = nil;
-    _isWebViewNeedReload = NO;
-    _isWebViewNeedInject = YES;
-    
-    _stringHeats = nil;
-    _isHeatMapModeOn = false;
-    
-    _uiWebView = nil;
-    _uiWebViewDelegate = nil;
-    _uiVcPath = nil;
-    
-    _wkWebView = nil;
-    _wkVcPath = nil;
+    @try {
+        _mode = Designer;
+        [_designerBindings removeAllObjects];
+        [_codelessBindings removeAllObjects];
+        [_bindings removeAllObjects];
+        _stringBindings = nil;
+        _isWebViewNeedReload = NO;
+        _isWebViewNeedInject = YES;
+        
+        _stringHeats = nil;
+        _isHeatMapModeOn = false;
+        
+        _uiWebView = nil;
+        _uiWebViewDelegate = nil;
+        _uiVcPath = nil;
+        
+        _wkWebView = nil;
+        _wkVcPath = nil;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)fillBindings
 {
-    if (self.mode == Designer)
-    {
-        self.bindings = self.designerBindings;
-    } else if (_mode == Codeless)
-    {
-        self.bindings = self.codelessBindings;
-    }
-    
-    if (self.bindings) {
-        NSError *error = nil;
-        NSData *jsonBindings = nil;
-        @try {
-            jsonBindings = [NSJSONSerialization dataWithJSONObject:self.bindings
-                                                           options:NSJSONWritingPrettyPrinted
-                                                             error:&error];
-            self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
-                                                               encoding:NSUTF8StringEncoding];
-            MPLogDebug(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
-        } @catch (NSException *exception) {
+    @try {
+        if (self.mode == Designer)
+        {
+            self.bindings = self.designerBindings;
+        } else if (_mode == Codeless)
+        {
+            self.bindings = self.codelessBindings;
+        }
+        
+        if (self.bindings) {
+            NSError *error = nil;
+            NSData *jsonBindings = nil;
             @try {
-                MPLogError(@"exception: %@, decoding jsonBindings data: %@ -> %@",
-                           exception,
-                           [self.bindings debugDescription],
-                           jsonBindings);
-                [ExceptionUtils exceptionToNetWork:exception];
+                jsonBindings = [NSJSONSerialization dataWithJSONObject:self.bindings
+                                                               options:NSJSONWritingPrettyPrinted
+                                                                 error:&error];
+                self.stringBindings = [[NSMutableString alloc] initWithData:jsonBindings
+                                                                   encoding:NSUTF8StringEncoding];
+                MPLogDebug(@"jsonBindings:\n%@\n%@", [jsonBindings debugDescription], self.stringBindings);
             } @catch (NSException *exception) {
-                
+                @try {
+                    MPLogError(@"exception: %@, decoding jsonBindings data: %@ -> %@",
+                               exception,
+                               [self.bindings debugDescription],
+                               jsonBindings);
+                    [ExceptionUtils exceptionToNetWork:exception];
+                } @catch (NSException *exception) {
+                    
+                }
+            }
+            if (error) {
+                MPLogDebug(@"Failed to translate HTML bindings to String: %@", error);
             }
         }
-        if (error) {
-            MPLogDebug(@"Failed to translate HTML bindings to String: %@", error);
-        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 

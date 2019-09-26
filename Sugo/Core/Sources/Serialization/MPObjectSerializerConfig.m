@@ -5,6 +5,7 @@
 #import "MPEnumDescription.h"
 #import "MPObjectSerializerConfig.h"
 #import "MPTypeDescription.h"
+#import "ExceptionUtils.h"
 
 @implementation MPObjectSerializerConfig
 
@@ -15,28 +16,31 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
-    self = [super init];
-    if (self) {
-        NSMutableDictionary *classDescriptions = [NSMutableDictionary dictionary];
-        for (NSDictionary *d in dictionary[@"classes"]) {
-            NSString *superclassName = d[@"superclass"];
-            MPClassDescription *superclassDescription = superclassName ? classDescriptions[superclassName] : nil;
-            MPClassDescription *classDescription = [[MPClassDescription alloc] initWithSuperclassDescription:superclassDescription
-                                                                                                  dictionary:d];
+    @try {
+        self = [super init];
+        if (self) {
+            NSMutableDictionary *classDescriptions = [NSMutableDictionary dictionary];
+            for (NSDictionary *d in dictionary[@"classes"]) {
+                NSString *superclassName = d[@"superclass"];
+                MPClassDescription *superclassDescription = superclassName ? classDescriptions[superclassName] : nil;
+                MPClassDescription *classDescription = [[MPClassDescription alloc] initWithSuperclassDescription:superclassDescription
+                                                                                                      dictionary:d];
 
-            classDescriptions[classDescription.name] = classDescription;
+                classDescriptions[classDescription.name] = classDescription;
+            }
+
+            NSMutableDictionary *enumDescriptions = [NSMutableDictionary dictionary];
+            for (NSDictionary *d in dictionary[@"enums"]) {
+                MPEnumDescription *enumDescription = [[MPEnumDescription alloc] initWithDictionary:d];
+                enumDescriptions[enumDescription.name] = enumDescription;
+            }
+
+            _classes = [classDescriptions copy];
+            _enums = [enumDescriptions copy];
         }
-
-        NSMutableDictionary *enumDescriptions = [NSMutableDictionary dictionary];
-        for (NSDictionary *d in dictionary[@"enums"]) {
-            MPEnumDescription *enumDescription = [[MPEnumDescription alloc] initWithDictionary:d];
-            enumDescriptions[enumDescription.name] = enumDescription;
-        }
-
-        _classes = [classDescriptions copy];
-        _enums = [enumDescriptions copy];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return self;
 }
 
@@ -57,16 +61,19 @@
 
 - (MPTypeDescription *)typeWithName:(NSString *)name
 {
-    MPEnumDescription *enumDescription = [self enumWithName:name];
-    if (enumDescription) {
-        return enumDescription;
-    }
+    @try {
+        MPEnumDescription *enumDescription = [self enumWithName:name];
+        if (enumDescription) {
+            return enumDescription;
+        }
 
-    MPClassDescription *classDescription = [self classWithName:name];
-    if (classDescription) {
-        return classDescription;
+        MPClassDescription *classDescription = [self classWithName:name];
+        if (classDescription) {
+            return classDescription;
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return nil;
 }
 

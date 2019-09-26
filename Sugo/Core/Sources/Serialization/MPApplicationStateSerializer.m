@@ -8,7 +8,7 @@
 #import "MPObjectIdentityProvider.h"
 #import "MPObjectSerializer.h"
 #import "MPObjectSerializerConfig.h"
-
+#import "ExceptionUtils.h"
 @implementation MPApplicationStateSerializer
 
 {
@@ -18,47 +18,55 @@
 
 - (instancetype)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider
 {
-    NSParameterAssert(application != nil);
-    NSParameterAssert(configuration != nil);
+    @try {
+        NSParameterAssert(application != nil);
+        NSParameterAssert(configuration != nil);
 
-    self = [super init];
-    if (self) {
-        _application = application;
-        _serializer = [[MPObjectSerializer alloc] initWithConfiguration:configuration objectIdentityProvider:objectIdentityProvider];
+        self = [super init];
+        if (self) {
+            _application = application;
+            _serializer = [[MPObjectSerializer alloc] initWithConfiguration:configuration objectIdentityProvider:objectIdentityProvider];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return self;
 }
 
 - (UIImage *)screenshotImageForKeyWindow
 {
     UIImage *image = nil;
-    
-    UIWindow *window = _application.keyWindow;
-    if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
-        UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 1);
-        if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
-            MPLogError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+    @try {
+        UIWindow *window = _application.keyWindow;
+        if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
+            UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 1);
+            if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
+                MPLogError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+            }
+            image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
         }
-        image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    
     return image;
 }
 
 - (UIImage *)screenshotImageForWindowAtIndex:(NSUInteger)index
 {
     UIImage *image = nil;
-
-    UIWindow *window = [self windowAtIndex:index];
-    if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
-        UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 1);
-        if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
-            MPLogError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+    @try {
+        UIWindow *window = [self windowAtIndex:index];
+        if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
+            UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 1);
+            if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
+                MPLogError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+            }
+            image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
         }
-        image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 
     return image;
@@ -66,9 +74,13 @@
 
 - (NSDictionary *)objectHierarchyForKeyWindow
 {
-    UIWindow *window = _application.keyWindow;
-    if (window) {
-        return [_serializer serializedObjectsWithRootObject:window];
+    @try {
+        UIWindow *window = _application.keyWindow;
+        if (window) {
+            return [_serializer serializedObjectsWithRootObject:window];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
     
     return @{};
@@ -82,11 +94,14 @@
 
 - (NSDictionary *)objectHierarchyForWindowAtIndex:(NSUInteger)index
 {
-    UIWindow *window = [self windowAtIndex:index];
-    if (window) {
-        return [_serializer serializedObjectsWithRootObject:window];
+    @try {
+        UIWindow *window = [self windowAtIndex:index];
+        if (window) {
+            return [_serializer serializedObjectsWithRootObject:window];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-
     return @{};
 }
 

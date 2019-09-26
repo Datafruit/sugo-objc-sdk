@@ -9,39 +9,51 @@
 #import "NSNotificationCenter+AutomaticEvents.h"
 #import "Sugo+AutomaticEvents.h"
 #import "AutomaticEventsConstants.h"
-
+#import "ExceptionUtils.h"
 @implementation NSNotificationCenter (AutomaticEvents)
 
 - (void)mp_postNotification:(NSNotification *)notification {
-    if ([NSNotificationCenter shouldTrackNotificationNamed:notification.name]) {
-        [[Sugo sharedAutomatedInstance] trackEvent:kAutomaticEventName];
+    @try {
+        if ([NSNotificationCenter shouldTrackNotificationNamed:notification.name]) {
+            [[Sugo sharedAutomatedInstance] trackEvent:kAutomaticEventName];
+        }
+        
+        [self mp_postNotification:notification];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    
-    [self mp_postNotification:notification];
 }
 
 - (void)mp_postNotificationName:(NSString *)name
                          object:(nullable id)object
                        userInfo:(nullable NSDictionary *)info {
-    if ([NSNotificationCenter shouldTrackNotificationNamed:name]) {
-        [[Sugo sharedAutomatedInstance] trackEvent:kAutomaticEventName];
-    }
+    @try {
+        if ([NSNotificationCenter shouldTrackNotificationNamed:name]) {
+            [[Sugo sharedAutomatedInstance] trackEvent:kAutomaticEventName];
+        }
     
-    [self mp_postNotificationName:name object:object userInfo:info];
+        [self mp_postNotificationName:name object:object userInfo:info];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 + (BOOL)shouldTrackNotificationNamed:(NSString *)name {
     // iOS spams notifications. We're whitelisting for now.
-    NSArray *names = @[
-                       // UITextField Editing
-                       UITextFieldTextDidEndEditingNotification,
-                       
-                       // UIApplication Lifecycle
-                       UIApplicationDidFinishLaunchingNotification,
-                       UIApplicationDidEnterBackgroundNotification,
-                       UIApplicationDidBecomeActiveNotification ];
-    NSSet<NSString *> *whiteListedNotificationNames = [NSSet setWithArray:names];
-    return [whiteListedNotificationNames containsObject:name];
+    @try {
+        NSArray *names = @[
+                           // UITextField Editing
+                           UITextFieldTextDidEndEditingNotification,
+                           
+                           // UIApplication Lifecycle
+                           UIApplicationDidFinishLaunchingNotification,
+                           UIApplicationDidEnterBackgroundNotification,
+                           UIApplicationDidBecomeActiveNotification ];
+        NSSet<NSString *> *whiteListedNotificationNames = [NSSet setWithArray:names];
+        return [whiteListedNotificationNames containsObject:name];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 @end

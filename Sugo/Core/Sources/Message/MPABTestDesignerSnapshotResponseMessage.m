@@ -3,7 +3,7 @@
 
 #import <CommonCrypto/CommonDigest.h>
 #import "MPABTestDesignerSnapshotResponseMessage.h"
-
+#import "ExceptionUtils.h"
 @implementation MPABTestDesignerSnapshotResponseMessage
 
 + (instancetype)message
@@ -13,19 +13,23 @@
 
 - (void)setScreenshot:(UIImage *)screenshot
 {
-    id payloadObject = nil;
-    id imageHash = nil;
-    if (screenshot) {
-        NSData *jpegSnapshotImageData = UIImageJPEGRepresentation(screenshot, 0);
-        if (jpegSnapshotImageData) {
-            payloadObject = [jpegSnapshotImageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-            imageHash = [self getImageHash:jpegSnapshotImageData];
+    @try {
+        id payloadObject = nil;
+        id imageHash = nil;
+        if (screenshot) {
+            NSData *jpegSnapshotImageData = UIImageJPEGRepresentation(screenshot, 0);
+            if (jpegSnapshotImageData) {
+                payloadObject = [jpegSnapshotImageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+                imageHash = [self getImageHash:jpegSnapshotImageData];
+            }
         }
-    }
 
-    _imageHash = imageHash;
-    [self setPayloadObject:(payloadObject ?: [NSNull null]) forKey:@"screenshot"];
-    [self setPayloadObject:(imageHash ?: [NSNull null]) forKey:@"image_hash"];
+        _imageHash = imageHash;
+        [self setPayloadObject:(payloadObject ?: [NSNull null]) forKey:@"screenshot"];
+        [self setPayloadObject:(imageHash ?: [NSNull null]) forKey:@"image_hash"];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (UIImage *)screenshot

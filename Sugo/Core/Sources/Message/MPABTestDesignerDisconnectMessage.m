@@ -8,7 +8,7 @@
 
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerDisconnectMessage.h"
-
+#import "ExceptionUtils.h"
 NSString *const MPABTestDesignerDisconnectMessageType = @"disconnect";
 
 @implementation MPABTestDesignerDisconnectMessage
@@ -20,14 +20,19 @@ NSString *const MPABTestDesignerDisconnectMessageType = @"disconnect";
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
 {
-    __weak MPABTestDesignerConnection *weak_connection = connection;
-    NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-        MPABTestDesignerConnection *conn = weak_connection;
+    @try {
+        __weak MPABTestDesignerConnection *weak_connection = connection;
+        NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+            MPABTestDesignerConnection *conn = weak_connection;
 
-        conn.sessionEnded = YES;
-        [conn close];
-    }];
-    return operation;
+            conn.sessionEnded = YES;
+            [conn close];
+        }];
+        return operation;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
+    }
 }
 
 @end

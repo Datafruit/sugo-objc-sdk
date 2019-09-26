@@ -30,14 +30,17 @@ static const NSUInteger kBatchSize = 50;
 
 #pragma mark - Flush
 - (void)flushEventQueue:(NSMutableArray *)events {
-    
-    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
-                                                               value:[Sugo sharedInstance].projectID];
-    NSArray *queryItems = @[queryItem];
-    [self flushQueue:events
-               toURL:self.eventCollectionURL
-         andEndpoint:MPNetworkEndpointTrack
-      withQueryItems:queryItems];
+    @try {
+        NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
+                                                                   value:[Sugo sharedInstance].projectID];
+        NSArray *queryItems = @[queryItem];
+        [self flushQueue:events
+                   toURL:self.eventCollectionURL
+             andEndpoint:MPNetworkEndpointTrack
+          withQueryItems:queryItems];
+    } @catch (NSException *exception) {
+        
+    }
 }
 
 
@@ -61,99 +64,114 @@ static const NSUInteger kBatchSize = 50;
         @autoreleasepool {
             NSUInteger batchSize = MIN(queue.count, kBatchSize);
             NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
-            
-            NSString *requestData = [MPNetwork encodeArrayForBatch: batch];//[MPNetwork encodeArrayForAPI:batch];
-            NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
-            MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
-            NSURLRequest *request = [self buildPostRequestForURL:url
-                                                     andEndpoint:endpoint
-                                                  withQueryItems:queryItems
-                                                         andBody:postBody];
-            [self updateNetworkActivityIndicator:YES];
-            
-            __block BOOL didFail = NO;
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            NSURLSession *session = [NSURLSession sharedSession];
-            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                      NSURLResponse *urlResponse,
-                                                                      NSError *error) {
-                [self updateNetworkActivityIndicator:NO];
-                
-                BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
-                if (error || !success) {
-                    MPLogError(@"%@ network failure: %@", self, error);
-                    didFail = YES;
-                } else {
-                    NSString *response = [[NSString alloc] initWithData:responseData
-                                                               encoding:NSUTF8StringEncoding];
-                    if ([response intValue] == 0) {
-                        MPLogDebug(@"%@ %lu response value %d", self, endpoint, [response intValue]);
-                    }
+            @try {
+                NSString *requestData = [MPNetwork encodeArrayForBatch: batch];//[MPNetwork encodeArrayForAPI:batch];
+                if ([requestData isEqualToString:@""]) {
+                    [queue removeObjectsInArray:batch];
+                    continue;
                 }
-                
-                dispatch_semaphore_signal(semaphore);
-            }] resume];
+                NSString *postBody = [NSString stringWithFormat:@"%@", requestData];
+                MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
+                NSURLRequest *request = [self buildPostRequestForURL:url
+                                                         andEndpoint:endpoint
+                                                      withQueryItems:queryItems
+                                                             andBody:postBody];
+                [self updateNetworkActivityIndicator:YES];
             
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                __block BOOL didFail = NO;
+                dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                NSURLSession *session = [NSURLSession sharedSession];
+                [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                          NSURLResponse *urlResponse,
+                                                                          NSError *error) {
+                    [self updateNetworkActivityIndicator:NO];
+                    
+                    BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
+                    if (error || !success) {
+                        MPLogError(@"%@ network failure: %@", self, error);
+                        didFail = YES;
+                    } else {
+                        NSString *response = [[NSString alloc] initWithData:responseData
+                                                                   encoding:NSUTF8StringEncoding];
+                        if ([response intValue] == 0) {
+                            MPLogDebug(@"%@ %lu response value %d", self, endpoint, [response intValue]);
+                        }
+                    }
+                    
+                    dispatch_semaphore_signal(semaphore);
+                }] resume];
             
-            if (didFail) {
-                break;
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            
+                if (didFail) {
+                    break;
+                }
+                [queue removeObjectsInArray:batch];
+            } @catch (NSException *exception) {
+                NSLog(@"%@",exception);
+                [queue removeObjectsInArray:batch];
             }
-            [queue removeObjectsInArray:batch];
         }
     }
 }
 
 + (void)flushExceptionEvents:(NSString *)exceptionEvents {
-    
-    // Build URL from path and query items
-    NSURL *serverURL = [NSURL URLWithString:[Sugo sharedInstance].eventCollectionURL];
-    NSURL *urlWithEndpoint = [serverURL URLByAppendingPathComponent:[MPNetwork pathForEndpoint:MPNetworkEndpointTrack]];
-    NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
-                                             resolvingAgainstBaseURL:YES];
-    
-    NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
-                                                               value:[NSString stringWithFormat:@"%@_filter", [Sugo sharedInstance].projectID]];
-    NSArray *queryItems = @[queryItem];
-    components.queryItems = queryItems;
-    
-    // Build request from URL
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
-    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:[exceptionEvents dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithRequest:request] resume];
+    @try {
+        // Build URL from path and query items
+        NSURL *serverURL = [NSURL URLWithString:[Sugo sharedInstance].eventCollectionURL];
+        NSURL *urlWithEndpoint = [serverURL URLByAppendingPathComponent:[MPNetwork pathForEndpoint:MPNetworkEndpointTrack]];
+        NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
+                                                 resolvingAgainstBaseURL:YES];
+        
+        NSURLQueryItem *queryItem = [[NSURLQueryItem alloc] initWithName:@"locate"
+                                                                   value:[NSString stringWithFormat:@"%@_filter", [Sugo sharedInstance].projectID]];
+        NSArray *queryItems = @[queryItem];
+        components.queryItems = queryItems;
+        
+        // Build request from URL
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
+        [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        [request setHTTPMethod:@"POST"];
+        [request setHTTPBody:[exceptionEvents dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request] resume];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+    }
 }
 
 - (BOOL)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error {
-    MPLogDebug(@"HTTP Response: %@", response.allHeaderFields);
-    MPLogDebug(@"HTTP Error: %@", error.localizedDescription);
-    
-    BOOL failed = [MPNetwork parseHTTPFailure:response withError:error];
-    if (failed) {
-        MPLogDebug(@"Consecutive network failures: %lu", self.consecutiveFailures);
-        self.consecutiveFailures++;
-    } else {
-        MPLogDebug(@"Consecutive network failures reset to 0");
-        self.consecutiveFailures = 0;
-    }
-    
-    // Did the server response with an HTTP `Retry-After` header?
-    NSTimeInterval retryTime = [MPNetwork parseRetryAfterTime:response];
-    if (self.consecutiveFailures >= 2) {
+    @try {
+        MPLogDebug(@"HTTP Response: %@", response.allHeaderFields);
+        MPLogDebug(@"HTTP Error: %@", error.localizedDescription);
         
-        // Take the larger of exponential back off and server provided `Retry-After`
-        retryTime = MAX(retryTime, [MPNetwork calculateBackOffTimeFromFailures:self.consecutiveFailures]);
+        BOOL failed = [MPNetwork parseHTTPFailure:response withError:error];
+        if (failed) {
+            MPLogDebug(@"Consecutive network failures: %lu", self.consecutiveFailures);
+            self.consecutiveFailures++;
+        } else {
+            MPLogDebug(@"Consecutive network failures reset to 0");
+            self.consecutiveFailures = 0;
+        }
+        
+        // Did the server response with an HTTP `Retry-After` header?
+        NSTimeInterval retryTime = [MPNetwork parseRetryAfterTime:response];
+        if (self.consecutiveFailures >= 2) {
+            
+            // Take the larger of exponential back off and server provided `Retry-After`
+            retryTime = MAX(retryTime, [MPNetwork calculateBackOffTimeFromFailures:self.consecutiveFailures]);
+        }
+        
+        NSDate *retryDate = [NSDate dateWithTimeIntervalSinceNow:retryTime];
+        self.requestsDisabledUntilTime = [retryDate timeIntervalSince1970];
+        
+        MPLogDebug(@"Retry backoff time: %.2f - %@", retryTime, retryDate);
+        
+        return !failed;
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
     }
-    
-    NSDate *retryDate = [NSDate dateWithTimeIntervalSinceNow:retryTime];
-    self.requestsDisabledUntilTime = [retryDate timeIntervalSince1970];
-    
-    MPLogDebug(@"Retry backoff time: %.2f - %@", retryTime, retryDate);
-    
-    return !failed;
 }
 
 #pragma mark - Helpers
@@ -162,67 +180,85 @@ static const NSUInteger kBatchSize = 50;
                                                 andProjectID:(NSString *)projectID
                                                     andToken:(NSString *)token
                                       andEventBindingVersion:(NSNumber *)eventBindingVersion {
-    NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
-                                                              value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
-    NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
-    NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
-    NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
-    NSURLQueryItem *itemDistinctID = [NSURLQueryItem queryItemWithName:@"distinct_id" value:distinctID];
-    NSURLQueryItem *itemEventBindingsVersion = [NSURLQueryItem queryItemWithName:@"event_bindings_version" value:[eventBindingVersion stringValue]];
-    
-    // Convert properties dictionary to a string
-    NSData *propertiesData = [NSJSONSerialization dataWithJSONObject:properties
-                                                             options:0
-                                                               error:NULL];
-    NSString *propertiesString = [[NSString alloc] initWithData:propertiesData
-                                                       encoding:NSUTF8StringEncoding];
-    NSURLQueryItem *itemProperties = [NSURLQueryItem queryItemWithName:@"properties" value:propertiesString];
-    
-    return @[itemVersion,
-             itemLib,
-             itemProjectID,
-             itemToken,
-             itemDistinctID,
-             itemEventBindingsVersion,
-             itemProperties];
+    @try {
+        NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
+                                                                  value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
+        NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
+        NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
+        NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
+        NSURLQueryItem *itemDistinctID = [NSURLQueryItem queryItemWithName:@"distinct_id" value:distinctID];
+        NSURLQueryItem *itemEventBindingsVersion = [NSURLQueryItem queryItemWithName:@"event_bindings_version" value:[eventBindingVersion stringValue]];
+        
+        // Convert properties dictionary to a string
+        NSData *propertiesData = [NSJSONSerialization dataWithJSONObject:properties
+                                                                 options:0
+                                                                   error:NULL];
+        NSString *propertiesString = [[NSString alloc] initWithData:propertiesData
+                                                           encoding:NSUTF8StringEncoding];
+        NSURLQueryItem *itemProperties = [NSURLQueryItem queryItemWithName:@"properties" value:propertiesString];
+        
+        return @[itemVersion,
+                 itemLib,
+                 itemProjectID,
+                 itemToken,
+                 itemDistinctID,
+                 itemEventBindingsVersion,
+                 itemProperties];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        return @[];
+    }
 }
 
 
 + (NSArray<NSURLQueryItem *> *)buildHeatQueryForToken:(NSString *)token andSecretKey:(NSString *)secretKey {
-    NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
-                                                              value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
-    NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
-    NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
-    NSURLQueryItem *itemSecretKey = [NSURLQueryItem queryItemWithName:@"sKey" value:secretKey];
-    
-    return @[itemVersion, itemLib, itemToken, itemSecretKey];
+    @try {
+        NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"app_version"
+                                                                  value:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]];
+        NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
+        NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
+        NSURLQueryItem *itemSecretKey = [NSURLQueryItem queryItemWithName:@"sKey" value:secretKey];
+        
+        return @[itemVersion, itemLib, itemToken, itemSecretKey];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        return @[];
+    }
 }
     
 + (NSArray<NSURLQueryItem *> *)buildFirstLoginQueryForIdentifer:(NSString *)identifer
                                                    andProjectID: (NSString *)projectID andToken: (NSString *)token {
-    
-    NSURLQueryItem *itemIdentifer = [NSURLQueryItem queryItemWithName:@"userId" value:identifer];
-    NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
-    NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
-    
-    return @[itemIdentifer, itemProjectID, itemToken];
+    @try {
+        NSURLQueryItem *itemIdentifer = [NSURLQueryItem queryItemWithName:@"userId" value:identifer];
+        NSURLQueryItem *itemProjectID = [NSURLQueryItem queryItemWithName:@"projectId" value:projectID];
+        NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
+        return @[itemIdentifer, itemProjectID, itemToken];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        return @[];
+    }
 }
 
 + (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {
-    static NSDictionary *endPointToPath = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
-                            @(MPNetworkEndpointDecideDimension): @"/api/sdk/decide-dimesion",
-                            @(MPNetworkEndpointDecideEvent): @"/api/sdk/decide-event",
-                            @(MPNetworkEndpointHeat): @"/api/sdk/heat",
-                            @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time",
-                            @(MPNetworkEndpointInitSugo):@"/api/sdk/decide-config"
-                            };
-        
-    });
-    NSNumber *key = @(endpoint);
-    return endPointToPath[key];
+    @try {
+        static NSDictionary *endPointToPath = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            endPointToPath = @{ @(MPNetworkEndpointTrack): @"/post",
+                                @(MPNetworkEndpointDecideDimension): @"/api/sdk/decide-dimesion",
+                                @(MPNetworkEndpointDecideEvent): @"/api/sdk/decide-event",
+                                @(MPNetworkEndpointHeat): @"/api/sdk/heat",
+                                @(MPNetworkEndpointFirstLogin): @"/api/sdk/get-first-login-time",
+                                @(MPNetworkEndpointInitSugo):@"/api/sdk/decide-config"
+                                };
+            
+        });
+        NSNumber *key = @(endpoint);
+        return endPointToPath[key];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        return @"";
+    }
 }
 
 - (NSURLRequest *)buildGetRequestForURL:(NSURL *)url
@@ -305,223 +341,244 @@ static const NSUInteger kBatchSize = 50;
 // Encode data for Sugo special need
 + (NSString *)encodeArrayForBatch:(NSArray *)batch
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSArray *dimensions = [userDefaults objectForKey:@"SugoDimensions"];
-    
-    NSMutableDictionary *types = [[NSMutableDictionary alloc] init];
-    NSMutableArray *localKeys = [[NSMutableArray alloc] init];
-    NSMutableArray *keys = [[NSMutableArray alloc] init];
-    NSMutableArray *values = [[NSMutableArray alloc] init];
-    NSMutableString *dataString = [[NSMutableString alloc] init];
-    
-    NSString *TypeSeperator = @"|";
-    NSString *KeysSeperator = @",";
-    NSString *ValuesSeperator = [NSString stringWithFormat:@"%c", 1];
-    NSString *LinesSeperator = [NSString stringWithFormat:@"%c", 2];
+    @try {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSArray *dimensions = [userDefaults objectForKey:@"SugoDimensions"];
+        
+        NSMutableDictionary *types = [[NSMutableDictionary alloc] init];
+        NSMutableArray *localKeys = [[NSMutableArray alloc] init];
+        NSMutableArray *keys = [[NSMutableArray alloc] init];
+        NSMutableArray *values = [[NSMutableArray alloc] init];
+        NSMutableString *dataString = [[NSMutableString alloc] init];
+        
+        NSString *TypeSeperator = @"|";
+        NSString *KeysSeperator = @",";
+        NSString *ValuesSeperator = [NSString stringWithFormat:@"%c", 1];
+        NSString *LinesSeperator = [NSString stringWithFormat:@"%c", 2];
 
-    for (NSDictionary *object in batch) {
-        if (![object isKindOfClass:[NSDictionary class]]) {
-            continue;
-        }
-        for (NSString *key in object.allKeys.reverseObjectEnumerator) {
-            if (![localKeys containsObject:key]) {
-                [localKeys addObject:key];
+        for (NSDictionary *object in batch) {
+            if (![object isKindOfClass:[NSDictionary class]]) {
+                continue;
             }
-        }
-    }
-    
-    for (NSDictionary *dimension in dimensions) {
-        NSString *dimensionKey = dimension[@"name"];
-        for (NSString *key in localKeys) {
-            if ([dimensionKey isEqualToString:key]) {
-                [keys addObject:key];
-            }
-        }
-    }
-    
-    for (NSDictionary *dimension in dimensions) {
-        NSString *dimensionKey = dimension[@"name"];
-        NSNumber *dimensionType = dimension[@"type"];
-        NSString *type;
-        for (NSString *key in keys) {
-            if ([dimensionKey isEqualToString:key]) {
-                switch (dimensionType.integerValue) {
-                    case 0:
-                        type = @"l";
-                        break;
-                    case 7:
-                    case 8:
-                    case 1:
-                        type = @"f";
-                        break;
-                    case 2:
-                        type = @"s";
-                        break;
-                    case 4:
-                        type = @"d";
-                        break;
-                    case 5:
-                        type = @"i";
-                        break;
-                    default:
-                        break;
+            for (NSString *key in object.allKeys.reverseObjectEnumerator) {
+                if (![localKeys containsObject:key]) {
+                    [localKeys addObject:key];
                 }
-                if (type) {
-                    [types setValue:type forKey:key];
-                }
-                break;
             }
         }
-    }
-    
-    for (NSString *key in keys) {
-        if (types[key]) {
-            dataString = [NSMutableString stringWithFormat:@"%@%@%@%@%@",
-                          dataString,
-                          types[key],
-                          TypeSeperator,
-                          key,
-                          KeysSeperator];
+        
+        for (NSDictionary *dimension in dimensions) {
+            NSString *dimensionKey = dimension[@"name"];
+            for (NSString *key in localKeys) {
+                if ([dimensionKey isEqualToString:key]) {
+                    [keys addObject:key];
+                }
+            }
         }
-    }
-    dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
-    dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
-    
-    NSMutableArray *exceptionEvents = [NSMutableArray array];
-    for (NSDictionary *object in batch) {
-        NSMutableDictionary *value = [[NSMutableDictionary alloc] init];
-        for (NSString *key in keys) {
-            if (object[key]) {
-                if ([[[object[key] classForCoder] description] isEqualToString:@"NSNumber"]) {
-                    if (strcmp([(NSNumber *)object[key] objCType], @encode(int)) == 0
-                        && [types[key] isEqualToString:@"i"]) {
-                        [value setValue:object[key] forKey:key];
-                    } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(long)) == 0)
-                        && [types[key] isEqualToString:@"l"]) {
-                        [value setValue:object[key] forKey:key];
-                    } else if (((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
-                          || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0)))
-                        && [types[key] isEqualToString:@"f"]) {
-                        [value setValue:object[key] forKey:key];
-                    } else {
-                        [value setValue:(NSNumber *)object[key] forKey:key];
+        
+        for (NSDictionary *dimension in dimensions) {
+            NSString *dimensionKey = dimension[@"name"];
+            NSNumber *dimensionType = dimension[@"type"];
+            NSString *type;
+            for (NSString *key in keys) {
+                if ([dimensionKey isEqualToString:key]) {
+                    switch (dimensionType.integerValue) {
+                        case 0:
+                            type = @"l";
+                            break;
+                        case 7:
+                        case 8:
+                        case 1:
+                            type = @"f";
+                            break;
+                        case 2:
+                            type = @"s";
+                            break;
+                        case 4:
+                            type = @"d";
+                            break;
+                        case 5:
+                            type = @"i";
+                            break;
+                        default:
+                            break;
                     }
-                } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]
-                    && [types[key] isEqualToString:@"d"]) {
-                    [value setValue:[NSString stringWithFormat:@"%.0f", [((NSDate *)object[key]) timeIntervalSince1970] * 1000] forKey:key];
-                } else if ([types[key] isEqualToString:@"s"]) {
-                    NSString *stringValue = object[key];
-                    if (stringValue.length > 100) {
-                        stringValue = [stringValue substringToIndex:99];
+                    if (type) {
+                        [types setValue:type forKey:key];
                     }
-                    [value setValue:stringValue forKey:key];
-                } else {
-                    [value setValue:@"" forKey:key];
-                }
-                if ([object[key] isKindOfClass:[NSString class]]
-                    && ([types[key] isEqualToString:@"i"]
-                        || [types[key] isEqualToString:@"l"]
-                        || [types[key] isEqualToString:@"f"])) {
-                        [exceptionEvents addObject:object];
-                        [value setValue:@0 forKey:key];
-                    }
-            } else {
-                if ([types[key] isEqualToString:@"s"]) {
-                    [value setValue:@"" forKey:key];
-                } else {
-                    [value setValue:@"" forKey:key];
+                    break;
                 }
             }
         }
-        [values addObject:value];
-    }
-    
-    for (NSDictionary *value in values) {
+        
         for (NSString *key in keys) {
-            dataString = [NSMutableString stringWithFormat:@"%@%@%@",
-                          dataString,
-                          value[key]?value[key]:@"",
-                          ValuesSeperator];
+            if (types[key]) {
+                dataString = [NSMutableString stringWithFormat:@"%@%@%@%@%@",
+                              dataString,
+                              types[key],
+                              TypeSeperator,
+                              key,
+                              KeysSeperator];
+            }
         }
         dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
         dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
+        
+        NSMutableArray *exceptionEvents = [NSMutableArray array];
+        for (NSDictionary *object in batch) {
+            NSMutableDictionary *value = [[NSMutableDictionary alloc] init];
+            for (NSString *key in keys) {
+                if (object[key]) {
+                    if ([[[object[key] classForCoder] description] isEqualToString:@"NSNumber"]) {
+                        if (strcmp([(NSNumber *)object[key] objCType], @encode(int)) == 0
+                            && [types[key] isEqualToString:@"i"]) {
+                            [value setValue:object[key] forKey:key];
+                        } else if ((strcmp([(NSNumber *)object[key] objCType], @encode(long)) == 0)
+                            && [types[key] isEqualToString:@"l"]) {
+                            [value setValue:object[key] forKey:key];
+                        } else if (((strcmp([(NSNumber *)object[key] objCType], @encode(float)) == 0
+                              || (strcmp([(NSNumber *)object[key] objCType], @encode(double)) == 0)))
+                            && [types[key] isEqualToString:@"f"]) {
+                            [value setValue:object[key] forKey:key];
+                        } else {
+                            [value setValue:(NSNumber *)object[key] forKey:key];
+                        }
+                    } else if ([[[object[key] classForCoder] description] isEqualToString:@"NSDate"]
+                        && [types[key] isEqualToString:@"d"]) {
+                        [value setValue:[NSString stringWithFormat:@"%.0f", [((NSDate *)object[key]) timeIntervalSince1970] * 1000] forKey:key];
+                    } else if ([types[key] isEqualToString:@"s"]) {
+                        NSString *stringValue = object[key];
+                        if (stringValue.length > 100) {
+                            stringValue = [stringValue substringToIndex:99];
+                        }
+                        [value setValue:stringValue forKey:key];
+                    } else {
+                        [value setValue:@"" forKey:key];
+                    }
+                    if ([object[key] isKindOfClass:[NSString class]]
+                        && ([types[key] isEqualToString:@"i"]
+                            || [types[key] isEqualToString:@"l"]
+                            || [types[key] isEqualToString:@"f"])) {
+                            [exceptionEvents addObject:object];
+                            [value setValue:@0 forKey:key];
+                        }
+                } else {
+                    if ([types[key] isEqualToString:@"s"]) {
+                        [value setValue:@"" forKey:key];
+                    } else {
+                        [value setValue:@"" forKey:key];
+                    }
+                }
+            }
+            [values addObject:value];
+        }
+        
+        for (NSDictionary *value in values) {
+            for (NSString *key in keys) {
+                dataString = [NSMutableString stringWithFormat:@"%@%@%@",
+                              dataString,
+                              value[key]?value[key]:@"",
+                              ValuesSeperator];
+            }
+            dataString = [NSMutableString stringWithString:[dataString substringToIndex:dataString.length - 1]];
+            dataString = [NSMutableString stringWithString:[dataString stringByAppendingString:LinesSeperator]];
+        }
+        
+        if (exceptionEvents.count > 0) {
+            NSString *exceptionEventsString = [MPNetwork encodeArrayForAPI:exceptionEvents];
+            [MPNetwork flushExceptionEvents:exceptionEventsString];
+        }
+        
+        MPLogDebug(@"Data:\n%@", dataString);
+        return [MPNetwork encodeBase64ForDataString:dataString];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        return @"";
     }
-    
-    if (exceptionEvents.count > 0) {
-        NSString *exceptionEventsString = [MPNetwork encodeArrayForAPI:exceptionEvents];
-        [MPNetwork flushExceptionEvents:exceptionEventsString];
-    }
-    
-    MPLogDebug(@"Data:\n%@", dataString);
-    return [MPNetwork encodeBase64ForDataString:dataString];
 }
 
 + (NSString *)encodeBase64ForDataString:(NSString *)dataString
 {
-    NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-    if (!data) {
+    @try {
+        NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        if (!data) {
+            return @"";
+        }
+        NSString *base64Encoded = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
+        
+        return base64Encoded;
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
         return @"";
     }
-    NSString *base64Encoded = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
-    
-    return base64Encoded;
+
 }
 
 + (id)convertFoundationTypesToJSON:(id)obj {
-    // valid json types
-    if ([obj isKindOfClass:NSNull.class]) {
+    @try {
+        // valid json types
+        if ([obj isKindOfClass:NSNull.class]) {
+            return @"";
+        }
+        
+        if ([obj isKindOfClass:NSString.class] || [obj isKindOfClass:NSNumber.class]) {
+            return obj;
+        }
+        
+        if ([obj isKindOfClass:NSDate.class]) {
+            return [[self dateFormatter] stringFromDate:obj];
+        } else if ([obj isKindOfClass:NSURL.class]) {
+            return [obj absoluteString];
+        }
+        
+        // recurse on containers
+        if ([obj isKindOfClass:NSArray.class]) {
+            NSMutableArray *a = [NSMutableArray array];
+            for (id i in obj) {
+                [a addObject:[self convertFoundationTypesToJSON:i]];
+            }
+            return [NSArray arrayWithArray:a];
+        }
+        
+        if ([obj isKindOfClass:NSDictionary.class]) {
+            NSMutableDictionary *d = [NSMutableDictionary dictionary];
+            for (id key in obj) {
+                NSString *stringKey = key;
+                if (![key isKindOfClass:[NSString class]]) {
+                    stringKey = [key description];
+                    MPLogWarning(@"%@ property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
+                }
+                id v = [self convertFoundationTypesToJSON:obj[key]];
+                d[stringKey] = v;
+            }
+            return [NSDictionary dictionaryWithDictionary:d];
+        }
+        
+        // default to sending the object's description
+        NSString *s = obj?[obj description]:@"";
+        MPLogWarning(@"%@ property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
+        return s;
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
         return @"";
     }
-    
-    if ([obj isKindOfClass:NSString.class] || [obj isKindOfClass:NSNumber.class]) {
-        return obj;
-    }
-    
-    if ([obj isKindOfClass:NSDate.class]) {
-        return [[self dateFormatter] stringFromDate:obj];
-    } else if ([obj isKindOfClass:NSURL.class]) {
-        return [obj absoluteString];
-    }
-    
-    // recurse on containers
-    if ([obj isKindOfClass:NSArray.class]) {
-        NSMutableArray *a = [NSMutableArray array];
-        for (id i in obj) {
-            [a addObject:[self convertFoundationTypesToJSON:i]];
-        }
-        return [NSArray arrayWithArray:a];
-    }
-    
-    if ([obj isKindOfClass:NSDictionary.class]) {
-        NSMutableDictionary *d = [NSMutableDictionary dictionary];
-        for (id key in obj) {
-            NSString *stringKey = key;
-            if (![key isKindOfClass:[NSString class]]) {
-                stringKey = [key description];
-                MPLogWarning(@"%@ property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
-            }
-            id v = [self convertFoundationTypesToJSON:obj[key]];
-            d[stringKey] = v;
-        }
-        return [NSDictionary dictionaryWithDictionary:d];
-    }
-    
-    // default to sending the object's description
-    NSString *s = obj?[obj description]:@"";
-    MPLogWarning(@"%@ property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
-    return s;
 }
 
 + (NSDateFormatter *)dateFormatter {
-    static NSDateFormatter *formatter = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-        formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    });
-    return formatter;
+    @try {
+        static NSDateFormatter *formatter = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            formatter = [[NSDateFormatter alloc] init];
+            formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+            formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+            formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        });
+        return formatter;
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        return [[NSDateFormatter alloc] init];
+    }
 }
 
 + (NSTimeInterval)calculateBackOffTimeFromFailures:(NSUInteger)failureCount {

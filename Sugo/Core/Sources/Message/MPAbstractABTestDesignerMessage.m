@@ -3,7 +3,7 @@
 
 #import "MPAbstractABTestDesignerMessage.h"
 #import "MPLogger.h"
-
+#import "ExceptionUtils.h"
 @interface MPAbstractABTestDesignerMessage ()
 
 @property (nonatomic, copy, readwrite) NSString *type;
@@ -55,15 +55,20 @@
 
 - (NSData *)JSONData
 {
-    NSDictionary *jsonObject = @{ @"type": _type, @"payload": [_payload copy] };
+    @try {
+        NSDictionary *jsonObject = @{ @"type": _type, @"payload": [_payload copy] };
 
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:NSJSONWritingPrettyPrinted error:&error];
-    if (error) {
-        MPLogError(@"Failed to serialize test designer message: %@", error);
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:NSJSONWritingPrettyPrinted error:&error];
+        if (error) {
+            MPLogError(@"Failed to serialize test designer message: %@", error);
+        }
+
+        return jsonData;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return nil;
     }
-
-    return jsonData;
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
