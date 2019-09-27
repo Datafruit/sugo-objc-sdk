@@ -254,15 +254,33 @@ static NSString *defaultProjectToken;
             if (uploadLocation > 0 ) {
                 [self.locationManager requestWhenInUseAuthorization];
             }
-            
-            
             instances[apiToken] = self;
+            [self cleanCacheEvent];
         }
     } @catch (NSException *exception) {
         [ExceptionUtils exceptionToNetWork:exception];
         NSLog(@"%@",exception);
     }
     return self;
+}
+
+-(void)cleanCacheEvent{
+    @try {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        bool uploadLocation = [userDefaults boolForKey:@"uploadLocation"];
+        if (!uploadLocation) {
+            return;
+        }
+        NSArray *eventResult = [self fetchEventResultOfLimit: 50];
+        while (eventResult != nil&&eventResult.count>0) {
+            [self deleteEventResult:eventResult];
+            [self.managedObjectContext reset];
+            eventResult = [self fetchEventResultOfLimit: 50];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
+    
 }
 
 
@@ -300,27 +318,35 @@ static NSString *defaultProjectToken;
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    if (_reachability != NULL) {
-        if (!SCNetworkReachabilitySetCallback(_reachability, NULL, NULL)) {
-            MPLogError(@"%@ error unsetting reachability callback", self);
+    @try {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        
+        if (_reachability != NULL) {
+            if (!SCNetworkReachabilitySetCallback(_reachability, NULL, NULL)) {
+                MPLogError(@"%@ error unsetting reachability callback", self);
+            }
+            if (!SCNetworkReachabilitySetDispatchQueue(_reachability, NULL)) {
+                MPLogError(@"%@ error unsetting reachability dispatch queue", self);
+            }
+            CFRelease(_reachability);
+            _reachability = NULL;
         }
-        if (!SCNetworkReachabilitySetDispatchQueue(_reachability, NULL)) {
-            MPLogError(@"%@ error unsetting reachability dispatch queue", self);
-        }
-        CFRelease(_reachability);
-        _reachability = NULL;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
 - (void)setValidationEnabled:(BOOL)validationEnabled {
-    _validationEnabled = validationEnabled;
-    
-    if (_validationEnabled) {
-        [Sugo setSharedAutomatedInstance:self];
-    } else {
-        [Sugo setSharedAutomatedInstance:nil];
+    @try {
+        _validationEnabled = validationEnabled;
+        
+        if (_validationEnabled) {
+            [Sugo setSharedAutomatedInstance:self];
+        } else {
+            [Sugo setSharedAutomatedInstance:nil];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -364,43 +390,51 @@ static NSString *defaultProjectToken;
 
 + (void)assertPropertyType:(id)propertyValue depth:(NSUInteger)depth
 {
-    // Note that @YES and @NO pass as instances of NSNumber class.
-    NSAssert([propertyValue isKindOfClass:[NSString class]] ||
-             [propertyValue isKindOfClass:[NSNumber class]] ||
-             [propertyValue isKindOfClass:[NSNull class]] ||
-             [propertyValue isKindOfClass:[NSArray class]] ||
-             [propertyValue isKindOfClass:[NSDictionary class]] ||
-             [propertyValue isKindOfClass:[NSDate class]] ||
-             [propertyValue isKindOfClass:[NSURL class]],
-             @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [propertyValue class], propertyValue);
+    @try {
+        // Note that @YES and @NO pass as instances of NSNumber class.
+        NSAssert([propertyValue isKindOfClass:[NSString class]] ||
+                 [propertyValue isKindOfClass:[NSNumber class]] ||
+                 [propertyValue isKindOfClass:[NSNull class]] ||
+                 [propertyValue isKindOfClass:[NSArray class]] ||
+                 [propertyValue isKindOfClass:[NSDictionary class]] ||
+                 [propertyValue isKindOfClass:[NSDate class]] ||
+                 [propertyValue isKindOfClass:[NSURL class]],
+                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [propertyValue class], propertyValue);
 
-#ifdef DEBUG
-    if (depth == 3) {
-        MPLogWarning(@"Your properties are overly nested, specifically 3 or more levels deep. \
-                     Generally this is not recommended due to its complexity.");
+    #ifdef DEBUG
+        if (depth == 3) {
+            MPLogWarning(@"Your properties are overly nested, specifically 3 or more levels deep. \
+                         Generally this is not recommended due to its complexity.");
+        }
+        if ([propertyValue isKindOfClass:[NSDictionary class]]) {
+            [Sugo assertPropertyTypesInDictionary:propertyValue depth:depth+1];
+        } else if ([propertyValue isKindOfClass:[NSArray class]]) {
+            [Sugo assertPropertyTypesInArray:propertyValue depth:depth+1];
+        }
+    #endif
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    if ([propertyValue isKindOfClass:[NSDictionary class]]) {
-        [Sugo assertPropertyTypesInDictionary:propertyValue depth:depth+1];
-    } else if ([propertyValue isKindOfClass:[NSArray class]]) {
-        [Sugo assertPropertyTypesInArray:propertyValue depth:depth+1];
-    }
-#endif
 }
 
 + (void)assertPropertyTypesInDictionary:(NSDictionary *)properties depth:(NSUInteger)depth
 {
-    if([properties count] > 1000) {
-        MPLogWarning(@"You have an NSDictionary in your properties that is bigger than 1000 in size. \
-                     Generally this is not recommended due to its size.");
-    }
-    for (id key in properties) {
-        id value = properties[key];
-        
-        if ([key isEqualToString:@"exception"]) {
-            NSLog(@"value+++++++:%@,%@",key,value);
+    @try {
+        if([properties count] > 1000) {
+            MPLogWarning(@"You have an NSDictionary in your properties that is bigger than 1000 in size. \
+                         Generally this is not recommended due to its size.");
         }
-        NSAssert([key isKindOfClass:[NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [key class], key);
-        [Sugo assertPropertyType:value depth:depth];
+        for (id key in properties) {
+            id value = properties[key];
+            
+            if ([key isEqualToString:@"exception"]) {
+                NSLog(@"value+++++++:%@,%@",key,value);
+            }
+            NSAssert([key isKindOfClass:[NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [key class], key);
+            [Sugo assertPropertyType:value depth:depth];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -488,19 +522,23 @@ static NSString *defaultProjectToken;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
 {
-    if (!self.enable) {
-        return;
+    @try {
+        if (!self.enable) {
+            return;
+        }
+        if (alias.length == 0) {
+            MPLogError(@"%@ create alias called with empty alias: %@", self, alias);
+            return;
+        }
+        if (distinctID.length == 0) {
+            MPLogError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
+            return;
+        }
+        [self trackEvent:@"create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
+        [self flush];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    if (alias.length == 0) {
-        MPLogError(@"%@ create alias called with empty alias: %@", self, alias);
-        return;
-    }
-    if (distinctID.length == 0) {
-        MPLogError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
-        return;
-    }
-    [self trackEvent:@"create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
-    [self flush];
 }
 
 - (void)trackEvent:(NSString *)event
@@ -1146,6 +1184,7 @@ static NSString *defaultProjectToken;
     @synchronized (self) {
         _flushInterval = interval;
     }
+    
     [self flush];
     [self startFlushTimer];
 }
@@ -1205,49 +1244,57 @@ static NSString *defaultProjectToken;
 
 - (void)flushWithCompletion:(void (^)())handler
 {
-    if (!self.enable) {
-        return;
-    }
-    dispatch_async(self.serialQueue, ^{
-        __strong id<SugoDelegate> strongDelegate = self.delegate;
-        if (strongDelegate && [strongDelegate respondsToSelector:@selector(sugoWillFlush:)]) {
-            if (![strongDelegate sugoWillFlush:self]) {
-                MPLogInfo(@"%@ flush deferred by delegate", self);
-                return;
-            }
+    @try {
+        if (!self.enable) {
+            return;
         }
-        
-        NSArray *eventResult = [self fetchEventResultOfLimit: 50];
-        while (eventResult.count > 0) {
-            NSMutableArray *queue = [NSMutableArray array];
-            if (eventResult != nil) {
-                for (SugoEvents *event in eventResult) {
-//                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
-//                    if (object) {
-//                        [queue addObject:object];
-//                    }
-                    NSData *data = event.event;
-                    if (data != nil) {
-                        [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+        dispatch_async(self.serialQueue, ^{
+            @try {
+                __strong id<SugoDelegate> strongDelegate = self.delegate;
+                if (strongDelegate && [strongDelegate respondsToSelector:@selector(sugoWillFlush:)]) {
+                    if (![strongDelegate sugoWillFlush:self]) {
+                        MPLogInfo(@"%@ flush deferred by delegate", self);
+                        return;
                     }
                 }
-            }
-            [self.network flushEventQueue:queue];
             
-            if (eventResult != nil && queue.count == 0) {
-                [self deleteEventResult:eventResult];
-                [self.managedObjectContext reset];
-                eventResult = [self fetchEventResultOfLimit: 50];
-            } else {
-                [self.managedObjectContext reset];
-                break;
+                NSArray *eventResult = [self fetchEventResultOfLimit: 50];
+                while (eventResult.count > 0) {
+                    NSMutableArray *queue = [NSMutableArray array];
+                    if (eventResult != nil) {
+                        for (SugoEvents *event in eventResult) {
+        //                    id object = [NSKeyedUnarchiver unarchiveObjectWithData:event.event];
+        //                    if (object) {
+        //                        [queue addObject:object];
+        //                    }
+                            NSData *data = event.event;
+                            if (data != nil) {
+                                [queue addObject:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+                            }
+                        }
+                    }
+                    [self.network flushEventQueue:queue];
+                    
+                    if (eventResult != nil && queue.count == 0) {
+                        [self deleteEventResult:eventResult];
+                        [self.managedObjectContext reset];
+                        eventResult = [self fetchEventResultOfLimit: 50];
+                    } else {
+                        [self.managedObjectContext reset];
+                        break;
+                    }
+                }
+            
+                if (handler) {
+                    dispatch_async(dispatch_get_main_queue(), handler);
+                }
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
             }
-        }
-        
-        if (handler) {
-            dispatch_async(dispatch_get_main_queue(), handler);
-        }
-    });
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)flushViaWebSocketEvent:(NSDictionary *)event
@@ -1367,16 +1414,20 @@ static NSString *defaultProjectToken;
 }
 
 - (NSArray *)fetchEventResultOfLimit:(NSUInteger)limit {
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *sugoEventsEntity = [NSEntityDescription entityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:sugoEventsEntity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(token = %@)", self.apiToken];
-    [fetchRequest setPredicate:predicate];
-    [fetchRequest setFetchLimit: limit];
+    @try {
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *sugoEventsEntity = [NSEntityDescription entityForName:@"SugoEvents" inManagedObjectContext:self.managedObjectContext];
+        [fetchRequest setEntity:sugoEventsEntity];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(token = %@)", self.apiToken];
+        [fetchRequest setPredicate:predicate];
+        [fetchRequest setFetchLimit: limit];
 
-    NSArray *eventResult = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil].copy;
-    return eventResult;
+        NSArray *eventResult = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil].copy;
+        return eventResult;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return [[NSArray alloc]init];
+    }
 }
 
 - (NSUInteger)countForSugoEvents {
@@ -1391,15 +1442,18 @@ static NSString *defaultProjectToken;
 }
 
 - (void)deleteEventResult:(NSArray *)eventResult {
-    
-    for (SugoEvents *event in eventResult) {
-        [self.managedObjectContext deleteObject:event];
+    @try {
+        for (SugoEvents *event in eventResult) {
+            [self.managedObjectContext deleteObject:event];
+        }
+        __weak Sugo *weakSelf = self;
+        [self.managedObjectContext performBlockAndWait:^{
+            __strong Sugo *strongSelf = weakSelf;
+            [strongSelf.managedObjectContext save:nil];
+        }];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    __weak Sugo *weakSelf = self;
-    [self.managedObjectContext performBlockAndWait:^{
-        __strong Sugo *strongSelf = weakSelf;
-        [strongSelf.managedObjectContext save:nil];
-    }];
 }
 
 - (void)unarchive
@@ -1488,94 +1542,106 @@ static NSString *defaultProjectToken;
 
 - (void)trackStayTime
 {
-    typeof(self) __weak weakSelf = self;
-    void (^viewDidAppearBlock)(id, SEL) = ^(id viewController, SEL command) {
-        UIViewController *vc = (UIViewController *)viewController;
-        if (!vc) {
-            return;
-        }
-        
-        NSArray *vcBlackList = (NSArray *)self.sugoConfiguration[@"VCFilterList"][@"Black"];
-        for (NSString *vcb in vcBlackList) {
-            if ([vcb isEqualToString:NSStringFromClass([vc classForCoder])]) {
-                return;
-            }
-        }
-        
-        NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-        NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-        if (keys && values) {
-            p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
-            //save current controller，and use it in buildApplicationMoveEvent method
-            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            if ([SugoPageInfos global].infos.count > 0) {
-                for (NSDictionary *info in [SugoPageInfos global].infos) {
-                    if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                        p[keys[@"PageName"]] = info[@"page_name"];
-                        if (info[@"page_category"]) {
-                            p[keys[@"PageCategory"]] = info[@"page_category"];
-                        }
+    @try {
+        typeof(self) __weak weakSelf = self;
+        void (^viewDidAppearBlock)(id, SEL) = ^(id viewController, SEL command) {
+            @try {
+                UIViewController *vc = (UIViewController *)viewController;
+                if (!vc) {
+                    return;
+                }
+                
+                NSArray *vcBlackList = (NSArray *)self.sugoConfiguration[@"VCFilterList"][@"Black"];
+                for (NSString *vcb in vcBlackList) {
+                    if ([vcb isEqualToString:NSStringFromClass([vc classForCoder])]) {
+                        return;
                     }
                 }
-            }
-            [self registerSuperProperties:p];
-            [self trackEvent:values[@"PageEnter"] properties:p];
-            [self timeEvent:values[@"PageStay"]];
-        }
-        
-        //Check the location upload time event
-        long currentTime=[[NSDate date]timeIntervalSince1970];
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSInteger uploadLocation = [userDefaults integerForKey:@"uploadLocation"];
-        if (uploadLocation>0&&weakSelf.locateInterval>0&&currentTime-weakSelf.recentlySendLoacationTime>=uploadLocation*60) {
-            [self.locationManager startUpdatingLocation];
-            [self locate];
-            weakSelf.recentlySendLoacationTime=currentTime;
-        }
-    };
-    
-    [MPSwizzler swizzleSelector:@selector(viewDidAppear:)
-                        onClass:[UIViewController class]
-                      withBlock:viewDidAppearBlock
-                          named:[[NSUUID UUID] UUIDString]];
-    
-    void (^viewDidDisappearBlock)(id, SEL) = ^(id viewController, SEL command) {
-        UIViewController *vc = (UIViewController *)viewController;
-        if (!vc) {
-            return;
-        }
-        
-        NSArray *vcBlackList = (NSArray *)self.sugoConfiguration[@"VCFilterList"][@"Black"];
-        for (NSString *vcb in vcBlackList) {
-            if ([vcb isEqualToString:NSStringFromClass([vc classForCoder])]) {
-                return;
-            }
-        }
-        
-        NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-        NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-        if (keys && values) {
-            p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
-            if ([SugoPageInfos global].infos.count > 0) {
-                for (NSDictionary *info in [SugoPageInfos global].infos) {
-                    if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                        p[keys[@"PageName"]] = info[@"page_name"];
-                        if (info[@"page_category"]) {
-                            p[keys[@"PageCategory"]] = info[@"page_category"];
+                
+                NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+                NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+                NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+                if (keys && values) {
+                    p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+                    //save current controller，and use it in buildApplicationMoveEvent method
+                    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+                    if ([SugoPageInfos global].infos.count > 0) {
+                        for (NSDictionary *info in [SugoPageInfos global].infos) {
+                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                                p[keys[@"PageName"]] = info[@"page_name"];
+                                if (info[@"page_category"]) {
+                                    p[keys[@"PageCategory"]] = info[@"page_category"];
+                                }
+                            }
                         }
                     }
+                    [self registerSuperProperties:p];
+                    [self trackEvent:values[@"PageEnter"] properties:p];
+                    [self timeEvent:values[@"PageStay"]];
                 }
+                
+                //Check the location upload time event
+                long currentTime=[[NSDate date]timeIntervalSince1970];
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                NSInteger uploadLocation = [userDefaults integerForKey:@"uploadLocation"];
+                if (uploadLocation>0&&weakSelf.locateInterval>0&&currentTime-weakSelf.recentlySendLoacationTime>=uploadLocation*60) {
+                    [self.locationManager startUpdatingLocation];
+                    [self locate];
+                    weakSelf.recentlySendLoacationTime=currentTime;
+                }
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
             }
-            [self trackEvent:values[@"PageStay"] properties:p];
-        }
-    };
+        };
     
-    [MPSwizzler swizzleSelector:@selector(viewDidDisappear:)
-                        onClass:[UIViewController class]
-                      withBlock:viewDidDisappearBlock
-                          named:[[NSUUID UUID] UUIDString]];
+        [MPSwizzler swizzleSelector:@selector(viewDidAppear:)
+                            onClass:[UIViewController class]
+                          withBlock:viewDidAppearBlock
+                              named:[[NSUUID UUID] UUIDString]];
+    
+        void (^viewDidDisappearBlock)(id, SEL) = ^(id viewController, SEL command) {
+            @try {
+                UIViewController *vc = (UIViewController *)viewController;
+                if (!vc) {
+                    return;
+                }
+                
+                NSArray *vcBlackList = (NSArray *)self.sugoConfiguration[@"VCFilterList"][@"Black"];
+                for (NSString *vcb in vcBlackList) {
+                    if ([vcb isEqualToString:NSStringFromClass([vc classForCoder])]) {
+                        return;
+                    }
+                }
+                
+                NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+                NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+                NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+                if (keys && values) {
+                    p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+                    if ([SugoPageInfos global].infos.count > 0) {
+                        for (NSDictionary *info in [SugoPageInfos global].infos) {
+                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                                p[keys[@"PageName"]] = info[@"page_name"];
+                                if (info[@"page_category"]) {
+                                    p[keys[@"PageCategory"]] = info[@"page_category"];
+                                }
+                            }
+                        }
+                    }
+                    [self trackEvent:values[@"PageStay"] properties:p];
+                }
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
+            }
+        };
+    
+        [MPSwizzler swizzleSelector:@selector(viewDidDisappear:)
+                            onClass:[UIViewController class]
+                          withBlock:viewDidDisappearBlock
+                              named:[[NSUUID UUID] UUIDString]];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 #pragma mark - Application Helpers
@@ -1601,59 +1667,77 @@ static NSString *defaultProjectToken;
 
 - (NSString *)deviceModel
 {
-    NSString *results = nil;
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char answer[size];
-    sysctlbyname("hw.machine", answer, &size, NULL, 0);
-    if (size) {
-        results = @(answer);
-    } else {
-        MPLogError(@"Failed fetch hw.machine from sysctl.");
+    @try {
+        NSString *results = nil;
+        size_t size;
+        sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+        char answer[size];
+        sysctlbyname("hw.machine", answer, &size, NULL, 0);
+        if (size) {
+            results = @(answer);
+        } else {
+            MPLogError(@"Failed fetch hw.machine from sysctl.");
+        }
+        return results;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return @"";
     }
-    return results;
 }
 
 - (NSString *)IFA
 {
-    NSString *ifa = nil;
-#if !defined(SUGO_NO_IFA)
-    Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
-    if (ASIdentifierManagerClass) {
-        SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
-        id sharedManager = ((id (*)(id, SEL))[ASIdentifierManagerClass methodForSelector:sharedManagerSelector])(ASIdentifierManagerClass, sharedManagerSelector);
-        SEL advertisingTrackingEnabledSelector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
-        BOOL isTrackingEnabled = ((BOOL (*)(id, SEL))[sharedManager methodForSelector:advertisingTrackingEnabledSelector])(sharedManager, advertisingTrackingEnabledSelector);
-        if (isTrackingEnabled) {
-            SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
-            NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
-            ifa = [uuid UUIDString];
+    @try {
+        NSString *ifa = nil;
+    #if !defined(SUGO_NO_IFA)
+        Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
+        if (ASIdentifierManagerClass) {
+            SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
+            id sharedManager = ((id (*)(id, SEL))[ASIdentifierManagerClass methodForSelector:sharedManagerSelector])(ASIdentifierManagerClass, sharedManagerSelector);
+            SEL advertisingTrackingEnabledSelector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
+            BOOL isTrackingEnabled = ((BOOL (*)(id, SEL))[sharedManager methodForSelector:advertisingTrackingEnabledSelector])(sharedManager, advertisingTrackingEnabledSelector);
+            if (isTrackingEnabled) {
+                SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
+                NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
+                ifa = [uuid UUIDString];
+            }
         }
+    #endif
+        return ifa;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-#endif
-    return ifa;
 }
 
 - (void)setCurrentRadio
 {
     dispatch_async(self.serialQueue, ^{
-        NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-        if (properties) {
-            properties[@"radio"] = [self currentRadio];
-            self.automaticProperties = [properties copy];
+        @try {
+            NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+            if (properties) {
+                properties[@"radio"] = [self currentRadio];
+                self.automaticProperties = [properties copy];
+            }
+        } @catch (NSException *exception) {
+            [ExceptionUtils exceptionToNetWork:exception];
         }
     });
 }
 
 - (NSString *)currentRadio
 {
-    NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
-    if (!radio) {
-        radio = @"None";
-    } else if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
-        radio = [radio substringFromIndex:23];
+    @try {
+        NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
+        if (!radio) {
+            radio = @"None";
+        } else if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
+            radio = [radio substringFromIndex:23];
+        }
+        return radio;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return @"None";
     }
-    return radio;
 }
 
 - (NSString *)libVersion
@@ -1668,32 +1752,42 @@ static NSString *defaultProjectToken;
 
 - (NSDictionary *)obtainPriorityProperties
 {
-    NSMutableDictionary *p = [NSMutableDictionary dictionary];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *priorityProperties = [userDefaults objectForKey:@"SugoPriorityProperties"];
-    if (priorityProperties) {
-        for (NSString *key in priorityProperties.allKeys) {
-            [p setValue:priorityProperties[key] forKey:key];
+    @try {
+        NSMutableDictionary *p = [NSMutableDictionary dictionary];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSDictionary *priorityProperties = [userDefaults objectForKey:@"SugoPriorityProperties"];
+        if (priorityProperties) {
+            for (NSString *key in priorityProperties.allKeys) {
+                [p setValue:priorityProperties[key] forKey:key];
+            }
         }
+        return [p copy];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return [[NSDictionary alloc]init];
     }
-    return [p copy];
 }
 
 - (NSDictionary *)collectDeviceProperties
 {
-    UIDevice *device = [UIDevice currentDevice];
-    CGSize size = [UIScreen mainScreen].bounds.size;
-    NSString *deviceBrand = [self deviceBrand];
-    NSString *deviceModel = [self deviceModel];
-    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-    return @{
-             keys[@"Manufacturer"]:  @"Apple",
-             keys[@"DeviceBrand"]:   deviceBrand,
-             keys[@"DeviceModel"]:   deviceModel,
-             keys[@"SystemName"]:    [device systemName],
-             keys[@"SystemVersion"]: [device systemVersion],
-             keys[@"ScreenPixel"]: [NSString stringWithFormat:@"%@*%@", [NSNumber numberWithFloat:size.width], [NSNumber numberWithFloat:size.height]]
-             };
+    @try {
+        UIDevice *device = [UIDevice currentDevice];
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        NSString *deviceBrand = [self deviceBrand];
+        NSString *deviceModel = [self deviceModel];
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+        return @{
+                 keys[@"Manufacturer"]:  @"Apple",
+                 keys[@"DeviceBrand"]:   deviceBrand,
+                 keys[@"DeviceModel"]:   deviceModel,
+                 keys[@"SystemName"]:    [device systemName],
+                 keys[@"SystemVersion"]: [device systemVersion],
+                 keys[@"ScreenPixel"]: [NSString stringWithFormat:@"%@*%@", [NSNumber numberWithFloat:size.width], [NSNumber numberWithFloat:size.height]]
+                 };
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+        return [[NSDictionary alloc]init];
+    }
 }
 
 - (NSDictionary *)collectAutomaticProperties
@@ -1725,105 +1819,113 @@ static NSString *defaultProjectToken;
 
 - (void)setupConfiguration
 {
-    self.sugoConfiguration = [[NSMutableDictionary alloc] init];
-    // For URLs
-    self.sugoConfiguration[@"URLs"] = [SugoConfigurationPropertyList loadWithName:@"SugoURLs"];
-    NSDictionary *urls = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"URLs"]];
-    if (SugoBindingsURL) {
-        self.serverURL = SugoBindingsURL;
-    } else {
-        self.serverURL = urls[@"Bindings"];
+    @try {
+        self.sugoConfiguration = [[NSMutableDictionary alloc] init];
+        // For URLs
+        self.sugoConfiguration[@"URLs"] = [SugoConfigurationPropertyList loadWithName:@"SugoURLs"];
+        NSDictionary *urls = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"URLs"]];
+        if (SugoBindingsURL) {
+            self.serverURL = SugoBindingsURL;
+        } else {
+            self.serverURL = urls[@"Bindings"];
+        }
+        if (SugoCollectionURL) {
+            self.eventCollectionURL = SugoCollectionURL;
+        } else {
+            self.eventCollectionURL = urls[@"Collection"];
+        }
+        if (SugoCodelessURL) {
+            self.switchboardURL = SugoCodelessURL;
+        } else {
+            self.switchboardURL = urls[@"Codeless"];
+        }
+        
+        // For custom dimension table
+        self.sugoConfiguration[@"DimensionKeys"] = [SugoConfigurationPropertyList loadWithName:@"SugoCustomDimensions" andKey:@"Keys"];
+        self.sugoConfiguration[@"DimensionValues"] = [SugoConfigurationPropertyList loadWithName:@"SugoCustomDimensions" andKey:@"Values"];
+        
+        // For ViewController filter list
+        self.sugoConfiguration[@"VCFilterList"] = [SugoConfigurationPropertyList loadWithName:@"SugoPageEventsViewControllerFilterList"];
+        
+        // For replacement of resources path
+        NSString *homePathKey = @"HomePath";
+        NSDictionary *rpr = @{NSHomeDirectory(): @""};
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:rpr forKey:homePathKey];
+        [userDefaults synchronize];
+        self.sugoConfiguration[@"ResourcesPathReplacements"] = [SugoConfigurationPropertyList loadWithName:@"SugoResourcesPathReplacements"];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    if (SugoCollectionURL) {
-        self.eventCollectionURL = SugoCollectionURL;
-    } else {
-        self.eventCollectionURL = urls[@"Collection"];
-    }
-    if (SugoCodelessURL) {
-        self.switchboardURL = SugoCodelessURL;
-    } else {
-        self.switchboardURL = urls[@"Codeless"];
-    }
-    
-    // For custom dimension table
-    self.sugoConfiguration[@"DimensionKeys"] = [SugoConfigurationPropertyList loadWithName:@"SugoCustomDimensions" andKey:@"Keys"];
-    self.sugoConfiguration[@"DimensionValues"] = [SugoConfigurationPropertyList loadWithName:@"SugoCustomDimensions" andKey:@"Values"];
-    
-    // For ViewController filter list
-    self.sugoConfiguration[@"VCFilterList"] = [SugoConfigurationPropertyList loadWithName:@"SugoPageEventsViewControllerFilterList"];
-    
-    // For replacement of resources path
-    NSString *homePathKey = @"HomePath";
-    NSDictionary *rpr = @{NSHomeDirectory(): @""};
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:rpr forKey:homePathKey];
-    [userDefaults synchronize];
-    self.sugoConfiguration[@"ResourcesPathReplacements"] = [SugoConfigurationPropertyList loadWithName:@"SugoResourcesPathReplacements"];
 }
 
 #pragma mark - UIApplication Events
 
 - (void)setUpListeners
 {
-    if (SugoCanTrackNativePage) {
-        [self trackStayTime];
-    }
-    // cellular info
-    [self setCurrentRadio];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(setCurrentRadio)
-                                                 name:CTRadioAccessTechnologyDidChangeNotification
-                                               object:nil];
-    // reachability
-    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, [self.eventCollectionURL cStringUsingEncoding:NSUTF8StringEncoding])) != NULL) {
-        SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
-        if (SCNetworkReachabilitySetCallback(_reachability, SugoReachabilityCallback, &context)) {
-            if (!SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
-                // cleanup callback if setting dispatch queue failed
-                SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
+    @try {
+        if (SugoCanTrackNativePage) {
+            [self trackStayTime];
+        }
+        // cellular info
+        [self setCurrentRadio];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(setCurrentRadio)
+                                                     name:CTRadioAccessTechnologyDidChangeNotification
+                                                   object:nil];
+        // reachability
+        if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, [self.eventCollectionURL cStringUsingEncoding:NSUTF8StringEncoding])) != NULL) {
+            SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
+            if (SCNetworkReachabilitySetCallback(_reachability, SugoReachabilityCallback, &context)) {
+                if (!SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
+                    // cleanup callback if setting dispatch queue failed
+                    SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
+                }
             }
         }
+    
+        __weak __typeof(self) weakself= self;
+    
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakself.locationManager = [[CLLocationManager alloc] init];
+            weakself.locationManager.delegate = self;
+            weakself.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+            weakself.locationManager.pausesLocationUpdatesAutomatically = YES;
+            [weakself.locationManager startUpdatingLocation];
+        });
+    
+    
+
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+        // Application lifecycle events
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillTerminate:)
+                                   name:UIApplicationWillTerminateNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillResignActive:)
+                                   name:UIApplicationWillResignActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidBecomeActive:)
+                                   name:UIApplicationDidBecomeActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidEnterBackground:)
+                                   name:UIApplicationDidEnterBackgroundNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillEnterForeground:)
+                                   name:UIApplicationWillEnterForegroundNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(appLinksNotificationRaised:)
+                                   name:@"com.parse.bolts.measurement_event"
+                                 object:nil];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    
-    __weak __typeof(self) weakself= self;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        weakself.locationManager = [[CLLocationManager alloc] init];
-        weakself.locationManager.delegate = self;
-        weakself.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        weakself.locationManager.pausesLocationUpdatesAutomatically = YES;
-        [weakself.locationManager startUpdatingLocation];
-    });
-    
-    
-
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
-    // Application lifecycle events
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationWillTerminate:)
-                               name:UIApplicationWillTerminateNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationWillResignActive:)
-                               name:UIApplicationWillResignActiveNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationDidBecomeActive:)
-                               name:UIApplicationDidBecomeActiveNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationDidEnterBackground:)
-                               name:UIApplicationDidEnterBackgroundNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationWillEnterForeground:)
-                               name:UIApplicationWillEnterForegroundNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(appLinksNotificationRaised:)
-                               name:@"com.parse.bolts.measurement_event"
-                             object:nil];
 
 //    [self initializeGestureRecognizer];
 }
@@ -1836,19 +1938,23 @@ static NSString *defaultProjectToken;
 
 - (void) initializeGestureRecognizer {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.testDesignerGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                           action:@selector(connectGestureRecognized:)];
-        self.testDesignerGestureRecognizer.minimumPressDuration = 1;
-        self.testDesignerGestureRecognizer.cancelsTouchesInView = NO;
-#if TARGET_IPHONE_SIMULATOR
-        self.testDesignerGestureRecognizer.numberOfTouchesRequired = 2;
-#else
-        self.testDesignerGestureRecognizer.numberOfTouchesRequired = 4;
-#endif
-        // because this is in a dispatch_async, if the user sets enableVisualABTestAndCodeless in the first run
-        // loop then this is initialized after that is set so we have to check here
-        self.testDesignerGestureRecognizer.enabled = self.enableVisualABTestAndCodeless;
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.testDesignerGestureRecognizer];
+        @try {
+            self.testDesignerGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                               action:@selector(connectGestureRecognized:)];
+            self.testDesignerGestureRecognizer.minimumPressDuration = 1;
+            self.testDesignerGestureRecognizer.cancelsTouchesInView = NO;
+    #if TARGET_IPHONE_SIMULATOR
+            self.testDesignerGestureRecognizer.numberOfTouchesRequired = 2;
+    #else
+            self.testDesignerGestureRecognizer.numberOfTouchesRequired = 4;
+    #endif
+            // because this is in a dispatch_async, if the user sets enableVisualABTestAndCodeless in the first run
+            // loop then this is initialized after that is set so we have to check here
+            self.testDesignerGestureRecognizer.enabled = self.enableVisualABTestAndCodeless;
+            [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.testDesignerGestureRecognizer];
+        } @catch (NSException *exception) {
+            [ExceptionUtils exceptionToNetWork:exception];
+        }
     });
 }
 
@@ -1862,312 +1968,368 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)reachabilityChanged:(SCNetworkReachabilityFlags)flags
 {
-    
-    NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-    if (!keys) {
-        return;
-    }
-    
-    // this should be run in the serial queue. the reason we don't dispatch_async here
-    // is because it's only ever called by the reachability callback, which is already
-    // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
-    NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-    if (properties) {
-        
-        properties[@"has_wifi"] = @"false";
-        
-        NSString *network = @"";
-        if ((flags & kSCNetworkReachabilityFlagsReachable) == 0)
-        {
-            // The target host is not reachable.
-            network = @"";
+    @try {
+        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+        if (!keys) {
+            return;
         }
         
-        if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0)
-        {
-            /*
-             If the target host is reachable and no connection is required then we'll assume (for now) that you're on Wi-Fi...
-             */
-            network = @"wifi";
-            properties[@"has_wifi"] = @"true";
-        }
-        
-        if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) ||
-             (flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0))
-        {
-            /*
-             ... and the connection is on-demand (or on-traffic) if the calling application is using the CFSocketStream or higher APIs...
-             */
+        // this should be run in the serial queue. the reason we don't dispatch_async here
+        // is because it's only ever called by the reachability callback, which is already
+        // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
+        NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+        if (properties) {
             
-            if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0)
+            properties[@"has_wifi"] = @"false";
+            
+            NSString *network = @"";
+            if ((flags & kSCNetworkReachabilityFlagsReachable) == 0)
+            {
+                // The target host is not reachable.
+                network = @"";
+            }
+            
+            if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0)
             {
                 /*
-                 ... and no [user] intervention is needed...
+                 If the target host is reachable and no connection is required then we'll assume (for now) that you're on Wi-Fi...
                  */
                 network = @"wifi";
                 properties[@"has_wifi"] = @"true";
             }
-        }
-        
-        if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN)
-        {
-            /*
-             ... but WWAN connections are OK if the calling application is using the CFNetwork APIs.
-             */
-            NSString *currentStatus = self.telephonyInfo.currentRadioAccessTechnology;
             
-            NSArray *status2G = @[CTRadioAccessTechnologyEdge,
-                                  CTRadioAccessTechnologyGPRS,
-                                  CTRadioAccessTechnologyCDMA1x];
-            
-            NSArray *status3G = @[CTRadioAccessTechnologyHSDPA,
-                                  CTRadioAccessTechnologyWCDMA,
-                                  CTRadioAccessTechnologyHSUPA,
-                                  CTRadioAccessTechnologyCDMAEVDORev0,
-                                  CTRadioAccessTechnologyCDMAEVDORevA,
-                                  CTRadioAccessTechnologyCDMAEVDORevB,
-                                  CTRadioAccessTechnologyeHRPD];
-            
-            NSArray *status4G = @[CTRadioAccessTechnologyLTE];
-            
-            if ([status4G containsObject:currentStatus]) {
-                network = @"4G";
-            } else if ([status3G containsObject:currentStatus]) {
-                network = @"3G";
-            } else if ([status2G containsObject:currentStatus]) {
-                network = @"2G";
-            } else {
-                network = @"other";
+            if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) ||
+                 (flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0))
+            {
+                /*
+                 ... and the connection is on-demand (or on-traffic) if the calling application is using the CFSocketStream or higher APIs...
+                 */
+                
+                if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0)
+                {
+                    /*
+                     ... and no [user] intervention is needed...
+                     */
+                    network = @"wifi";
+                    properties[@"has_wifi"] = @"true";
+                }
             }
+            
+            if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN)
+            {
+                /*
+                 ... but WWAN connections are OK if the calling application is using the CFNetwork APIs.
+                 */
+                NSString *currentStatus = self.telephonyInfo.currentRadioAccessTechnology;
+                
+                NSArray *status2G = @[CTRadioAccessTechnologyEdge,
+                                      CTRadioAccessTechnologyGPRS,
+                                      CTRadioAccessTechnologyCDMA1x];
+                
+                NSArray *status3G = @[CTRadioAccessTechnologyHSDPA,
+                                      CTRadioAccessTechnologyWCDMA,
+                                      CTRadioAccessTechnologyHSUPA,
+                                      CTRadioAccessTechnologyCDMAEVDORev0,
+                                      CTRadioAccessTechnologyCDMAEVDORevA,
+                                      CTRadioAccessTechnologyCDMAEVDORevB,
+                                      CTRadioAccessTechnologyeHRPD];
+                
+                NSArray *status4G = @[CTRadioAccessTechnologyLTE];
+                
+                if ([status4G containsObject:currentStatus]) {
+                    network = @"4G";
+                } else if ([status3G containsObject:currentStatus]) {
+                    network = @"3G";
+                } else if ([status2G containsObject:currentStatus]) {
+                    network = @"2G";
+                } else {
+                    network = @"other";
+                }
+            }
+            
+            properties[keys[@"Reachability"]] = network;
+            
+            self.automaticProperties = [properties copy];
+            MPLogDebug(@"Reachability: %@", network);
         }
-        
-        properties[keys[@"Reachability"]] = network;
-        
-        self.automaticProperties = [properties copy];
-        MPLogDebug(@"Reachability: %@", network);
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    
-    CLLocationCoordinate2D l = locations.lastObject.coordinate;
-    latitude = [NSNumber numberWithDouble:l.latitude];
-    longitude = [NSNumber numberWithDouble:l.longitude];
+    @try {
+        CLLocationCoordinate2D l = locations.lastObject.coordinate;
+        latitude = [NSNumber numberWithDouble:l.latitude];
+        longitude = [NSNumber numberWithDouble:l.longitude];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    
-    MPLogInfo(@"Failed to locate device: %@", error);
-    latitude = @0;
-    longitude = @0;
+    @try {
+        MPLogInfo(@"Failed to locate device: %@", error);
+        latitude = @0;
+        longitude = @0;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 -(void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
-    
-    latitude = @0;
-    longitude = @0;
+    @try {
+        latitude = @0;
+        longitude = @0;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    MPLogInfo(@"%@ application did become active", self);
-    [self startFlushTimer];
-    
-    switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            [self.locationManager startUpdatingLocation];
-//            [self startLocationTimer];
-            break;
-        case kCLAuthorizationStatusDenied:
-        case kCLAuthorizationStatusRestricted:
-            break;
-        case kCLAuthorizationStatusNotDetermined:
-//            [self.locationManager requestWhenInUseAuthorization];
-        default:
-            break;
+    @try {
+        MPLogInfo(@"%@ application did become active", self);
+        [self startFlushTimer];
+        
+        switch ([CLLocationManager authorizationStatus]) {
+            case kCLAuthorizationStatusAuthorizedAlways:
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                [self.locationManager startUpdatingLocation];
+    //            [self startLocationTimer];
+                break;
+            case kCLAuthorizationStatusDenied:
+            case kCLAuthorizationStatusRestricted:
+                break;
+            case kCLAuthorizationStatusNotDetermined:
+    //            [self.locationManager requestWhenInUseAuthorization];
+            default:
+                break;
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
     
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
-    MPLogInfo(@"%@ application will resign active", self);
-    [self stopFlushTimer];
+    @try {
+        MPLogInfo(@"%@ application will resign active", self);
+        [self stopFlushTimer];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
-    MPLogInfo(@"%@ did enter background", self);
-    
-    switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            [self.locationManager stopUpdatingLocation];
-//            [self stopLocationTimer];
-            break;
-        case kCLAuthorizationStatusDenied:
-        case kCLAuthorizationStatusRestricted:
-        case kCLAuthorizationStatusNotDetermined:
-        default:
-            break;
-    }
-    
-    // Page Stay
-    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
-        [self trackEvent:values[@"BackgroundEnter"]];
-        [self timeEvent:values[@"BackgroundStay"]];
-    }
-    UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
-    WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
-    if (uiwv || wkwv) {
-        if (uiwv && uiwv.window == UIApplication.sharedApplication.keyWindow) {
-            [WebViewBindings.globalBindings trackStayEventOfWebView:uiwv];
+    @try {
+        MPLogInfo(@"%@ did enter background", self);
+        
+        switch ([CLLocationManager authorizationStatus]) {
+            case kCLAuthorizationStatusAuthorizedAlways:
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                [self.locationManager stopUpdatingLocation];
+    //            [self stopLocationTimer];
+                break;
+            case kCLAuthorizationStatusDenied:
+            case kCLAuthorizationStatusRestricted:
+            case kCLAuthorizationStatusNotDetermined:
+            default:
+                break;
         }
-        if (wkwv && wkwv.window == UIApplication.sharedApplication.keyWindow) {
-            [wkwv evaluateJavaScript:@"sugo.trackStayEvent();" completionHandler:nil];
+        
+        // Page Stay
+        NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+        if (values) {
+            [self trackEvent:values[@"BackgroundEnter"]];
+            [self timeEvent:values[@"BackgroundStay"]];
         }
-    } else if (values) {
-        UIViewController *vc = [UIViewController sugoCurrentUIViewController];
-        NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-        if (vc) {
-            NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-            if (keys) {
-                p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
-                if ([SugoPageInfos global].infos.count > 0) {
-                    for (NSDictionary *info in [SugoPageInfos global].infos) {
-                        if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                            p[keys[@"PageName"]] = info[@"page_name"];
-                            if (info[@"page_category"]) {
-                                p[keys[@"PageCategory"]] = info[@"page_category"];
+        UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
+        WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
+        if (uiwv || wkwv) {
+            if (uiwv && uiwv.window == UIApplication.sharedApplication.keyWindow) {
+                [WebViewBindings.globalBindings trackStayEventOfWebView:uiwv];
+            }
+            if (wkwv && wkwv.window == UIApplication.sharedApplication.keyWindow) {
+                [wkwv evaluateJavaScript:@"sugo.trackStayEvent();" completionHandler:nil];
+            }
+        } else if (values) {
+            UIViewController *vc = [UIViewController sugoCurrentUIViewController];
+            NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+            if (vc) {
+                NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+                if (keys) {
+                    p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+                    if ([SugoPageInfos global].infos.count > 0) {
+                        for (NSDictionary *info in [SugoPageInfos global].infos) {
+                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                                p[keys[@"PageName"]] = info[@"page_name"];
+                                if (info[@"page_category"]) {
+                                    p[keys[@"PageCategory"]] = info[@"page_category"];
+                                }
                             }
                         }
                     }
+                    [self trackEvent:values[@"PageStay"] properties:p];
                 }
-                [self trackEvent:values[@"PageStay"] properties:p];
             }
         }
-    }
-    if (self.flushOnBackground) {
-        [self flush];
-    }
-    
-    __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        MPLogInfo(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
-        [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
-        self.taskId = UIBackgroundTaskInvalid;
-    }];
-    self.taskId = backgroundTask;
-    MPLogInfo(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
-    
-    dispatch_group_t bgGroup = dispatch_group_create();
-    dispatch_group_enter(bgGroup);
-    dispatch_async(_serialQueue, ^{
-        [self archive];
-        dispatch_group_leave(bgGroup);
-    });
-    
-    dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
-        MPLogInfo(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
-        if (self.taskId != UIBackgroundTaskInvalid) {
-            [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-            self.taskId = UIBackgroundTaskInvalid;
+        if (self.flushOnBackground) {
+            [self flush];
         }
-    });
+        
+        __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            MPLogInfo(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
+            [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
+            self.taskId = UIBackgroundTaskInvalid;
+        }];
+        self.taskId = backgroundTask;
+        MPLogInfo(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
+        
+        dispatch_group_t bgGroup = dispatch_group_create();
+        dispatch_group_enter(bgGroup);
+        dispatch_async(_serialQueue, ^{
+            @try {
+                [self archive];
+                dispatch_group_leave(bgGroup);
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
+            }
+        });
+        
+        dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
+            @try {
+                MPLogInfo(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
+                if (self.taskId != UIBackgroundTaskInvalid) {
+                    [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                    self.taskId = UIBackgroundTaskInvalid;
+                }
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
+            }
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
-    MPLogInfo(@"%@ will enter foreground", self);
+    @try {
+        MPLogInfo(@"%@ will enter foreground", self);
     
-    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
-        [self trackEvent:values[@"BackgroundStay"]];
-        [self trackEvent:values[@"BackgroundExit"]];
-    }
-    UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
-    WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
-    if (uiwv || wkwv) {
-        if (uiwv
-            && uiwv.window == UIApplication.sharedApplication.keyWindow) {
-            [uiwv stringByEvaluatingJavaScriptFromString:@"sugo.trackBrowseEvent();"];
+        NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+        if (values) {
+            [self trackEvent:values[@"BackgroundStay"]];
+            [self trackEvent:values[@"BackgroundExit"]];
         }
-        if (wkwv
-            && wkwv.window == UIApplication.sharedApplication.keyWindow) {
-            [wkwv evaluateJavaScript:@"sugo.trackBrowseEvent();" completionHandler:nil];
-        }
-    } else if (values) {
-        UIViewController *vc = [UIViewController sugoCurrentUIViewController];
-        if (vc) {
-            NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
-            NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
-            NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-            if (keys && values) {
-                p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
-                if ([SugoPageInfos global].infos.count > 0) {
-                    for (NSDictionary *info in [SugoPageInfos global].infos) {
-                        if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
-                            p[keys[@"PageName"]] = info[@"page_name"];
-                            if (info[@"page_category"]) {
-                                p[keys[@"PageCategory"]] = info[@"page_category"];
+        UIWebView *uiwv = WebViewBindings.globalBindings.uiWebView;
+        WKWebView *wkwv = WebViewBindings.globalBindings.wkWebView;
+        if (uiwv || wkwv) {
+            if (uiwv
+                && uiwv.window == UIApplication.sharedApplication.keyWindow) {
+                [uiwv stringByEvaluatingJavaScriptFromString:@"sugo.trackBrowseEvent();"];
+            }
+            if (wkwv
+                && wkwv.window == UIApplication.sharedApplication.keyWindow) {
+                [wkwv evaluateJavaScript:@"sugo.trackBrowseEvent();" completionHandler:nil];
+            }
+        } else if (values) {
+            UIViewController *vc = [UIViewController sugoCurrentUIViewController];
+            if (vc) {
+                NSMutableDictionary *p = [[NSMutableDictionary alloc] init];
+                NSDictionary *keys = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionKeys"]];
+                NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+                if (keys && values) {
+                    p[keys[@"PagePath"]] = NSStringFromClass([vc class]);
+                    if ([SugoPageInfos global].infos.count > 0) {
+                        for (NSDictionary *info in [SugoPageInfos global].infos) {
+                            if ([info[@"page"] isEqualToString:p[keys[@"PagePath"]]]) {
+                                p[keys[@"PageName"]] = info[@"page_name"];
+                                if (info[@"page_category"]) {
+                                    p[keys[@"PageCategory"]] = info[@"page_category"];
+                                }
                             }
                         }
                     }
+                    [self trackEvent:values[@"PageEnter"] properties:p];
+                    [self timeEvent:values[@"PageStay"]];
                 }
-                [self trackEvent:values[@"PageEnter"] properties:p];
-                [self timeEvent:values[@"PageStay"]];
             }
         }
-    }
     
-    dispatch_async(self.serialQueue, ^{
-        if (self.taskId != UIBackgroundTaskInvalid) {
-            [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-            self.taskId = UIBackgroundTaskInvalid;
-            [self.network updateNetworkActivityIndicator:NO];
-        }
-    });
+        dispatch_async(self.serialQueue, ^{
+            @try {
+                if (self.taskId != UIBackgroundTaskInvalid) {
+                    [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                    self.taskId = UIBackgroundTaskInvalid;
+                    [self.network updateNetworkActivityIndicator:NO];
+                }
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
+            }
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-    MPLogInfo(@"%@ application will terminate", self);
+    @try {
+        MPLogInfo(@"%@ application will terminate", self);
     
-    NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
-    if (values) {
-//        [self rawTrack:nil eventName:values[@"BackgroundStay"] properties:nil];
-//        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
-        [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
-        [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
+        NSDictionary *values = [NSDictionary dictionaryWithDictionary:self.sugoConfiguration[@"DimensionValues"]];
+        if (values) {
+    //        [self rawTrack:nil eventName:values[@"BackgroundStay"] properties:nil];
+    //        [self rawTrack:nil eventName:values[@"BackgroundExit"] properties:nil];
+            [self rawTrack:nil eventName:values[@"AppStay"] properties:nil];
+            [self rawTrack:nil eventName:values[@"AppExit"] properties:nil];
+        }
+    
+        dispatch_async(_serialQueue, ^{
+            @try {
+                [self archive];
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
+            }
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    
-    dispatch_async(_serialQueue, ^{
-       [self archive];
-    });
 }
 
 - (void)appLinksNotificationRaised:(NSNotification *)notification
 {
-    NSDictionary *eventMap = @{@"al_nav_out": @"al_nav_out",
-                               @"al_nav_in": @"al_nav_in",
-                               @"al_ref_back_out": @"al_ref_back_out"
-                               };
-    NSDictionary *userInfo = notification.userInfo;
-    if (userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
-        [self trackEvent:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
+    @try {
+        NSDictionary *eventMap = @{@"al_nav_out": @"al_nav_out",
+                                   @"al_nav_in": @"al_nav_in",
+                                   @"al_ref_back_out": @"al_ref_back_out"
+                                   };
+        NSDictionary *userInfo = notification.userInfo;
+        if (userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
+            [self trackEvent:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
 #pragma mark - Logging
 - (void)setEnableLogging:(BOOL)enableLogging {
-    gLoggingEnabled = enableLogging;
+    @try {
+        gLoggingEnabled = enableLogging;
 
-    if (gLoggingEnabled) {
-        asl_add_log_file(NULL, STDERR_FILENO);
-        asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
-    } else {
-        asl_remove_log_file(NULL, STDERR_FILENO);
+        if (gLoggingEnabled) {
+            asl_add_log_file(NULL, STDERR_FILENO);
+            asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
+        } else {
+            asl_remove_log_file(NULL, STDERR_FILENO);
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -2675,139 +2837,158 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 }
 
 - (void)requestForHeatMapWithCompletion:(void (^)(NSData *heatMap))completion {
-    
-    if (self.abtestDesignerConnection.connected) return;
-    if (self.heatMap.mode) return;
-    
-    dispatch_async(self.serialQueue, ^{
+    @try {
+        if (self.abtestDesignerConnection.connected) return;
+        if (self.heatMap.mode) return;
         
-        __block BOOL hadError = NO;
-        __block NSData *data = [[NSData alloc] init];
-        
-        NSArray *queryItems = [MPNetwork buildHeatQueryForToken:self.apiToken
-                                                   andSecretKey:self.urlHeatMapSecretKey];
-        // Build a network request from the URL
-        NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
-                                                        andEndpoint:MPNetworkEndpointHeat
-                                                     withQueryItems:queryItems];
-        // Send the network request
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                  NSURLResponse *urlResponse,
-                                                                  NSError *error) {
-            if (error) {
-                MPLogError(@"%@ heat request http error: %@", self, error);
-                hadError = YES;
-                dispatch_semaphore_signal(semaphore);
-                return;
+        dispatch_async(self.serialQueue, ^{
+            @try {
+                __block BOOL hadError = NO;
+                __block NSData *data = [[NSData alloc] init];
+                
+                NSArray *queryItems = [MPNetwork buildHeatQueryForToken:self.apiToken
+                                                           andSecretKey:self.urlHeatMapSecretKey];
+                // Build a network request from the URL
+                NSURLRequest *request = [self.network buildGetRequestForURL:[NSURL URLWithString:self.serverURL]
+                                                                andEndpoint:MPNetworkEndpointHeat
+                                                             withQueryItems:queryItems];
+                // Send the network request
+                dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                NSURLSession *session = [NSURLSession sharedSession];
+                [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                          NSURLResponse *urlResponse,
+                                                                          NSError *error) {
+                    if (error) {
+                        MPLogError(@"%@ heat request http error: %@", self, error);
+                        hadError = YES;
+                        dispatch_semaphore_signal(semaphore);
+                        return;
+                    }
+                    MPLogDebug(@"Heat responseData\n%@",[[NSString alloc] initWithData:responseData
+                                                                              encoding:NSUTF8StringEncoding]);
+                    
+                    // Handle network response
+                    data = responseData;
+                    
+                    dispatch_semaphore_signal(semaphore);
+                }] resume];
+                
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                
+                if (hadError) {
+                    if (completion) {
+                        completion(nil);
+                    }
+                } else {
+                    if (completion) {
+                        completion(data);
+                    }
+                }
+            } @catch (NSException *exception) {
+                [ExceptionUtils exceptionToNetWork:exception];
             }
-            MPLogDebug(@"Heat responseData\n%@",[[NSString alloc] initWithData:responseData
-                                                                      encoding:NSUTF8StringEncoding]);
-            
-            // Handle network response
-            data = responseData;
-            
-            dispatch_semaphore_signal(semaphore);
-        }] resume];
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-        if (hadError) {
-            if (completion) {
-                completion(nil);
-            }
-        } else {
-            if (completion) {
-                completion(data);
-            }
-        }
-    });
+        });
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)handleDecideDimensionsObject:(NSDictionary *)object
 {
-    id dimensions = object[@"dimensions"];
-    if (dimensions
-        && [dimensions isKindOfClass:[NSArray class]]) {
-        [[NSUserDefaults standardUserDefaults] setObject:dimensions
-                                                  forKey:@"SugoDimensions"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        MPLogInfo(@"%@ decide check dimensions found %lu dimensions",
-                  self,
-                  ((NSArray *)dimensions).count);
-    }
-    
-    NSNumber *locationConfigure = object[@"position_config"];
-    if (locationConfigure) {
-        self.locateInterval = locationConfigure.doubleValue * 60;
+    @try {
+        id dimensions = object[@"dimensions"];
+        if (dimensions
+            && [dimensions isKindOfClass:[NSArray class]]) {
+            [[NSUserDefaults standardUserDefaults] setObject:dimensions
+                                                      forKey:@"SugoDimensions"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            MPLogInfo(@"%@ decide check dimensions found %lu dimensions",
+                      self,
+                      ((NSArray *)dimensions).count);
+        }
+        
+        NSNumber *locationConfigure = object[@"position_config"];
+        if (locationConfigure) {
+            self.locateInterval = locationConfigure.doubleValue * 60;
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
 - (void)handleDecideBindingsObject:(NSDictionary *)object
 {
-    id commonEventBindings = object[@"event_bindings"];
-    NSMutableSet *parsedEventBindings = [NSMutableSet set];
-    if ([commonEventBindings isKindOfClass:[NSArray class]]) {
-        for (id obj in commonEventBindings) {
-            MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
-            if (binder) {
-                [parsedEventBindings addObject:binder];
+    @try {
+        id commonEventBindings = object[@"event_bindings"];
+        NSMutableSet *parsedEventBindings = [NSMutableSet set];
+        if ([commonEventBindings isKindOfClass:[NSArray class]]) {
+            for (id obj in commonEventBindings) {
+                MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
+                if (binder) {
+                    [parsedEventBindings addObject:binder];
+                }
             }
+        } else {
+            MPLogDebug(@"%@ tracking events check response format error: %@", self, object);
         }
-    } else {
-        MPLogDebug(@"%@ tracking events check response format error: %@", self, object);
-    }
-    
-    id htmlEventBindings = object[@"h5_event_bindings"];
-    if ([htmlEventBindings isKindOfClass:[NSArray class]]) {
-        [[WebViewBindings globalBindings].designerBindings removeAllObjects];
-        [[WebViewBindings globalBindings].designerBindings addObjectsFromArray:(NSArray *)htmlEventBindings];
-    }
-    
-    id pageInfos = object[@"page_info"];
-    if ([pageInfos isKindOfClass:[NSArray class]]) {
-        [[SugoPageInfos global].infos removeAllObjects];
-        [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
-    }
-    
-    id dimensions = object[@"dimensions"];
-    if (dimensions
-        && [dimensions isKindOfClass:[NSArray class]]
-        && ((NSArray *)dimensions).count > 0) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:dimensions
-                                                  forKey:@"SugoDimensions"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        id htmlEventBindings = object[@"h5_event_bindings"];
+        if ([htmlEventBindings isKindOfClass:[NSArray class]]) {
+            [[WebViewBindings globalBindings].designerBindings removeAllObjects];
+            [[WebViewBindings globalBindings].designerBindings addObjectsFromArray:(NSArray *)htmlEventBindings];
+        }
+        
+        id pageInfos = object[@"page_info"];
+        if ([pageInfos isKindOfClass:[NSArray class]]) {
+            [[SugoPageInfos global].infos removeAllObjects];
+            [[SugoPageInfos global].infos addObjectsFromArray:(NSArray *)pageInfos];
+        }
+        
+        id dimensions = object[@"dimensions"];
+        if (dimensions
+            && [dimensions isKindOfClass:[NSArray class]]
+            && ((NSArray *)dimensions).count > 0) {
+            
+            [[NSUserDefaults standardUserDefaults] setObject:dimensions
+                                                      forKey:@"SugoDimensions"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        
+        // Finished bindings are those which should no longer be run.
+        NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
+    //    [finishedEventBindings minusSet:parsedEventBindings];
+        [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
+        
+        // New bindings are those we are running for the first time.
+        NSMutableSet *newEventBindings = [NSMutableSet set];
+        [newEventBindings unionSet:parsedEventBindings];
+        [newEventBindings minusSet:self.eventBindings];
+        
+        NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
+        [allEventBindings minusSet:finishedEventBindings];
+        [allEventBindings unionSet:newEventBindings];
+        
+    //    self.eventBindings = [allEventBindings copy];
+        self.eventBindings = [parsedEventBindings copy];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
-    
-    // Finished bindings are those which should no longer be run.
-    NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
-//    [finishedEventBindings minusSet:parsedEventBindings];
-    [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
-    
-    // New bindings are those we are running for the first time.
-    NSMutableSet *newEventBindings = [NSMutableSet set];
-    [newEventBindings unionSet:parsedEventBindings];
-    [newEventBindings minusSet:self.eventBindings];
-    
-    NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
-    [allEventBindings minusSet:finishedEventBindings];
-    [allEventBindings unionSet:newEventBindings];
-    
-//    self.eventBindings = [allEventBindings copy];
-    self.eventBindings = [parsedEventBindings copy];
+
 }
 
 #pragma mark - Sugo Codeless and Heat Map
 - (void)setEnableVisualABTestAndCodeless:(BOOL)enableVisualABTestAndCodeless {
-    _enableVisualABTestAndCodeless = enableVisualABTestAndCodeless;
+    @try {
+        _enableVisualABTestAndCodeless = enableVisualABTestAndCodeless;
 
-    self.testDesignerGestureRecognizer.enabled = _enableVisualABTestAndCodeless;
-    if (!_enableVisualABTestAndCodeless) {
-        // Note that the connection will be closed and cleaned up properly in the dealloc method
-        [self.abtestDesignerConnection close];
-        self.abtestDesignerConnection = nil;
+        self.testDesignerGestureRecognizer.enabled = _enableVisualABTestAndCodeless;
+        if (!_enableVisualABTestAndCodeless) {
+            // Note that the connection will be closed and cleaned up properly in the dealloc method
+            [self.abtestDesignerConnection close];
+            self.abtestDesignerConnection = nil;
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -2817,8 +2998,12 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)connectGestureRecognized:(id)sender
 {
-    if (!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan)) {
-        [self connectToABTestDesigner];
+    @try {
+        if (!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan)) {
+            [self connectToABTestDesigner];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -2829,107 +3014,119 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)connectToABTestDesigner:(BOOL)reconnect
 {
-    if (self.heatMap.mode) return;
+    @try {
+        if (self.heatMap.mode) return;
     
-    // Ignore the gesture if the AB test designer is disabled.
-    if (!self.enableVisualABTestAndCodeless) return;
+        // Ignore the gesture if the AB test designer is disabled.
+        if (!self.enableVisualABTestAndCodeless) return;
     
-    if ([self.abtestDesignerConnection isKindOfClass:[MPABTestDesignerConnection class]] && ((MPABTestDesignerConnection *)self.abtestDesignerConnection).connected) {
-        MPLogWarning(@"A/B test designer connection already exists");
-        return;
-    }
+        if ([self.abtestDesignerConnection isKindOfClass:[MPABTestDesignerConnection class]] && ((MPABTestDesignerConnection *)self.abtestDesignerConnection).connected) {
+            MPLogWarning(@"A/B test designer connection already exists");
+            return;
+        }
 
-    NSString *designerURLString = [NSString stringWithFormat:@"%@/connect/%@", self.switchboardURL, self.apiToken];
-    NSURL *designerURL = [NSURL URLWithString:designerURLString];
-    __weak Sugo *weakSelf = self;
-    void (^connectCallback)(void) = ^{
-        __strong Sugo *strongSelf = weakSelf;
-        [strongSelf.eventsQueue removeAllObjects];
-        [strongSelf stopFlushTimer];
-        [strongSelf stopCacheTimer];
-        [UIApplication sharedApplication].idleTimerDisabled = YES;
-    };
-    void (^disconnectCallback)(void) = ^{
-        __strong Sugo *strongSelf = weakSelf;
-        [strongSelf.eventsQueue removeAllObjects];
-        [strongSelf startFlushTimer];
-        [strongSelf startCacheTimer];
-        [UIApplication sharedApplication].idleTimerDisabled = NO;
-    };
-    self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
-                                                                         keepTrying:reconnect
-                                                                    connectCallback:connectCallback
-                                                                 disconnectCallback:disconnectCallback];
+        NSString *designerURLString = [NSString stringWithFormat:@"%@/connect/%@", self.switchboardURL, self.apiToken];
+        NSURL *designerURL = [NSURL URLWithString:designerURLString];
+        __weak Sugo *weakSelf = self;
+        void (^connectCallback)(void) = ^{
+            __strong Sugo *strongSelf = weakSelf;
+            [strongSelf.eventsQueue removeAllObjects];
+            [strongSelf stopFlushTimer];
+            [strongSelf stopCacheTimer];
+            [UIApplication sharedApplication].idleTimerDisabled = YES;
+        };
+        void (^disconnectCallback)(void) = ^{
+            __strong Sugo *strongSelf = weakSelf;
+            [strongSelf.eventsQueue removeAllObjects];
+            [strongSelf startFlushTimer];
+            [strongSelf startCacheTimer];
+            [UIApplication sharedApplication].idleTimerDisabled = NO;
+        };
+        self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
+                                                                             keepTrying:reconnect
+                                                                        connectCallback:connectCallback
+                                                                     disconnectCallback:disconnectCallback];
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (BOOL)handleURL:(NSURL *)url
 {
-    if (!self.enable) {
-        return false;
-        
-    }
-    
-    NSLog(@"url: %@", url.absoluteString);
-    NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
-    NSMutableDictionary *querys = [NSMutableDictionary dictionary];
-    
-    for (NSString *query in rawQuerys) {
-        NSArray *item = [query componentsSeparatedByString:@"="];
-        if (item.count != 2) {
-            continue;
+    @try {
+        if (!self.enable) {
+            return false;
+            
         }
-        [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
-    }
-    
-    if (querys[@"type"]
-        && [querys[@"type"] isEqualToString:@"heatmap"]
-        && querys[@"sKey"]) {
-        self.urlHeatMapSecretKey = (NSString *)querys[@"sKey"];
-        [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
-            if (heatMap) {
-                self.heatMap.data = heatMap;
-                [self.heatMap switchMode:true];
-                [[WebViewBindings globalBindings] switchHeatMapMode:self.heatMap.mode
-                                                           withData:self.heatMap.data];
+        
+        NSLog(@"url: %@", url.absoluteString);
+        NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
+        NSMutableDictionary *querys = [NSMutableDictionary dictionary];
+        
+        for (NSString *query in rawQuerys) {
+            NSArray *item = [query componentsSeparatedByString:@"="];
+            if (item.count != 2) {
+                continue;
             }
-        }];
-        return true;
-    } else if (querys[@"sKey"]) {
-        self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
-        [self connectToABTestDesigner];
-        return true;
-    }
+            [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
+        }
+        
+        if (querys[@"type"]
+            && [querys[@"type"] isEqualToString:@"heatmap"]
+            && querys[@"sKey"]) {
+            self.urlHeatMapSecretKey = (NSString *)querys[@"sKey"];
+            [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
+                if (heatMap) {
+                    self.heatMap.data = heatMap;
+                    [self.heatMap switchMode:true];
+                    [[WebViewBindings globalBindings] switchHeatMapMode:self.heatMap.mode
+                                                               withData:self.heatMap.data];
+                }
+            }];
+            return true;
+        } else if (querys[@"sKey"]) {
+            self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
+            [self connectToABTestDesigner];
+            return true;
+        }
 
-    return false;
+        return false;
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
+    }
 }
 
 - (void)connectToCodelessViaURL:(NSURL *)url
 {
-    if (!self.enable) {
-        return;
-    }
-    NSLog(@"url: %@", url.absoluteString);
-    NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
-    NSMutableDictionary *querys = [NSMutableDictionary dictionary];
-    
-    for (NSString *query in rawQuerys) {
-        NSArray *item = [query componentsSeparatedByString:@"="];
-        if (item.count != 2) {
-            continue;
+    @try {
+        if (!self.enable) {
+            return;
         }
-        [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
-    }
-    
-    if (querys.count <= 0) {
-        return;
-    }
-    
-    if (querys[@"sKey"] && ((NSString *)querys[@"sKey"]).length > 0) {
-        self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
-    }
-    
-    if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
-        [self connectToABTestDesigner];
+        NSLog(@"url: %@", url.absoluteString);
+        NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
+        NSMutableDictionary *querys = [NSMutableDictionary dictionary];
+        
+        for (NSString *query in rawQuerys) {
+            NSArray *item = [query componentsSeparatedByString:@"="];
+            if (item.count != 2) {
+                continue;
+            }
+            [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
+        }
+        
+        if (querys.count <= 0) {
+            return;
+        }
+        
+        if (querys[@"sKey"] && ((NSString *)querys[@"sKey"]).length > 0) {
+            self.urlCodelessSecretKey = (NSString *)querys[@"sKey"];
+        }
+        
+        if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
+            [self connectToABTestDesigner];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
@@ -2957,38 +3154,42 @@ static void SugoReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 - (void)requestForHeatMapViaURL:(NSURL *)url
 {
-    if (!self.enable) {
-        return;
-    }
-    NSLog(@"url: %@", url.absoluteString);
-    NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
-    NSMutableDictionary *querys = [NSMutableDictionary dictionary];
-    
-    for (NSString *query in rawQuerys) {
-        NSArray *item = [query componentsSeparatedByString:@"="];
-        if (item.count != 2) {
-            continue;
+    @try {
+        if (!self.enable) {
+            return;
         }
-        [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
-    }
-    
-    if (querys.count <= 0) {
-        return;
-    }
-    
-    if (querys[@"sKey"] && ((NSString *)querys[@"sKey"]).length > 0) {
-        self.urlHeatMapSecretKey = (NSString *)querys[@"sKey"];
-    }
-    
-    if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
-        [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
-            if (heatMap) {
-                self.heatMap.data = heatMap;
-                [self.heatMap switchMode:true];
-                [[WebViewBindings globalBindings] switchHeatMapMode:self.heatMap.mode
-                                                           withData:self.heatMap.data];
+        NSLog(@"url: %@", url.absoluteString);
+        NSArray *rawQuerys = [url.query componentsSeparatedByString:@"&"];
+        NSMutableDictionary *querys = [NSMutableDictionary dictionary];
+        
+        for (NSString *query in rawQuerys) {
+            NSArray *item = [query componentsSeparatedByString:@"="];
+            if (item.count != 2) {
+                continue;
             }
-        }];
+            [querys addEntriesFromDictionary:@{[item firstObject]: [item lastObject]}];
+        }
+        
+        if (querys.count <= 0) {
+            return;
+        }
+        
+        if (querys[@"sKey"] && ((NSString *)querys[@"sKey"]).length > 0) {
+            self.urlHeatMapSecretKey = (NSString *)querys[@"sKey"];
+        }
+        
+        if (querys[@"token"] && [querys[@"token"] isEqualToString:self.apiToken]) {
+            [self requestForHeatMapWithCompletion:^(NSData *heatMap) {
+                if (heatMap) {
+                    self.heatMap.data = heatMap;
+                    [self.heatMap switchMode:true];
+                    [[WebViewBindings globalBindings] switchHeatMapMode:self.heatMap.mode
+                                                               withData:self.heatMap.data];
+                }
+            }];
+        }
+    } @catch (NSException *exception) {
+        [ExceptionUtils exceptionToNetWork:exception];
     }
 }
 
