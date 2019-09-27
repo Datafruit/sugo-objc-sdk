@@ -58,8 +58,12 @@ static NSString *tokenId;
             [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                       NSURLResponse *urlResponse,
                                                                       NSError *error) {
-                NSString *requestData = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
-                dispatch_semaphore_signal(semaphore);
+                @try {
+                    NSString *requestData = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
+                    dispatch_semaphore_signal(semaphore);
+                } @catch (NSException *exception) {
+                    NSLog(@"%@",exception);
+                }
             }] resume];
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         });
