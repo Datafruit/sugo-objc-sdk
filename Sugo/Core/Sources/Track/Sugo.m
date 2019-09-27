@@ -267,8 +267,8 @@ static NSString *defaultProjectToken;
 -(void)cleanCacheEvent{
     @try {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        bool uploadLocation = [userDefaults boolForKey:@"uploadLocation"];
-        if (!uploadLocation) {
+        bool isUpdateConfig = [userDefaults boolForKey:@"isUpdateConfig"];
+        if (!isUpdateConfig) {
             return;
         }
         NSArray *eventResult = [self fetchEventResultOfLimit: 50];
